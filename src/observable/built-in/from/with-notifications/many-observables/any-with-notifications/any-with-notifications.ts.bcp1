@@ -1,0 +1,236 @@
+import { asyncUnsubscribe } from '../../../../../../misc/helpers/subscription/async-unsubscribe';
+import { futureUnsubscribe } from '../../../../../../misc/helpers/subscription/future-unsubscribe';
+import { mergeUnsubscribeFunctions } from '../../../../../../misc/helpers/subscription/merge-unsubscribe-functions';
+import { subscribeWithUnsubscribeArgument } from '../../../../../../misc/helpers/subscription/subscribe-with-unsubscribe-argument';
+import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
+import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
+import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
+import { IObserver } from '../../../../../../observer/type/observer.type';
+import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { emptyWithNotifications } from '../../values/empty/empty-with-notifications';
+import {
+  IGenericAnyWithNotificationsInObservables,
+  IAnyWithNotificationsObservableNotifications,
+  IAnyWithNotificationsObservablesValues,
+} from './any-with-notifications-observable-notifications.type';
+
+export function anyWithNotifications<GObservables extends IGenericAnyWithNotificationsInObservables>(
+  observables: GObservables,
+): IObservable<IAnyWithNotificationsObservableNotifications<GObservables>> {
+  type GValues = IAnyWithNotificationsObservablesValues<GObservables>;
+  type GNotifications = IAnyWithNotificationsObservableNotifications<GObservables>;
+  const length: number = observables.length;
+  if (length === 0) {
+    return emptyWithNotifications();
+  } else {
+    return (emit: IObserver<GNotifications>): IUnsubscribe => {
+      const values: unknown[] = Array.from({ length });
+      const error: boolean[] = Array.from({ length });
+      let errorCount: number = 0;
+      let running: boolean = true;
+
+      const end = (): void => {
+        if (running) {
+          running = false;
+          asyncUnsubscribe((): IUnsubscribe => unsubscribe);
+        }
+      };
+
+      const unsubscribe: IUnsubscribe = mergeUnsubscribeFunctions(
+        observables
+          .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+            const localUnsubscribe: IUnsubscribe = subscribeWithUnsubscribeArgument(
+              subscribe,
+              (notification: GNotifications): void => {
+                switch (notification.name) {
+                  case 'next':
+                    values[index] = notification.value;
+                    break;
+                  case 'complete':
+                    emit(createNextNotification<GValues>(values[index] as unknown as GValues));
+                    if (running) {
+                      emit(STATIC_COMPLETE_NOTIFICATION);
+                    }
+                    end();
+                    break;
+                  case 'error':
+                    asyncUnsubscribe((): IUnsubscribe => localUnsubscribe);
+                    if (!error[index]) {
+                      values[index] = notification.value;
+                      error[index] = true;
+                      errorCount++;
+                    }
+                    if (errorCount === length) {
+                      emit(createErrorNotification(new AggregateError(values, `All observables threw`)));
+                      end();
+                    }
+                    break;
+                }
+              },
+            );
+
+            return localUnsubscribe;
+          }),
+      );
+
+      return futureUnsubscribe((unsubscribe: IUnsubscribe): IUnsubscribe => {
+        return mergeUnsubscribeFunctions(
+          observables
+            .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+              const localUnsubscribe: IUnsubscribe = subscribeWithUnsubscribeArgument(
+                subscribe,
+                (notification: GNotifications): void => {
+                  switch (notification.name) {
+                    case 'next':
+                      values[index] = notification.value;
+                      break;
+                    case 'complete':
+                      emit(createNextNotification<GValues>(values[index] as unknown as GValues));
+                      if (running) {
+                        emit(STATIC_COMPLETE_NOTIFICATION);
+                      }
+                      end();
+                      break;
+                    case 'error':
+                      asyncUnsubscribe((): IUnsubscribe => localUnsubscribe);
+                      if (!error[index]) {
+                        values[index] = notification.value;
+                        error[index] = true;
+                        errorCount++;
+                      }
+                      if (errorCount === length) {
+                        emit(createErrorNotification(new AggregateError(values, `All observables threw`)));
+                        end();
+                      }
+                      break;
+                  }
+                },
+              );
+
+              return localUnsubscribe;
+            }),
+        );
+      });
+    };
+  }
+}
+
+
+
+// import { asyncUnsubscribe } from '../../../../../../misc/helpers/subscription/async-unsubscribe';
+// import { futureUnsubscribe } from '../../../../../../misc/helpers/subscription/future-unsubscribe';
+// import { mergeUnsubscribeFunctions } from '../../../../../../misc/helpers/subscription/merge-unsubscribe-functions';
+// import { subscribeWithUnsubscribeArgument } from '../../../../../../misc/helpers/subscription/subscribe-with-unsubscribe-argument';
+// import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
+// import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
+// import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
+// import { IObserver } from '../../../../../../observer/type/observer.type';
+// import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+// import { emptyWithNotifications } from '../../values/empty/empty-with-notifications';
+// import {
+//   IGenericAnyWithNotificationsInObservables,
+//   IAnyWithNotificationsObservableNotifications,
+//   IAnyWithNotificationsObservablesValues,
+// } from './any-with-notifications-observable-notifications.type';
+//
+// export function anyWithNotifications<GObservables extends IGenericAnyWithNotificationsInObservables>(
+//   observables: GObservables,
+// ): IObservable<IAnyWithNotificationsObservableNotifications<GObservables>> {
+//   type GValues = IAnyWithNotificationsObservablesValues<GObservables>;
+//   type GNotifications = IAnyWithNotificationsObservableNotifications<GObservables>;
+//   const length: number = observables.length;
+//   if (length === 0) {
+//     return emptyWithNotifications();
+//   } else {
+//     return (emit: IObserver<GNotifications>): IUnsubscribe => {
+//       const values: unknown[] = Array.from({ length });
+//       const error: boolean[] = Array.from({ length });
+//       let errorCount: number = 0;
+//       let running: boolean = true;
+//
+//       const end = (): void => {
+//         if (running) {
+//           running = false;
+//           asyncUnsubscribe((): IUnsubscribe => unsubscribe);
+//         }
+//       };
+//
+//       const unsubscribe: IUnsubscribe = mergeUnsubscribeFunctions(
+//         observables
+//           .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+//             const localUnsubscribe: IUnsubscribe = subscribeWithUnsubscribeArgument(
+//               subscribe,
+//               (notification: GNotifications): void => {
+//                 switch (notification.name) {
+//                   case 'next':
+//                     values[index] = notification.value;
+//                     break;
+//                   case 'complete':
+//                     emit(createNextNotification<GValues>(values[index] as unknown as GValues));
+//                     if (running) {
+//                       emit(STATIC_COMPLETE_NOTIFICATION);
+//                     }
+//                     end();
+//                     break;
+//                   case 'error':
+//                     asyncUnsubscribe((): IUnsubscribe => localUnsubscribe);
+//                     if (!error[index]) {
+//                       values[index] = notification.value;
+//                       error[index] = true;
+//                       errorCount++;
+//                     }
+//                     if (errorCount === length) {
+//                       emit(createErrorNotification(new AggregateError(values, `All observables threw`)));
+//                       end();
+//                     }
+//                     break;
+//                 }
+//               },
+//             );
+//
+//             return localUnsubscribe;
+//           }),
+//       );
+//
+//       return futureUnsubscribe((unsubscribe: IUnsubscribe): IUnsubscribe => {
+//         return mergeUnsubscribeFunctions(
+//           observables
+//             .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+//               const localUnsubscribe: IUnsubscribe = subscribeWithUnsubscribeArgument(
+//                 subscribe,
+//                 (notification: GNotifications): void => {
+//                   switch (notification.name) {
+//                     case 'next':
+//                       values[index] = notification.value;
+//                       break;
+//                     case 'complete':
+//                       emit(createNextNotification<GValues>(values[index] as unknown as GValues));
+//                       if (running) {
+//                         emit(STATIC_COMPLETE_NOTIFICATION);
+//                       }
+//                       end();
+//                       break;
+//                     case 'error':
+//                       asyncUnsubscribe((): IUnsubscribe => localUnsubscribe);
+//                       if (!error[index]) {
+//                         values[index] = notification.value;
+//                         error[index] = true;
+//                         errorCount++;
+//                       }
+//                       if (errorCount === length) {
+//                         emit(createErrorNotification(new AggregateError(values, `All observables threw`)));
+//                         end();
+//                       }
+//                       break;
+//                   }
+//                 },
+//               );
+//
+//               return localUnsubscribe;
+//             }),
+//         );
+//       });
+//     };
+//   }
+// }
+//

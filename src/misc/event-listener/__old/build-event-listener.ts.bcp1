@@ -1,0 +1,75 @@
+import { IObserver, ISubscribeFunction, IUnsubscribeFunction } from '../../types';
+
+export type TListenersMap<GTarget extends object, GValue> = WeakMap<GTarget, IObserver<GValue>[]>;
+
+export interface IListenerFunction<GTarget extends object, GValue> {
+  (target: GTarget): ISubscribeFunction<GValue>;
+}
+
+/**
+ * TODO use Source for better performances
+ */
+
+export function createListenerFunction<GTarget extends object, GValue>(
+  map: TListenersMap<GTarget, GValue>,
+): IListenerFunction<GTarget, GValue> {
+  return (target: GTarget): ISubscribeFunction<GValue> => {
+    return (emit: IObserver<GValue>): IUnsubscribeFunction => {
+      let emitFunctions: IObserver<GValue>[];
+      if (map.has(target)) {
+        emitFunctions = map.get(target) as IObserver<GValue>[];
+      } else {
+        emitFunctions = [];
+        map.set(target, emitFunctions);
+      }
+
+      if (emitFunctions.includes(emit)) {
+        throw new Error(`Already observing this Node`);
+      } else {
+        emitFunctions.push(emit);
+      }
+
+      return () => {
+        const index: number = emitFunctions.indexOf(emit);
+        if (index !== -1) {
+          emitFunctions.splice(index, 1);
+        }
+      };
+    };
+  };
+}
+
+export interface IListenerDispatchFunction<GTarget extends object, GValue> {
+  (target: GTarget, value: GValue): void;
+}
+
+export function createListenerDispatchFunction<GTarget extends object, GValue>(
+  map: TListenersMap<GTarget, GValue>,
+): IListenerDispatchFunction<GTarget, GValue> {
+  return (target: GTarget, value: GValue): void => {
+    if (map.has(target)) {
+      const emitFunctions: IObserver<GValue>[] = (map.get(target) as IObserver<GValue>[]).slice();
+      for (let i = 0, l = emitFunctions.length; i < l; i++) {
+        emitFunctions[i](value);
+      }
+    }
+  };
+}
+
+
+export interface IListenerDBuilderFunctions<GTarget extends object, GValue> {
+  readonly listener: IListenerFunction<GTarget, GValue>;
+  readonly dispatch: IListenerDispatchFunction<GTarget, GValue>;
+}
+
+
+export function createListenerBuilderFunctions<GTarget extends object, GValue>(
+  map: TListenersMap<GTarget, GValue>,
+): IListenerDBuilderFunctions<GTarget, GValue> {
+  return Object.freeze({
+    listener: createListenerFunction<GTarget, GValue>(map),
+    dispatch: createListenerDispatchFunction<GTarget, GValue>(map),
+  });
+}
+
+

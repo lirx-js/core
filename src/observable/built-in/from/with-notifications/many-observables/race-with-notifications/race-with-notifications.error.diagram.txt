@@ -1,0 +1,11 @@
+sequenceDiagram
+
+participant A as observables[0]
+participant B as observables[1]
+participant raceWithNotifications as raceWithNotifications(observables)
+participant OUT
+
+B->>raceWithNotifications: next: b1
+A->>raceWithNotifications: error: errorA
+raceWithNotifications->>OUT: error: errorA
+

@@ -1,0 +1,20 @@
+{
+  "name": "@lirx/core",
+  "version": "1.0.0",
+  "description": "Blazing fast Observables",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lirx-js/core"
+  },
+  "keywords": [
+    "rx-js",
+    "reactive",
+    "async",
+    "observable",
+    "stream"
+  ],
+  "sideEffects": false,
+  "author": "Valentin Richard",
+  "license": "MIT",
+  "access": "public"
+}
