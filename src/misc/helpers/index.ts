@@ -7,4 +7,5 @@ export * from './freeze';
 export * from './noop';
 export * from './passthrough';
 export * from './read-observable-value';
+export * from './throw-function';
 export * from './tuple';

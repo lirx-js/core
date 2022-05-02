@@ -303,6 +303,12 @@ Can't find a function that suits your needs ? Open a discussion, or create your 
   <a href="https://github.com/lirx-js/router">
     <img src="assets/lirx-router-logo.png" alt="lirx-router-logo" width="50px" height="50px"/>
   </a>
+  <a href="https://github.com/lirx-js/i18n">
+    <img src="assets/lirx-i18n-logo.png" alt="lirx-i18n-logo" width="50px" height="50px"/>
+  </a>
+  <a href="https://github.com/lirx-js/store">
+    <img src="assets/lirx-store-logo.png" alt="lirx-store-logo" width="50px" height="50px"/>
+  </a>
 </p>
 
 ## Differences with RxJS:

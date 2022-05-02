@@ -1,5 +1,6 @@
 import { IObserver } from '../../observer/type/observer.type';
 import { noop } from '../helpers/noop';
+import { throwFunction } from '../helpers/throw-function';
 import { IDefaultInNotificationsUnion } from './default-notifications-union.type';
 import { IGenericNotification } from './notification.type';
 
@@ -18,7 +19,7 @@ export function defaultNotificationObserver<GValue>(
   }
 
   if (error === void 0) {
-    error = noop;
+    error = throwFunction;
   }
 
   if (other === void 0) {
