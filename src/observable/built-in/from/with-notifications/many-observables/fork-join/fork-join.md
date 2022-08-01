@@ -1,4 +1,4 @@
-## forkJoin or allWithNotifications or allN
+## forkJoin, allWithNotifications or allN
 
 ```ts
 function forkJoin<GObservables extends IGenericForkInObservables>(
@@ -13,8 +13,7 @@ or all observables sending an `complete` Notification.
 If it received an `error` Notification, it will send this `error` Notification.
 
 If it received only `complete` Notifications, it will emit an array with the last values received through the `next` Notifications for each
-observable,
-followed by a `complete` Notification.
+observable, followed by a `complete` Notification.
 
 This is equivalent of `Promise.any`.
 

@@ -1,5 +1,3 @@
-import {
-  IFromPromiseFactoryObservableNotifications
-} from '../../../../promise/from-promise-factory/from-promise-factory-observable-notifications.type';
+import { IFromFetchBodyObservableNotifications } from '../body/from-fetch-body-observable-notifications.type';
 
-export type IFromFetchJSONObservableNotifications<GResult> = IFromPromiseFactoryObservableNotifications<GResult>;
+export type IFromFetchJSONObservableNotifications<GData> = IFromFetchBodyObservableNotifications<GData>;

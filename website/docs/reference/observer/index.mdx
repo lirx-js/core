@@ -1,0 +1,55 @@
+# 🄸 Observer
+
+### Types
+
+```ts
+interface IObserver<GValue> {
+  (value: GValue): void;
+}
+```
+
+### Definition
+
+An Observer receives and consumes a value.
+
+This is equivalent to a *push destination* or a *[RxJS Observer](https://rxjs-dev.firebaseapp.com/guide/observer)*.
+
+It is simply a function with one argument: the received values.
+
+:::info
+
+A best practice consist of pre-fixing your Observers with `$`.
+It's a convenient way to distinguish them from the more classic variables.
+Example: `const $onValues = value => console.log(value);`
+
+:::
+
+### Example
+
+#### Observer that receives a number and logs this value
+
+```ts
+const emit: IObserver<number> = (value: number): void => {
+  console.log('value:', value);
+};
+
+emit(1);
+emit(2);
+emit(3);
+```
+
+Output:
+
+```text
+value: 1
+value: 2
+value: 3
+```
+
+##### RxJS equivalent
+
+```ts
+new Observer<number>((value: number) => {
+  console.log('value:', value);
+});
+```

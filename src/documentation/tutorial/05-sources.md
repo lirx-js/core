@@ -11,7 +11,7 @@ interface ISource<GValue> {
 }
 ```
 
-A Source does the link between an *Observer* and a *Observable*.
+A Source does the link between an *Observer* and an *Observable*.
 `emit` and `subscribe` are tied together, by an internal algorithm: usually, emitting a value using `emit` will emit this value into
 the Observable of the Source.
 

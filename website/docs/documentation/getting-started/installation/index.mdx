@@ -1,0 +1,45 @@
+# Installation
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="package-managers">
+  <TabItem value="npm" label="npm">
+
+```bash
+npm install @lirx/core --save
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+
+```bash
+yarn add @lirx/core
+```
+
+  </TabItem>
+</Tabs>
+
+Then you can import and use it:
+
+```ts
+import { of, pipe$$, map$$$ } from '@lirx/core';
+
+const subscribe = pipe$$(of(1, 2, 3), [
+  map$$$(value => `-> ${value}`),
+]);
+```
+
+This library supports:
+
+- **common-js** (require): transpiled as es5, with .cjs extension, useful for old nodejs versions
+- **module** (esm import): transpiled as esnext, with .mjs extension (requires node resolution for external packages)
+
+The library is ready to go and does not require transpiling nor bundling. **However** it has been optimized for three-shacking,
+so you should use a bundler like rollup or webpack.
+
+For rapid testing, [you can immediately play with @lirx/core on stackblitz](https://stackblitz.com/edit/typescript-5ksaqe?file=index.ts)
+
+If you prefer to use a CDN, you can use for example [skypack](https://www.skypack.dev/):
+[https://cdn.skypack.dev/@lirx/core](https://cdn.skypack.dev/@lirx/core)
+

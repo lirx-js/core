@@ -1,0 +1,150 @@
+# Some basic Observables
+
+In this tutorial, we'll **learn** to use some the **most essentials** Observables provided by `@lirx/core`.
+
+Let's begin with Observables sending predefined values.
+
+### Creating an Observable from a single value
+
+The most basic Observable will send an unique value.
+This is done with the function **[single](../../../reference/single)**.
+
+```ts
+const subscribe = single('Hello World !');
+
+subscribe((value) => {
+  console.log(value);
+});
+// logs 'Hello World !'
+```
+
+[//]: # (TODO create live demo)
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-9swej8?devtoolsheight=33&file=index.ts).
+
+
+When subscribed, it will send and log the value `Hello World !`.
+
+Hooray you've created your first Observable 🎉 ! Simple, isn't it ?
+
+Let's continue now with a list of values.
+
+### Creating an Observable from a list of values
+
+To create an Observable from a list of value, the function **[of](../../../reference/of)** is all you need:
+
+```ts
+const subscribe = of(0, 1, 2, 3);
+
+subscribe((value) => {
+  console.log(value);
+});
+// logs 0, 1, 2, 3
+```
+
+It simply takes the list of values your Observable will send sequentially.
+
+There is plenty of others function to create Observables from values like:
+**[fromArray](../../reference/from-array)**,
+**[fromIterable](../../reference/from-iterable)**,
+**[reference](../../reference/reference)**,
+etc.
+You can find all of them on the **[reference page](../../reference/observable)**.
+
+Let's focus now on the most common async functions in javascript.
+
+### setInterval
+
+Sometimes, you have to refresh some data within a specific period.
+You'll usually end up using a `setInterval` or a `setTimeout`.
+
+```ts
+const timer = setInterval(() => {
+  console.log('tick');
+}, 500);
+
+setTimeout(() => {
+  clearInterval(timer);
+}, 2000);
+```
+
+Here are the Observable replacements for:
+
+- *setInterval* and *clearInterval*: **[interval](../../reference/interval)**
+- *setTimeout* and *clearTimeout*: **[timeout](../../reference/timeout)**
+
+So let's rewrite the previous code with Observables instead:
+
+```ts
+const unsubscribe = interval(500)(() => {
+  console.log('tick');
+});
+
+timeout(2000)(unsubscribe);
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-9swej8?devtoolsheight=33&file=index.ts).
+
+### addEventListener
+
+Event listeners are another extremely used API for web applications.
+We use them to react to inputs, clicks, movements, changes, etc.
+
+Let's create a piece of code that counts the number of clicks done by an user, and displays 'clicked twice'
+after he had clicked the second time on the window.
+
+```ts
+let count: number = 0;
+
+const onClick = () => {
+  count++;
+  console.log(`clicked: ${count}`);
+  if (count >= 2) {
+    window.removeEventListener('click', onClick);
+    console.log('clicked twice');
+  }
+};
+
+window.addEventListener('click', onClick);
+```
+
+To create an Observable from an EventTarget, we will use **[fromEventTarget](../../reference/from-event-target)**.
+
+Here is the equivalent with Observables:
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  scan$$$(count => (count + 1), 0),
+  filter$$$(count => (count >= 2)),
+]);
+
+const unsubscribe = subscribe(() => {
+  console.log('clicked twice');
+  unsubscribe();
+});
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-crwffj?devtoolsheight=33&file=index.ts)
+
+Let me explain the new functions:
+
+- **[fromEventTarget](../../reference/from-event-target)**: creates an Observable from an EventTarget
+- **[scan$$$](../../reference/scan-observable-pipe)**: creates an ObservablePipe that "accumulates" a value => here it counts the number of time it received a value
+- **[filter$$$](../../reference/scan-observable-pipe)**: creates an ObservablePipe that re-emits the received value only if it passes a condition
+=> here it emits only values greater or equal than 2
+- **[pipe$$](../../reference/pipe-observable)**: "pipes" (or chains) the Observable created by `fromEventTarget`, with the ObservablePipes `scan$$$` and `filter$$$`
+
+
+[//]: # (TODO Promise)
+
+
+### Going deeper
+
+To be efficient with `@lirx/core` (and Reactive Programing in general),
+**you will have to take a look at many functions**.
+If you **skip** this part, you'll definitively **struggle** with RP.
+
+This may feel like a pain, but it's like any other framework: you'll be more productive if you **take an hour** (or a few) reading the documentation or some tutorials.
+
+`@lirx/core` provides many functions to help you to build and pipe some Observables.
+Everytime you face a problem with Observables, **there is probably an existing function** to fix it.
+You can find all of them on the **[reference page](../../reference/observable)**.

@@ -26,10 +26,21 @@ Creates an Observable which mimics the behaviour of `Promise.any`.
 
 Creates an Observer which logs in the console the received values.
 
+#### switchAllObservablePipe and switchMapObservablePipe
+
+Add `switchAll` and `switchMap` shortcuts to match with the RxJS equivalent functions.
+
+- [mergeAllSingleObservablePipe/switchAllObservablePipe](../../observable/pipes/built-in/without-notifications/merge/merge-all/derived/merge-all-single/merge-all-single-observable-pipe.md)
+- [mergeMapSingleObservablePipe/switchMapObservablePipe](../../observable/pipes/built-in/without-notifications/merge/merge-map/derived/merge-map-single/merge-map-single-observable-pipe.md)
+
+
 #### others
 
 - add `defaultNotificationObserver`
 - add `open` and `close` Notifications
+- add `fromSingleAnimationFrame`
+- add `fromSelfEventTarget`
+- add `thenAnyObservablePipe`
 
 
 ### Breaking changes

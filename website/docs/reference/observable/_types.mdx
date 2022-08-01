@@ -1,0 +1,24 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="observable" label="IObservable" default>
+
+```ts
+interface IObservable<GValue> {
+  (emit: IObserver<GValue>): IUnsubscribe;
+}
+```
+
+  </TabItem>
+
+  <TabItem value="unsubscribe" label="IUnsubscribe">
+
+```ts
+interface IUnsubscribe {
+  (): void;
+}
+```
+
+  </TabItem>
+</Tabs>

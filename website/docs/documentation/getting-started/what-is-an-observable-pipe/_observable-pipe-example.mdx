@@ -1,0 +1,46 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="uncommented" label="Short version" default>
+
+```ts
+const distinct = <GValue>(subscribe: IObservable<GValue>): IObservable<GValue> => {
+  return (emit: IObserver<GValue>): IUnsubscribe => {
+    let previousValue: GValue;
+    return subscribe((value: GValue): void => {
+      if (value !== previousValue) {
+        previousValue = value;
+        emit(value);
+      }
+    });
+  };
+};
+```
+
+  </TabItem>
+
+  <TabItem value="commented" label="With comments">
+
+```ts
+const distinct = <GValue>(subscribe: IObservable<GValue>): IObservable<GValue> => {
+  // returns a new Observable
+  return (emit: IObserver<GValue>): IUnsubscribe => {
+    // defines a previous value
+    let previousValue: GValue;
+    // subscribes to the provided Observable
+    return subscribe((value: GValue) => {
+      // if the received value differs from the previous one
+      if (value !== previousValue) {
+        // we replace previousValue with the new value
+        previousValue = value;
+        // and we emit the value
+        emit(value);
+      }
+    });
+  };
+};
+```
+
+  </TabItem>
+</Tabs>

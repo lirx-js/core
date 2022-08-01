@@ -1,0 +1,31 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="languages">
+  <TabItem value="typescript" label="Typescript">
+
+```ts
+const observable: IObservable<number> = (emit: IObserver<number>): IUnsubscribe => {
+  let count: number = 0;
+  const timer: any = setInterval(() => emit(count++), 500);
+  return (): void => {
+    clearInterval(timer);
+  };
+};
+```
+
+  </TabItem>
+  <TabItem value="javascript" label="Javascript">
+
+```ts
+const observable = (emit) => {
+  let count = 0;
+  const timer = setInterval(() => emit(count++), 500);
+  return () => {
+    clearInterval(timer);
+  };
+};
+```
+
+  </TabItem>
+</Tabs>

@@ -1,0 +1,23 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="languages">
+  <TabItem value="typescript" label="Typescript">
+
+```ts
+const observer: IObserver<number> = (value: number): void => {
+  console.log('value:', value);
+};
+```
+
+  </TabItem>
+  <TabItem value="javascript" label="Javascript">
+
+```ts
+const observer = (value) => {
+  console.log('value:', value);
+};
+```
+
+  </TabItem>
+</Tabs>

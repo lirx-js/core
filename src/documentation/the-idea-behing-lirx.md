@@ -71,7 +71,7 @@ Par exemple, si un état infime change dans un composant plutôt haut dans l'arb
 - avec Angular, toutes les propriétés du composant sont réévalués, et selon l'usage, les composants enfants peuvent être aussi réévalués.
 - avec React ou Vue, tous les composants enfants sont réévalués.
 
-Attention, réévalués ne peux pas forcément dire re-rendu dans le DOM, mais simplement qu'une partie du framework a du revérifié les valeurs ou re-exécuter le js de certains composants.
+Attention, réévalués ne peux pas forcément dire re-rendu dans le DOM, mais simplement qu'une partie du framework a dû revérifier les valeurs ou re-exécuter le js de certains composants.
 
 Or, grâce à l'utilisation des Observables, on peut concevoir assez facilement un framework qui ne refresh que les nodes concernées avec un minimum de JS exécuté:
 

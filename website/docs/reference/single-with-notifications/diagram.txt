@@ -1,0 +1,7 @@
+sequenceDiagram
+
+participant singleWithNotifications as singleWithNotifications(3)
+participant OUT
+
+singleWithNotifications->>OUT: next: 3
+singleWithNotifications->>OUT: complete

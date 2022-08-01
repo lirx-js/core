@@ -1,0 +1,20 @@
+# 🄿 mergeMapSingleObservablePipe
+
+Alternatives: `mergeMapS$$$`, `switchMapObservablePipe`, `switchMap$$$`
+
+### Types
+
+```ts
+function mergeMapSingleObservablePipe<GIn, GOut>(
+  mapFunction: IMapFunction<GIn, IObservable<GOut>>,
+): IObservablePipe<GIn, GOut>
+```
+
+### Definition
+
+This function is a shortcut and optimized version of `mergeMapObservablePipe(mapFunction, 1)`
+
+See [mergeMapObservablePipe](../merge-map-observable-pipe)
+
+The RxJS equivalent is [switchMap](https://rxjs.dev/api/index/function/switchMap)
+

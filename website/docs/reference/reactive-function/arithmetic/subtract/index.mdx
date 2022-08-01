@@ -1,0 +1,41 @@
+# 🄾 reactiveSubtract
+
+Alternatives: `sub$$`, `subtract$$`
+
+### Types
+
+```ts
+function reactiveSubtract(
+  a: IObservable<number>,
+  b: IObservable<number>,
+): IObservable<number>
+```
+
+### Definition
+
+Creates an Observable which subtracts and sends the values emitted by two Observables.
+
+### Diagram
+
+[//]: # (TODO)
+
+### Perform the "subtraction" of two Observables
+
+####
+
+```ts
+const subscribe = reactiveSubtract(
+  single(10),
+  single(5),
+);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+5
+```

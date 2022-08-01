@@ -1,0 +1,42 @@
+# 🄾 fromEventTarget
+
+### Types
+
+```ts
+function fromEventTarget<GName extends string, GEvent extends Event>(
+  target: ITypedPureEventTarget<TKeyValueTuple<GName, GEvent>>,
+  eventName: GName,
+  options?: AddEventListenerOptions,
+): IObservable<GEvent>
+```
+
+### Definition
+
+Creates an Observable that emits events of a specific type coming from the given event target.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNpVj79OAzEMxl_F8lKQjhfIUOkkOgID7ZbFSnwl4mIfidMKVX130qMMbJ-s3_fHFwwaGR1W_mosgZ8THQtlL14WKpZCWkgMRqAKU9G8O7HYnsqR7eGcJOp5gE2YU_jcPP63vB32t5RXNQY9cYFx6CcHh9r16qigAr8hN3J82m5X4kVb5bXICw6YuWRKsY-8eAHwaB-c2aPrMvJEbTaPXq4dbUsk411MpgXdRHPlAamZvn9LQGel8R90f_ROXX8AM1Zd2Q)](https://mermaid.live/edit#pako:eNpVj79OAzEMxl_F8lKQjhfIUOkkOgID7ZbFSnwl4mIfidMKVX130qMMbJ-s3_fHFwwaGR1W_mosgZ8THQtlL14WKpZCWkgMRqAKU9G8O7HYnsqR7eGcJOp5gE2YU_jcPP63vB32t5RXNQY9cYFx6CcHh9r16qigAr8hN3J82m5X4kVb5bXICw6YuWRKsY-8eAHwaB-c2aPrMvJEbTaPXq4dbUsk411MpgXdRHPlAamZvn9LQGel8R90f_ROXX8AM1Zd2Q)
+
+### Example
+
+
+#### Displays the mouse position on click
+
+```ts
+const subscribe = fromEventTarget(window, 'click');
+
+subscribe((event: MouseEvent) => {
+  console.log('click: ', event.clientX, '-', event.clientY);
+})
+```
+
+Output:
+
+```text
+click: 245-499
+click: 987-123
+click: 71-268
+....
+```
+

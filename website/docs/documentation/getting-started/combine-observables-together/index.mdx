@@ -1,0 +1,91 @@
+# Combine Observables
+
+In this part, we'll learn how to combine Observables to create more complex dataflow.
+
+The following examples will group a list Observables,
+and will re-emit the values they send differently, according to the selected function.
+
+### Re-emit all values
+
+The simplest combinator of Observable is **[merge](../../../reference/merge)**.
+
+It creates an output Observable which concurrently emits all values from every given input Observable.
+
+As an example, we may create an Observable grouping mouse events:
+
+```ts
+const onMouseDown$ = fromEventTarget(window, 'mousedown');
+const onMouseUp$ = fromEventTarget(window, 'mouseup');
+
+const onMouseDownOrUp$ = merge([
+  onMouseDown$,
+  onMouseUp$,
+]);
+
+onMouseDownOrUp$((event: MouseEvent) => {
+  console.log(event.button);
+});
+// logs the mouse button when down or up
+```
+
+However, on real applications, we will not end up using frequently this aggregator.
+Instead, we'll mostly use the following function.
+
+### Emit the values in the form of an Array
+
+Usually, when grouping some Observables, we want to get all the last values they sent in the form of an Array,
+everytime a change occurs.
+
+This may be done with the function **[combineLatest](../../../reference/combine-latest)**.
+
+For example, let's assume we have two Observables containing the firstname and the lastname of a user (ex: coming from two &lt;input&gt; elements),
+and we want to display the fullname of this user dynamically.
+
+We may write:
+
+```ts
+// to keep it short in this example, the names are built through 'single'
+// but in a real case, they could come from two <input>
+const firstName$ = single('Richard');
+const lastName$ = single('Stallman');
+
+const onNamesChange$ = combineLatest([
+  firstName$,
+  lastName$,
+]);
+
+onNamesChange$(([firstName, lastName]) => {
+  console.log(`${firstName} ${lastName}`);
+});
+// logs 'Richard Stallman'
+```
+
+In this example, if any of `firstName$` or `lastName$` changes, then the displayed fullname will change too.
+
+
+### Aggregates the values
+
+Finally, we'll see how to subscribe to many observables, and when one changes, we can aggregate the values and emit the result.
+
+We may think about strings concatenation, performing a sum, etc.
+
+This function is called **[reactiveFunction](../../../reference/reactive-function)**.
+
+If we re-write our previous example:
+
+```ts
+const firstName$ = single('Richard');
+const lastName$ = single('Stallman');
+
+const fullName$ = reactiveFunction(
+  [firstName$, lastName$],
+  ([firstName, lastName]) => {
+    return `${firstName} ${lastName}`;
+  },
+);
+
+fullName$((fullName: string) => {
+  console.log(fullName);
+});
+// logs 'Richard Stallman'
+```

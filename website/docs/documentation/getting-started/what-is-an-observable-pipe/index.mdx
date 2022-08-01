@@ -1,0 +1,64 @@
+# Pipe Observables
+
+An essential part of Reactive Programing, is being able to **pipe** our Observable, to build easily **complex dataflow**.
+
+We will start first by defining what is an ObservablePipe.
+
+## Definition of an ObservablePipe
+
+Here's the type of an [ObservablePipe](../../../reference/observable-pipe):
+
+```ts
+interface IObservablePipe<GIn, GOut> {
+  (subscribe: IObservable<GIn>): IObservable<GOut>;
+}
+```
+
+A *ObservablePipe* is a function that **accepts an *Observable*** as input (the `subscribe` argument), and **returns another
+*Observable*** as output. Both are related by an algorithm defined internally into the *ObservablePipe*.
+
+As an example, here's an handmade *ObservablePipe* that emits only distinct received values:
+
+
+import ObservablePipeExample from './_observable-pipe-example.mdx';
+
+<ObservablePipeExample/>
+
+Then we may use our new *ObservablePipe* like this:
+
+```ts
+const distinctValues$ = distinct(observable);
+const unsubscribe = distinctValues$(observer);
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-y9g9fd?devtoolsheight=33&file=index.ts)
+
+If this looks too complex, don't worry. We **won't have to write** from scratch any of them.
+`@lirx/core` comes with a many ObservablePipes, right out of the box.
+
+## Chaining many ObservablePipes
+
+ObservablePipes are made to be chained together to **create complex dataflow**.
+
+An *ObservablePipe* could be used directly like any ordinary functions (`distinct(observable)`), but in practice, there
+tend to be many of them convolved together, and quickly become unreadable (`op4(op3(op2(op1(obs))))`).
+
+For that reason, we will use the function **[pipe$$](../../../reference/pipe-observable)**
+that accomplishes the same thing while being **much easier to read**:
+
+```ts
+pipe$$(obs, [
+  op1,
+  op2,
+  op3,
+  op4,
+]);
+```
+
+This function simply does:
+
+```ts
+[op1, op2, op3, op4].reduce((value, fnc) => fnc(value), obs);
+```
+
+Moreover, we can group our ObservablePipes too using [pipe$$$](../../../reference/pipe-observable-pipes) (less frequently used).

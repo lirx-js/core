@@ -6,7 +6,7 @@ RxJS's Observables may emit 3 kind of events: `next`, `complete` and `error`.
 
 This choice is due to a simple observation: most Observables do not have a final state.
 They just send values until we unsubscribe, so a `complete` or `error` is unnecessary.
-Having such states, impact negatively RxJS: the bundle size is increased, end the overall performances are decreased.
+Having such states, impact negatively RxJS: the bundle size is increased, and the overall performances are decreased.
 
 Moreover, some *Observables* may want to emit more than this 3 *events*: we may imagine an XHR
 Observable which emits an `upload-progress` and `download-progress` *events*.
@@ -108,7 +108,34 @@ next: 5
 resolved
 ```
 
-You may also use the function [notificationObserver](../../misc/notifications/notification-observer.ts) if you prefer:
+You may also use the function  [defaultNotificationObserver](../../misc/notifications/default-notification-observer.ts) if you prefer:
+
+```ts
+function defaultNotificationObserver<GValue>(
+  next: IObserver<GValue> | undefined,
+  complete?: IObserver<void> | undefined,
+  error?: IObserver<unknown> | undefined,
+  other?: IObserver<IGenericNotification> | undefined,
+): IObserver<IDefaultInNotificationsUnion<GValue>>
+```
+
+```ts
+subscribe(
+  defaultNotificationObserver(
+    /* next */ (value: number) => {
+      console.log('next', value);
+    },
+    /* complete */ () => {
+      console.log('resolved');
+    },
+    /* error */ (error: any) => {
+      console.log('rejected', error);
+    },
+  ),
+);
+```
+
+Or use [notificationObserver](../../misc/notifications/notification-observer.ts),
 
 ```ts
 function notificationObserver<GNotificationsUnion extends IGenericNotification>(
@@ -128,7 +155,7 @@ subscribe(
     error: (error: any) => {
       console.log('rejected', error);
     },
-  })
+  }),
 );
 ```
 

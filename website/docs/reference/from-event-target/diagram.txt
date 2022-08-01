@@ -1,0 +1,8 @@
+sequenceDiagram
+
+participant A as fromEventTarget(window, 'click')
+participant OUT
+
+Note over A,OUT: User clicks on window
+
+A->>OUT: MouseEvent

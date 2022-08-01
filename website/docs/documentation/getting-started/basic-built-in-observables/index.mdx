@@ -1,0 +1,125 @@
+# Basic Observables
+
+In this tutorial, we'll **learn** to use some the **most essentials** Observables provided by `@lirx/core`.
+
+Let's begin with Observables sending predefined values.
+
+### Creating an Observable from a single value
+
+The most basic Observable will send an unique value.
+This is done with the function **[single](../../../reference/single)**.
+
+```ts
+const value$ = single('Hello World !');
+
+value$((value) => {
+  console.log(value);
+});
+// logs 'Hello World !'
+```
+
+[//]: # (TODO create live demo)
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-9swej8?devtoolsheight=33&file=index.ts).
+
+
+When subscribed, it will send and log the value `Hello World !`.
+
+Hooray we've created our first Observable 🎉 ! It wasn't so difficult, isn't it ?
+
+Now, what if we have more than one value to send ?
+
+### Creating an Observable from a list of values
+
+To create an Observable from a list of value, the function **[of](../../../reference/of)** is all we need:
+
+```ts
+const values$ = of(0, 1, 2, 3);
+
+values$((value) => {
+  console.log(value);
+});
+// logs 0, 1, 2, 3
+```
+
+It simply takes the series of values that our Observable will send sequentially.
+
+There is plenty of others function to create Observables from values like:
+**[fromArray](../../../reference/from-array)**,
+**[fromIterable](../../../reference/from-iterable)**,
+**[reference](../../../reference/reference)**,
+etc.
+You can find all of them on the **[reference page](../../../reference/observable)**.
+
+Let's focus now on the most common async functions in javascript.
+
+### setInterval
+
+Sometimes, we have to refresh some data within a specific period.
+We'll usually end up using a `setInterval` or a `setTimeout`.
+
+```ts
+const timer = setInterval(() => {
+  console.log('tick');
+}, 500);
+
+setTimeout(() => {
+  clearInterval(timer);
+}, 2000);
+```
+
+Here are the Observable replacements for:
+
+- *setInterval* and *clearInterval*: **[interval](../../../reference/interval)**
+- *setTimeout* and *clearTimeout*: **[timeout](../../../reference/timeout)**
+
+So let's rewrite the previous code with Observables instead:
+
+```ts
+const every500Ms$ = interval(500);
+const after2000Ms$ = timeout(2000);
+
+const unsubscribe = every500Ms$(() => {
+  console.log('tick');
+});
+
+after2000Ms$(unsubscribe);
+// logs 'tick', 'tick', 'tick', 'tick'
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-9swej8?devtoolsheight=33&file=index.ts).
+
+As you may see, you can combine Observables together easily and start to build more complex dataflow.
+
+### addEventListener
+
+Event listeners are another extremely used API for web applications.
+We use them to react to inputs, clicks, movements, changes, states, etc.
+
+Let's write some code that logs the mouse position of the user:
+
+```ts
+window.addEventListener('mousemove', (event: MouseEvent) => {
+  console.log(`position: ${event.clientX}-${event.clientY}`);
+});
+```
+
+To create an Observable from an EventTarget, we will use **[fromEventTarget](../../../reference/from-event-target)**:
+
+Here is the equivalent with Observables:
+
+```ts
+const onMouseMove$ = fromEventTarget(window, 'mousemove');
+
+onMouseMove$((event: MouseEvent) => {
+  console.log(`position: ${event.clientX}-${event.clientY}`);
+});
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-crwffj?devtoolsheight=33&file=index.ts)
+
+
+### Going deeper
+
+There is **plenty** of functions to create Observables:
+from Promises, fetch requests, streams, etc.
+We can't talk about all of them in this introduction, but you can find the complete list on the **[reference page](../../../reference/observable)**.

@@ -1,0 +1,29 @@
+# Introduction
+
+`@lirx/core` (pronounced `lyrics`) is simply the [fastest and smallest](../performances) javascript library for `Reactive Programming`,
+providing different tools to generate, consume, and pipe Observables and Observers.
+
+If *Reactive Programming* does not tell you much or is a new concept to you, you may [take a look at this tutorial](./src/documentation/tutorial/01-introduction.md).
+
+[//]: # (TODO link)
+In a few words, if you deal frequently with async programming like *events*, *timeouts*, *promises* or *streams* (ex: front-end development),
+then `@lirx/core` is the perfect candidate for you.
+
+
+*Example: emulate double click*
+
+```js
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  bufferTime$$$(500),
+  filter$$$((events: PointerEvent[]) => events.length === 2),
+  map$$$((events: PointerEvent[]) => events[events.length - 1]),
+]);
+
+subscribe((event: PointerEvent) => {
+  console.log('double click', event);
+});
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-sfkssg?devtoolsheight=33&file=index.ts)
+
+Give it a try, and you'll love it !

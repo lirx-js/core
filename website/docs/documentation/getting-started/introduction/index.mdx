@@ -1,0 +1,173 @@
+# Introduction
+
+⚡️ **@lirx/core** is extremely **[fast and small](../../../performances)**.
+Tree-shaking is fully supported, and the library is strongly optimized, so you can embed it in any applications, even the smallest ones.
+
+📨 It helps you to build and compose **asynchronous and event-based programs**.
+Everything being asynchronous, like user events, http requests, data streams, is supported out from the box.
+
+🦸 This is your **best ally** when developing a **web-app**.
+Code in a more predictable way with **clear data workflows**, avoiding bugs, errors and inconsistent states.
+
+<p align="center">
+🚀🚀🚀
+</p>
+
+🔥 However, **[learning it is hard](https://dev.to/mfcodeworks/comment/11agc)**, or it may looks like a total waste of time.
+But don't give up. Once you'll become a master of Reactive Programming you'll feel like a divinity.
+
+When I started using RxJS, which is the most used Observables library, it was a nightmare:
+it lacks of tutorials, the documentation is cryptic, and we can't find concrete use cases and examples.
+It's just a pile of documentation where the authors expect that everyone can read their mind 😑.
+
+The first thing to know is that Reactive Programing requires you to **think in reactive**.
+Just like Promises on their time (*async thinking*), you'll have to be able to change your vision on variables and streams.
+
+The second and most important point: you'll have to read the documentation and learn at least the essentials functions before beginning.
+Just like you would have done for a tooling library like *lodash* or *underscore*.
+If you skip this step, you won't be able to unleash the true potential of Observables.
+
+*But now, that I'm very confortable with Reactive Programing, I simply cannot work without it:
+it solves so many problems and allows me to create very consistent applications.*
+
+
+## What is Reactive Programming?
+
+> Reactive programming is programming with asynchronous data streams.
+
+Actually, this isn't new:
+
+- Promises are streams of values with a `success` and `error` state, and you can "pipe" them with `then` or `catch`
+- EventListeners are streams of events
+- Timers (setTimeout/setInterval) are somehow streams of "void/empty" values
+- [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)
+  and [Readable](https://nodejs.org/api/stream.html#class-streamreadable) are data streams too
+- websockets
+- ...
+
+So, you've probably already played with asynchronous data streams. Reactive programing is all about this but on steroids.
+You'll be able to **create data streams of anything**, not just from click and hover events:
+variables, user inputs, properties, tasks, data structures,...
+
+On top of that, you are given **an amazing toolbox of functions** to combine, create and filter any of those streams.
+That's where the "functional" magic kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs
+to another stream. You can merge two streams. You can filter a stream to get another one that has only those events you are interested in.
+You can map data values from one stream to another new one. Etc.
+
+A stream is simply a sequence of **ongoing values ordered in time**.
+
+We capture these emitted values only **asynchronously**, by defining a function that will execute when a value is emitted.
+The "listening" to the stream is called **subscribing**.
+The functions we are defining are *Observers*. The stream is the *Observable* being observed.
+
+## Reactive Programming by example
+
+Normally you'll register event listeners like this:
+
+```js
+const onClick = () => console.log('clicked');
+document.addEventListener('click', onClick);
+// later
+document.removeEventListener('click', onClick);
+```
+
+With `@lirx/core`, instead, you will create an Observable :
+
+```js
+const onClick$ = fromEventTarget(document, 'click');
+const unsubscribe = onClick$(() => console.log('clicked'));
+// later
+unsubscribe();
+```
+
+The most important part of Reactive Programing, is that you have fine control of the flow of your values.
+
+Let's write a piece of code which displays the number of time the user clicked on the document:
+
+In classic js:
+
+```js
+let count = 0;
+let rate = 1000;
+let lastClick = Date.now() - rate;
+document.addEventListener('click', () => {
+  if (Date.now() - lastClick >= rate) {
+    console.log(`clicked ${++count} times`);
+    lastClick = Date.now();
+  }
+});
+```
+
+With `@lirx/core`:
+
+```js
+const subscribe = pipe$$(fromEventTarget(document, 'click'), [
+  throttleTime$$$(1000),
+  scan$$$(count => count + 1, 0),
+]);
+subscribe(count => console.log(`clicked ${count} times`));
+```
+
+I hope you enjoy the beauty of this approach.
+This example is just the tip of the iceberg: you can apply the same operations on different kinds of streams,
+for instance, on a stream of API responses; on the other hand, there are many other functions available.
+
+## For what usage RP is great ?
+
+Usually, when we use variables and functions, we **PULL** values:
+
+```ts
+let firstname = 'Valentin';
+let lastname = 'Richard';
+const fullname = `${firstname} ${lastname}`; // you 'PULL' the values from 'firstname' and 'lastname' to compute 'fullname'
+console.log(fullname); // 'Valentin Richard'
+```
+
+But, sometimes (especially in javascript with a lot of async events, or in front-end applications) we have to deal with evolving values:
+If we update the value of `firstname` or `lastname` (ex: from an &lt;input&gt; element), we would like to update the value of `fullname` too.
+
+We could write:
+
+```ts
+const getFullName = () => `${firstname} ${lastname}`;
+console.log(getFullName()); // 'Valentin Richard'
+firstname = `Bob`;
+console.log(getFullName()); // 'Bob Richard'
+```
+
+But we're forced to **PULL** the "fullname" to get the value. It would be more convenient having `fullname`
+updating automatically when any of `firstname` or `lastname` changes.
+
+Here comes the Observables:
+
+
+```ts
+const firstname$ = createTextInputObservable('Valentin');
+const lastname$ = createTextInputObservable('Richard');
+const fullname$ = string$$`${firstname$} ${lastname$}`;
+
+fullname$((fullname) => {
+  console.log(fullname);
+});
+```
+
+If `firstname$` or `lastname$` changes, then `fullname$` is immediately updated.
+So Observables **PUSHES** values. We don't have to **PULL** them. It's magic, and it's perfect for all async events.
+
+[You can test this code here](https://stackblitz.com/edit/typescript-psdoti?file=index.ts)
+
+
+## Why should you consider adopting RP ?
+
+Reactive Programming raises the level of abstraction of your code, so you can focus on the interdependence of events that define the
+business logic, rather than having to constantly fiddle with a large amount of implementation details.
+**Code in RP will likely be more concise**.
+
+The benefits are really important in **web applications**, where you have to deal with multitude of UI events, async requests, etc...
+and react to these changes, like updating the DOM.
+
+---
+
+This introduction is largely inspired by [this article](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754) from Andre Staltz.
+Take a look, it goes deeply into RP.
+

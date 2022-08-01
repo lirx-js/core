@@ -1,0 +1,22 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="next-notification" label="INextNotification" default>
+
+```ts
+type INextNotification<GValue> = INotification<'next', GValue>;
+```
+
+  </TabItem>
+
+  <TabItem value="create-next-notification" label="createNextNotification">
+
+```ts
+function createNextNotification<GValue>(
+  value: GValue,
+): INextNotification<GValue>;
+```
+
+  </TabItem>
+</Tabs>

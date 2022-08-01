@@ -1,0 +1,44 @@
+# 🄾 single
+
+### Types
+
+```ts
+function single<GValue>(
+  value: GValue,
+): IObservable<GValue>
+```
+
+### Definition
+
+Creates an Observable from a single value. It emits this value when subscribed.
+
+:::caution
+
+This is not equivalent of the RxJS [single](https://rxjs.dev/api/index/function/single) function.
+
+:::
+
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNpdzr8KwjAQBvBXibdUQV8gQ6Gg4Oag4pLlSK41kFxq_gxS-u6mUAfdPvh-x30T6GAIJCR6FWJNR4tDRK9Y8YgxW21H5Cw6gUkky4OjbXMm54J4hOiM2DS7X3m535bj7tC2NUrxp5dOMezBU_RoTX09KRZCQX6SJwWyRkM9FpcVKJ4rLaPBTCdjc4gge3SJ9oAlh-ubNcgcC33ROn9V8we9iE0T)](https://mermaid.live/edit#pako:eNpdzr8KwjAQBvBXibdUQV8gQ6Gg4Oag4pLlSK41kFxq_gxS-u6mUAfdPvh-x30T6GAIJCR6FWJNR4tDRK9Y8YgxW21H5Cw6gUkky4OjbXMm54J4hOiM2DS7X3m535bj7tC2NUrxp5dOMezBU_RoTX09KRZCQX6SJwWyRkM9FpcVKJ4rLaPBTCdjc4gge3SJ9oAlh-ubNcgcC33ROn9V8we9iE0T)
+
+### Example
+
+#### Emits the value 'Hello World !'
+
+```ts
+const subscribe = single('Hello World !');
+
+subscribe((value: string) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+Hello World !
+```
+
+

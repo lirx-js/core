@@ -1,0 +1,42 @@
+# 🄿 distinctObservablePipe
+
+Alternative: `distinct$$$`
+
+### Types
+
+```ts
+function distinctObservablePipe<GValue>(): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the last previous value.
+
+The RxJS equivalent is [distinctUntilChanged](https://rxjs-dev.firebaseapp.com/api/operators/distinct)
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNqtkrsKAjEQRX8lTKWgoJYprLRWULs0YzJqYHd2TSaCLPvvRvGBoKhgF3LPPTOQNGArR6Ah0j4RW5p43AYsDRuuMYi3vkYWVa0jhQOuC3q-dz6KZyuzez73NSmMb5JO97k_Wy3Pox76_nj8uqnVwPDrKHey5wJ8qRp-Ug1_UX1Jjj4NHf11f-hBSaFE7_LzNoaVMiA7KsmAzkdHG0yFGDDcZjTVDoWmzksVQG-wiNQDTFItjmxBS0h0g65f5Eq1J3IF1kQ)](https://mermaid.live/edit#pako:eNqtkrsKAjEQRX8lTKWgoJYprLRWULs0YzJqYHd2TSaCLPvvRvGBoKhgF3LPPTOQNGArR6Ah0j4RW5p43AYsDRuuMYi3vkYWVa0jhQOuC3q-dz6KZyuzez73NSmMb5JO97k_Wy3Pox76_nj8uqnVwPDrKHey5wJ8qRp-Ug1_UX1Jjj4NHf11f-hBSaFE7_LzNoaVMiA7KsmAzkdHG0yFGDDcZjTVDoWmzksVQG-wiNQDTFItjmxBS0h0g65f5Eq1J3IF1kQ)
+
+### Example
+
+#### Emits only distinct values
+
+```ts
+const subscribe = pipe$$(of(0, 1, 1, 2, 1), [
+  distinct$$$(),
+]);
+
+subscribe((value) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+0
+1
+2
+1
+```

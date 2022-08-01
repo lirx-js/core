@@ -11,11 +11,11 @@ The same is true for `Observer` => [IObserver](../../observer/type/observer.md).
 - `rxjs` regroups under same the same name (`Operator`) the functions that generate an Observable and the pipes that chains them
 (called `Pipeable Operator`). `@lirx/core` has a specific type for the pipes: [IObservablePipe](../../observable/pipes/type/observable-pipe.md)
 
-Moreover, `@lirx/core` tries to be consistent in its naming:
+Moreover, `@lirx/core` tries to be more consistent in its naming:
 
 - functions are explicit about what they return (ex: ends with `ObservablePipe`)
 - it follows the Observable naming convention: a `$` is present at the end of a variable name representing an Observable (ex: `const value$ = of(5);`)
-, and it extends this rule with `$$` for a function that generates an Observable, and `$$$` for a function that generates an ObservablePipe)
+, and it extends this rule with `$$` for a function that generates an Observable, and `$$$` for a function that generates an ObservablePipe
 
 ## Creating an Observable
 

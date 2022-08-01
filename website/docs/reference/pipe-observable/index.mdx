@@ -1,0 +1,58 @@
+# 🄵 pipeObservable
+
+Alternative: `pipe$$`
+
+### Types
+
+```ts
+function pipeObservable<
+  GObservable extends IGenericObservable,
+  GFunctions extends IObservablePipeConstraint<GObservable, GFunctions>
+>(
+  subscribe: GObservable,
+  fns: GFunctions,
+): IObservablePipeReturn<GObservable, GFunctions>
+```
+
+### Definition
+
+This function allows you to pipe (chain) an [Observable](../observable)
+with many [ObservablePipes](../observable-pipe).
+
+This is equivalent the RxJS [Observable.pipe](https://rxjs-dev.firebaseapp.com/api/index/class/Observable#pipe) method.
+
+### Example
+
+#### ObservablePipe which keeps only positive numbers and convert them to strings
+
+```ts
+const subscribe = pipe$$(of(-2, -1, 0, 1, 2), [
+  filter$$$(value => (value >= 0)),
+  map$$$(String),
+]);
+
+const unsubscribe = subscribe((value: string) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+0
+1
+2
+```
+
+##### RxJS equivalent
+
+```ts
+of(-2, -1, 0, 1, 2)
+  .pipe(
+    filter(value => (value >= 0)),
+    map(String),
+  )
+  .subscribe((value: string) => {
+    console.log(value);
+  });
+```

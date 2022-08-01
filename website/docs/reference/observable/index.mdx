@@ -1,0 +1,65 @@
+# 🄸 Observable
+
+### Types
+
+import Types from './_types.mdx';
+
+<Types/>
+
+### Definition
+
+An Observable is a ***lazy push source*** able to emit multiple values.
+
+It is simply a function accepting one argument (an [Observer](../observer)), and returning an **unsubscribe** function.
+
+It's lazy, because the Observable emits values when subscribed, and stops when unsubscribed.
+
+This is equivalent to the *[RxJS Observable](https://rxjs-dev.firebaseapp.com/guide/observable)*
+or somehow an *[EventListener](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener)*.
+
+:::info
+
+A best practice consist of post-fixing your Observables with `$`.
+It's a convenient way to distinguish them from the more classic variables.
+Example: `const value$ = of(1, 2, 3)`
+
+:::
+
+### Example
+
+#### Observable which emits 'void' every 500ms when subscribed
+
+```ts
+const subscribe: IObservable<void> = (emit: IObserver<void>): IUnsubscribe => {
+  const timer: any = setInterval(() => emit(), 500);
+  return (): void => {
+    clearInterval(timer);
+  };
+};
+
+const unsubscribe = subscribe(() => {
+  console.log('tick');
+});
+
+setTimeout(unsubscribe, 2100);
+```
+
+Output:
+
+```text
+tick
+tick
+tick
+tick
+```
+
+##### RxJS equivalent
+
+```ts
+new Observable<void>((subscriber) => {
+  const timer: any = setInterval(() => subscriber.next(), 500);
+  return (): void => {
+    clearInterval(timer);
+  };
+});
+```
