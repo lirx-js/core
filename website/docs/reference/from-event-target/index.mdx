@@ -1,4 +1,8 @@
-# 🄾 fromEventTarget
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromEventTarget
 
 ### Types
 
@@ -20,15 +24,14 @@ Creates an Observable that emits events of a specific type coming from the given
 
 ### Example
 
-
-#### Displays the mouse position on click
+#### Display the mouse position on click
 
 ```ts
 const subscribe = fromEventTarget(window, 'click');
 
 subscribe((event: MouseEvent) => {
   console.log('click: ', event.clientX, '-', event.clientY);
-})
+});
 ```
 
 Output:
@@ -37,6 +40,6 @@ Output:
 click: 245-499
 click: 987-123
 click: 71-268
-....
+...
 ```
 

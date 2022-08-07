@@ -1,4 +1,8 @@
-# 🄾🄽 fromPromise
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromPromise
 
 ### Types
 
@@ -21,7 +25,7 @@ The Observable emits values in the form of Notifications:
 :::caution
 
 `fromPromise` should be used only if you already have a Promise, else you should prefer to
-use [fromPromiseFactory](../from-promise-factory) which provides an AbortSignal to properly
+use [fromPromiseFactory](/docs/reference/from-promise-factory/) which provides an AbortSignal to properly
 cancel any pending tasks.
 
 :::
@@ -33,14 +37,14 @@ cancel any pending tasks.
 
 ### Examples
 
-#### Simple fulfilled Promise
+#### Fulfilled Promise
 
 ```ts
 const subscribe = fromPromise(Promise.resolve('Hello World !'));
 
 subscribe((notification) => {
   console.log(notification.name, ':', notification.value);
-})
+});
 ```
 
 Output:
@@ -50,14 +54,14 @@ next: Hello World !
 complete
 ```
 
-#### Simple rejected Promise
+#### Rejected Promise
 
 ```ts
 const subscribe = fromPromise(Promise.reject(new Error('Rejected')));
 
 subscribe((notification) => {
   console.log(notification.name, ':', notification.value);
-})
+});
 ```
 
 Output:

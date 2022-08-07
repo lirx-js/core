@@ -1,0 +1,18 @@
+---
+tags: [INTERFACE, NOTIFICATION]
+---
+
+# IErrorNotification
+
+### Types
+
+```ts
+type IErrorNotification<GError = any> = INotification<'error', GError>;
+```
+
+### Definition
+
+Used to notify of an ***error*** state. This is used as a replacement of the `error` *event* of RxJS.
+
+You can create an *ErrorNotification* with the function [createErrorNotification](/docs/reference/create-error-notification/).
+

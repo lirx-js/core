@@ -1,4 +1,8 @@
-# 🄿 throttleTimeObservablePipe
+---
+tags: [FUNCTION, OBSERVABLE PIPE, TIME RELATED]
+---
+
+# throttleTimeObservablePipe
 
 Alternative: `throttleTime$$$`
 
@@ -27,11 +31,13 @@ When a value is received:
 
 As result, a value if emitted evey `duration` ms at best.
 
+You'll mainly use this function to limit the number of values send by an Observable, based on a period of time.
+
 The RxJS equivalent is [throttleTime](https://rxjs.dev/api/operators/throttleTime).
 
 ### Diagram
 
-TODO
+[![](https://mermaid.ink/img/pako:eNqVkjFvwjAQhf_KyROoIIWwWW2mdi1IpZuXI74Uq7Ed7AtqhfjvNVHahoG0bCff8_fu2XcUpdckpIi0b8mV9GjwLaBVTrkGA5vSNOgY_DZSOOC2pstz3gXPXNPGWFr9aNamIcA40p3kWTa9RK1eN2fXX6d5UVwHSFgod72d7iZeJ3r2TOAPFAYhJNwtssxGmDA8QFdOb7DOR63nH531vTaxxKBJFzegl_9Cv1PDUPkANTKFYhhyDD4Mnfeh_37D5flbxExYChaNTstyVA5ACd6RJSVkKjVV2NashHKnJG0bnQZ70oZ9ELLCOtJMYMv-5dOVQnJo6VvUL1yvOn0BUrrv6g)](https://mermaid.live/edit#pako:eNqVkjFvwjAQhf_KyROoIIWwWW2mdi1IpZuXI74Uq7Ed7AtqhfjvNVHahoG0bCff8_fu2XcUpdckpIi0b8mV9GjwLaBVTrkGA5vSNOgY_DZSOOC2pstz3gXPXNPGWFr9aNamIcA40p3kWTa9RK1eN2fXX6d5UVwHSFgod72d7iZeJ3r2TOAPFAYhJNwtssxGmDA8QFdOb7DOR63nH531vTaxxKBJFzegl_9Cv1PDUPkANTKFYhhyDD4Mnfeh_37D5flbxExYChaNTstyVA5ACd6RJSVkKjVV2NashHKnJG0bnQZ70oZ9ELLCOtJMYMv-5dOVQnJo6VvUL1yvOn0BUrrv6g)
 
 ### Examples
 
@@ -50,13 +56,15 @@ subscribe(() => {
 Timeline:
 
 ```text
-0ms: user clicks
-0ms: 'clicked'
-100ms: user clicks
-200ms: 'clicked'
-300ms: user clicks
-350ms: user clicks
-400ms: 'clicked'
+// t = 0ms: user clicks
+'clicked'
+// t = 100ms: user clicks
+// t = 200ms
+'clicked'
+// t = 300ms: user clicks
+// t = 350ms: user clicks
+// t = 400ms
+'clicked'
 ```
 
 

@@ -1,0 +1,20 @@
+# What is a Source ?
+
+We've seen how to create Observables, but how can we simply emit some values ?
+
+## Definition of a Source
+
+Let's write the interface of a [Source](../../../reference/observer-observable-pair/source/):
+
+```ts
+interface ISource<GValue> {
+  readonly emit: IObserver<GValue>;
+  readonly subscribe: IObservable<GValue>;
+}
+```
+
+A *Source* is simply a **tuple** composed of an *Observer* and an *Observable*.
+
+Usually, they are tied together by a predefined algorithm.
+
+

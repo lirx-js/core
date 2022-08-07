@@ -1,0 +1,24 @@
+---
+tags: [FUNCTION, OBSERVER OBSERVABLE PAIR, SOURCE, REPLAY]
+---
+
+# createReplaySource
+
+### Types
+
+```ts
+function createReplaySource<GValue, GSource extends ISource<GValue>>(
+  source: GSource,
+  maxNumberOfValues: number = Number.POSITIVE_INFINITY,
+): IReplaySource<GValue, GSource>
+```
+
+### Definition
+
+Creates a [IReplaySource](/docs/reference/replay-source/).
+
+When calling `createReplaySource` you must provide a `source` which is used to build the ReplaySource. You may
+choose for example, between an [IUnicastSource](/docs/reference/unicast-source/) or a [IMulticastSource](/docs/reference/multicast-source/).
+
+
+

@@ -1,0 +1,37 @@
+---
+tags: [FUNCTION, NOTIFICATION]
+---
+
+# createNotification
+
+### Types
+
+```ts
+function createNotification<GName extends string, GValue>(
+  name: GName,
+  value: GValue,
+): INotification<GName, GValue>
+```
+
+### Definition
+
+Used to create a [INotification](/docs/reference/notification/).
+
+### Example
+
+#### Emit a single 'upload-done' Notification
+
+```ts
+const subscribe = single(createNotification('upload-done', void 0));
+
+subscribe((notification) => {
+  console.log(notification);
+});
+```
+
+Output:
+
+```text
+{ name: 'upload-done', value: undefined }
+```
+

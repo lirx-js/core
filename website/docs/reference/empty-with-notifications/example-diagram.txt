@@ -1,0 +1,6 @@
+sequenceDiagram
+
+participant emptyWithNotifications as emptyWithNotifications()
+participant OUT
+
+emptyWithNotifications->>OUT: complete

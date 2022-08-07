@@ -1,0 +1,16 @@
+sequenceDiagram
+
+participant observable
+participant throttleTimeObservablePipe as throttleTimeObservablePipe(200)
+participant OUT
+
+observable->>throttleTimeObservablePipe: 1
+throttleTimeObservablePipe->>OUT: 1
+Note over observable: +100ms (t = 100ms)
+observable->>throttleTimeObservablePipe: 2
+throttleTimeObservablePipe--xOUT: <discarded>
+observable->>throttleTimeObservablePipe: 3
+throttleTimeObservablePipe--xOUT: <kept for later>
+Note over throttleTimeObservablePipe: +100ms (t = 200ms)
+throttleTimeObservablePipe->>OUT: 3
+

@@ -1,0 +1,68 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE]
+---
+
+# TODO bufferTimeObservablePipe
+
+Alternatives: `bufferTime$$$`, `bufferT$$$`
+
+### Types
+
+```ts
+function bufferTimeObservablePipe<GValue>(
+  duration: number,
+): IObservablePipe<GValue, GValue[]>
+```
+
+### Definition
+
+This pipe appends into an array the received values until a period defined by `duration` is elapsed.
+Then, this array is emitted, and a new one is created for the next values.
+
+:::caution
+
+This is not equivalent to:
+
+```ts
+function bufferTimeObservablePipe<GValue>(
+  duration: number,
+): IObservablePipe<GValue, GValue[]> {
+  return bufferObservablePipe<GValue>(interval(duration));
+}
+```
+
+The timer begins only when a value is received, meaning empty arrays will never be emitted.
+
+:::
+
+:::caution
+
+There is not RxJS equivalent.
+[bufferTime](https://rxjs.dev/api/operators/bufferTime) does something different.
+
+:::
+
+### Diagram
+
+TODO
+
+### Example
+
+#### Buffer the mouse positions on the X axis with a period of one second
+
+```ts
+const subscribe = pipe$$(fromEventTarget<'mousemove', MouseEvent>(window, 'mousemove'), [
+  map$$$<MouseEvent, number>((event: MouseEvent) => event.clientX),
+  bufferTime$$$<number>(1000),
+]);
+
+subscribe((positions: number[]) => {
+  console.log(positions);
+});
+```
+
+Output:
+
+```text
+TODO
+```

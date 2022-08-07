@@ -1,0 +1,56 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
+---
+
+# TODO shareObservablePipeWithMulticastReplayLastSource
+
+Alternative: `shareRL$$$`
+
+### Types
+
+```ts
+function shareObservablePipeWithMulticastReplayLastSource<GValue>(
+  options?: IShareObservableWithMulticastReplayLastSourceOptions<GValue>,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+TODO
+
+### Diagram
+
+TODO
+
+### Example
+
+#### Sharing the same Observable
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  shareRL$$$<number>(),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+// note that interval(1000) is only subscribed once
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+Output:
+
+```text
+// 1000ms
+value - A: 0
+value - B: 0
+// 1000ms
+value - A: 1
+value - B: 1
+...
+```
+

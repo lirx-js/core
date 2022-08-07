@@ -1,4 +1,8 @@
-# 🄾 interval
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# interval
 
 ### Types
 
@@ -25,7 +29,7 @@ const subscribe = interval(1000);
 
 const unsubscribe = subscribe((notification) => {
   console.log('ping');
-})
+});
 
 setTimeout(4500, unsubscribe);
 ```

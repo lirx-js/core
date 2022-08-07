@@ -1,4 +1,8 @@
-# 🄸 Observable
+---
+tags: [INTERFACE, OBSERVABLE]
+---
+
+# IObservable
 
 ### Types
 
@@ -10,7 +14,7 @@ import Types from './_types.mdx';
 
 An Observable is a ***lazy push source*** able to emit multiple values.
 
-It is simply a function accepting one argument (an [Observer](../observer)), and returning an **unsubscribe** function.
+It is simply a function accepting one argument (an [Observer](/docs/reference/observer/)), and returning an **unsubscribe** function.
 
 It's lazy, because the Observable emits values when subscribed, and stops when unsubscribed.
 

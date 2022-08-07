@@ -1,0 +1,52 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# reference
+
+### Types
+
+```ts
+function reference<GValue>(
+  getValue: IGetReferenceValue<GValue>,
+): IObservable<GValue>
+```
+
+```ts
+interface IGetReferenceValue<GValue> {
+  (): GValue;
+}
+```
+
+### Definition
+
+Creates an Observable, which on subscribe, will call `getValue` and emits the returned value.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNpVzjELwjAQBeC_ctzUQh1cAxYKOjuoW5YjuWqgSev1MkjpfzeFOri94Xu8t6AbPaPBmd-Zk-NzoKdQtMmmiUSDCxMlhQ5oBuGeZUNVVcOphWP9j66P-9brDm1booEjNhhZIgVfFhabACzqiyNbNCV67ikPatGmtdA8eVK--KCjoOlpmLlByjrePsmhUcn8Q_vLXa1fU8xD-g)](https://mermaid.live/edit#pako:eNpVzjELwjAQBeC_ctzUQh1cAxYKOjuoW5YjuWqgSev1MkjpfzeFOri94Xu8t6AbPaPBmd-Zk-NzoKdQtMmmiUSDCxMlhQ5oBuGeZUNVVcOphWP9j66P-9brDm1booEjNhhZIgVfFhabACzqiyNbNCV67ikPatGmtdA8eVK--KCjoOlpmLlByjrePsmhUcn8Q_vLXa1fU8xD-g)
+
+### Example
+
+#### Deferred usage of the variable 'value'
+
+```ts
+// let's assume we don't know yet the value to assign
+let value: number;
+
+const subscribe = reference(() => value);
+
+const destination = (value: number) => {
+  console.log(value);
+};
+
+// LATER
+value = 1;
+subscribe(destination); // output '1'
+
+value = 2;
+subscribe(destination); // output '2'
+```
+
+
+

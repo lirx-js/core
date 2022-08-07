@@ -1,0 +1,20 @@
+sequenceDiagram
+
+participant observable as observable
+participant toPromiseAll as toPromiseAll(observable)
+participant THEN as .then
+participant CATCH as .catch
+
+observable->>toPromiseAll: next: value1
+observable->>toPromiseAll: next: value2
+observable->>toPromiseAll: next: value3
+
+alt if complete
+    observable->>toPromiseAll: complete
+    toPromiseAll->>THEN: [value1, value2, value3]
+else if error
+    observable->>toPromiseAll: error: error
+    toPromiseAll->>CATCH:  error
+end
+
+

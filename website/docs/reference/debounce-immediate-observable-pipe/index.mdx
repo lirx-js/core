@@ -1,0 +1,52 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, TIME RELATED]
+---
+
+# TODO debounceImmediateObservablePipe
+
+Alternative: `debounceImmediate$$$`
+
+### Types
+
+```ts
+function debounceImmediateObservablePipe<GValue>(): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+Awaits for the next event loop (`setImmediate`) and emits the last value received from the source Observable.
+
+### Diagram
+
+TODO
+
+### Example
+
+#### Debounce frequent values
+
+```ts
+const source = createMulticastSource<number>();
+
+const subscribe = pipe$$(source.subscribe, [
+  debounceImmediate$$$(),
+]);
+
+subscribe((value: number) => {
+  console.log('value', value);
+});
+
+// emit some values
+console.log('start');
+source.emit(0);
+source.emit(1);
+source.emit(2);
+console.log('end');
+```
+
+Output:
+
+```text
+start
+end
+value: 2
+```

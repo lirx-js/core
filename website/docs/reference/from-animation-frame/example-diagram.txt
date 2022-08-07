@@ -1,0 +1,8 @@
+sequenceDiagram
+
+participant A as fromAnimationFrame()
+participant OUT
+
+loop when an animation frame is triggered
+    A->>OUT: void
+end

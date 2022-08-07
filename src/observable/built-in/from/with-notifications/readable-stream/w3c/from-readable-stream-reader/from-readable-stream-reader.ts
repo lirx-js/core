@@ -9,10 +9,13 @@ export function fromReadableStreamReader<GValue>(
   reader: ReadableStreamReader<GValue>,
 ): IObservable<IFromReadableStreamReaderObservableNotifications<GValue>> {
   return fromAsyncIterator((async function* () {
-    let result: ReadableStreamDefaultReadResult<GValue>;
-    while (!(result = await reader.read()).done) {
-      yield (result as ReadableStreamDefaultReadValueResult<GValue>).value;
+    try {
+      let result: ReadableStreamDefaultReadResult<GValue>;
+      while (!(result = await reader.read()).done) {
+        yield (result as ReadableStreamDefaultReadValueResult<GValue>).value;
+      }
+    } finally {
+      reader.releaseLock();
     }
-    reader.releaseLock();
   })());
 }

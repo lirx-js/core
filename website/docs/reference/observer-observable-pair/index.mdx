@@ -1,0 +1,18 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR]
+---
+
+# IObserverObservablePair
+
+### Types
+
+```ts
+interface IObserverObservablePair<GObserverValue, GObservableValue> {
+  readonly emit: IObserver<GObserverValue>;
+  readonly subscribe: IObservable<GObservableValue>;
+}
+```
+
+### Definition
+
+Tuple having an Observer and an Observable.

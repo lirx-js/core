@@ -1,0 +1,36 @@
+---
+tags: [FUNCTION, NOTIFICATION]
+---
+
+# createErrorNotification
+
+### Types
+
+```ts
+function createErrorNotification<GError>(
+  error: GError,
+): IErrorNotification<GError>
+```
+
+### Definition
+
+Creates an [IErrorNotification](/docs/reference/error-notification/).
+
+### Example
+
+#### Emit a single 'error' Notification
+
+```ts
+const subscribe = single(createErrorNotification(new Error(`Custom Error`)));
+
+subscribe((notification) => {
+  console.log(notification);
+});
+```
+
+Output:
+
+```text
+{ name: 'error', value: Error('Custom Error') }
+```
+

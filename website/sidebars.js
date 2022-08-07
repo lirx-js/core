@@ -30,7 +30,17 @@ const sidebars = {
         'documentation/getting-started/combine-observables-together/index',
         'documentation/getting-started/what-is-an-observable-pipe/index',
         'documentation/getting-started/basic-built-in-observable-pipes/index',
+        'documentation/getting-started/what-is-a-source/index',
+        'documentation/getting-started/what-is-a-notification/index',
         'documentation/getting-started/what-is-next/index',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Migration',
+      items: [
+        'documentation/migration/from-promise/index',
+        'documentation/migration/from-rxjs/index',
       ],
     },
     'documentation/decision-tree/index',

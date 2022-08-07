@@ -1,0 +1,57 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
+---
+
+# TODO shareObservablePipe
+
+Alternative: `share$$$`
+
+### Types
+
+```ts
+function shareObservablePipe<GValue>(
+  options?: IShareObservableOptions<GValue>,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+This ObservablePipe perform something similar to:
+
+```ts
+sourceObservablePipe<GValue>({ getSource: createMulticastSource })
+```
+
+### Diagram
+
+TODO
+
+### Example
+
+#### Sharing the same Observable
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  share$$$<number>(),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+Output:
+
+```text
+value - A: 0
+value - B: 0
+value - A: 1
+value - B: 1
+...
+```
+

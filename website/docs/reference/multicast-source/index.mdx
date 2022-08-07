@@ -1,0 +1,21 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE, MULTICAST]
+---
+
+# IMulticastSource
+
+### Types
+
+```ts
+interface IMulticastSource<GValue> extends ISource<GValue> {
+  getObservers(): readonly IObserver<GValue>[]; // readonly list of observers for this source
+}
+```
+
+### Definition
+
+A *MulticastSource* is used to emit one value to multiple Observers.
+
+You can create a *IMulticastSource* with the function [createMulticastSource](/docs/reference/create-multicast-source/).
+
+This is equivalent to the *[Subject](https://rxjs-dev.firebaseapp.com/guide/subject)*.

@@ -1,0 +1,8 @@
+sequenceDiagram
+
+participant A as idle()
+participant OUT
+
+loop when idle time is available
+    A->>OUT: void
+end

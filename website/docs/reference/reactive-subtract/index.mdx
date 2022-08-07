@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveSubtract
+
+Alternatives: `sub$$`, `subtract$$`
+
+### Types
+
+```ts
+function reactiveSubtract(
+  a: IObservable<number>,
+  b: IObservable<number>,
+): IObservable<number>
+```
+
+### Definition
+
+Creates an Observable which subtracts and sends the values emitted by two Observables.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp1kcFqwzAMhl_F6NRBCu1gMHwoJLTnHbrddFFstTUkSubIhVH67nNGB01ob0Lfpx8hXcB1nsHCwN-JxfE20DFSi4LSU9TgQk-ipjQ0mK4eOJ6pbric0mpKqymNTE7Dmfep1pjLUZ73FnfZxX3UyzTr4-tzXK1cbjbzCGvWK5TqIXlDmTezl8P-0OOZ1-cz7-MOUEDLsaXg8_kuKMYg6IlbRrC59Hyg1CgCyjWrqfekvPNBuwj2QM3ABVDSbv8jDqzGxP_S7QU36_oLCvyX9Q)](https://mermaid.live/edit#pako:eNp1kcFqwzAMhl_F6NRBCu1gMHwoJLTnHbrddFFstTUkSubIhVH67nNGB01ob0Lfpx8hXcB1nsHCwN-JxfE20DFSi4LSU9TgQk-ipjQ0mK4eOJ6pbric0mpKqymNTE7Dmfep1pjLUZ73FnfZxX3UyzTr4-tzXK1cbjbzCGvWK5TqIXlDmTezl8P-0OOZ1-cz7-MOUEDLsaXg8_kuKMYg6IlbRrC59Hyg1CgCyjWrqfekvPNBuwj2QM3ABVDSbv8jDqzGxP_S7QU36_oLCvyX9Q)
+
+### Perform the "subtraction" of two Observables
+
+####
+
+```ts
+const subscribe = reactiveSubtract(
+  single(10),
+  single(5),
+);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+5
+```

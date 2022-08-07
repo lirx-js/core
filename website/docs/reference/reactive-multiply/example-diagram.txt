@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveMultiply as reactiveMultiply(observableA, observableB)
+participant OUT
+
+A->>reactiveMultiply: 10
+B->>reactiveMultiply: 5
+reactiveMultiply->>OUT: 50
+B->>reactiveMultiply: 2
+reactiveMultiply->>OUT: 20
+

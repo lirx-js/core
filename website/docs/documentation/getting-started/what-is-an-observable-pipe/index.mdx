@@ -1,10 +1,18 @@
 # Pipe Observables
 
-An essential part of Reactive Programing, is being able to **pipe** our Observable, to build easily **complex dataflow**.
+An essential part of Reactive Programing consist of **piping** our Observable.
 
-We will start first by defining what is an ObservablePipe.
+It brings us the possibility to **transform** multiple values on different steps to build **complex dataflow** in a few lines of code.
+
+For example, we may think of a *pipe* filtering only odd numbers, and another converting incoming numbers to string.
+
+Such a function is called an ObservablePipe.
 
 ## Definition of an ObservablePipe
+
+An ObservablePipe is a **transform/modify data function** for Observables.
+It usually **subscribes** to the provided Observable, **performs** some operations on the incoming values,
+and may **emit** these values or new ones.
 
 Here's the type of an [ObservablePipe](../../../reference/observable-pipe):
 
@@ -17,7 +25,7 @@ interface IObservablePipe<GIn, GOut> {
 A *ObservablePipe* is a function that **accepts an *Observable*** as input (the `subscribe` argument), and **returns another
 *Observable*** as output. Both are related by an algorithm defined internally into the *ObservablePipe*.
 
-As an example, here's an handmade *ObservablePipe* that emits only distinct received values:
+As an example, here's a handmade *ObservablePipe* that emits only distinct received values:
 
 
 import ObservablePipeExample from './_observable-pipe-example.mdx';
@@ -62,3 +70,5 @@ This function simply does:
 ```
 
 Moreover, we can group our ObservablePipes too using [pipe$$$](../../../reference/pipe-observable-pipes) (less frequently used).
+
+In the next chapter, we will see some examples.

@@ -1,4 +1,8 @@
-# 🄾 timeout
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# timeout
 
 ### Types
 
@@ -23,14 +27,14 @@ Creates an Observable that emits void or the return of `getValue` after a specif
 
 ### Example
 
-#### Prints 'timeout' after a period of 1000ms
+#### Print 'timeout' after a period of 1000ms
 
 ```ts
 const subscribe = timeout(1000);
 
 subscribe(() => {
   console.log('timeout');
-})
+});
 ```
 
 Output:

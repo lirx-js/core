@@ -1,0 +1,22 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE, UNICAST]
+---
+
+# IUnicastSource
+
+### Types
+
+```ts
+interface IUnicastSource<GValue> extends ISource<GValue> {
+  getObserver(): IObserver<GValue> | null;
+}
+```
+
+### Definition
+
+An *UnicastSource* is used to emit one value to only one Observer.
+
+You can create an *IUnicastSource* with the function [createUnicastSource](/docs/reference/create-unicast-source/).
+
+This is partially equivalent to the *[Subject](https://rxjs-dev.firebaseapp.com/guide/subject)*.
+

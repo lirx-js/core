@@ -1,4 +1,8 @@
-# 🄾 reactiveFunction
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveFunction
 
 Alternative: `functionI$$`
 
@@ -24,7 +28,7 @@ pipe$$(combineLatest<GObservables>(observables), [
 ]);
 ```
 
-`@lirx/core` comes with some common predefined `reactiveFunction`'s that you can find on the side bar.
+`@lirx/core` comes with some common predefined [reactiveFunctions](/docs/tags/reactive-function/).
 
 
 If you prefer to have a function which handles changes in batch you may want to use:
@@ -32,9 +36,9 @@ If you prefer to have a function which handles changes in batch you may want to 
 
 ### Diagram
 
-[//]: # (TODO)
+[![](https://mermaid.ink/img/pako:eNp9kUFrwzAMhf-K0KljHmyFXgwLJKy97rDtNO-g2OpmSOTMsQuj9L_PgQ6asO0kofe9h5COaINj1DjyZ2ax_ODpPVJvxMhAMXnrB5IENdAIoR05HqjtuJ6rzVxt5mpksskfeJel1CATvJytXi_C1WXWm4IVKWiv4L4CguvSzeMfX56nbeubqlqmari7NdL8qmyMLIeFK2HFtPnLtP7HtJ62QIU9x568Kzc9GgEwmD64Z4O6tI73lLtk0MipoHlwlHjrfAoR9Z66kRVSTuHpSyzqFDP_QOe_nKnTNxamnJA)](https://mermaid.live/edit#pako:eNp9kUFrwzAMhf-K0KljHmyFXgwLJKy97rDtNO-g2OpmSOTMsQuj9L_PgQ6asO0kofe9h5COaINj1DjyZ2ax_ODpPVJvxMhAMXnrB5IENdAIoR05HqjtuJ6rzVxt5mpksskfeJel1CATvJytXi_C1WXWm4IVKWiv4L4CguvSzeMfX56nbeubqlqmari7NdL8qmyMLIeFK2HFtPnLtP7HtJ62QIU9x568Kzc9GgEwmD64Z4O6tI73lLtk0MipoHlwlHjrfAoR9Z66kRVSTuHpSyzqFDP_QOe_nKnTNxamnJA)
 
-### Examples
+### Example
 
 #### Perform the "sum" of two Observables
 
@@ -72,17 +76,21 @@ You should avoid using a lot of ReactiveFunctions when you could just create one
 
 :::
 
-If you want to achieve:
+If you want to achieve
 
 ```text
 ((obs1 + obs2) * obs3) === obs4
 ```
 
-```ts
-// AVOID
-eq$$(mul$$(add$$(obs1, obs2), obs3), obs4);
+Avoid
 
-// PREFER
+```ts
+eq$$(mul$$(add$$(obs1, obs2), obs3), obs4);
+```
+
+And prefer
+
+```ts
 reactiveFunction(
   [obs1, obs2, obs3, obs4],
   (obs1, obs2, obs3, obs4) => {

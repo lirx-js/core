@@ -39,5 +39,4 @@ Output:
 1
 ...
 9
-complete
 ```

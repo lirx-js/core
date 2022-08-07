@@ -41,6 +41,9 @@ Add `switchAll` and `switchMap` shortcuts to match with the RxJS equivalent func
 - add `fromSingleAnimationFrame`
 - add `fromSelfEventTarget`
 - add `thenAnyObservablePipe`
+- add `fromWritableStream`
+- add `fromWritableStreamDefaultWriter`
+- add `fromReadableWritablePair`
 
 
 ### Breaking changes

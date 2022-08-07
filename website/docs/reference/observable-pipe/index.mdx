@@ -1,4 +1,8 @@
-# 🄸 ObservablePipe
+---
+tags: [INTERFACE, OBSERVABLE PIPE]
+---
+
+# IObservablePipe
 
 ### Types
 
@@ -12,13 +16,21 @@ interface IObservablePipe<GIn, GOut> {
 
 An ObservablePipe receives a value, performs some operation on it, and may emit something else.
 
-Similar to an [ObserverPipe](../observer-pipe) but works with
-[Observables](../observable) instead.
+It is similar to an [ObserverPipe](/docs/reference/observer-pipe/) but works with
+[Observables](/docs/reference/observable/) instead.
 
 Somehow, this is both a **lazy push destination** (returned Observable),
 and a **lazy push source** (received Observable)
 
 This is equivalent to the *[Pipeable Operators](https://rxjs-dev.firebaseapp.com/guide/operators)* (only the pipeable ones).
+
+:::info
+
+A best practice consist of post-fixing your ObservablePipes with `$$`.
+It's a convenient way to distinguish them from the other variables.
+Example: `const oddFilter$$ = filter$$$(x => x % 2 === 1)`
+
+:::
 
 ### Example
 

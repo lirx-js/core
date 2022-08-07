@@ -1,0 +1,189 @@
+# Migrating from Promise
+
+Promise is the de-facto API to work with async data.
+Observables **don't replace them**, but they **cover some specific limits** of the Promises.
+
+[//]: # (- Observables may send **more than one value**.)
+
+[//]: # (- Observables are **cancellable**.)
+
+[//]: # (- Observables pipeline is defined before and may be executed later, where the Promise pipeline is immediately executed.)
+
+[//]: # (So with these particular use-cases, you may consider using Observables instead.)
+
+We will discuss of these particular use-cases in this tutorial.
+
+### Difference between a Promise and an Observable
+
+First, we need to understand the differences between a Promise and an Observable:
+
+- A Promise sends only **one** value, where an Observable may emit **many values**.
+- A Promise canot be **cancelled** (or with special tricks like `AbortSignal`), where an Observable is based on a **subscribe/unsubscribe** mechanism.
+- A Promise is executed **immediately**. However, with the Observables we define first the pipeline, and then, by subscribing **later**, we run this pipeline.
+
+So if we're facing one of these limits, then an Observable is the perfect candidate.
+
+### How to represent a Promise with an Observable ?
+
+A Promise has an internal state:
+  - `pending`: the Promise is not resolved yet
+  - `fulfilled`: the Promise is resolved without error and has a `value`
+  - `rejected`: the Promise is rejected with an `error`
+
+However, an Observable may emit **any kind of value**, so to mimic the behaviour of a Promise we will use some **[Notifications](/docs/documentation/getting-started/what-is-a-notification/)**:
+
+- [INextNotification](/docs/reference/next-notification/): used to emit a value
+- [ICompleteNotification](/docs/reference/complete-notification/): used to notify of a `complete` state (success/fulfilled)
+- [IErrorNotification](/docs/reference/error-notification/): used to notify of an `error` state (rejected)
+
+So to represent a `fulfilled` Promise:
+
+- we have to emit a `next` Notification
+- followed by a `complete` one
+
+And to represent a `rejected` Promise:
+
+- we have to emit an `error` Notification
+
+It's a little tricky, so we will see now some examples.
+
+### Observable equivalent of the Promise's methods
+
+#### Promise.resolve
+
+As said earlier, a fulfilled Promise, may be represented by a `next` Notification followed by a `complete` one.
+
+This function has the name of [singleWithNotifications](/docs/reference/single-with-notifications/).
+
+It simply does:
+
+```ts
+function singleWithNotifications<GValue>(
+  value: GValue,
+): IObservable<ISingleObservableNotifications<GValue>> {
+  return (emit: IObserver<ISingleObservableNotifications<GValue>>): IUnsubscribe => {
+    emit(createNextNotification<GValue>(value));
+    emit(STATIC_COMPLETE_NOTIFICATION);
+    return noop;
+  };
+}
+```
+
+#### Promise.reject
+
+On another hand, a rejected Promise, may be represented by an `error` Notification.
+
+This time, the function has the name of [throwError](/docs/reference/throw-error/).
+
+And it does:
+
+```ts
+function throwError<GError>(
+  error: GError,
+): IObservable<IErrorNotification<GError>> {
+  return (emit: IObserver<IErrorNotification<GError>>): IUnsubscribe => {
+    emit(createErrorNotification<GError>(error));
+    return noop;
+  };
+}
+```
+
+#### Promise.all
+
+TODO continue here
+
+[forkJoin or allWithNotifications](../../observable/built-in/from/with-notifications/many-observables/fork-join/fork-join.md)
+
+#### Promise.race
+
+[raceWithNotifications](../../observable/built-in/from/with-notifications/many-observables/race-with-notifications/race-with-notifications.md)
+
+#### Promise.any
+
+[anyWithNotifications](../../observable/built-in/from/with-notifications/many-observables/any-with-notifications/any-with-notifications.md)
+
+
+#### Chaining -> then / catch
+
+##### then
+
+[thenObservablePipe](../../observable/pipes/built-in/with-notifications/then/then-observable-pipe.md)
+
+[fulfilledObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/fulfilled/fulfilled-observable-pipe.ts)
+
+##### catch
+
+[rejectedObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/rejected/rejected-observable-pipe.ts)
+
+##### finally
+
+[finallyObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/finally/finally-observable-pipe.md)
+
+#### Casting an Observable to a Promise
+
+In most cases, you simply want the last received value (last `next` Notification), so you can use the function
+[toPromiseLast](../../observable/built-in/to/with-notifications/promise/last/to-promise-last.md)
+, but if for some reasons you prefer to receive all the values as an array, you can use the function
+[toPromiseAll](../../observable/built-in/to/with-notifications/promise/all/to-promise-all.md)
+
+
+### Example
+
+```ts
+function noCORS(url: string): string {
+  const _url: URL = new URL(`https://cors-anywhere.herokuapp.com/`);
+  _url.pathname = url;
+  return _url.href;
+}
+
+interface IGeoJSGetGeoJSON {
+  organization_name: string;
+  region: string;
+  accuracy: number;
+  asn: number;
+  organization: string;
+  timezone: string;
+  longitude: string;
+  country_code3: string;
+  area_code: string;
+  ip: string;
+  city: string;
+  country: string;
+  continent_code: string;
+  country_code: string;
+  latitude: string;
+}
+
+// 1) prepare the request pipiline
+const request$ = pipe$$(fromFetch(noCORS(`https://get.geojs.io/v1/ip/geo.json`)), [
+  fulfilled$$$((response: Response): IObservable<IDefaultNotificationsUnion<IGeoJSGetGeoJSON>> => {
+    if (response.ok) {
+      return fromPromise(response.json());
+    } else {
+      return throwError(createNetworkError());
+    }
+  }),
+  fulfilled$$$((data: IGeoJSGetGeoJSON): IObservable<IDefaultNotificationsUnion<string>> => {
+    return singleN<string>(data.country);
+  }),
+]);
+
+const doRequestOnClick$ = pipe$$(fromEventTarget(window, 'click'), [
+  mergeMapS$$$(() => request$),
+]);
+
+doRequestOnClick$((notification: IDefaultNotificationsUnion<string>) => {
+  console.log(notification.name, notification.value);
+});
+```
+
+Output:
+
+```text
+// user clicks
+'next', United States
+'complete', undefined
+```
+
+[Try it on stackblitz](https://stackblitz.com/edit/typescript-a6j2xx?devtoolsheight=33&file=index.ts)
+

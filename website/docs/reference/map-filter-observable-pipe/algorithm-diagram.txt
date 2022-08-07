@@ -1,0 +1,14 @@
+sequenceDiagram
+
+participant observable
+participant mapFilterObservablePipe as mapFilterObservablePipe(mapFilterFunction)
+participant OUT
+
+observable->>mapFilterObservablePipe: value
+
+alt if (newValue = mapFilterFunction(value)) returns MAP_FILTER_DISCARD: discard value
+    mapFilterObservablePipe--xOUT:
+else else send newValue
+    mapFilterObservablePipe->>OUT: newValue
+end
+

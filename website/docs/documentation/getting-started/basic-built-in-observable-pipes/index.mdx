@@ -1,2 +1,113 @@
 # Basic ObservablePipes
 
+*ObservablePipes* are the most important bricks to build complex data flow with our Observables.
+
+In this tutorial, we'll **learn** to use some the **most essentials** ObservablePipes provided by `@lirx/core`.
+
+### Filtering and mapping
+
+The most common pipes are [filter$$$](../../../reference/filter-observable-pipe/), [map$$$](../../../reference/map-observable-pipe/),
+and [distinct$$$](../../../reference/distinct-observable-pipe/).
+
+For example, we may want to filter only even numbers, and then cast them to string:
+
+```ts
+const subscribe = pipe$$(single(0, 1, 2, 3, 4, 5), [
+  filter$$$(v => v % 2 === 0),
+  map$$$(String),
+]);
+
+subscribe((value: string) => {
+  console.log(value);
+});
+```
+
+As you may see this is really similar with the `Array.map` and `Array.filter` functions:
+
+```ts
+const data = [0, 1, 2, 3, 4, 5]
+  .filter(v => v % 2 === 0)
+  .map(String);
+
+console.log(data);
+```
+
+
+
+However, it works with streams of data instead of static values.
+
+
+### Debouncing values
+
+Sometimes, we need to delay incoming values and/or discard next values during this period.
+
+The most common pipes are [debounceTime$$$](../../../reference/debounce-time-observable-pipe/)
+and [throttleTime$$$](../../../reference/map-observable-pipe/).
+
+As an example, this is especially useful when we want to debounce user's click:
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  debounceTime$$$(200),
+]);
+
+subscribe(() => {
+  console.log('clicked');
+});
+```
+
+### When an Observable emits a value, map this value and return another Observable
+
+One of the most used pipe is [switchMap$$$](../../../reference/merge-map-single-observable-pipe/).
+It maps the incoming values of an Observable to another one.
+
+It allows us to listen to an element's size selected by a user click for example:
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  // maps incoming event to the "select" element using event.target
+  map$$$((event: MouseEvent): HTMLElement => event.target as HTMLElement),
+  // maps incoming element into an Observable listening to its size
+  switchMap$$$((element: HTMLElement): IObservable<DOMRectReadOnly> => {
+    // use merge to get the initial size, and the new size if the element is resized
+    return merge([
+      // initial size
+      reference((): DOMRectReadOnly => element.getBoundingClientRect()),
+      // listen to the element's size and map the value to get a DOMRectReadOnly
+      map$$(fromResizeObserver(event.target), ({ contentRect }) => contentRect),
+    ]);
+  }),
+]);
+
+subscribe(({ width, height }) => {
+  console.log(width, height);
+});
+```
+
+### Sharing values of an Observable (only subscribing once)
+
+Last common use case: if we want to subscribe many times to an Observable but subscribe only once to the original once, we may use
+[shareRL$$$](../../../reference/share-observable-pipe/share-observable-pipe-with-multicast-replay-last-source/).
+
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  share$$$<number>(),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+// note that interval(1000) is only subscribed once
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+
+### Going deeper
+
+Plenty of others *ObservablePipes* may be found on the **[reference page](../../../reference/observable-pipe/)**.
+

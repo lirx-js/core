@@ -1,0 +1,56 @@
+---
+tags: [FUNCTION, TO, NOTIFICATION]
+---
+
+# toPromiseLast
+
+### Types
+
+```ts
+function toPromiseLast<GValue>(
+  subscribe: IObservable<IObservableToPromiseNotifications<GValue>>,
+  options?: IObservableToPromiseLastOptions
+): Promise<GValue>
+```
+
+### Definition
+
+Converts an Observable of Notifications into a Promise.
+
+It's similar to [toPromiseAll](/docs/reference/to-promise-all/),
+but it returns the last received `next` value instead of an Array.
+
+### Diagram
+
+#### Algorithm
+
+[![](https://mermaid.ink/img/pako:eNqNkk1LAzEQhv9KmJNCFdRbDgWphR5EBHvMZZrM2kA-1mS2KKX_3WRp2aYHbQ4hk3nmnY9kDzoaAgmZvgYKml4sfib0KqjQY2KrbY-BRdxkSjvcOBKYz6yW4vieoreZXjFzBZuLmynsto1br5ZvFb_nLV0kXjyvF6vRp5H1ttY1ydzN500GKQJ9l32HbqCHq8nHq8mnmh8dC9sJHX3viMsIRFl_CbRk4yxwbX6SJ5epqlNKMf0vPWLynL6UHwcoxQmhYGoPKsAMPCWP1pTX39dYBWX8nhTIcjTU4eBYgQqHgg69QaalsRwTyA5LlTPAgePHT9AgOQ10go4_6EgdfgEJwt0I)](https://mermaid.live/edit#pako:eNqNkk1LAzEQhv9KmJNCFdRbDgWphR5EBHvMZZrM2kA-1mS2KKX_3WRp2aYHbQ4hk3nmnY9kDzoaAgmZvgYKml4sfib0KqjQY2KrbY-BRdxkSjvcOBKYz6yW4vieoreZXjFzBZuLmynsto1br5ZvFb_nLV0kXjyvF6vRp5H1ttY1ydzN500GKQJ9l32HbqCHq8nHq8mnmh8dC9sJHX3viMsIRFl_CbRk4yxwbX6SJ5epqlNKMf0vPWLynL6UHwcoxQmhYGoPKsAMPCWP1pTX39dYBWX8nhTIcjTU4eBYgQqHgg69QaalsRwTyA5LlTPAgePHT9AgOQ10go4_6EgdfgEJwt0I)
+
+#### Example
+
+[![](https://mermaid.ink/img/pako:eNqN0cFKAzEQBuBXCXOqsAptbzn0ZMGDFEHBS0Cm2Vkb2MysyUSU0nc3kYqsBymBEJLvZybJEbz0BBYyvRViT7cBXxNGx44nTBp8mJDVyD5Tesf9SAazkeE56GEnGobgUYNwXiw7s-rM-mqeU3lIEkOme8zaorONxcsf_nS33TV1owfi1sNv3evNZpa1humjzstL0OoStP4feYnTSEqOZwcVtq6_421AB5FSxNDXVz06NsZBvU0kB7YuexqwjOrA8anSMvWotO2DSgI74JipAywqj5_swWoq9IPOP3NWpy8qb6AS)](https://mermaid.live/edit#pako:eNqN0cFKAzEQBuBXCXOqsAptbzn0ZMGDFEHBS0Cm2Vkb2MysyUSU0nc3kYqsBymBEJLvZybJEbz0BBYyvRViT7cBXxNGx44nTBp8mJDVyD5Tesf9SAazkeE56GEnGobgUYNwXiw7s-rM-mqeU3lIEkOme8zaorONxcsf_nS33TV1owfi1sNv3evNZpa1humjzstL0OoStP4feYnTSEqOZwcVtq6_421AB5FSxNDXVz06NsZBvU0kB7YuexqwjOrA8anSMvWotO2DSgI74JipAywqj5_swWoq9IPOP3NWpy8qb6AS)
+
+### Examples
+
+#### Simple http request
+
+```ts
+toPromiseLast(fromFetch('https://some-url.site'))
+  .then((response: Response) => {
+    console.log(response.statusText);
+  });
+```
+
+#### Simple http request aborted
+
+```ts
+const controller = new AbortController();
+
+toPromiseLast(fromFetch('https://some-url.site'), { signal: controller.signal })
+  .then((response: Response) => {
+    console.log(response.statusText);
+  });
+
+controller.abort(); // the request is properly aborted
+```
+

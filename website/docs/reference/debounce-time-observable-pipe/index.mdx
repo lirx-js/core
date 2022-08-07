@@ -1,4 +1,8 @@
-# 🄿 debounceTimeObservablePipe
+---
+tags: [FUNCTION, OBSERVABLE PIPE, TIME RELATED]
+---
+
+# debounceTimeObservablePipe
 
 Alternative: `debounceTime$$$`
 
@@ -14,7 +18,7 @@ function debounceTimeObservablePipe<GValue>(
 
 Emits a value from the source Observable only after a particular time span has passed without another source emission.
 
-The RxJS equivalent is [debounceTime](https://rxjs-dev.firebaseapp.com/api/operators/debounceTime)
+The RxJS equivalent is [debounceTime](https://rxjs-dev.firebaseapp.com/api/operators/debounceTime).
 
 ### Diagram
 
@@ -37,7 +41,8 @@ subscribe(() => {
 Timeline:
 
 ```text
-0ms: user clicks
-100ms: user clicks
-300ms: 'clicked'
+// t = 0ms: user clicks on window
+// t = 100ms: user clicks on window
+// t = 300ms
+'clicked'
 ```

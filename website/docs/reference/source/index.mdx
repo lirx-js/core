@@ -1,0 +1,21 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE]
+---
+
+# ISource
+
+### Types
+
+```ts
+type ISource<GValue> = IObserverObservablePair<GValue, GValue>
+```
+
+### Definition
+
+A *Source* does the link between an Observer and Observable.
+
+`emit` and `subscribe` are tied together, and share the same value's type.
+
+It is generally used to emit a value to many observers.
+
+

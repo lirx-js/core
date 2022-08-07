@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant observable as ofWithNotifications(1, 2, 3)
+participant toPromiseAll as toPromiseAll(_)
+participant THEN as .then
+
+observable->>toPromiseAll: next: 1
+observable->>toPromiseAll: next: 2
+observable->>toPromiseAll: next: 3
+observable->>toPromiseAll: complete
+toPromiseAll->>THEN: [1, 2, 3]
+
+

@@ -1,0 +1,54 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE]
+---
+
+# takeWhileObservablePipe
+
+Alternative: `takeWhile$$$`
+
+### Types
+
+```ts
+function takeWhileObservablePipe<GValue>(
+  predicate: ITakeWhileObservablePredicateFunction<GValue>,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+This pipe emits values sent by the source Observable so long as each value satisfies the given `predicate`,
+and then stops as soon as this predicate is not satisfied.
+
+The RxJS equivalent is [takeWhile](https://rxjs.dev/api/index/function/takeWhile).
+
+### Diagram
+
+#### Algorithm
+
+[![](https://mermaid.ink/img/pako:eNp9kb9uAjEMh18l8gQSfYEMTO1MpbbqksWX-IrVnC_kD1KFePf6EBxluGaIovjT97OTE_gxEFgodGgknp4ZvzIOTpwkzJU9J5Rqxq5QPmIX6fG-4jd97jnSbgZeOZHBslRapUyBPVZaP6p2H-9T6j3pabtdcFhzxNhowjFWw72ZpatLZW1YG8gTYnQtaDRAQ2cZxULmsjUprSs-c6eTSDCBi8ccbuB_SnXeJ7B_TRogwQlsYKA8IAd99dMkc1D3NJADq8dAPbZYHTg5K9pS0KFeAtcxg-1Ru9sAtjq-_YgHO414g64_d6XOv1FkrtQ)](https://mermaid.live/edit#pako:eNp9kb9uAjEMh18l8gQSfYEMTO1MpbbqksWX-IrVnC_kD1KFePf6EBxluGaIovjT97OTE_gxEFgodGgknp4ZvzIOTpwkzJU9J5Rqxq5QPmIX6fG-4jd97jnSbgZeOZHBslRapUyBPVZaP6p2H-9T6j3pabtdcFhzxNhowjFWw72ZpatLZW1YG8gTYnQtaDRAQ2cZxULmsjUprSs-c6eTSDCBi8ccbuB_SnXeJ7B_TRogwQlsYKA8IAd99dMkc1D3NJADq8dAPbZYHTg5K9pS0KFeAtcxg-1Ru9sAtjq-_YgHO414g64_d6XOv1FkrtQ)
+
+#### Example
+
+[![](https://mermaid.ink/img/pako:eNqVkj1PAzEMhv-K5QmkMtAyRXATldiKVBBLFt_FpRE5X5qP6qqq_520KlQdThxbFD9-XifyHpvOMCqMvMksDT9b-gzUatHiKSTbWE-SoKsjhy3Vjq_vE33xx9o6XvwCr9YzUBwq3fTwVEEPjzC7vXYt3t-OsZeou6oakCi41zJQK13FdCLGyqZ_yqbjZbMjOqQrjReLgiwx17EJtuZTgE_wsvNdWnP5FXIg3CfYksscx8Y__OPRLEYLTrDl0JI1ZQ32WgA0lgFa1qjK0fCKsksatRwKmr2hxHNjUxdQrchFniDl1C130qBKIfMPdF6lM3X4BpHI5Jw)](https://mermaid.live/edit#pako:eNqVkj1PAzEMhv-K5QmkMtAyRXATldiKVBBLFt_FpRE5X5qP6qqq_520KlQdThxbFD9-XifyHpvOMCqMvMksDT9b-gzUatHiKSTbWE-SoKsjhy3Vjq_vE33xx9o6XvwCr9YzUBwq3fTwVEEPjzC7vXYt3t-OsZeou6oakCi41zJQK13FdCLGyqZ_yqbjZbMjOqQrjReLgiwx17EJtuZTgE_wsvNdWnP5FXIg3CfYksscx8Y__OPRLEYLTrDl0JI1ZQ32WgA0lgFa1qjK0fCKsksatRwKmr2hxHNjUxdQrchFniDl1C130qBKIfMPdF6lM3X4BpHI5Jw)
+
+### Example
+
+#### Take values as long as they are lower than 3
+
+```ts
+const subscribe = pipe$$(of(1, 2, 3, 4), [
+  takeWhile$$$(x => x < 3),
+]);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+1
+2
+```
+

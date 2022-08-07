@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant observable
+participant takeObservablePipe as takeObservablePipe(count)
+participant OUT
+
+observable->>takeObservablePipe: value
+
+alt if the number of emited values is less than <count>
+    takeObservablePipe->>OUT: value
+else else unsubscribe and discard value
+    takeObservablePipe-->>observable: unsubscribe
+end

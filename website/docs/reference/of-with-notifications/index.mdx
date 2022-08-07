@@ -1,4 +1,8 @@
-# 🄾🄽 ofWithNotifications
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# ofWithNotifications
 
 Alternative: `ofN`
 
@@ -19,14 +23,14 @@ type IOfObservableNotifications<GValue> = IFromArrayObservableNotifications<GVal
 Creates an Observable from a list of values. It emits the values one by one in the form of `next` Notifications
 and then complete (`complete` Notification).
 
-It's identical of [fromArrayWithNotifications](../from-array-with-notifications) but used spread values instead.
+It's identical of [fromArrayWithNotifications](/docs/reference/from-array-with-notifications/) but use spread values instead.
 
 ### Example
 
-#### Emits the sequence of values: 0, 1, 2, 3
+#### Emit the sequence of values: 0, 1, 2, 3
 
 ```ts
-const subscribe = of(0, 1, 2, 3);
+const subscribe = ofWithNotifications(0, 1, 2, 3);
 
 subscribe((notification) => {
   console.log(notification.name, ':', notification.value);

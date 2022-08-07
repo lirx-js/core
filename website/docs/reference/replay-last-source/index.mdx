@@ -1,0 +1,27 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE, REPLAY]
+---
+
+# IReplayLastSource
+
+### Types
+
+```ts
+interface IReplayLastSourceMethods<GValue> {
+  getValue(): GValue;
+}
+
+type IReplayLastSource<GValue, GSource extends ISource<GValue>> =
+  Omit<GSource, keyof IReplayLastSourceMethods<GValue>>
+  & IReplayLastSourceMethods<GValue>;
+```
+
+### Definition
+
+A *ReplayLastSource* is used to store a value and emit it each time we subscribe to it.
+
+You can create a *IReplayLastSource* with the function [createReplayLastSource](/docs/reference/create-replay-last-source/).
+
+This is equivalent to the *[BehaviorSubject](https://rxjs-dev.firebaseapp.com/guide/subject)* if you provide a *MulticastSource*.
+
+

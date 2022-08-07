@@ -23,18 +23,17 @@ const subscribe = fromIterable(
   })()
 );
 
-subscribe((notification) => {
-  console.log(notification.name, ':', notification.value);
+subscribe((value: number) => {
+  console.log(value);
 });
 ```
 
 Output:
 
 ```text
-next: 0
-next: 1
+0
+1
 ...
-next: 9
-complete
+9
 ```
 

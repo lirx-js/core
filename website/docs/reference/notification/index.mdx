@@ -1,4 +1,8 @@
-# 🄸 Notification
+---
+tags: [INTERFACE, NOTIFICATION]
+---
+
+# INotification
 
 ### Types
 
@@ -15,13 +19,13 @@ A *Notification* is used as a replacement of the `next`, `complete` and `error` 
 you will emit directly a `INextNotification` instead of calling `subscriber.next()` for example.
 
 To create a Notification, you may use a plain object `{ name, value }` or use the
-function [createNotification](./create).
+function [createNotification](/docs/reference/create-notification/).
 
 Moreover, you may use some pre-existing *Notifications*:
 
-- [NextNotification](./next)
-- [CompleteNotification](./complete)
-- [ErrorNotification](./error)
+- [INextNotification](/docs/reference/next-notification/)
+- [ICompleteNotification](/docs/reference/complete-notification/)
+- [IErrorNotification](/docs/reference/error-notification/)
 
 ### Example
 
@@ -63,7 +67,7 @@ function fromPromise<GValue>(
 }
 ```
 
-#### Consumes your notifications
+#### Consume the notifications
 
 ```ts
 const subscribe = fromPromise(Promise.resolve(5));
@@ -89,6 +93,8 @@ Output:
 next: 5
 resolved
 ```
+
+[//]: # (TODO doc)
 
 You may also use the function `notificationObserver` if you prefer:
 

@@ -1,0 +1,80 @@
+---
+tags: [FUNCTION, TO, NOTIFICATION]
+---
+
+# toPromiseAll
+
+### Types
+
+```ts
+function toPromiseAll<GValue>(
+  subscribe: IObservable<IObservableToPromiseNotifications<GValue>>,
+  options?: IObservableToPromiseAllOptions,
+): Promise<GValue[]>
+```
+
+```ts
+interface IObservableToPromiseAllOptions extends IObservableToPromiseOptions {
+  maxNumberOfValues?: number; // (default: Infinity)
+}
+
+type IObservableToPromiseNotifications<GValue> = IDefaultInNotificationsUnion<GValue>;
+```
+
+### Definition
+
+Converts an Observable of Notifications into a Promise, resolved with an array of values.
+
+The Observable must emit the following Notifications:
+
+- `next`: the values to resolve the promise with
+- `complete`: resolves the promise with all the `next` values
+- `error`: rejects the promise with the received error
+
+You may provide a `IObservableToPromiseAllOptions`, which may be used to force an abort from an external
+AbortSignal: this is useful if you want to abort any pending work and unsubscribe from the provided Observable,
+before it completes.
+If this signal is aborted, the promise is rejected with an `AbortError`.
+
+### Diagram
+
+#### Algorithm
+
+[![](https://mermaid.ink/img/pako:eNqNkk1LAzEQhv9KyElhFbS3HAqlFnoSwd6Mh2kyawP5WJNJUUr_u8m6pbs9aHNJhnnevDPJHLgKGrngCT8zeoVPBj4iOOml7yCSUaYDTyxsE8Y9bC0ySKNoSlF4icGZhAtrKzeOb86i26lqs149V_qednhhu1xslus-p4DUrlZ1vuZuPh8bCObxiwTbg834cC34eC04q-ZgiZmWqeA6i1S6Z2X9oZ-C41xBa9-Cvf3W2wzlDPvsXXq0Casbxhjiv1Y9JcbwhV3_loKdCPS6diQ9b7jD6MDoMgaHKpW8_IRDyUU5amwhW5Jc-mNBc6eBcKUNhchFC6XGhkOm8PrtFRcUM56gYZQG6vgDEbPeog)](https://mermaid.live/edit#pako:eNqNkk1LAzEQhv9KyElhFbS3HAqlFnoSwd6Mh2kyawP5WJNJUUr_u8m6pbs9aHNJhnnevDPJHLgKGrngCT8zeoVPBj4iOOml7yCSUaYDTyxsE8Y9bC0ySKNoSlF4icGZhAtrKzeOb86i26lqs149V_qednhhu1xslus-p4DUrlZ1vuZuPh8bCObxiwTbg834cC34eC04q-ZgiZmWqeA6i1S6Z2X9oZ-C41xBa9-Cvf3W2wzlDPvsXXq0Casbxhjiv1Y9JcbwhV3_loKdCPS6diQ9b7jD6MDoMgaHKpW8_IRDyUU5amwhW5Jc-mNBc6eBcKUNhchFC6XGhkOm8PrtFRcUM56gYZQG6vgDEbPeog)
+
+#### Example
+
+[![](https://mermaid.ink/img/pako:eNqN0cFKAzEQBuBXCXNqYRXa3nIoCBY8FaGCByMyzc62gWSyJhNRSt_drKy4epDekvD95J_kBDa2BBoyvRZiS7cODwmDYcM9JnHW9cii4j5TesO9J4VZxe7RyXEbxXXOorjIebZo1LJRq_nvnMT7FIPLdOP9kJzuZy9_8MPdZjugazkSDw1-br1ar6dRrZjeRavFBWZ5gVn9a2wMvSchw9PzyobCWj2Noz-br9LQQKAU0LX1WU-GlTJQBwpkQNdlSx0WLwYMnystfYtCm9ZJTKA79JkawCJx98EWtKRC32j8mlGdPwGD6J5o)](https://mermaid.live/edit#pako:eNqN0cFKAzEQBuBXCXNqYRXa3nIoCBY8FaGCByMyzc62gWSyJhNRSt_drKy4epDekvD95J_kBDa2BBoyvRZiS7cODwmDYcM9JnHW9cii4j5TesO9J4VZxe7RyXEbxXXOorjIebZo1LJRq_nvnMT7FIPLdOP9kJzuZy9_8MPdZjugazkSDw1-br1ar6dRrZjeRavFBWZ5gVn9a2wMvSchw9PzyobCWj2Noz-br9LQQKAU0LX1WU-GlTJQBwpkQNdlSx0WLwYMnystfYtCm9ZJTKA79JkawCJx98EWtKRC32j8mlGdPwGD6J5o)
+
+### Examples
+
+#### Resolves with [1, 2, 3]
+
+```ts
+toPromiseAll(ofWithNotifications(1, 2, 3))
+  .then((values: number[]) => {
+    console.log(values);
+  });
+```
+
+Output:
+
+```text
+[1, 2, 3]
+```
+
+#### Rejects with an error
+
+```ts
+toPromiseAll(throwError(new Error('Custom Error')))
+  .catch((error: unknown) => {
+    console.log(error);
+  });
+```
+
+Output:
+
+```text
+Error('Custom Error')
+```
+

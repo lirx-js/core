@@ -1,0 +1,28 @@
+---
+tags: [FUNCTION, OBSERVER OBSERVABLE PAIR, SOURCE, REPLAY]
+---
+
+# createReplayLastSource
+
+### Types
+
+```ts
+function createReplayLastSource<GValue, GSource extends ISource<GValue>>(
+  source: GSource,
+  ...initialValue: ICreateReplayLastSourceInitialValue<GValue>
+): IReplayLastSource<GValue, GSource>
+```
+
+```ts
+type ICreateReplayLastSourceInitialValue<GValue> = [] | [GValue];
+```
+
+### Definition
+
+Creates a [IReplayLastSource](/docs/reference/replay-last-source/).
+
+When calling `createReplayLastSource` you must provide a `source` which is used to build the ReplayLastSource. You may
+choose for example, between an [IUnicastSource](/docs/reference/unicast-source/) or a [IMulticastSource](/docs/reference/multicast-source/).
+
+You may provide an initial value (`initialValue`).
+If you don't, the ReplayLastSource waits for the first value received.

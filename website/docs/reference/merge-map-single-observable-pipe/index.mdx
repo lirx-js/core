@@ -1,4 +1,8 @@
-# 🄿 mergeMapSingleObservablePipe
+---
+tags: [FUNCTION, OBSERVABLE PIPE]
+---
+
+# mergeMapSingleObservablePipe
 
 Alternatives: `mergeMapS$$$`, `switchMapObservablePipe`, `switchMap$$$`
 
@@ -12,9 +16,55 @@ function mergeMapSingleObservablePipe<GIn, GOut>(
 
 ### Definition
 
-This function is a shortcut and optimized version of `mergeMapObservablePipe(mapFunction, 1)`
 
-See [mergeMapObservablePipe](../merge-map-observable-pipe)
+This is one of the most used `@lirx/core` ObservablePipe.
+It maps the incoming values of an Observable to another one.
 
-The RxJS equivalent is [switchMap](https://rxjs.dev/api/index/function/switchMap)
+
+This function is a shortcut and optimized version of `mergeMapObservablePipe(mapFunction, 1)`.
+
+See [mergeMapObservablePipe](/docs/reference/merge-map-observable-pipe/).
+
+The RxJS equivalent is [switchMap](https://rxjs.dev/api/index/function/switchMap).
+
+### Diagram
+
+[//]: # (TODO)
+
+### Example
+
+#### When a user clicks on an element, listen to its size
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  map$$$((event: MouseEvent): HTMLElement => event.target as HTMLElement),
+  switchMap$$$((element: HTMLElement): IObservable<DOMRectReadOnly> => {
+    return merge([
+      reference((): DOMRectReadOnly => element.getBoundingClientRect()),
+      map$$(fromResizeObserver(event.target), ({ contentRect }) => contentRect),
+    ]);
+  }),
+]);
+
+subscribe(({ width, height }) => {
+  console.log(width, height);
+});
+```
+
+Output:
+
+```text
+// user clicks on an element
+// element size change
+240, 120
+// element size change
+350, 120
+// user clicks on another element
+// stops listening to the first element's size
+// new element size change
+80, 60
+// new element size change
+120, 60
+// ...
+```
 

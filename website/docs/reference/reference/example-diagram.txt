@@ -1,0 +1,6 @@
+sequenceDiagram
+
+participant A as reference(() => 1)
+participant OUT
+
+A->>OUT: 1

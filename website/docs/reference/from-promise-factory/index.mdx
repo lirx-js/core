@@ -1,4 +1,8 @@
-# 🄾🄽 fromPromiseFactory
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromPromiseFactory
 
 ### Types
 
@@ -25,8 +29,8 @@ Creates an Observable from a Promise factory.
 
 The promise factory is a function which receives an AbortSignal and returns a Promise.
 
-The AbortSignal is aborted when the subscription is unsubscribed and if the Promise is not resolved
-(fulfilled or rejected).
+The AbortSignal is aborted when the subscription is unsubscribed
+(only before the Promise is fulfilled or rejected).
 This signal should be used to cancel any pending work (ex: `fetch`, or any pending async task).
 
 The Observable emits values in the form of Notifications:
@@ -46,26 +50,26 @@ You may provide a `IObservableFromPromiseFactoryOptions`, which may be used to f
 #### Simple http request
 
 ```ts
-const subscribe = fromPromiseFactory(
-  (signal: AbortSignal) => {
-    return fetch('https://some-url.site', {
-      signal,
-    });
-  },
-);
+const subscribe = fromPromiseFactory((signal: AbortSignal): Promise<Response> => {
+  return fetch('https://some-url.site', { signal });
+});
 
 subscribe((notification) => {
   console.log(notification.name, ':', notification.value);
-})
+});
 ```
 
 Output:
 
+*if fulfilled*
+
 ```text
-=> if fulfilled
 next: Response
 complete
-=> if rejected
-error: Error
 ```
 
+*if rejected*
+
+```text
+error: Error
+```

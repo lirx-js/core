@@ -1,0 +1,38 @@
+---
+tags: [INTERFACE, NOTIFICATION]
+---
+
+# ICompleteNotification
+
+### Types
+
+```ts
+type ICompleteNotification = INotification<'complete', void>;
+```
+
+### Definition
+
+Used to notify of a ***complete*** state. This is used as a replacement of the `complete` *event* of RxJS.
+
+For performance reasons, you may use directly the variable `STATIC_COMPLETE_NOTIFICATION`, instead of creating your own `complete` Notification.
+
+
+### Example
+
+#### Emit a single 'complete' Notification
+
+```ts
+const subscribe = single(STATIC_COMPLETE_NOTIFICATION);
+
+subscribe((notification) => {
+  console.log(notification);
+});
+```
+
+Output:
+
+```text
+{ name: 'complete', value: undefined }
+```
+
+

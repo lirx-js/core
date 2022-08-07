@@ -1,0 +1,44 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromArray
+
+### Types
+
+```ts
+function fromArray<GValue>(
+  array: ArrayLike<GValue>,
+): IObservable<GValue>
+```
+
+### Definition
+
+Creates an Observable from an Array. It emits the array's values one by one.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNpVzzELwjAQhuG_ctykEMG2W4ZCQWcHdTIOR3PVQJPUNBlK6X-3hQp1e4b3g7sRa68ZJfb8SexqPhl6BbLKKddRiKY2HbkIFVAPTfC2CoGG3eMoIBOQCyie-__ycr8t4-pQljMlHDfONs43LpYFCrQcLBk9nzMqB6AwvtmyQjlTc0OpjQqVm-Y0dZoin7WJPqBsqO1ZIKXor4OrUcaQ-BetL63V9AUJ11Be)](https://mermaid.live/edit#pako:eNpVzzELwjAQhuG_ctykEMG2W4ZCQWcHdTIOR3PVQJPUNBlK6X-3hQp1e4b3g7sRa68ZJfb8SexqPhl6BbLKKddRiKY2HbkIFVAPTfC2CoGG3eMoIBOQCyie-__ycr8t4-pQljMlHDfONs43LpYFCrQcLBk9nzMqB6AwvtmyQjlTc0OpjQqVm-Y0dZoin7WJPqBsqO1ZIKXor4OrUcaQ-BetL63V9AUJ11Be)
+
+### Example
+
+#### Emit the values 0, 1, 2, 3
+
+```ts
+const subscribe = fromArray([0, 1, 2, 3]);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+0
+1
+2
+3
+```
+
+

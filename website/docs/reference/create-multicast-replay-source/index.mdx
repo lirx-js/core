@@ -1,0 +1,71 @@
+---
+tags: [FUNCTION, OBSERVER OBSERVABLE PAIR, SOURCE, MULTICAST, REPLAY]
+---
+
+# createMulticastReplaySource
+
+### Types
+
+```ts
+function createMulticastReplaySource<GValue>(
+  maxNumberOfValues?: number,
+): IMulticastReplaySource<GValue>
+```
+
+### Definition
+
+Creates a [IReplaySource](/docs/reference/replay-source/)  with a [IMulticastSource](/docs/reference/multicast-source/).
+
+### Example
+
+#### Replay values
+
+```ts
+
+const source = createMulticastReplaySource<number>();
+
+source.subscribe((value: string) => {
+  console.log('value - A:', value);
+});
+
+source.emit(0);
+source.emit(1);
+
+source.subscribe((value: string) => {
+  console.log('value - B:', value);
+});
+
+source.emit(2);
+```
+
+Output:
+
+```text
+value - A: 0
+value - A: 1
+value - B: 0
+value - B: 1
+value - A: 3
+value - B: 3
+```
+
+##### RxJS equivalent
+
+```ts
+const source = new ReplaySubject();
+
+source.subscribe((value: string) => {
+  console.log('value - A:', value);
+});
+
+source.next(0);
+source.next(0);
+
+source.subscribe((value: string) => {
+  console.log('value - B:', value);
+});
+
+source.next(2);
+```
+
+

@@ -1,4 +1,8 @@
-# 🄾 merge
+---
+tags: [FUNCTION, OBSERVABLE, MANY OBSERVABLES]
+---
+
+# merge
 
 ### Types
 
@@ -11,6 +15,8 @@ function merge<GObservables extends readonly IGenericObservable[]>(
 ### Definition
 
 Creates an output Observable which concurrently emits all values from every given input Observable.
+
+The RxJS equivalent is [merge](https://rxjs.dev/api/index/function/merge).
 
 ### Diagram
 
@@ -32,6 +38,7 @@ const obs2 = pipe$$(interval(550), [
   map$$$<void, string>(String.fromCharCode),
 ]);
 
+// highlight-next-line
 const subscribe = merge([obs1, obs2]);
 
 let startTime: number = Date.now();

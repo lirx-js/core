@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveSubtract as reactiveSubtract(observableA, observableB)
+participant OUT
+
+A->>reactiveSubtract: 10
+B->>reactiveSubtract: 5
+reactiveSubtract->>OUT: 5
+B->>reactiveSubtract: 2
+reactiveSubtract->>OUT: 8
+

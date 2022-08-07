@@ -1,7 +1,6 @@
-import { futureUnsubscribe, IRunning } from '../../../../../../misc/helpers/subscription/future-unsubscribe';
-import { IObserver } from '../../../../../../observer/type/observer.type';
 import { empty } from '../../../../../built-in/from/without-notifications/values/empty/empty';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable } from '../../../../../type/observable.type';
+import { takeWhileObservable } from '../take-while/take-while-observable';
 
 export function takeObservable<GValue>(
   subscribe: IObservable<GValue>,
@@ -10,21 +9,8 @@ export function takeObservable<GValue>(
   if (count <= 0) {
     return empty();
   } else {
-    return (emit: IObserver<GValue>): IUnsubscribe => {
-      return futureUnsubscribe((
-        unsubscribe: IUnsubscribe,
-        running: IRunning,
-      ): IUnsubscribe => {
-        return subscribe((value: GValue): void => {
-          if (running()) {
-            --count;
-            if (count === 0) {
-              unsubscribe();
-            }
-            emit(value);
-          }
-        });
-      });
-    };
+    return takeWhileObservable<GValue>(subscribe, (_, index: number): boolean => {
+      return (index < count);
+    });
   }
 }

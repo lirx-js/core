@@ -1,0 +1,116 @@
+# Migrating from RxJS
+
+Migrating from `rxjs` to `@lirx/core` is a great choice if you aim to improve the performances of your application
+and reduce its overall size.
+
+However, currently no migration tool exists, so it cannot be done automatically for existing applications.
+Instead, you may start to use `@lirx/core`'s Observables, slowing replacing your old `rxjs`'s ones (both can coexist).
+Or, you may start a new project based exclusively on `@lirx/core`.
+
+## Types
+
+- `rxjs` uses classes, where `@lirx/core` uses functions.
+So the class `Observable` becomes the type [IObservable](/docs/reference/observable/) (a function definition).
+The same is true for `Observer` => [IObserver](/docs/reference/observer/).
+- `rxjs` regroups under same the same name (`Operator`) the functions that generate an Observable and the pipes that chains them
+(called `Pipeable Operator`). `@lirx/core` has a specific type for the pipes: [IObservablePipe](/docs/reference/observable-pipe/).
+
+Moreover, `@lirx/core` tries to be more consistent in its naming:
+
+- functions are explicit about what they return (ex: ends with `ObservablePipe`).
+- it follows the Observable naming convention: a `$` is present at the end of a variable name representing an Observable (ex: `const value$ = of(5);`)
+, and it extends this rule with `$$` for a function that generates an Observable, and `$$$` for a function that generates an ObservablePipe.
+
+## Creating an Observable
+
+Most functions that create an Observable in `rxjs` have a similar same name in `@lirx/core`. Example:
+
+- [of](/docs/reference/of/)
+- [fromEventTarget](/docs/reference/from-event-target/)
+- [combineLatest](/docs/reference/combine-latest/)
+- [interval](/docs/reference/interval/)
+- etc...
+
+## Creating an ObservablePipe
+
+This is true too for the Observable pipes: many functions have a similar name:
+
+- [distinct$$$](/docs/reference/distinct-observable-pipe/)
+- [map$$$](/docs/reference/map-observable-pipe/)
+- [scan$$$](/docs/reference/scan-observable-pipe/)
+- [debounceTime$$$](/docs/reference/debounce-time-observable-pipe/)
+- etc...
+
+
+## Subscription / Unsubscription
+
+
+To subscribe with `rxjs`, we have to call the `subscribe` method, which returns a Subscription,
+and then we can unsubscribe it using the method `unsubscribe`:
+
+```ts
+const subscription = of(1, 2, 3)
+ .subscribe((value: number) => {
+    console.log(value);
+  });
+
+// LATER
+subscription.unsubscribe();
+```
+
+With `@lirx/core` we just have to call a function, and later call its return:
+
+
+```ts
+const unsubscribe = of(1, 2, 3)
+  ((value: number) => {
+    console.log(value);
+  });
+
+// LATER
+unsubscribe();
+```
+
+
+## Piping
+
+With `rxjs` we pipe our Observables with the method `pipe`:
+
+```ts
+const subscription = of(1, 2, 3)
+ .pipe(
+   map(String),
+   distinct(),
+ );
+```
+
+With `@lirx/core`, instead of using a method, we'll use the function **[pipe$$](/docs/reference/pipe-observable/)**;
+
+```ts
+const subscription = pipe$$(of(1, 2, 3), [
+  map$$$(String),
+  distinct$$$(),
+]);
+```
+
+If we only have one pipe, we can even inline it:
+
+```ts
+const subscription = map$$(of(1, 2, 3), String);
+```
+
+You'll gain in performance and bundle size.
+
+## State of the Observable - next, complete and error
+
+The `@lirx/core` Observables don't have a `complete` nor `error` state. Instead, they just send values defined by their type.
+
+This is somehow, like if they were only sending `next`. To send a state, we have to use some [Notifications](/docs/documentation/getting-started/what-is-a-notification/).
+
+## Subject, BehaviorSubject and ReplaySubject
+
+They are replaced by [Sources](/docs/documentation/getting-started/what-is-a-source/):
+
+- Subject: [createMulticastSource](/docs/reference/create-multicast-source/)
+- BehaviorSubject: [createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/)
+- ReplaySubject: [createMulticastReplaySource](/docs/reference/create-multicast-replay-source/)

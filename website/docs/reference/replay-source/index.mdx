@@ -1,0 +1,26 @@
+---
+tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE, REPLAY]
+---
+
+# IReplaySource
+
+### Types
+
+```ts
+interface IReplaySourceMethods<GValue> {
+  getValues(): readonly GValue[];
+}
+
+type IReplaySource<GValue, GSource extends ISource<GValue>> =
+  Omit<GSource, keyof IReplaySourceMethods<GValue>>
+  & IReplaySourceMethods<GValue>;
+```
+
+### Definition
+
+A *ReplaySource* is used to cache many values and emit them each time we subscribe to it.
+
+You can create a *IReplaySource* with the function [createReplaySource](/docs/reference/create-replay-source/).
+
+This is equivalent to the *[ReplaySubject](https://rxjs.dev/api/index/class/ReplaySubject)* if you provide a *MulticastSource*.
+

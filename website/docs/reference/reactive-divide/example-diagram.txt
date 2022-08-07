@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveDivide as reactiveDivide(observableA, observableB)
+participant OUT
+
+A->>reactiveDivide: 10
+B->>reactiveDivide: 5
+reactiveDivide->>OUT: 2
+B->>reactiveDivide: 2
+reactiveDivide->>OUT: 5
+

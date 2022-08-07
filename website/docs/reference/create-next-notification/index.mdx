@@ -1,0 +1,36 @@
+---
+tags: [FUNCTION, NOTIFICATION]
+---
+
+# createNextNotification
+
+### Types
+
+```ts
+function createNextNotification<GValue>(
+  value: GValue,
+): INextNotification<GValue>
+```
+
+### Definition
+
+Creates a [INextNotification](/docs/reference/next-notification/).
+
+### Example
+
+#### Emit a single 'next' Notification with value 1
+
+```ts
+const subscribe = single(createNextNotification(1));
+
+subscribe((notification) => {
+  console.log(notification);
+});
+```
+
+Output:
+
+```text
+{ name: 'next', value: 1 }
+```
+

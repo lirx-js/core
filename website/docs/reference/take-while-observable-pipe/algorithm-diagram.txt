@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant observable
+participant takeWhileObservablePipe as takeWhileObservablePipe(predicate)
+participant OUT
+
+observable->>takeWhileObservablePipe: value
+
+alt if predicate(value) is true
+    takeWhileObservablePipe->>OUT: value
+else else unsubscribe and discard value
+    takeWhileObservablePipe-->>observable: unsubscribe
+end

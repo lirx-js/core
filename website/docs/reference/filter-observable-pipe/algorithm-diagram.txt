@@ -1,0 +1,14 @@
+sequenceDiagram
+
+participant observable
+participant filterObservablePipe as filterObservablePipe(filterFunction)
+participant OUT
+
+observable->>filterObservablePipe: value
+
+alt if filterFunction(value) returns true
+    filterObservablePipe->>OUT: value
+else else discard value
+    filterObservablePipe--xOUT:
+end
+

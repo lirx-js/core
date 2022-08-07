@@ -10,21 +10,21 @@ Use this page to pick the right function which fulfills your needs.
 
 *without notifications*
 
-- nothing and emit no value: [empty](src/observable/built-in/from/without-notifications/values/empty/empty.md)
+- nothing and emit no value: [empty](/docs/reference/empty/)
 
 - one value
-  - already defined: **[single](src/observable/built-in/from/without-notifications/values/single/single.md)**
-  - defined later: [reference](/src/observable/built-in/from/without-notifications/values/reference/reference.md)
+  - already defined: **[single](/docs/reference/single/)**
+  - defined later: [reference](TODO)
 
-- a list of values: **[of](src/observable/built-in/from/without-notifications/values/of/of.md)**
+- a list of values: **[of](/docs/reference/of/)**
 
 - an iterable
-  - array: [fromArray](src/observable/built-in/from/without-notifications/iterable/from-array/from-array.md)
+  - array: [fromArray](/docs/reference/from-array/)
   - iterable: [fromIterable](src/observable/built-in/from/without-notifications/iterable/from-iterable/from-iterable.md)
   - iterator ⚠️: [fromIterator](src/observable/built-in/from/without-notifications/iterable/from-iterator/from-iterator.md)
 
 - something related to the DOM
-  - an EventTarget: **[fromEventTarget](src/observable/built-in/from/without-notifications/dom/from-event-target/from-event-target.md)**
+  - an EventTarget: **[fromEventTarget](/docs/reference/from-event-target/)**
   - an IntersectionObserver: [fromIntersectionObserver](src/observable/built-in/from/without-notifications/dom/from-intersection-observer/from-intersection-observer.md)
   - a ResizeObserver: [fromResizeObserver](src/observable/built-in/from/without-notifications/dom/from-resize-observer/from-resize-observer.md)
   - a css @media query: [fromMatchMedia](src/observable/built-in/from/without-notifications/dom/from-match-media/from-match-media.md)
@@ -33,17 +33,17 @@ Use this page to pick the right function which fulfills your needs.
   - defined later: [defer](/src/observable/built-in/from/without-notifications/values/defer/defer.md)
 
 - many Observables. When any value is received
-  - re-emit it concurrently: **[merge](src/observable/built-in/from/without-notifications/many-observables/merge/merge.md)**
-  - combine the values in an array and emit it: **[combineLatest](src/observable/built-in/from/without-notifications/many-observables/combine-latest/combine-latest.md)**
+  - re-emit it concurrently: **[merge](/docs/reference/merge/)**
+  - combine the values in an array and emit it: **[combineLatest](/docs/reference/combine-latest/)**
     - combine the values in an array, runs a function with these values, and emit distinct returned
       values:
        **[optimizedReactiveFunction](src/observable/built-in/from/without-notifications/many-observables/reactive-function/alternatives/optimized-reactive-function.md)**,
-       [reactiveFunction](src/observable/built-in/from/without-notifications/many-observables/reactive-function/reactive-function.md)
+       [reactiveFunction](/docs/reference/reactive-function/)
       - arithmetic:
-        [reactiveAdd](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/arithmetic/add/reactive-add.ts),
-        [reactiveSubtract](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/arithmetic/subtract/reactive-subtract.ts),
-        [reactiveMultiply](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/arithmetic/multiply/reactive-multiply.ts),
-        [reactiveDivide](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/arithmetic/divide/reactive-divide.ts)
+        [reactiveAdd](/docs/reference/reactive-add/),
+        [reactiveSubtract](/docs/reference/reactive-subtract/),
+        [reactiveMultiply](/docs/reference/reactive-multiply/),
+        [reactiveDivide](/docs/reference/reactive-divide/)
       - logic:
         [reactiveAnd](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/logic/and/reactive-and.ts),
         [reactiveOr](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/logic/or/reactive-or.ts),
@@ -59,8 +59,8 @@ Use this page to pick the right function which fulfills your needs.
         [reactiveTemplateString](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/string/reactive-template-string.ts)
 
 - *time related*
-  - emits every 'ms': **[interval](src/observable/built-in/from/without-notifications/time-related/interval/interval.md)**
-  - emits after 'ms': [timeout](src/observable/built-in/from/without-notifications/time-related/timeout/timeout.md)
+  - emits every 'ms': **[interval](/docs/reference/interval/)**
+  - emits after 'ms': [timeout](/docs/reference/timeout/)
   - emits when idle time is available: [idle](src/observable/built-in/from/without-notifications/time-related/idle/idle.md)
   - emits on each animation frame: [fromAnimationFrame](src/observable/built-in/from/without-notifications/time-related/from-animation-frame/from-animation-frame.md)
 
@@ -71,9 +71,9 @@ Use this page to pick the right function which fulfills your needs.
 - nothing and send a `complete` Notification: **[emptyWithNotifications](src/observable/built-in/from/with-notifications/values/empty/empty-with-notifications.md)**
 
 - one value
-  - already defined: **[singleWithNotifications](src/observable/built-in/from/with-notifications/values/single/single-with-notifications.md)**
+  - already defined: **[singleWithNotifications](/docs/reference/single-with-notifications/)**
 
-- a list of values: **[ofWithNotifications](src/observable/built-in/from/with-notifications/values/of/of-with-notifications.md)**
+- a list of values: **[ofWithNotifications](/docs/reference/of-with-notifications/)**
 
 - an iterable
   - sync
@@ -89,8 +89,8 @@ Use this page to pick the right function which fulfills your needs.
   - the position of the user (Geolocation): [fromGeolocationPosition](src/observable/built-in/from/with-notifications/dom/from-geolocation-position/from-geolocation-position.md)
 
 - a promise
-  - with a factory: **[fromPromiseFactory](src/observable/built-in/from/with-notifications/promise/from-promise-factory/from-promise-factory.md)**
-  - without a factory ⚠️: [fromPromise](src/observable/built-in/from/with-notifications/promise/from-promise/from-promise.md)
+  - with a factory: **[fromPromiseFactory](/docs/reference/from-promise-factory/)**
+  - without a factory ⚠️: [fromPromise](/docs/reference/from-promise/)
 
 - a readable stream
   - [w3c streams](https://streams.spec.whatwg.org/#rs-class)
@@ -126,53 +126,55 @@ Use this page to pick the right function which fulfills your needs.
 
 *without notifications*
 
-- a promise: [toPromise](src/observable/built-in/to/without-notifications/promise/to-promise.md)
+- a promise: [toPromise](/docs/reference/to-promise/)
 
 *with notifications*
 
 - a promise
-  - with only the last value: **[toPromiseLast](src/observable/built-in/to/with-notifications/promise/last/to-promise-last.md)**
-  - with every value: [toPromiseAll](src/observable/built-in/to/with-notifications/promise/all/to-promise-all.md)
+  - with only the last value: **[toPromiseLast](/docs/reference/to-promise-last/)**
+  - with every value: [toPromiseAll](/docs/reference/to-promise-all/)
 
-- an async iterable: [toAsyncIterable](src/observable/built-in/to/with-notifications/async-iterable/to-async-iterable.md)
+- an async iterable: [toAsyncIterable](/docs/reference/to-async-iterable/)
 
 #### create an ObservablePipe which
 
 *without notifications*
 
 - *ObserverPipe related*
-  - emits only distinct received values: **[distinctObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable-pipe.md)**
-  - filters received values: **[filterObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/filter/filter-observable-pipe.md)**
-  - transforms received values: **[mapObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable-pipe.md)**
-  - transforms and filter received values: [mapFilterObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/map-filter/map-filter-observable-pipe.md)
-  - transforms received values with an accumulator: [scanObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/scan/scan-observable-pipe.ts)
-  - reads received values, and re-emits them without transformations: [tapObservablePipe](src/observable/pipes/built-in/without-notifications/observer-pipe-related/tap/tap-observable-pipe.ts)
+  - emits only distinct received values: **[distinctObservablePipe](/docs/reference/distinct-observable-pipe/)**
+  - filters received values: **[filterObservablePipe](/docs/reference/filter-observable-pipe/)**
+  - transforms received values: **[mapObservablePipe](/docs/reference/map-observable-pipe/)**
+  - transforms and filter received values: [mapFilterObservablePipe](/docs/reference/map-filter-observable-pipe/)
+  - transforms received values with an accumulator: [scanObservablePipe](/docs/reference/scan-observable-pipe/)
+  - reads received values, and re-emits them without transformations: [tapObservablePipe](/docs/reference/tap-observable-pipe/)
 
 - *Source related*
-  - allows one Observable to emit its values to many Observable: **[shareObservablePipe](src/observable/pipes/built-in/without-notifications/source-related/built-in/share-observable-pipe.md)**
+  - allows one Observable to emit its values to many Observable: **[shareObservablePipe](/docs/reference/share-observable-pipe/)**
 
 - reduces the order of an Observable of Observables
-  - once: **[mergeAllSingleObservablePipe](src/observable/pipes/built-in/without-notifications/merge/merge-all/derived/merge-all-single/merge-all-single-observable-pipe.md)**
-  - many: [mergeAllObservablePipe](src/observable/pipes/built-in/without-notifications/merge/merge-all/merge-all-observable-pipe.md)
+  - once: **[mergeAllSingleObservablePipe](/docs/reference/merge-all-single-observable-pipe/)**
+  - many: [mergeAllObservablePipe](/docs/reference/merge-all-observable-pipe/)
   - maps an Observable and then reduces the order:
-    - once: **[mergeMapSingleObservablePipe/switchMapObservablePipe](src/observable/pipes/built-in/without-notifications/merge/merge-map/derived/merge-map-single/merge-map-single-observable-pipe.md)**
-    - many: [mergeMapObservablePipe](src/observable/pipes/built-in/without-notifications/merge/merge-map/merge-map-observable-pipe.md)
+    - once: **[mergeMapSingleObservablePipe/switchMapObservablePipe](/docs/reference/merge-map-single-observable-pipe/)**
+    - many: [mergeMapObservablePipe](/docs/reference/merge-map-observable-pipe/)
 
 - accumulates values:
-  - until another Observable emits: [bufferObservablePipe](src/observable/pipes/built-in/without-notifications/others/buffer/buffer-observable-pipe.md)
-  - within a fixed period of time: [bufferTimeObservablePipe](src/observable/pipes/built-in/without-notifications/others/buffer/derived/buffer-time/buffer-time-observable-pipe.md)
+  - until another Observable emits: [bufferObservablePipe](/docs/reference/buffer-observable-pipe/)
+  - within a fixed period of time: [bufferTimeObservablePipe](/docs/reference/buffer-time-observable-pipe/)
 
-- take the first value: [firstObservablePipe](src/observable/pipes/built-in/without-notifications/others/first/first-observable-pipe.md)
-- take the X first values: [takeObservablePipe](src/observable/pipes/built-in/without-notifications/others/take/take-observable-pipe.md)
-- take the values until another observable emits: [takeUntilObservablePipe](src/observable/pipes/built-in/without-notifications/others/take-until/take-until-observable-pipe.md)
-- take the first value that passes a condition: [findObservablePipe](src/observable/pipes/built-in/without-notifications/others/find/find-observable-pipe.md)
+- take
+  - the first value: [firstObservablePipe](/docs/reference/first-observable-pipe/)
+  - the X first values: [takeObservablePipe](/docs/reference/take-observable-pipe/)
+  - the values until another observable emits: [takeUntilObservablePipe](/docs/reference/take-until-observable-pipe/)
+  - the values until a predicate fails: [takeWhileObservablePipe](/docs/reference/take-while-observable-pipe/)
+  - the first value that passes a condition: [findObservablePipe](/docs/reference/find-observable-pipe/)
 
 - time related
-  - **[debounceTimeObservablePipe](src/observable/pipes/built-in/without-notifications/time-related/debounce-time/debounce-time-observable-pipe.md)**
-  - **[throttleTimeObservablePipe](src/observable/pipes/built-in/without-notifications/time-related/throttle-time/throttle-time-observable-pipe.md)**
-  - [debounceFrameObservablePipe](src/observable/pipes/built-in/without-notifications/time-related/debounce-frame/debounce-frame-observable-pipe.md)
-  - [debounceImmediateObservablePipe](src/observable/pipes/built-in/without-notifications/time-related/debounce-immediate/debounce-immediate-observable-pipe.md)
-  - [debounceMicrotaskObservablePipe](src/observable/pipes/built-in/without-notifications/time-related/debounce-microtask/debounce-microtask-observable-pipe.md)
+  - **[debounceTimeObservablePipe](/docs/reference/debounce-time-observable-pipe/)**
+  - **[throttleTimeObservablePipe](/docs/reference/throttle-time-observable-pipe/)**
+  - [debounceFrameObservablePipe](/docs/reference/debounce-frame-observable-pipe/)
+  - [debounceImmediateObservablePipe](/docs/reference/debounce-immediate-observable-pipe/)
+  - [debounceMicrotaskObservablePipe](/docs/reference/debounce-microtask-observable-pipe/)
 
 - logs the state of the upper Observable: [logStateObservablePipe](src/observable/pipes/built-in/without-notifications/others/log-state/log-state-observable-pipe.ts)
 
@@ -188,16 +190,26 @@ Use this page to pick the right function which fulfills your needs.
 
 #### emit a value myself => create a Source which emits values to
 
-- multiple Observers: [createMulticastSource](src/observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.md)
-- only one Observer: [createUnicastSource](src/observer-observable-pair/build-in/source/built-in/unicast-source/unicast-source.md)
+- multiple Observers: [createMulticastSource](/docs/reference/multicast-source/)
+- only one Observer: [createUnicastSource](/docs/reference/unicast-source/)
 - one or many Observer and stores all emitted values:
-  [createReplaySource](src/observer-observable-pair/build-in/source/built-in/replay-source/replay-source.md),
-  [createMulticastReplaySource](src/observer-observable-pair/build-in/source/built-in/replay-source/derived/create-multicast-replay-source.ts),
-  [createUnicastReplaySource](src/observer-observable-pair/build-in/source/built-in/replay-source/derived/create-unicast-replay-source.ts)
+  [createReplaySource](/docs/reference/replay-source/),
+  [createMulticastReplaySource](/docs/reference/create-multicast-replay-source/)
 - one or many Observer and stores the last emitted value:
-  [createReplayLastSource](src/observer-observable-pair/build-in/source/built-in/replay-last-source/replay-last-source.md),
-  **[createMulticastReplayLastSource](src/observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-multicast-replay-last-source.ts)**,
-  [createUnicastReplayLastSource](src/observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-unicast-replay-last-source.ts)
+  [createReplayLastSource](/docs/reference/replay-last-source/),
+  **[createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/)**,
+
+[//]: # (  [createUnicastReplayLastSource]&#40;/docs/reference/create-unicast-replay-last-source/&#41;)
+
+#### observables and observers from w3c streams
+
+[w3c streams documentation](https://streams.spec.whatwg.org/#rs-class)
+
+- readable stream: [fromReadableStream](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md)
+- readable stream reader ⚠: [fromReadableStreamReader](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
+- writable stream: [fromWritableStream](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md)
+- writable stream default writer ⚠: [fromWritableStreamDefaultWriter](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
+- writable stream default writer [fromReadableWritablePair](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
 
 #### create an io stream
 
@@ -205,8 +217,8 @@ Use this page to pick the right function which fulfills your needs.
 
 #### others
 
-- chain many ObservablePipes: [pipeObservablePipes](src/observable/helpers/piping/pipe-observable-pipes/pipe-observable-pipes.md)
-- chain many ObservablePipes with an Observable: **[pipeObservable](src/observable/helpers/piping/pipe-observable/pipe-observable.md)**
+- chain many ObservablePipes: [pipeObservablePipes](/docs/reference/pipe-observable-pipes/)
+- chain many ObservablePipes with an Observable: **[pipeObservable](/docs/reference/pipe-observable/)**
 
 ---
 
