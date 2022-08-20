@@ -1,0 +1,61 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# forkJoin
+
+Alternatives: `allWithNotifications`, `allN`
+
+### Types
+
+```ts
+function forkJoin<GObservables extends IGenericForkInObservables>(
+  observables: GObservables,
+): IObservable<IForkJoinObservableNotifications<GObservables>
+```
+
+### Definition
+
+Waits for the first observable to send an `error` Notification,
+or all observables sending a `complete` Notification.
+
+If it received an `error` Notification, it will send this `error` Notification.
+
+If it received only `complete` Notifications, it will emit an array with the last values received through the `next` Notifications for each
+observable, followed by a `complete` Notification.
+
+This is equivalent of `Promise.all`.
+
+### Diagrams
+
+#### If all completed
+
+[![](https://mermaid.ink/img/pako:eNp1kbFOwzAQhl_FugmkMJTRQ6VEsLAwAFPd4WJfwCI-B_uMQFXfHVdqVNLCdvr_7zud7B3Y6Ag0ZPooxJbuPL4mDIYNT5jEWz8hi2oVZhX7TOkT-5Fyu6y7s7pb1kNM7w_R84Ga56vN73XNwt5eL_3Hl-fDQd3Nej3rWjF9iVb9ynD7R44XuY1hGknonz235_mJn7Na10tmY4Orpmrby_5kGoYGAqWA3tVH3hlWyoC8USADuo6OBiyjGDC8r2iZHArdOy8xgR5wzNQAFolP32xBSyo0Q8ePOlL7H0K2osg)](https://mermaid.live/edit#pako:eNp1kbFOwzAQhl_FugmkMJTRQ6VEsLAwAFPd4WJfwCI-B_uMQFXfHVdqVNLCdvr_7zud7B3Y6Ag0ZPooxJbuPL4mDIYNT5jEWz8hi2oVZhX7TOkT-5Fyu6y7s7pb1kNM7w_R84Ga56vN73XNwt5eL_3Hl-fDQd3Nej3rWjF9iVb9ynD7R44XuY1hGknonz235_mJn7Na10tmY4Orpmrby_5kGoYGAqWA3tVH3hlWyoC8USADuo6OBiyjGDC8r2iZHArdOy8xgR5wzNQAFolP32xBSyo0Q8ePOlL7H0K2osg)
+
+#### If one errored
+
+[![](https://mermaid.ink/img/pako:eNplkLFOxDAMhl8l8gRSGVgznNQKFhaGg4kwuIkLEY1TnASBTvfupFIrkUMZYvn7fsvyCWx0BBoSfRZiS3ce3wSDYcMLSvbWL8hZ9QqTimMi-cJxptS3eLjAQ4unKB8P0fNq7fXVy99xXZN-vW7zj89P60LDzeGwx7Vi-s5ajbeXfRvDMlMmw33TJ5Eo21fX30F16vh_eH3QQSAJ6F090MmwUgbyOwUyoGvpaMIyZwOGz1Uti8NM987nKKAnnBN1gCXH4w9b0FkK7dJ25M06_wLG4ox7)](https://mermaid.live/edit#pako:eNplkLFOxDAMhl8l8gRSGVgznNQKFhaGg4kwuIkLEY1TnASBTvfupFIrkUMZYvn7fsvyCWx0BBoSfRZiS3ce3wSDYcMLSvbWL8hZ9QqTimMi-cJxptS3eLjAQ4unKB8P0fNq7fXVy99xXZN-vW7zj89P60LDzeGwx7Vi-s5ajbeXfRvDMlMmw33TJ5Eo21fX30F16vh_eH3QQSAJ6F090MmwUgbyOwUyoGvpaMIyZwOGz1Uti8NM987nKKAnnBN1gCXH4w9b0FkK7dJ25M06_wLG4ox7)
+
+### Example
+
+#### Example 1
+
+```ts
+const observable1$ = singleN(false);
+const observable2$ = switchMap$$(timeout(2000), () => singleN(true)); // emits 'true' after 2000ms
+
+const result$ = forkJoin([observable1$, observable2$]);
+
+result$((notification) => {
+  console.log(notification.name, notification.value);
+});
+
+```
+
+Output:
+
+```text
+// t = 2000ms
+'next', [false, true]
+'complete', undefined
+```

@@ -1,0 +1,56 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromAsyncIterator
+
+### Types
+
+```ts
+function fromAsyncIterator<GValue>(
+  asyncIterator: AsyncIterator<GValue>,
+): IObservable<IFromAsyncIteratorObservableNotifications<GValue>>
+```
+
+### Definition
+
+Creates an Observable from an AsyncIterator. It emits values in the form of Notifications.
+
+:::caution
+
+Use with caution: if you subscribe twice to the same AsyncIterator, the emitted values probably won't be what you
+expect, due to concurrent calls on the `.next` function.
+
+:::
+
+You should prefer to use [fromAsyncIterable](/docs/reference/from-async-iterable/) which generates a unique
+AsyncIterator, or `share` the Observable.
+
+
+### Example
+
+#### Simple AsyncIterator which emits values from 0 to 9
+
+```ts
+const subscribe = fromAsyncIterator(
+  (async function * () {
+    for (let i = 0; i < 10; i++) {
+      yield i;
+    }
+  })()
+);
+
+subscribe((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+```text
+next: 0
+next: 1
+...
+next: 9
+complete
+```

@@ -2,7 +2,7 @@
 tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
 ---
 
-# TODO shareObservablePipe
+# shareObservablePipe
 
 Alternative: `share$$$`
 
@@ -16,15 +16,23 @@ function shareObservablePipe<GValue>(
 
 ### Definition
 
-This ObservablePipe perform something similar to:
+This ObservablePipe is a shortcut for:
 
 ```ts
 sourceObservablePipe<GValue>({ getSource: createMulticastSource })
 ```
 
-### Diagram
+See [sourceObservablePipe](/docs/reference/source-observable-pipe)
+and [createMulticastSource](/docs/reference/create-multicast-source/).
 
-TODO
+:::caution
+
+You will probably never user directly this ObservablePipe, instead you may use:
+[shareObservablePipeWithMulticastReplaySource](/docs/reference/share-observable-pipe-with-multicast-replay-source/)
+or
+[shareObservablePipeWithMulticastReplayLastSource](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/).
+
+:::
 
 ### Example
 

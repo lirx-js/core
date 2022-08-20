@@ -20,6 +20,8 @@ type IReplayLastSource<GValue, GSource extends ISource<GValue>> =
 
 A *ReplayLastSource* is used to store a value and emit it each time we subscribe to it.
 
+This is the perfect candidate if you have to keep the last emitted value.
+
 You can create a *IReplayLastSource* with the function [createReplayLastSource](/docs/reference/create-replay-last-source/).
 
 This is equivalent to the *[BehaviorSubject](https://rxjs-dev.firebaseapp.com/guide/subject)* if you provide a *MulticastSource*.

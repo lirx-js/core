@@ -3,14 +3,6 @@
 Promise is the de-facto API to work with async data.
 Observables **don't replace them**, but they **cover some specific limits** of the Promises.
 
-[//]: # (- Observables may send **more than one value**.)
-
-[//]: # (- Observables are **cancellable**.)
-
-[//]: # (- Observables pipeline is defined before and may be executed later, where the Promise pipeline is immediately executed.)
-
-[//]: # (So with these particular use-cases, you may consider using Observables instead.)
-
 We will discuss of these particular use-cases in this tutorial.
 
 ### Difference between a Promise and an Observable
@@ -18,7 +10,8 @@ We will discuss of these particular use-cases in this tutorial.
 First, we need to understand the differences between a Promise and an Observable:
 
 - A Promise sends only **one** value, where an Observable may emit **many values**.
-- A Promise canot be **cancelled** (or with special tricks like `AbortSignal`), where an Observable is based on a **subscribe/unsubscribe** mechanism.
+- A Promise canot be **cancelled** (or with special tricks like `AbortSignal`).
+But, the Observables are based on a **subscribe/unsubscribe** mechanism, so cancellation is native for them.
 - A Promise is executed **immediately**. However, with the Observables we define first the pipeline, and then, by subscribing **later**, we run this pipeline.
 
 So if we're facing one of these limits, then an Observable is the perfect candidate.
@@ -53,7 +46,7 @@ It's a little tricky, so we will see now some examples.
 
 As said earlier, a fulfilled Promise, may be represented by a `next` Notification followed by a `complete` one.
 
-This function has the name of [singleWithNotifications](/docs/reference/single-with-notifications/).
+This function has the name of **[singleWithNotifications](/docs/reference/single-with-notifications/)**.
 
 It simply does:
 
@@ -73,7 +66,7 @@ function singleWithNotifications<GValue>(
 
 On another hand, a rejected Promise, may be represented by an `error` Notification.
 
-This time, the function has the name of [throwError](/docs/reference/throw-error/).
+This time, the function has the name of **[throwError](/docs/reference/throw-error/)**.
 
 And it does:
 
@@ -90,42 +83,63 @@ function throwError<GError>(
 
 #### Promise.all
 
-TODO continue here
+`Promise.all` is used to await all promises to fulfill from a list of promises. If one is rejected, it will reject too.
 
-[forkJoin or allWithNotifications](../../observable/built-in/from/with-notifications/many-observables/fork-join/fork-join.md)
+The Observable's equivalent is [**forkJoin** or allWithNotifications](/docs/reference/fork-join/).
 
 #### Promise.race
 
-[raceWithNotifications](../../observable/built-in/from/with-notifications/many-observables/race-with-notifications/race-with-notifications.md)
+`Promise.race` is used to await the first promise to resolve (fulfilled or rejected) from a list of promises.
+
+The Observable's function is: **[raceWithNotifications](/docs/reference/race-with-notifications/)**.
 
 #### Promise.any
 
-[anyWithNotifications](../../observable/built-in/from/with-notifications/many-observables/any-with-notifications/any-with-notifications.md)
+`Promise.any` is used to await that one promise fulfills from a list of promises. If all the promises reject, it will reject too.
+
+With Observables: **[anyWithNotifications](/docs/reference/any-with-notifications/)**.
 
 
 #### Chaining -> then / catch
 
+A key point of Promises is they capability to be chained using the `.then` and `.catch` methods.
+
 ##### then
 
-[thenObservablePipe](../../observable/pipes/built-in/with-notifications/then/then-observable-pipe.md)
+The `.then` method of a Promise accepts two optional/nullable arguments:
 
-[fulfilledObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/fulfilled/fulfilled-observable-pipe.ts)
+- an `onFulfilled` function (called when the Promise is fulfilled)
+- and an `onRejected` function (called when the Promise is rejected)
+
+However, the Observables are stricter, and provides distinct functions, for each case:
+
+- `.then(onFulfilled)` or `.then(onFulfilled, null)` : **[fulfilledObservablePipe](/docs/reference/fulfilled-observable-pipe/)**.
+- `.catch(onRejected)` or `.then(null, onRejected)`: **[rejectedObservablePipe](/docs/reference/rejected-observable-pipe/)**.
+- `.then(onFulfilled, onRejected)`: **[thenObservablePipe](/docs/reference/then-observable-pipe/)**.
 
 ##### catch
 
-[rejectedObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/rejected/rejected-observable-pipe.ts)
+So the `.catch` method becomes **[rejectedObservablePipe](/docs/reference/rejected-observable-pipe/)**, with Observables.
 
 ##### finally
 
-[finallyObservablePipe](../../observable/pipes/built-in/with-notifications/then/derived/finally/finally-observable-pipe.md)
+Lastly, the `.finally` method is used to handle fulfilled or rejected states.
+
+With `@lirx/core`, it's called **[finallyObservablePipe](/docs/reference/finally-observable-pipe/)**.
 
 #### Casting an Observable to a Promise
 
-In most cases, you simply want the last received value (last `next` Notification), so you can use the function
-[toPromiseLast](../../observable/built-in/to/with-notifications/promise/last/to-promise-last.md)
-, but if for some reasons you prefer to receive all the values as an array, you can use the function
-[toPromiseAll](../../observable/built-in/to/with-notifications/promise/all/to-promise-all.md)
+In most cases, we simply want the last received value (last `next` Notification), so we can use the function
+**[toPromiseLast](/docs/reference/to-promise-last/)**.
+However, sometimes, we want to get all the values as an array. In this case, we can use the function
+**[toPromiseAll](/docs/reference/to-promise-all/)**.
+.
 
+:::caution
+
+**[toPromise](/docs/reference/to-promise)** **MUST** only be used with Observables **NOT** sending notifications.
+
+:::
 
 ### Example
 
@@ -154,11 +168,11 @@ interface IGeoJSGetGeoJSON {
   latitude: string;
 }
 
-// 1) prepare the request pipiline
+// 1) prepare the request pipeline
 const request$ = pipe$$(fromFetch(noCORS(`https://get.geojs.io/v1/ip/geo.json`)), [
   fulfilled$$$((response: Response): IObservable<IDefaultNotificationsUnion<IGeoJSGetGeoJSON>> => {
     if (response.ok) {
-      return fromPromise(response.json());
+      return fromPromiseFactory(() => response.json());
     } else {
       return throwError(createNetworkError());
     }
@@ -169,7 +183,7 @@ const request$ = pipe$$(fromFetch(noCORS(`https://get.geojs.io/v1/ip/geo.json`))
 ]);
 
 const doRequestOnClick$ = pipe$$(fromEventTarget(window, 'click'), [
-  mergeMapS$$$(() => request$),
+  switchMap$$$(() => request$),
 ]);
 
 doRequestOnClick$((notification: IDefaultNotificationsUnion<string>) => {

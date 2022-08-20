@@ -1,0 +1,67 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# optimizedReactiveFunction
+
+Alternative: `function$$`
+
+### Types
+
+```ts
+function optimizedReactiveFunction<GFunction extends IGenericFunction>(
+  observables: IReactiveFunctionObservables<GFunction>,
+  fnc: GFunction,
+): IReactiveFunctionReturn<GFunction>
+```
+
+### Definition
+
+Most of the time, when using [reactiveFunction](/docs/reference/reactive-function/), you'll usually update its observable in batch,
+and would prefer to have a `reactiveFunction` that emit only once and only if the value changed.
+This is the purpose of `optimizedReactiveFunction`.
+
+It simply does:
+
+```ts
+return distinctObservable(debounceMicrotaskObservable(reactiveFunction<GFunction>(observables, fnc)));
+```
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNqFkU1Lw0AQhv_KsKcUE9BCLwEDCepV8OPkephkp7qQnY2b2aKW_ne3WqE5pD3twPPu8w7MVnXekCrVSB-RuKMbi28BnWbNAwaxnR2QBWrAEXw7Uthg21M9pc2UNlPqB7HOfpN5IOzEbugucno9__6ag9nLUV1-bH_NIcMc2gVcV4BwkaZp4f3z037_uqiqWX0JV5eam9ORleZZWhSfqSdpVpCxFxiJZXHWuDxlrKo_43K_vcqVo-DQmnSdrWYAreSdHGlVptHQGmMvWmnepWgcDArdGis-qHKN_Ui5wij-8Ys7VUqI9B86XPiQ2v0APAW6SA)](https://mermaid.live/edit#pako:eNqFkU1Lw0AQhv_KsKcUE9BCLwEDCepV8OPkephkp7qQnY2b2aKW_ne3WqE5pD3twPPu8w7MVnXekCrVSB-RuKMbi28BnWbNAwaxnR2QBWrAEXw7Uthg21M9pc2UNlPqB7HOfpN5IOzEbugucno9__6ag9nLUV1-bH_NIcMc2gVcV4BwkaZp4f3z037_uqiqWX0JV5eam9ORleZZWhSfqSdpVpCxFxiJZXHWuDxlrKo_43K_vcqVo-DQmnSdrWYAreSdHGlVptHQGmMvWmnepWgcDArdGis-qHKN_Ui5wij-8Ys7VUqI9B86XPiQ2v0APAW6SA)
+
+### Example
+
+#### Perform the "sum" of two Observables in batch
+
+```ts
+const obs1 = let$$<number>(0);
+const obs2 = let$$<number>(0);
+
+const subscribe = optimizedReactiveFunction(
+  [obs1.subscribe, obs2.subscribe],
+  (a: number, b: number) => {
+    return a + b;
+  },
+);
+
+subscribe((sum: number) => {
+  console.log(sum);
+});
+obs1.emit(2);
+obs2.emit(1);
+```
+
+Output:
+
+```text
+3
+```
+
+:::info
+
+As you may see, the values are debounced, ensuring a single value instead of many.
+
+:::
+

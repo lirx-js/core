@@ -1,0 +1,81 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# anyWithNotifications
+
+Alternative: `anyN`
+
+### Types
+
+```ts
+function anyWithNotifications<GObservables extends IGenericAnyInObservables>(
+  observables: GObservables,
+): IObservable<IAnyObservableNotifications<GObservables>>
+```
+
+### Definition
+
+Waits for the first observable to send a `complete` Notification,
+or all observables sending an `error` Notification.
+
+If it received a `complete` Notification, it will emit the last value received through the `next` Notifications of this observable,
+followed by a `complete` Notification.
+
+If it received only `error` Notifications, it will send an `error` Notification (whose value is an AggregateError).
+
+This is equivalent of `Promise.any`.
+
+### Diagrams
+
+#### If one completes
+
+[![](https://mermaid.ink/img/pako:eNp9kbFOAzEMhl8l8gTSMbBmqHQnWGEoiAEzuImPRro4R-JDVFXfnVQqooeObpH_z18sew8ueQYLhT8mFsd3gd4zRRSUkbIGF0YSNa2hYtKmcP6kzcClncfdn7ibxyS7l6Dbh6ShD440JCnHjqX61ev5N83M-nY99z4-Px0H7W5WqyWVNZxzyijtv4Dwl1pDt5cYl-I4sDLKUl7b6hjnpkvUrwsFGoicIwVf979HMQZBtxwZwdan556mQRFQDhWdRk_K9z5oymB7Ggo3QJOm9U4cWM0T_0CnG56owzdNvbLq)](https://mermaid.live/edit#pako:eNp9kbFOAzEMhl8l8gTSMbBmqHQnWGEoiAEzuImPRro4R-JDVFXfnVQqooeObpH_z18sew8ueQYLhT8mFsd3gd4zRRSUkbIGF0YSNa2hYtKmcP6kzcClncfdn7ibxyS7l6Dbh6ShD440JCnHjqX61ev5N83M-nY99z4-Px0H7W5WqyWVNZxzyijtv4Dwl1pDt5cYl-I4sDLKUl7b6hjnpkvUrwsFGoicIwVf979HMQZBtxwZwdan556mQRFQDhWdRk_K9z5oymB7Ggo3QJOm9U4cWM0T_0CnG56owzdNvbLq)
+
+#### If one errored
+
+[![](https://mermaid.ink/img/pako:eNqNUc1OxCAQfhUypzWpL8BhkzZ61YMaD4uHWZh2SVqow2Cy2ey7C7Eaa3rwBMz3C1zARkegIdF7pmDpzuPAOJlgwows3voZg6hWYVLxmIg_8DhSatdw9wfu1jCG86uX00MU33uL4mNIVbE13x1-xzQr17ebte_jy3Mt2t3u91tWWhFz5GUpndp_EcvdtkhFW_J-qO0wMA0odF_Pu8OXtFmyalMToIGJeELvygtfTFDKgJxoIgO6bB31mEcxYMK1UPPsqp3zEhl0j2OiBjBLfDoHC1o40zdp-aWFdf0EiUGniQ)](https://mermaid.live/edit#pako:eNqNUc1OxCAQfhUypzWpL8BhkzZ61YMaD4uHWZh2SVqow2Cy2ey7C7Eaa3rwBMz3C1zARkegIdF7pmDpzuPAOJlgwows3voZg6hWYVLxmIg_8DhSatdw9wfu1jCG86uX00MU33uL4mNIVbE13x1-xzQr17ebte_jy3Mt2t3u91tWWhFz5GUpndp_EcvdtkhFW_J-qO0wMA0odF_Pu8OXtFmyalMToIGJeELvygtfTFDKgJxoIgO6bB31mEcxYMK1UPPsqp3zEhl0j2OiBjBLfDoHC1o40zdp-aWFdf0EiUGniQ)
+
+### Examples
+
+#### Example 1
+
+```ts
+const observable0$ = switchMap$$(timeout(1000), () => singleN<'a1'>('a1'));
+const observable1$ = switchMap$$(timeout(500), () => throwError(new Error(`Failed`)));
+
+const subscribe = anyWithNotifications([observable0$, observable1$]);
+
+subscribe((value: IDefaultNotificationsUnion<'a1'>) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+// t = 1000ms
+'next', 'a1'
+'complete', undefined
+```
+
+#### Example 2
+
+```ts
+const observable0$ = switchMap$$(timeout(1000), () => throwError(new Error(`Failed A`)));
+const observable1$ = switchMap$$(timeout(500), () => throwError(new Error(`Failed B`)));
+
+const subscribe = anyWithNotifications([observable0$, observable1$]);
+
+subscribe((value: IDefaultNotificationsUnion<any>) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+// t = 1000ms
+'error', AggregateError
+```
+

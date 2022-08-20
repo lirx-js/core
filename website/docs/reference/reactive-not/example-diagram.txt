@@ -1,0 +1,11 @@
+sequenceDiagram
+
+participant A as observable
+participant reactiveNot as reactiveNot(observable)
+participant OUT
+
+A->>reactiveNot: false
+reactiveNot->>OUT: true
+A->>reactiveNot: true
+reactiveNot->>OUT: false
+

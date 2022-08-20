@@ -1,0 +1,19 @@
+sequenceDiagram
+
+participant observable
+participant sourceObservablePipe as sourceObservablePipe({ getSource: createMulticastSource })
+participant observerA
+participant observerB
+
+observerA-->>sourceObservablePipe: subscribe
+sourceObservablePipe-->>observable: subscribe
+observable->>sourceObservablePipe: a
+sourceObservablePipe->>observerA: a
+
+observerB-->>sourceObservablePipe: subscribe
+Note over sourceObservablePipe: already subscribed
+
+
+observable->>sourceObservablePipe: b
+sourceObservablePipe->>observerA: b
+sourceObservablePipe->>observerB: b

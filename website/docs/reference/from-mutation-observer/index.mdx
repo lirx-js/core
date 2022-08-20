@@ -1,0 +1,33 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromMutationObserver
+
+### Types
+
+```ts
+function fromMutationObserver(
+  element: Element,
+  options?: MutationObserverInit,
+): IObservable<MutationRecord>
+```
+### Definition
+
+Creates an Observable that creates an *MutationObserver* for a specific element, and emits a
+*MutationRecord* when a change in the DOM is detected.
+
+### Example
+
+#### Listen on attribute changes on body
+
+```ts
+const subscribe = fromMutationObserver(document.body, {
+  attributes: true,
+});
+
+subscribe((record: MutationRecord) => {
+  console.log(`Attribute '${record.attributeName}' changed`);
+});
+```
+

@@ -1,0 +1,30 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromGeolocationPosition
+
+### Types
+
+```ts
+function fromGeolocationPosition(
+  options?: PositionOptions
+): IObservable<IFromGeolocationPositionObservableNotifications>
+```
+
+### Example
+
+#### Prints the user's position
+
+```ts
+
+const subscribe = fromGeolocationPosition();
+
+subscribe(notificationObserver({
+  next: (position: GeolocationPosition) => {
+    console.log(position);
+  },
+}));
+```
+
+

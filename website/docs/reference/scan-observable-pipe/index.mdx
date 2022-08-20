@@ -2,7 +2,7 @@
 tags: [FUNCTION, OBSERVABLE PIPE]
 ---
 
-# TODO scanObservablePipe
+# scanObservablePipe
 
 Alternative: `scan$$$`
 
@@ -17,13 +17,42 @@ function scanObservablePipe<GIn, GOut>(
 
 ### Definition
 
-TODO definition
+Applies an accumulator (or "reducer function") to each value from the source Observable from an initial value (second argument).
+This accumulated value is then emitted.
 
 ### Diagram
 
-TODO Diagram
+#### Algorithm
+
+[![](https://mermaid.ink/img/pako:eNptkU1qAzEMha8itEpgeoGBZtVum0LbrLxRbE1isGXXPwMh5O71kGlLMvFK6D1_ekhn1MEw9pj5u7JofrF0SOSVKImUitU2khQI-8xppL3j237WJNs_7d1GBsoPuqvEpmpOHZDW1VdHhc2OXOX1LXD79TnN_p_3tNkscT2M09_J6UKIMIQETPoIVnTwVg6_OrT3FgpDGDnBI9B9HniGOevqXuqu1PUVu4S1qC3-EqmExSjBDj0nT9a0fZ8niMJyZM8K-1YaHqi6olDJpVlrNA3wamwJCfuBXOYOqZbwcRKNfUktz2yabza7Lj_uY6wz)](https://mermaid.live/edit#pako:eNptkU1qAzEMha8itEpgeoGBZtVum0LbrLxRbE1isGXXPwMh5O71kGlLMvFK6D1_ekhn1MEw9pj5u7JofrF0SOSVKImUitU2khQI-8xppL3j237WJNs_7d1GBsoPuqvEpmpOHZDW1VdHhc2OXOX1LXD79TnN_p_3tNkscT2M09_J6UKIMIQETPoIVnTwVg6_OrT3FgpDGDnBI9B9HniGOevqXuqu1PUVu4S1qC3-EqmExSjBDj0nT9a0fZ8niMJyZM8K-1YaHqi6olDJpVlrNA3wamwJCfuBXOYOqZbwcRKNfUktz2yabza7Lj_uY6wz)
+
+#### Example
+
+[![](https://mermaid.ink/img/pako:eNqNkU9Lw0AQxb_KMKcUI7QWPCyYUz23UL3NZbI71YVkEvePIKXf3VWqUioht8ebN793eEe0gxM0GOUti1rZeH4J3JOSjhySt35kTTC0UcI7t51c-tGybn9vOz8KcPzHrSquoV3AQwMVw02RNSwXl6zt89NX7V_VbdNckwwsSa_tki3_38cZiNUUYjULcTeFWM9CrKcQ96RYYy-hZ-_KQEdSAML0Kr0QmiKdHDh3iZD0VKJ5dJzk0fk0BDQH7qLUyDkN-w-1aFLI8hM6j3xOnT4BQNK5Hg)](https://mermaid.live/edit#pako:eNqNkU9Lw0AQxb_KMKcUI7QWPCyYUz23UL3NZbI71YVkEvePIKXf3VWqUioht8ebN793eEe0gxM0GOUti1rZeH4J3JOSjhySt35kTTC0UcI7t51c-tGybn9vOz8KcPzHrSquoV3AQwMVw02RNSwXl6zt89NX7V_VbdNckwwsSa_tki3_38cZiNUUYjULcTeFWM9CrKcQ96RYYy-hZ-_KQEdSAML0Kr0QmiKdHDh3iZD0VKJ5dJzk0fk0BDQH7qLUyDkN-w-1aFLI8hM6j3xOnT4BQNK5Hg)
 
 ### Example
 
-TODO Example
+#### Compute the sum of incoming values
+
+```ts
+const subscribe = pipe$$(of(0, 1, 2, 3), [
+  scan$$$((sum: number, value: number): number => {
+    return sum + value;
+  }, 0),
+]);
+
+subscribe((value) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+0
+1
+3
+6
+```
+
 

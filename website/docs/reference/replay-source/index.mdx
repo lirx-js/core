@@ -20,6 +20,8 @@ type IReplaySource<GValue, GSource extends ISource<GValue>> =
 
 A *ReplaySource* is used to cache many values and emit them each time we subscribe to it.
 
+This is the perfect candidate if you have to replay the values sent by an Observable.
+
 You can create a *IReplaySource* with the function [createReplaySource](/docs/reference/create-replay-source/).
 
 This is equivalent to the *[ReplaySubject](https://rxjs.dev/api/index/class/ReplaySubject)* if you provide a *MulticastSource*.

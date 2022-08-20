@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant anyWithNotifications as anyWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>anyWithNotifications: error
+A->>anyWithNotifications: next: a1
+A->>anyWithNotifications: complete
+anyWithNotifications->>OUT: next: a1
+anyWithNotifications->>OUT: complete
+

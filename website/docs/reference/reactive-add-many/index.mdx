@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveAddMany
+
+Alternatives: `addMany$$`, `addM$$`, `sum$$`
+
+### Types
+
+```ts
+function reactiveAddMany(
+ ...observables: IObservable<number>[]
+): IObservable<number>
+```
+
+### Definition
+
+Creates an Observable which performs an addition (`+`) between the values sent by many Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp1kcFqwzAQRH9F7CkFF1KXUNAhYLs9lh7a3nTZSJtWYK9deRUIIf8eGVKwTHKT5o1mVtIJbO8INIz0F4ktvXr8CdgZNjxgEG_9gCyqUjiqfjdSOOCupSqndU7rnDY5bXIaCK34A1XOvSMfJ-9CWs16i3nNfNM85LEf31_THarH7XYRp9XGcH1Lf1obbm6BMoGFmGypQqvne2Hl3SPlyzQZFNBR6NC79Ponw0oZkF_qyIBOS0d7jK0YMHxO1jg4FHpzXvoAeo_tSAVglP7zyBa0hEj_pusPXl3nC8uGrBI)](https://mermaid.live/edit#pako:eNp1kcFqwzAQRH9F7CkFF1KXUNAhYLs9lh7a3nTZSJtWYK9deRUIIf8eGVKwTHKT5o1mVtIJbO8INIz0F4ktvXr8CdgZNjxgEG_9gCyqUjiqfjdSOOCupSqndU7rnDY5bXIaCK34A1XOvSMfJ-9CWs16i3nNfNM85LEf31_THarH7XYRp9XGcH1Lf1obbm6BMoGFmGypQqvne2Hl3SPlyzQZFNBR6NC79Ponw0oZkF_qyIBOS0d7jK0YMHxO1jg4FHpzXvoAeo_tSAVglP7zyBa0hEj_pusPXl3nC8uGrBI)
+
+### Example
+
+#### Perform the "sum" of three Observables
+
+```ts
+const subscribe = reactiveAddMany(
+  single(10),
+  single(20),
+  single(5),
+);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+35
+```

@@ -28,12 +28,12 @@ This is equivalent the RxJS [pipe](https://rxjs-dev.firebaseapp.com/api/index/fu
 #### ObservablePipe which keeps only positive numbers and convert them to strings
 
 ```ts
-const observablePipe = pipe$$$([
+const customPipe$$$ = pipe$$$([
   filter$$$(value => (value >= 0)),
   map$$$(String),
 ]);
 
-const subscribe = observablePipe(of(-2, -1, 0, 1, 2));
+const subscribe = customPipe$$$(of(-2, -1, 0, 1, 2));
 
 const unsubscribe = subscribe((value: string) => {
   console.log(value);

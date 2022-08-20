@@ -1,0 +1,53 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, NOTIFICATION]
+---
+
+# thenAnyObservablePipe
+
+Alternative: `thenAny$$$`
+
+### Types
+
+```ts
+function thenAnyObservablePipe<GInNextValue, GOut>(
+  onThenAny: IThenAnyObservableCallback<GInNextValue, GOut>,
+): IObservablePipe<IThenObservableInNotifications<GInNextValue>, GOut>
+```
+
+### Definition
+
+This function is similar to the method `.then` of a Promise:
+
+When a `complete` or `error` Notification is received, `onThenAny` is called with the resolved state.
+
+Then, it emits the values from the Observable returned by `onThenAny`.
+
+### Example
+
+#### When an HTTP request completes, emits its state
+
+```ts
+const subscribe = pipe$$(request$, [
+  thenAny$$$(({ state }): IObservable<IEmptyObservableNotifications> => {
+    return single(`state: ${state}`);
+  }),
+]);
+
+subscribe((value) => {
+  console.log(nvalue);
+});
+```
+
+Output:
+
+*if fulfilled*
+
+```text
+'state fulfilled'
+```
+
+*if rejected*
+
+```text
+'state rejected'
+```

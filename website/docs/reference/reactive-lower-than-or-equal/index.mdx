@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveLowerThanOrEqual
+
+Alternatives: `lowerThanOrEqual$$`, `lte$$`
+
+### Types
+
+```ts
+function reactiveLowerThanOrEqual(
+  a: IObservable<any>,
+  b: IObservable<any>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs a lower than or equal comparison (`>=`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNqtkbFqwzAQhl9F3NSCO7SjhoBNsxUyJN1uuUiXRmCfHPmUEkLePXJIIB7cqZvg---7n9MZXPQMFgY-ZBbHn4F-EnUoKD0lDS70JGpqQ4OJ24HTkbYt11PaTGkzpYnJaTjyV_zltNmTrNLykKkdh-bYy9Ou6ln9OnWvvjdj1fptsZhTWfOB0vwZeEeZg2Wu7LBmR-3A_-DRlHlsDBV0nDoKvhz_jGIMgu65YwRbnp53lFtFQLmUaO49KS990JjA3rpUQFnj-iQO7Ch9hO4feE9drqQ3sEI)](https://mermaid.live/edit#pako:eNqtkbFqwzAQhl9F3NSCO7SjhoBNsxUyJN1uuUiXRmCfHPmUEkLePXJIIB7cqZvg---7n9MZXPQMFgY-ZBbHn4F-EnUoKD0lDS70JGpqQ4OJ24HTkbYt11PaTGkzpYnJaTjyV_zltNmTrNLykKkdh-bYy9Ou6ln9OnWvvjdj1fptsZhTWfOB0vwZeEeZg2Wu7LBmR-3A_-DRlHlsDBV0nDoKvhz_jGIMgu65YwRbnp53lFtFQLmUaO49KS990JjA3rpUQFnj-iQO7Ch9hO4feE9drqQ3sEI)
+
+### Example
+
+#### Perform a lower than comparison of two Observables
+
+```ts
+const subscribe = reactiveLowerThanOrEqual(
+  single(1),
+  single(2),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

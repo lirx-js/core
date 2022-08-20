@@ -23,7 +23,7 @@ Moreover, `@lirx/core` tries to be more consistent in its naming:
 
 ## Creating an Observable
 
-Most functions that create an Observable in `rxjs` have a similar same name in `@lirx/core`. Example:
+Most functions that create an Observable in `rxjs` have a similar name in `@lirx/core`. Example:
 
 - [of](/docs/reference/of/)
 - [fromEventTarget](/docs/reference/from-event-target/)
@@ -71,6 +71,7 @@ const unsubscribe = of(1, 2, 3)
 unsubscribe();
 ```
 
+This simple trick allows `@lirx/core` to heavily optimize function calls and code.
 
 ## Piping
 

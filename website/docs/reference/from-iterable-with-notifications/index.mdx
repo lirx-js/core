@@ -1,0 +1,56 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromIterableWithNotifications
+
+Alternative: `fromIterableN`
+
+### Types
+
+```ts
+function fromIterableWithNotifications<GValue>(
+  iterable: Iterable<GValue>,
+): IObservable<IFromIterableObservableNotifications<GValue>>
+```
+
+### Definition
+
+Creates an Observable from an Iterable.
+It emits the iterable's values one by one in the form of `next` Notifications and then complete (`complete` Notification).
+
+See [fromIteratorWithNotifications](/docs/reference/from-iterator-with-notifications/) for more details.
+
+
+### Example
+
+#### Emit the values 0, 1, 2, 3
+
+```ts
+const subscribe = fromIterableWithNotifications(
+  (function * () {
+    for (let i = 0; i < 10; i++) {
+      yield i;
+    }
+  })()
+);
+
+subscribe((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+```text
+next: 0
+next: 1
+next: 2
+...
+next: 9
+complete
+```
+
+
+
+

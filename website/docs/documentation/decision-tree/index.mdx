@@ -1,8 +1,10 @@
 # Decision tree
 
-Use this page to pick the right function which fulfills your needs.
+This page contains all the available functions provided by `@lirx/core`.
 
-> The most important functions are in **bold**.
+They are grouped in a decision tree to find the best one fulfilling your requirements.
+
+In case of doubt, the most frequently used functions are in **bold**.
 
 ### I want to:
 
@@ -14,61 +16,64 @@ Use this page to pick the right function which fulfills your needs.
 
 - one value
   - already defined: **[single](/docs/reference/single/)**
-  - defined later: [reference](TODO)
+  - defined later: [reference](/docs/reference/reference/)
 
 - a list of values: **[of](/docs/reference/of/)**
 
 - an iterable
   - array: [fromArray](/docs/reference/from-array/)
-  - iterable: [fromIterable](src/observable/built-in/from/without-notifications/iterable/from-iterable/from-iterable.md)
-  - iterator ⚠️: [fromIterator](src/observable/built-in/from/without-notifications/iterable/from-iterator/from-iterator.md)
+  - iterable: [fromIterable](/docs/reference/from-iterable/)
+  - iterator ⚠️: [fromIterator](/docs/reference/from-iterator/)
 
 - something related to the DOM
   - an EventTarget: **[fromEventTarget](/docs/reference/from-event-target/)**
-  - an IntersectionObserver: [fromIntersectionObserver](src/observable/built-in/from/without-notifications/dom/from-intersection-observer/from-intersection-observer.md)
-  - a ResizeObserver: [fromResizeObserver](src/observable/built-in/from/without-notifications/dom/from-resize-observer/from-resize-observer.md)
-  - a css @media query: [fromMatchMedia](src/observable/built-in/from/without-notifications/dom/from-match-media/from-match-media.md)
+  - an IntersectionObserver: [fromIntersectionObserver](/docs/reference/from-intersection-observer/)
+  - a ResizeObserver: [fromResizeObserver](/docs/reference/from-resize-observer/)
+  - a css @media query: [fromMatchMedia](/docs/reference/from-match-media/)
 
 - one Observable
-  - defined later: [defer](/src/observable/built-in/from/without-notifications/values/defer/defer.md)
+  - defined later: [defer](/docs/reference/defer/)
 
 - many Observables. When any value is received
   - re-emit it concurrently: **[merge](/docs/reference/merge/)**
   - combine the values in an array and emit it: **[combineLatest](/docs/reference/combine-latest/)**
     - combine the values in an array, runs a function with these values, and emit distinct returned
       values:
-       **[optimizedReactiveFunction](src/observable/built-in/from/without-notifications/many-observables/reactive-function/alternatives/optimized-reactive-function.md)**,
+       **[optimizedReactiveFunction](/docs/reference/optimized-reactive-function/)**,
        [reactiveFunction](/docs/reference/reactive-function/)
       - arithmetic:
         [reactiveAdd](/docs/reference/reactive-add/),
+        [reactiveAddMany](/docs/reference/reactive-add-many/),
         [reactiveSubtract](/docs/reference/reactive-subtract/),
         [reactiveMultiply](/docs/reference/reactive-multiply/),
         [reactiveDivide](/docs/reference/reactive-divide/)
       - logic:
-        [reactiveAnd](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/logic/and/reactive-and.ts),
-        [reactiveOr](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/logic/or/reactive-or.ts),
-        [reactiveNot](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/logic/not/reactive-not.ts)
+        [reactiveAnd](/docs/reference/reactive-and/),
+        [reactiveAndMany](/docs/reference/reactive-and-many/),
+        [reactiveOr](/docs/reference/reactive-or/),
+        [reactiveOrMany](/docs/reference/reactive-or-many/),
+        [reactiveNot](/docs/reference/reactive-not/)
       - comparison:
-        [reactiveEqual](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/equal/reactive-equal.ts),
-        [reactiveNotEqual](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/not-equal/reactive-not-equal.ts),
-        [reactiveGreaterThan](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/greater-than/reactive-greater-than.ts),
-        [reactiveGreaterThanOrEqual](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/greater-than-or-equal/reactive-greater-than-or-equal.ts),
-        [reactiveLowerThan](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/lower-than/reactive-lower-than.ts),
-        [reactiveLowerThanOrEqual](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/comparison/lower-than-or-equal/reactive-lower-than-or-equal.ts)
+        [reactiveEqual](/docs/reference/reactive-equal/),
+        [reactiveNotEqual](/docs/reference/reactive-not-equal/),
+        [reactiveGreaterThan](/docs/reference/reactive-greater-than/),
+        [reactiveGreaterThanOrEqual](/docs/reference/reactive-greater-than-or-equal/),
+        [reactiveLowerThan](/docs/reference/reactive-lower-than/),
+        [reactiveLowerThanOrEqual](/docs/reference/reactive-lower-than-or-equal/)
       - string:
-        [reactiveTemplateString](src/observable/built-in/from/without-notifications/many-observables/reactive-function/built-in/string/reactive-template-string.ts)
+        [reactiveTemplateString](/docs/reference/reactive-template-string/)
 
 - *time related*
   - emits every 'ms': **[interval](/docs/reference/interval/)**
   - emits after 'ms': [timeout](/docs/reference/timeout/)
-  - emits when idle time is available: [idle](src/observable/built-in/from/without-notifications/time-related/idle/idle.md)
-  - emits on each animation frame: [fromAnimationFrame](src/observable/built-in/from/without-notifications/time-related/from-animation-frame/from-animation-frame.md)
+  - emits when idle time is available: [idle](/docs/reference/idle/)
+  - emits on each animation frame: [fromAnimationFrame](/docs/reference/from-animation-frame/)
 
 
 
 *with notifications*
 
-- nothing and send a `complete` Notification: **[emptyWithNotifications](src/observable/built-in/from/with-notifications/values/empty/empty-with-notifications.md)**
+- nothing and send a `complete` Notification: **[emptyWithNotifications](/docs/reference/empty-with-notifications/)**
 
 - one value
   - already defined: **[singleWithNotifications](/docs/reference/single-with-notifications/)**
@@ -77,16 +82,16 @@ Use this page to pick the right function which fulfills your needs.
 
 - an iterable
   - sync
-    - array: [fromArrayWithNotifications](src/observable/built-in/from/with-notifications/iterable/sync/from-array/from-array-with-notifications.md)
-    - iterable: [fromIterableWithNotifications](src/observable/built-in/from/with-notifications/iterable/sync/from-iterable/from-iterable-with-notifications.md)
-    - iterator ⚠️: [fromIteratorWithNotifications](src/observable/built-in/from/with-notifications/iterable/sync/from-iterator/from-iterator-with-notifications.md)
+    - array: [fromArrayWithNotifications](/docs/reference/from-array-with-notifications/)
+    - iterable: [fromIterableWithNotifications](/docs/reference/from-iterable-with-notifications/)
+    - iterator ⚠️: [fromIteratorWithNotifications](/docs/reference/from-iterator-with-notifications/)
 
   - async
-    - async iterable: [fromAsyncIterable](src/observable/built-in/from/with-notifications/iterable/async/from-async-iterable/from-async-iterable.md)
-    - async iterator ⚠️: [fromAsyncIterator](src/observable/built-in/from/with-notifications/iterable/async/from-async-iterator/from-async-iterator.md)
+    - async iterable: [fromAsyncIterable](/docs/reference/from-async-iterable/)
+    - async iterator ⚠️: [fromAsyncIterator](/docs/reference/from-async-iterator/)
 
 - something related to the DOM
-  - the position of the user (Geolocation): [fromGeolocationPosition](src/observable/built-in/from/with-notifications/dom/from-geolocation-position/from-geolocation-position.md)
+  - the position of the user (Geolocation): [fromGeolocationPosition](/docs/reference/from-geolocation-position/)
 
 - a promise
   - with a factory: **[fromPromiseFactory](/docs/reference/from-promise-factory/)**
@@ -94,32 +99,38 @@ Use this page to pick the right function which fulfills your needs.
 
 - a readable stream
   - [w3c streams](https://streams.spec.whatwg.org/#rs-class)
-    - readable stream: [fromReadableStream](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md)
-    - readable stream reader ⚠: [fromReadableStreamReader](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
+    - readable stream: [fromReadableStream](/docs/reference/from-readable-stream/)
+    - readable stream reader ⚠: [fromReadableStreamReader](/docs/reference/from-readable-stream-reader/)
   - nodejs: TODO
 
 - an http request
-  - using fetch: **[fromFetch](src/observable/built-in/from/with-notifications/http/from-fetch/from-fetch.md)**
-    - [fromFetchJSON](src/observable/built-in/from/with-notifications/http/from-fetch/derived/json/from-fetch-json.ts)
-    - [fromFetchText](src/observable/built-in/from/with-notifications/http/from-fetch/derived/text/from-fetch-text.ts)
-    - [fromFetchBlob](src/observable/built-in/from/with-notifications/http/from-fetch/derived/blob/from-fetch-blob.ts)
-    - [fromFetchArrayBuffer](src/observable/built-in/from/with-notifications/http/from-fetch/derived/array-buffer/from-fetch-array-buffer.ts)
-    - [fromFetchStream](src/observable/built-in/from/with-notifications/http/from-fetch/derived/stream/from-fetch-stream.ts)
-  - using xhr: [fromXHR](src/observable/built-in/from/with-notifications/http/xhr/from-xhr/from-xhr.md)
+  - using fetch: **[fromFetch](/docs/reference/from-fetch/)**
 
-- a blob (reads content): [readBlob](src/observable/built-in/from/with-notifications/dom/read-blob/read-blob.md)
+[//]: # (    - [fromFetchJSON]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/json/from-fetch-json.ts&#41;)
 
-- an error (send an `error` Notification): **[throwError](src/observable/built-in/from/with-notifications/others/throw-error/throw-error.md)**
+[//]: # (    - [fromFetchText]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/text/from-fetch-text.ts&#41;)
+
+[//]: # (    - [fromFetchBlob]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/blob/from-fetch-blob.ts&#41;)
+
+[//]: # (    - [fromFetchArrayBuffer]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/array-buffer/from-fetch-array-buffer.ts&#41;)
+
+[//]: # (    - [fromFetchStream]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/stream/from-fetch-stream.ts&#41;)
+
+[//]: # (  - using xhr: [fromXHR]&#40;src/observable/built-in/from/with-notifications/http/xhr/from-xhr/from-xhr.md&#41;)
+
+- a blob (reads content): [readBlob](/docs/reference/read-blob/)
+
+- an error (send an `error` Notification): **[throwError](/docs/reference/throw-error/)**
 
 - *time related*
   - emits after 'ms':
-    - with a complete notification: [timeoutWithCompleteNotification](src/observable/built-in/from/without-notifications/time-related/timeout/derived/timeout-with-complete-notification.ts)
-    - with an error notification: [timeoutWithErrorNotification](src/observable/built-in/from/without-notifications/time-related/timeout/derived/timeout-with-error-notification.ts)
+    - with a complete notification: [timeoutWithCompleteNotification](/docs/reference/timeout-with-complete-notification/)
+    - with an error notification: [timeoutWithErrorNotification](/docs/reference/timeout-with-error-notification/)
 
 - many Observables:
-  - equivalent of Promise.all: **[forkJoin](src/observable/built-in/from/with-notifications/many-observables/fork-join/fork-join.md)**
-  - equivalent of Promise.race: **[raceWithNotifications](src/observable/built-in/from/with-notifications/many-observables/race-with-notifications/race-with-notifications.md)**
-  - equivalent of Promise.any: [anyWithNotifications](src/observable/built-in/from/with-notifications/many-observables/any-with-notifications/any-with-notifications.md)
+  - equivalent of Promise.all: **[forkJoin](/docs/reference/fork-join/)**
+  - equivalent of Promise.race: **[raceWithNotifications](/docs/reference/race-with-notifications/)**
+  - equivalent of Promise.any: [anyWithNotifications](/docs/reference/any-with-notifications/)
 
 
 #### convert an Observable to
@@ -149,7 +160,11 @@ Use this page to pick the right function which fulfills your needs.
   - reads received values, and re-emits them without transformations: [tapObservablePipe](/docs/reference/tap-observable-pipe/)
 
 - *Source related*
-  - allows one Observable to emit its values to many Observable: **[shareObservablePipe](/docs/reference/share-observable-pipe/)**
+  - allows one Observable to emit its values to many Observable:
+    - [shareObservablePipe](/docs/reference/share-observable-pipe/)
+    - [shareObservablePipeWithMulticastReplaySource](/docs/reference/share-observable-pipe-with-multicast-replay-source/)
+    - **[shareObservablePipeWithMulticastReplayLastSource](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/)**
+
 
 - reduces the order of an Observable of Observables
   - once: **[mergeAllSingleObservablePipe](/docs/reference/merge-all-single-observable-pipe/)**
@@ -176,27 +191,27 @@ Use this page to pick the right function which fulfills your needs.
   - [debounceImmediateObservablePipe](/docs/reference/debounce-immediate-observable-pipe/)
   - [debounceMicrotaskObservablePipe](/docs/reference/debounce-microtask-observable-pipe/)
 
-- logs the state of the upper Observable: [logStateObservablePipe](src/observable/pipes/built-in/without-notifications/others/log-state/log-state-observable-pipe.ts)
+- logs the state of the upper Observable: [logStateObservablePipe](/docs/reference/log-state-observable-pipe/)
 
 
 *with notifications*
 
 - awaits to receive a `complete` or `error` Notification, and performs some kind of `mergeMap`:
-  - **[thenObservablePipe](src/observable/pipes/built-in/with-notifications/then/then-observable-pipe.md)**
-    - [fulfilledObservablePipe](src/observable/pipes/built-in/with-notifications/then/derived/fulfilled/fulfilled-observable-pipe.md)
-    - [rejectedObservablePipe](src/observable/pipes/built-in/with-notifications/then/derived/rejected/rejected-observable-pipe.md)
-    - [finallyObservablePipe](src/observable/pipes/built-in/with-notifications/then/derived/finally/finally-observable-pipe.md)
-    - [thenAnyObservablePipe](src/observable/pipes/built-in/with-notifications/then/derived/then-any/then-any-observable-pipe.md)
+  - **[thenObservablePipe](/docs/reference/then-observable-pipe/)**
+    - [fulfilledObservablePipe](/docs/reference/fulfilled-observable-pipe/)
+    - [rejectedObservablePipe](/docs/reference/rejected-observable-pipe/)
+    - [finallyObservablePipe](/docs/reference/finally-observable-pipe/)
+    - [thenAnyObservablePipe](/docs/reference/then-any-observable-pipe/)
 
 #### emit a value myself => create a Source which emits values to
 
-- multiple Observers: [createMulticastSource](/docs/reference/multicast-source/)
-- only one Observer: [createUnicastSource](/docs/reference/unicast-source/)
+- multiple Observers: [createMulticastSource](/docs/reference/create-multicast-source/)
+- only one Observer: [createUnicastSource](/docs/reference/create-unicast-source/)
 - one or many Observer and stores all emitted values:
-  [createReplaySource](/docs/reference/replay-source/),
+  [createReplaySource](/docs/reference/create-replay-source/),
   [createMulticastReplaySource](/docs/reference/create-multicast-replay-source/)
 - one or many Observer and stores the last emitted value:
-  [createReplayLastSource](/docs/reference/replay-last-source/),
+  [createReplayLastSource](/docs/reference/create-replay-last-source/),
   **[createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/)**,
 
 [//]: # (  [createUnicastReplayLastSource]&#40;/docs/reference/create-unicast-replay-last-source/&#41;)
@@ -205,15 +220,19 @@ Use this page to pick the right function which fulfills your needs.
 
 [w3c streams documentation](https://streams.spec.whatwg.org/#rs-class)
 
-- readable stream: [fromReadableStream](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md)
-- readable stream reader ⚠: [fromReadableStreamReader](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
-- writable stream: [fromWritableStream](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md)
-- writable stream default writer ⚠: [fromWritableStreamDefaultWriter](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
-- writable stream default writer [fromReadableWritablePair](src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md)
+- readable stream: [fromReadableStream](/docs/reference/from-readable-stream/)
+- readable stream reader ⚠: [fromReadableStreamReader](/docs/reference/from-readable-stream-reader/)
 
-#### create an io stream
+[//]: # (- writable stream: [fromWritableStream]&#40;src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream/from-readable-stream.md&#41;)
 
-- from a websocket: [createWebSocketByteStream](src/observer-observable-pair/build-in/io-stream/built-in/websocket/derived/byte-stream/create-websocket-byte-stream.md)
+[//]: # (- writable stream default writer ⚠: [fromWritableStreamDefaultWriter]&#40;src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md&#41;)
+
+[//]: # (- writable stream default writer [fromReadableWritablePair]&#40;src/observable/built-in/from/with-notifications/readable-stream/w3c/from-readable-stream-reader/from-readable-stream-reader.md&#41;)
+
+[//]: # (#### create an io stream)
+
+[//]: # ()
+[//]: # (- from a websocket: [createWebSocketByteStream]&#40;src/observer-observable-pair/build-in/io-stream/built-in/websocket/derived/byte-stream/create-websocket-byte-stream.md&#41;)
 
 #### others
 
@@ -222,4 +241,4 @@ Use this page to pick the right function which fulfills your needs.
 
 ---
 
-Can't find a function that suits your needs ? Open a discussion, or create your own and share it !
+Can't find a function that suits your needs ? [Open a discussion](https://github.com/lirx-js/core/discussions), or create your own and share it !

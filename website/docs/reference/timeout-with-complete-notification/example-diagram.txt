@@ -1,0 +1,9 @@
+sequenceDiagram
+
+participant A as timeoutWithCompleteNotification(1000)
+participant OUT
+
+Note over A,OUT: After 1000ms
+
+A->>OUT: complete
+

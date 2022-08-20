@@ -1,0 +1,63 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
+---
+
+# shareObservablePipeWithMulticastReplaySource
+
+Alternative: `shareR$$$`
+
+### Types
+
+```ts
+function shareObservablePipeWithMulticastReplaySource<GValue>(
+  options?: IShareObservableWithMulticastReplaySourceOptions<GValue>,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+This ObservablePipe is a shortcut for:
+
+```ts
+shareObservablePipe<GValue>({
+  ...options,
+  getSource: () => createMulticastReplaySource<GValue>(maxNumberOfValues),
+})
+```
+
+See [shareObservablePipe](/docs/reference/share-observable-pipe/)
+and [createMulticastReplaySource](/docs/reference/create-multicast-replay-source/).
+
+
+### Example
+
+#### Sharing the same Observable
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  shareR$$$<number>(),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+// note that interval(1000) is only subscribed once
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+Output:
+
+```text
+// 1000ms
+value - A: 0
+value - B: 0
+// 1000ms
+value - A: 1
+value - B: 1
+...
+```
+

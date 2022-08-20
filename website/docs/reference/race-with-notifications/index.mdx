@@ -1,0 +1,59 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# raceWithNotifications
+
+Alternative: `raceN`
+
+### Types
+
+```ts
+function raceWithNotifications<GObservables extends IGenericRaceInObservables>(
+  observables: GObservables,
+): IObservable<IRaceObservableNotifications<GObservables>>
+```
+
+### Definition
+
+Waits for the first observable to send a `complete` or `error` Notification.
+
+If it received a `complete` Notification, it will emit the last value received through the `next` Notifications of this observable,
+followed by a `complete` Notification.
+
+If it received an `error` Notification, it will immediately send this Notification (`error`).
+
+This is equivalent of `Promise.race`.
+
+### Diagrams
+
+#### If one completes
+
+[![](https://mermaid.ink/img/pako:eNqFkcFKBDEMhl-l5OTCePDaw8IMetWDyh6sh0ybcQvTdGxTUZZ9dzuw4o4MK7kE_i9fAjmAjY5AQ6b3Qmzp1uNbwmDY8IRJvPUTsqhWYVaxz5Q-sB8pt8u4-xN3yzihpZ2X_X0UP3iL4iPneWQ1uHo5X9QsvK-bpfnh-Wk-tbveblddWjF9ilb9jeH2PwgvQzaGaSQhw6tAHazXnLsuYr-2uaCBQCmgd_UXB8NKGZA9BTKga-towDKKAcPHipbJodCd8xIT6AHHTA1gkfj4xRa0pEI_0OmfJ-r4Dftetns)](https://mermaid.live/edit#pako:eNqFkcFKBDEMhl-l5OTCePDaw8IMetWDyh6sh0ybcQvTdGxTUZZ9dzuw4o4MK7kE_i9fAjmAjY5AQ6b3Qmzp1uNbwmDY8IRJvPUTsqhWYVaxz5Q-sB8pt8u4-xN3yzihpZ2X_X0UP3iL4iPneWQ1uHo5X9QsvK-bpfnh-Wk-tbveblddWjF9ilb9jeH2PwgvQzaGaSQhw6tAHazXnLsuYr-2uaCBQCmgd_UXB8NKGZA9BTKga-towDKKAcPHipbJodCd8xIT6AHHTA1gkfj4xRa0pEI_0OmfJ-r4Dftetns)
+
+#### If one errored
+
+[![](https://mermaid.ink/img/pako:eNp1kT1PxDAMhv9K5AmkMrBmOKkVrDAciIEwuInLRWqd4jgIdLr_Tk4qEoUy2dL7-PXXEXwKBBYyvRViTzcRXwUnx45nFI0-zshqWoPZpD6TvGM_Um7XcvdL7tayoKenqIe7pHGIHjUmzueSTeHi-WejZuX7crl2vn98OI_aXe12m17WMH2oNf214_Z_iESSLKGutknV6trtD-sYGphIJoyh3vHo2BgHeqCJHNiaBhqwjOrA8amiZQ6odBuiJgE74JipASya9p_swaoU-oaWXyzU6QtJ-Z2S)](https://mermaid.live/edit#pako:eNp1kT1PxDAMhv9K5AmkMrBmOKkVrDAciIEwuInLRWqd4jgIdLr_Tk4qEoUy2dL7-PXXEXwKBBYyvRViTzcRXwUnx45nFI0-zshqWoPZpD6TvGM_Um7XcvdL7tayoKenqIe7pHGIHjUmzueSTeHi-WejZuX7crl2vn98OI_aXe12m17WMH2oNf214_Z_iESSLKGutknV6trtD-sYGphIJoyh3vHo2BgHeqCJHNiaBhqwjOrA8amiZQ6odBuiJgE74JipASya9p_swaoU-oaWXyzU6QtJ-Z2S)
+
+### Example
+
+#### Select the first Observable to complete
+
+```ts
+const observable1$ = switchMap$$(timeout(500), () => singleN<'a1'>('a1'));
+const observable2$ = switchMap$$(timeout(1000), () => singleN<'a2'>('a2'));
+
+const subscribe = raceWithNotifications([observable1$, observable2$]);
+
+subscribe((value: IDefaultNotificationsUnion<'a1' | 'a2'>) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+// t = 500ms
+'next', 'a1'
+'complete', undefined
+```

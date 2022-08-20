@@ -1,0 +1,52 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# timeoutWithCompleteNotification
+
+Alternative: `timeoutCN`
+
+### Types
+
+```ts
+function timeoutWithCompleteNotification(
+  duration: number,
+): IObservable<ICompleteNotification>
+```
+
+### Definition
+
+Creates an Observable that emits a `complete` Notification after a specified duration of time.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNpVjzELwjAQhf9KuEmhQl0zFIq66qDikuVIrnrQJDW9CCL-d1Opg9vdu-893r3ARkegYaR7pmBpy3hN6E0wYcAkbHnAIKpVOCphTzHLheW2iX7oSWgfhTu2KBzDYl3X9fLfdzifpqiCkYoPSqqtiqRV20lZJoMfJ6BdNc33YOfgSYQKPCWP7ErBlwlKGZAbeTKgy-iow9yLARPeBc2DQ6GdY4kJdIf9SBVglnh8BgtaUqYfND85U-8PlCJb5g)](https://mermaid.live/edit#pako:eNpVjzELwjAQhf9KuEmhQl0zFIq66qDikuVIrnrQJDW9CCL-d1Opg9vdu-893r3ARkegYaR7pmBpy3hN6E0wYcAkbHnAIKpVOCphTzHLheW2iX7oSWgfhTu2KBzDYl3X9fLfdzifpqiCkYoPSqqtiqRV20lZJoMfJ6BdNc33YOfgSYQKPCWP7ErBlwlKGZAbeTKgy-iow9yLARPeBc2DQ6GdY4kJdIf9SBVglnh8BgtaUqYfND85U-8PlCJb5g)
+
+### Example
+
+#### Delay an HTTP request by 2000ms
+
+```ts
+const subscribe = pipe$$(fromFetchJSON('https://api.org'), [
+  finally$$$(() => timeoutWithCompleteNotification(2000)),
+]);
+
+subscribe((notification) => {
+  console.log(notification.name, notification.value);
+});
+```
+
+Output:
+
+*if fulfilled*
+
+```text
+'next', { ...json data }
+'complete'
+```
+
+*else*
+
+```text
+'error', Error
+```

@@ -1,0 +1,54 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromIterator
+
+### Types
+
+```ts
+function fromIterator<GValue>(
+  iterator: Iterator<GValue>,
+): IObservable<GValue>
+```
+
+### Definition
+
+Creates an Observable from an Iterator. It emits the values sent by the iterator one by one.
+
+:::caution
+
+Use with caution: if you subscribe twice to the same Iterator, the emitted values probably won't be what you expect,
+due to concurrent calls on the `.next` function.
+
+:::
+
+You should prefer to use [fromIterable](/docs/reference/from-iterable/) which generates a unique Iterator, or `share`
+the Observable.
+
+### Example
+
+#### Simple Iterator emitting values from 0 to 9
+
+```ts
+const subscribe = fromIterator(
+  (function * () {
+    for (let i = 0; i < 10; i++) {
+      yield i;
+    }
+  })()
+);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+0
+1
+...
+9
+```

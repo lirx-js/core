@@ -1,0 +1,81 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE]
+---
+
+# logStateObservablePipe
+
+Alternative: `logState$$$`
+
+### Types
+
+```ts
+function logStateObservablePipe<GValue>(
+  name: string,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+This ObservablePipe is a passthrough to log the state of an Observable.
+It is useful to debug your Observables and improve sometimes the performances.
+
+### Example
+
+#### Find a missing 'share'
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  logState$$$('interval'),
+  scan$$$(_ => (_ + 1), 0),
+]);
+
+subscribe((value) => {
+  console.log(value);
+});
+
+subscribe((value) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+console.log(`interval -> subscribe`);
+console.log(`interval -> subscribe`);
+0
+0
+1
+1
+```
+
+We may see **two different subscriptions**.
+
+Sharing our Observable will increase the performances, especially on complex data flows:
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  logState$$$('interval'),
+  scan$$$(_ => (_ + 1), 0),
+  shareRL$$$(),
+]);
+
+subscribe((value) => {
+  console.log(value);
+});
+
+subscribe((value) => {
+  console.log(value);
+});
+```
+
+
+Output:
+
+```text
+console.log(`interval -> subscribe`);
+0
+0
+1
+1
+```

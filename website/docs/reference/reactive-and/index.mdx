@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveAnd
+
+Alternative: `and$$`
+
+### Types
+
+```ts
+function reactiveAnd(
+  a: IObservable<boolean>,
+  b: IObservable<boolean>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs the boolean `AND` operation (`&&`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNptkMFuwjAMhl8l8mmTygvkUKkVnDls3HwxiYFIrVtSBwkh3n3pBiiduCX___lL5Bu4wTNYmPicWByvAx0j9SgoI0UNLowkahpDkxn2E8cL7Ttulm27bNtlG5mchgs34meuuH4UxqoUfC4N2933_KFmVdfFtDUaE6O0_-MDdVPOiywT2fFq2veiNwN_BQpU0HPsKfi8qxuKMQh64p4RbD56PlDqFAHlntE0elLe-KBDBPv7aAWUdPi6igM7S5_QY98P6v4DHKaQow)](https://mermaid.live/edit#pako:eNptkMFuwjAMhl8l8mmTygvkUKkVnDls3HwxiYFIrVtSBwkh3n3pBiiduCX___lL5Bu4wTNYmPicWByvAx0j9SgoI0UNLowkahpDkxn2E8cL7Ttulm27bNtlG5mchgs34meuuH4UxqoUfC4N2933_KFmVdfFtDUaE6O0_-MDdVPOiywT2fFq2veiNwN_BQpU0HPsKfi8qxuKMQh64p4RbD56PlDqFAHlntE0elLe-KBDBPv7aAWUdPi6igM7S5_QY98P6v4DHKaQow)
+
+### Example
+
+#### Perform the boolean "AND" of two Observables
+
+```ts
+const subscribe = reactiveAnd(
+  single(true),
+  single(false),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+false
+```

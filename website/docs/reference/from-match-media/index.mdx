@@ -1,0 +1,31 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromMatchMedia
+
+### Types
+
+```ts
+function fromMatchMedia(
+  query: string,
+): IObservable<boolean>
+```
+### Definition
+
+Creates an Observable that emits true if the window matches `query` (a css @media query).
+
+### Example
+
+#### Body's background color is green when window width is greater than 600px, else it's red
+
+```ts
+const subscribe = fromMatchMedia('(max-width: 600px)');
+
+subscribe((matches: boolean) => {
+  document.body.style.backgroundColor = matches
+    ? 'red'
+    : 'green';
+});
+```
+

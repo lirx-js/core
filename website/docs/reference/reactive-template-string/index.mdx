@@ -1,0 +1,46 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveTemplateString
+
+Alternative: `string$$`
+
+### Types
+
+```ts
+function reactiveTemplateString(
+  parts: TemplateStringsArray | string[],
+  ...observables: IObservable<any>[]
+): IObservable<string>
+```
+
+### Definition
+
+Creates an Observable from a [template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+If any of the members (Observables) of the template string change, it re-generates the string and send it.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNqVkctqwzAQRX9FDIVs3B_QImC1XXeRdKdFxtIkFejhyqNAMf73KmkCFZhAd0L33AfMDCZZAgkTfRWKhl4dnjIGHXUcMbMzbsTIohc4iTRMlM84eOpbVbWqatVMaNidaU9h9Mi04-zi6WJZVw4oxdP8p2zpxNB-qeXQdrx_7C-T--ftdj1Uik3vnaGNjuoRpNJQkXW5-mpPherAa9h116_jYegL5uT_GXv36AgdBMoBna13mnUUQgN_UiANsj4tHbF41qDjUtEy2pr8Zh2nDPKIfqIOsHDafUcDknOhO3S79Y1afgCdJLx5)](https://mermaid.live/edit#pako:eNqVkctqwzAQRX9FDIVs3B_QImC1XXeRdKdFxtIkFejhyqNAMf73KmkCFZhAd0L33AfMDCZZAgkTfRWKhl4dnjIGHXUcMbMzbsTIohc4iTRMlM84eOpbVbWqatVMaNidaU9h9Mi04-zi6WJZVw4oxdP8p2zpxNB-qeXQdrx_7C-T--ftdj1Uik3vnaGNjuoRpNJQkXW5-mpPherAa9h116_jYegL5uT_GXv36AgdBMoBna13mnUUQgN_UiANsj4tHbF41qDjUtEy2pr8Zh2nDPKIfqIOsHDafUcDknOhO3S79Y1afgCdJLx5)
+
+### Example
+
+#### Compute the fullname of a user from its firstname and lastname
+
+```ts
+const firstname$ = single('Valentin');
+const lastname$ = single('Richard');
+
+const fullname$ = reactiveTemplateString`${firstname$} ${lastname$}`;
+
+fullname$((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+Valentin Richard
+```

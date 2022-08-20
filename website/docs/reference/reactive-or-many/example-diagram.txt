@@ -1,0 +1,15 @@
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant C as observableC
+participant reactiveOrMany as reactiveOrMany(observableA, observableB, observableC)
+participant OUT
+
+A->>reactiveOrMany: false
+B->>reactiveOrMany: false
+C->>reactiveOrMany: false
+reactiveOrMany->>OUT: false
+B->>reactiveOrMany: true
+reactiveOrMany->>OUT: true
+

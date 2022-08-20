@@ -1,0 +1,32 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# fromResizeObserver
+
+### Types
+
+```ts
+function fromResizeObserver(
+  element: Element,
+  options?: ResizeObserverOptions,
+): IObservable<ResizeObserverEntry>
+```
+### Definition
+
+
+Creates an Observable that creates a *ResizeObserver* for a specific element, and emits a
+*ResizeObserverEntry* when the element's size changes.
+
+### Example
+
+#### Detect when the body changes
+
+```ts
+const subscribe = fromResizeObserver(document.body);
+
+subscribe(() => {
+  console.log(`Body's size changed`);
+});
+```
+

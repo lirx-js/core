@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveGreaterThan
+
+Alternatives: `greaterThan$$`, `gt$$`
+
+### Types
+
+```ts
+function reactiveGreaterThan(
+  a: IObservable<any>,
+  b: IObservable<any>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs a greater than comparison (`>`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp9kUGLwkAMhf_KkJNCF1yPcxBaFI97WPeWS5yJ60CbdqcZYRH_u1NRsFC9hbyXL4_kDK71DBZ6_kssjteBfiM1KCgdRQ0udCRqSkO9afc9xxPtay7HajVWq7EamZyGE29zoRx3R5LBP9GePW0onoHzMfHrZzcELD9WqwmKNZ8o1SttiTLRz-4MteZAdc9vphdvpzUmHoJBAQ3HhoLPlz2jGIOgR24YwebS84FSrQgol2xNnc-gjQ_aRrC3BAVQ0vb7XxzYAfow3b9zd12uPA2ieQ)](https://mermaid.live/edit#pako:eNp9kUGLwkAMhf_KkJNCF1yPcxBaFI97WPeWS5yJ60CbdqcZYRH_u1NRsFC9hbyXL4_kDK71DBZ6_kssjteBfiM1KCgdRQ0udCRqSkO9afc9xxPtay7HajVWq7EamZyGE29zoRx3R5LBP9GePW0onoHzMfHrZzcELD9WqwmKNZ8o1SttiTLRz-4MteZAdc9vphdvpzUmHoJBAQ3HhoLPlz2jGIOgR24YwebS84FSrQgol2xNnc-gjQ_aRrC3BAVQ0vb7XxzYAfow3b9zd12uPA2ieQ)
+
+### Example
+
+#### Perform a greater than comparison of two Observables
+
+```ts
+const subscribe = reactiveGreaterThan(
+  single(2),
+  single(1),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

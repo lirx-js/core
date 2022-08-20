@@ -35,6 +35,8 @@ const sidebars = {
         'documentation/getting-started/what-is-next/index',
       ],
     },
+    'documentation/decision-tree/index',
+    'documentation/naming-convention/index',
     {
       type: 'category',
       label: 'Migration',
@@ -43,7 +45,6 @@ const sidebars = {
         'documentation/migration/from-rxjs/index',
       ],
     },
-    'documentation/decision-tree/index',
     'documentation/performances/index',
   ],
 
@@ -64,18 +65,6 @@ const sidebars = {
     //   ],
     // },
   ],
-  // reference: [
-  //   {
-  //     type: 'category',
-  //     label: 'Types',
-  //     items: [
-  //       'reference/observable/index',
-  //       'reference/observer/index',
-  //       'reference/observable-pipe/index',
-  //       'reference/observer-pipe/index',
-  //     ],
-  //   },
-  // ],
 };
 
 module.exports = sidebars;

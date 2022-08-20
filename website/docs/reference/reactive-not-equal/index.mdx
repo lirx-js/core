@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveNotEqual
+
+Alternatives: `notEqual$$`, `neq$$`
+
+### Types
+
+```ts
+function reactiveNotEqual(
+  a: IObservable<any>,
+  b: IObservable<any>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs a strict not equal comparison (`!==`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp9kUEKwjAQRa8SZqNCvUAWQotudaHuspkmowbapKaTghTvbioKtqi7MP_N4zPpQXtDIKGlaySnaW3xHLBWTrkGA1ttG3QscoGt8GVLocOyonycFuO0GKeBULPtaOt5c41YDfB0Nv9wZ5-qxdi1Ox6GavlytZoqpJjhTLnie1SmaDpOZPJJwSHSz0X8s3jCqqWhD2RQU6jRmnTKXjkhFPCFalIg09PQCWPFCpS7JzQ2Bpk2xrIPIJ-SDDCy39-cBjnUeUOv73hR9wfAbJvA)](https://mermaid.live/edit#pako:eNp9kUEKwjAQRa8SZqNCvUAWQotudaHuspkmowbapKaTghTvbioKtqi7MP_N4zPpQXtDIKGlaySnaW3xHLBWTrkGA1ttG3QscoGt8GVLocOyonycFuO0GKeBULPtaOt5c41YDfB0Nv9wZ5-qxdi1Ox6GavlytZoqpJjhTLnie1SmaDpOZPJJwSHSz0X8s3jCqqWhD2RQU6jRmnTKXjkhFPCFalIg09PQCWPFCpS7JzQ2Bpk2xrIPIJ-SDDCy39-cBjnUeUOv73hR9wfAbJvA)
+
+### Example
+
+#### Perform a strict not equal comparison of two Observables
+
+```ts
+const subscribe = reactiveNotEqual(
+  single('a'),
+  single('b'),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

@@ -1,0 +1,13 @@
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveAnd as reactiveAnd(observableA, observableB)
+participant OUT
+
+A->>reactiveAnd: true
+B->>reactiveAnd: false
+reactiveAnd->>OUT: false
+B->>reactiveAnd: true
+reactiveAnd->>OUT: true
+

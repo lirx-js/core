@@ -1,0 +1,56 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromArrayWithNotifications
+
+Alternative: `fromArrayN`
+
+### Types
+
+```ts
+function fromArrayWithNotifications<GValue>(
+  array: ArrayLike<GValue>,
+): IObservable<IFromArrayObservableNotifications<GValue>>
+```
+
+```ts
+type IFromArrayObservableNotifications<GValue> =
+  INextNotification<GValue>
+  | ICompleteNotification
+```
+
+### Definition
+
+Creates an Observable from an Array.
+It emits the array's values one by one in the form of `next` Notifications and then complete (`complete` Notification).
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNplkE1LAzEQhv_KMCeFCP245VBY0KseqngwHoZk1g5sJtvsBCyl_71bqKD29vLwzMD7HjGWxOhx4n1jjfwo9FUpBw06UjWJMpIadEAT9LXkrlY6vIvtnotJL5FMik53HwsHSwcrB-vP-7-nL2-vl2_dw2YzRw_K3-ZhcUOWN2T1n6x_gVjyOLBxUHSYuWaSNPc4BgUIaDvOHNDPMXFPbbCAQU-z2sZExk9JrFT0PQ0TO6RmZXvQiN5q4x_pusXVOp0BrhRlLQ)](https://mermaid.live/edit#pako:eNplkE1LAzEQhv_KMCeFCP245VBY0KseqngwHoZk1g5sJtvsBCyl_71bqKD29vLwzMD7HjGWxOhx4n1jjfwo9FUpBw06UjWJMpIadEAT9LXkrlY6vIvtnotJL5FMik53HwsHSwcrB-vP-7-nL2-vl2_dw2YzRw_K3-ZhcUOWN2T1n6x_gVjyOLBxUHSYuWaSNPc4BgUIaDvOHNDPMXFPbbCAQU-z2sZExk9JrFT0PQ0TO6RmZXvQiN5q4x_pusXVOp0BrhRlLQ)
+
+### Example
+
+#### Emit the values 0, 1, 2, 3
+
+```ts
+const subscribe = fromArrayWithNotifications([0, 1, 2, 3]);
+
+subscribe((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+```text
+next: 0
+next: 1
+next: 2
+next: 3
+complete
+```
+
+
+
+

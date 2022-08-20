@@ -9,6 +9,6 @@ observable->>distinctObservablePipe: value
 alt if <value> is different from the previous value
     distinctObservablePipe->>OUT: value
 else else discard value
-    distinctObservablePipe--xOUT:
+    distinctObservablePipe--xOUT: <never>
 end
 

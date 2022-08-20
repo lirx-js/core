@@ -1,0 +1,163 @@
+# Naming convention
+
+To keep our dataflow as clear as possible for everyone, it's a **best practice** to apply the following naming convention.
+
+We won't force you to follow strictly this guide, but it's a very efficient way to organize your code.
+
+---
+
+> an Observable ends with $
+
+Example: an Observable from an HTTP request
+
+```ts
+const request$ = fromFetch('http://example.com');
+```
+
+This is particularly useful to distinguish "sync" variables from "async" ones.
+
+---
+
+> a function that generates an Observable ends with $$
+
+Example: an ObservablePipe converting incoming values to string
+
+```ts
+const mapToString$$ = mapObservablePipe(String);
+
+// usage example
+const output$ = mapToString$$(input$);
+```
+
+Every ObservablePipe enter this category (functions ending with `Observable`).
+
+---
+
+> a function that generates a function returning an Observable ends with $$$
+
+Example: shortcut for the function `mapObservablePipe`
+
+```ts
+const map$$$ = mapObservablePipe;
+
+// usage example
+const output$ = map$$$(String)(input$);
+```
+
+Every function generating an ObservablePipe enters this category (functions ending with `ObservablePipe`).
+
+---
+
+> an Observer starts with $
+
+Example: an Observer for byte data
+
+```ts
+const $chunk = (data: Uint8Array) => {
+  console.log(data);
+};
+
+// usage example
+const unsubscribe = chunk$($chunk);
+```
+
+We'll use it to distinguish Observers from other callback functions.
+
+---
+
+> a source starts and ends with $
+
+Example: a Source of numbers
+
+```ts
+const $count$ = let$$(5);
+```
+
+## Alternatives
+
+During our journey with Observables, we've seen a lot of functions, and it's just the tip of the iceberg.
+
+To keep thinks as clear as possible, `@lirx/core` took the bet to name its functions **explicitly** about what they do and return,
+... at the cost of verbose function names.
+This is very useful for beginners, however, this is not truly practical when we'll be confident with Reactive Programming,
+as **it tends to bloat our code**, and make it less readable.
+
+So we've written **shorter alternatives** to many functions.
+These alternatives may be found on top of each documentation of the `@lirx/core`'s functions.
+
+For instance, every function generating an ObservablePipe (functions ending with `ObservablePipe`),
+may be replaced with an `$$$` at the end (`[name]ObservablePipe => [name]$$$`).
+
+Examples:
+
+- `mapObservablePipe` => `map$$$`
+- `distinctObservablePipe` => `disctinct$$$`
+- etc.
+
+Its keeps everything shorter, an easier to read.
+
+Moreover, these function have an **"inline" alternative**.
+
+If we remove the `Pipe` at the end of their name, they accept an Observable as first argument and return another one.
+
+It's a **shorter** and **optimized** version of: `[name]ObservablePipe(...args)(observable)` => `[name]Observable(observable, ...args)`
+
+And, as they follow the Observables naming convention, we may instead write `$$` at the end (`[name]Observable => [name]$$`).
+
+An example is probably clearer:
+
+*the verbose implementation*
+
+```ts
+const output$ = pipeObservable(input$, [
+  mapObservablePipe(String),
+]);
+```
+
+*the shorter version*
+
+```ts
+const output$ = pipe$$(input$, [
+  map$$$(String),
+]);
+```
+
+*and the inline alternative*
+
+```ts
+const output$ = map$$(input$, String);
+```
+
+When possible, you should strongly consider using the "inline alternative".
+
+---
+
+However, **do not inline**, when you have to chain many ObservablePipes:
+
+*the verbose implementation*
+
+```ts
+const output$ = pipeObservable(input$, [
+  mapObservablePipe(String),
+  filterObservablePipe(_ => _ !== ''),
+]);
+```
+
+*the shorter version*
+
+```ts
+const output$ = pipe$$(input$, [
+  map$$$(String),
+  filter$$$(_ => _ !== ''),
+]);
+```
+
+*and the inline alternative*
+
+```ts
+// DON'T inline when you have to chain many ObservablePipes, as it becomes unreadable !
+const output$ = filter$$(map$$(input$, String), _ => _ !== '');
+```
+
+
+And voilà ! You're ready to write concise data flow with Observables.

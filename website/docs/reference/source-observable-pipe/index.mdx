@@ -1,0 +1,85 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
+---
+
+# sourceObservablePipe
+
+### Types
+
+```ts
+function sourceObservablePipe<GValue>(
+  options: ISourceObservableOptions<GValue>,
+): IObservablePipe<GValue, GValue>
+```
+
+```ts
+interface ISourceObservableOptions<GValue> {
+  getSource: ISourceObservablePipeGetSource<GValue>;
+  subscribePoint?: number;
+  unsubscribePoint?: number;
+}
+
+interface ISourceObservablePipeGetSource<GValue> {
+  (): ISource<GValue>;
+}
+```
+
+### Definition
+
+This ObservablePipe does the bridge between a Source which is not lazy loaded, and an Observable (which is lazy loaded).
+
+It counts the number of subscriptions and subscribes (only once) to the Observable if the number of
+subscriptions is equal to `subscribePoint` (default: 1). The received value is then emitted in the source.
+
+If the number of subscriptions is equal to `unsubscribePoint` (default: 0), it unsubscribes from the Observable.
+
+When a subscription occurs, it is transmitted to the Source (same when unsubscribing).
+
+So by default, this pipe subscribes to the original observable on the first subscription,
+and unsubscribes of it when no one remains.
+
+This is partially equivalent to the *[multicast](https://rxjs-dev.firebaseapp.com/api/operators/multicast)*
+and *[refCount](https://rxjs-dev.firebaseapp.com/api/operators/refCount)* operators, but it is more generic.
+
+:::caution
+
+You will probably never user directly this ObservablePipe, instead you may use:
+[shareObservablePipeWithMulticastReplaySource](/docs/reference/share-observable-pipe-with-multicast-replay-source/)
+or
+[shareObservablePipeWithMulticastReplayLastSource](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/).
+
+:::
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNqNkstqwzAQRX9FzKqF5Ae0CNS0yz4gW21G0iQV2JKrRyEY_3vHwYkJyNQ7cXXmzpVmBjDBEkhI9FPIG3p1eI7YKa98jzE743r0WQSdKP6ibulRT6FEQ5_32y_Xk8BU1Z8GcaZ8vN5IYSJhpvfSshemWRbjc60vxZe63Ew578x-fzjUGkuRik4mOs3pa8BUuLzwAV_kVXNcMb15crIrtCRtNiX9CJlEYFys9G35C-1lKbFTj02R9ZbI_0MNQ7CDjmKHzvIWDcoLoSB_U0cKJB8tnZBnrED5kdHSW576m3U5RJAnbBPtAEsOx4s3IHMsdIPmTZyp8Q9zvwG4)](https://mermaid.live/edit#pako:eNqNkstqwzAQRX9FzKqF5Ae0CNS0yz4gW21G0iQV2JKrRyEY_3vHwYkJyNQ7cXXmzpVmBjDBEkhI9FPIG3p1eI7YKa98jzE743r0WQSdKP6ibulRT6FEQ5_32y_Xk8BU1Z8GcaZ8vN5IYSJhpvfSshemWRbjc60vxZe63Ew578x-fzjUGkuRik4mOs3pa8BUuLzwAV_kVXNcMb15crIrtCRtNiX9CJlEYFys9G35C-1lKbFTj02R9ZbI_0MNQ7CDjmKHzvIWDcoLoSB_U0cKJB8tnZBnrED5kdHSW576m3U5RJAnbBPtAEsOx4s3IHMsdIPmTZyp8Q9zvwG4)
+
+### Example
+
+#### Sharing the same Observable
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  sourceObservablePipe<number>({ getSource: createMulticastSource }),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+Output:
+
+```text
+value - A: 0
+value - B: 0
+value - A: 1
+value - B: 1
+...
+```
+

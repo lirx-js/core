@@ -1,0 +1,46 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromReadableStream
+
+### Types
+
+```ts
+function fromReadableStream<GValue>(
+  readableStream: ReadableStream<GValue>,
+): IObservable<IFromReadableStreamObservableNotifications<GValue>>
+```
+
+### Definition
+
+Creates an Observable from a [ReadableStream](https://streams.spec.whatwg.org/#rs-class).
+It emits values in the form of Notifications.
+
+See [fromReadableStreamReader](/docs/reference/from-readable-stream-reader/) for more details.
+
+
+### Example
+
+#### Read data from a Response (Body)
+
+```ts
+async function run() {
+  const response = await fetch('https://somefile');
+  const subscribe = fromReadableStream(response.body);
+
+  subscribe((notification) => {
+    console.log(notification.name, ':', notification.value);
+  });
+}
+
+run();
+```
+
+Output:
+
+```text
+next: ArrayBuffer
+next: ArrayBuffer
+complete
+```

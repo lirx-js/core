@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveOrMany
+
+Alternatives: `orMany$$`, `orM$$`
+
+### Types
+
+```ts
+function reactiveOrMany(
+  ...observables: IObservable<boolean>[]
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs the boolean `OR` operation (`||`) between the values sent by many Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp9kcFqwzAMhl_F6LRB9gI-FJJsx9FDu5suqq1uhkRJHbtQSt99ztpCdMhutr7P_4_RFdzgGSxMfMosjt8DfUfqUVBGiim4MJIkUxuazHCYOJ7p0HGtaaNpo2mraatpZHIpnHkbP0kus6onL4vWalmyvLSvOnT7tZ9_UL9tNjrNmiN1E6M066hdR3pcvFL0b2SKefXZnaFABT3HnoIve7iiGIOQfrhnBFuOno-Uu4SAcitqHj0l_vAhDRHsX3UFlNOwu4gDO4c-pccuH9btF3sos4M)](https://mermaid.live/edit#pako:eNp9kcFqwzAMhl_F6LRB9gI-FJJsx9FDu5suqq1uhkRJHbtQSt99ztpCdMhutr7P_4_RFdzgGSxMfMosjt8DfUfqUVBGiim4MJIkUxuazHCYOJ7p0HGtaaNpo2mraatpZHIpnHkbP0kus6onL4vWalmyvLSvOnT7tZ9_UL9tNjrNmiN1E6M066hdR3pcvFL0b2SKefXZnaFABT3HnoIve7iiGIOQfrhnBFuOno-Uu4SAcitqHj0l_vAhDRHsX3UFlNOwu4gDO4c-pccuH9btF3sos4M)
+
+### Example
+
+#### Perform the boolean "OR" of three Observables
+
+```ts
+const subscribe = reactiveOrMany(
+  single(false),
+  single(true),
+  single(false),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

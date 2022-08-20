@@ -1,6 +1,6 @@
 # Pipe Observables
 
-An essential part of Reactive Programing consist of **piping** our Observable.
+An essential part of Reactive Programing consist of **piping** our Observables.
 
 It brings us the possibility to **transform** multiple values on different steps to build **complex dataflow** in a few lines of code.
 
@@ -14,7 +14,7 @@ An ObservablePipe is a **transform/modify data function** for Observables.
 It usually **subscribes** to the provided Observable, **performs** some operations on the incoming values,
 and may **emit** these values or new ones.
 
-Here's the type of an [ObservablePipe](../../../reference/observable-pipe):
+Here's the type of an [ObservablePipe](/docs/reference/observable-pipe/):
 
 ```ts
 interface IObservablePipe<GIn, GOut> {
@@ -42,7 +42,7 @@ const unsubscribe = distinctValues$(observer);
 [Click here to see the live demo](https://stackblitz.com/edit/typescript-y9g9fd?devtoolsheight=33&file=index.ts)
 
 If this looks too complex, don't worry. We **won't have to write** from scratch any of them.
-`@lirx/core` comes with a many ObservablePipes, right out of the box.
+`@lirx/core` comes with plenty of ObservablePipes, right out of the box.
 
 ## Chaining many ObservablePipes
 
@@ -51,7 +51,7 @@ ObservablePipes are made to be chained together to **create complex dataflow**.
 An *ObservablePipe* could be used directly like any ordinary functions (`distinct(observable)`), but in practice, there
 tend to be many of them convolved together, and quickly become unreadable (`op4(op3(op2(op1(obs))))`).
 
-For that reason, we will use the function **[pipe$$](../../../reference/pipe-observable)**
+For that reason, we will use the function **[pipe$$](/docs/reference/pipe-observable/)**
 that accomplishes the same thing while being **much easier to read**:
 
 ```ts
@@ -69,6 +69,6 @@ This function simply does:
 [op1, op2, op3, op4].reduce((value, fnc) => fnc(value), obs);
 ```
 
-Moreover, we can group our ObservablePipes too using [pipe$$$](../../../reference/pipe-observable-pipes) (less frequently used).
+Moreover, we can group our ObservablePipes too using [pipe$$$](/docs/reference/pipe-observable-pipes/) (less frequently used).
 
 In the next chapter, we will see some examples.

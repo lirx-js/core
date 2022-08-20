@@ -5,7 +5,7 @@ This allows extremely **efficient optimizations** from the bundler, the minifier
 
 🪣 Fully **tree-shakable**: bundle only what's your using and nothing more.
 
-💪 **Well optimized**, to handle efficiently the garbage collection, the used and released resources, and the piped dataflow.
+💪 **Well optimized**, with efficient garbage collection, fast data flow, and freed resources.
 
 ---
 

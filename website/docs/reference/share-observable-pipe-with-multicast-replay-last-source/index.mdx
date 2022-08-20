@@ -2,7 +2,7 @@
 tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
 ---
 
-# TODO shareObservablePipeWithMulticastReplayLastSource
+# shareObservablePipeWithMulticastReplayLastSource
 
 Alternative: `shareRL$$$`
 
@@ -16,11 +16,18 @@ function shareObservablePipeWithMulticastReplayLastSource<GValue>(
 
 ### Definition
 
-TODO
+This ObservablePipe is a shortcut for:
 
-### Diagram
+```ts
+shareObservablePipe<GValue>({
+  ...options,
+  getSource: () => createMulticastReplayLastSource<GValue>(maxNumberOfValues),
+})
+```
 
-TODO
+See [shareObservablePipe](/docs/reference/share-observable-pipe/)
+and [createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/).
+
 
 ### Example
 

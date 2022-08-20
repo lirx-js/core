@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveLowerThan
+
+Alternatives: `lowerThan$$`, `lt$$`
+
+### Types
+
+```ts
+function reactiveLowerThan(
+  a: IObservable<any>,
+  b: IObservable<any>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs a lower than comparison (`<`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp9kcFqwzAMhl_F6LRBBmuPPhQStttgh3Y3XVRbXQ2JnDpyxyh99zqlg4Zsuxn9nz5-5BO46BksDHzILI5fAn0m6lBQekoaXOhJ1NSGBhO3A6cjbVuup2kzTZtpmpichiO_xS9Omz3JSM-GD3f26l72OLW9f2zGcvXTajVzWLNAaX5PliizaSGLzhpNmf9cfP5ncUftwGMdqKDj1FHw5ZYnFGMQdM8dI9jy9Lyj3CoCyrmgufek_OqDxgT2KqmAssb1tziwY50f6PYfN-p8ATi_nTI)](https://mermaid.live/edit#pako:eNp9kcFqwzAMhl_F6LRBBmuPPhQStttgh3Y3XVRbXQ2JnDpyxyh99zqlg4Zsuxn9nz5-5BO46BksDHzILI5fAn0m6lBQekoaXOhJ1NSGBhO3A6cjbVuup2kzTZtpmpichiO_xS9Omz3JSM-GD3f26l72OLW9f2zGcvXTajVzWLNAaX5PliizaSGLzhpNmf9cfP5ncUftwGMdqKDj1FHw5ZYnFGMQdM8dI9jy9Lyj3CoCyrmgufek_OqDxgT2KqmAssb1tziwY50f6PYfN-p8ATi_nTI)
+
+### Example
+
+#### Perform a lower than comparison of two Observables
+
+```ts
+const subscribe = reactiveLowerThan(
+  single(1),
+  single(2),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

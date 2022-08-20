@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, REACTIVE FUNCTION]
+---
+
+# reactiveOr
+
+Alternative: `or$$`
+
+### Types
+
+```ts
+function reactiveOr(
+  a: IObservable<boolean>,
+  b: IObservable<boolean>,
+): IObservable<boolean>
+```
+
+### Definition
+
+Creates an Observable which performs the boolean `OR` operation (`||`) between the values sent by two Observables, and emits the result.
+
+### Diagram
+
+[![](https://mermaid.ink/img/pako:eNp1kE2uwjAMhK8SeQVSuUAWSK14axbAzhuTGIjUuiV1kBDi7qT8qFTi7eyZbyaRb-Baz2Ch53NicbwKdIzUoKB0FDW40JGoKQ31pt33HC-0r7mcutXUraZuZHIaLryOAzZus6--4js-n-bXu-3wnXKxXI5haw5U94xS_ZZHKfu54V9eY_qJv3QUKKDh2FDw-Uo3FGMQ9MQNI9g8ej5QqhUB5Z7R1HlS_vNB2wj2-WQBlLTdXMWBHUo_0PvSb-r-ANxljrA)](https://mermaid.live/edit#pako:eNp1kE2uwjAMhK8SeQVSuUAWSK14axbAzhuTGIjUuiV1kBDi7qT8qFTi7eyZbyaRb-Baz2Ch53NicbwKdIzUoKB0FDW40JGoKQ31pt33HC-0r7mcutXUraZuZHIaLryOAzZus6--4js-n-bXu-3wnXKxXI5haw5U94xS_ZZHKfu54V9eY_qJv3QUKKDh2FDw-Uo3FGMQ9MQNI9g8ej5QqhUB5Z7R1HlS_vNB2wj2-WQBlLTdXMWBHUo_0PvSb-r-ANxljrA)
+
+### Example
+
+#### Perform the boolean "OR" of two Observables
+
+```ts
+const subscribe = reactiveOr(
+  single(true),
+  single(false),
+);
+
+subscribe((value: boolean) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+true
+```

@@ -1,0 +1,77 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+---
+
+# fromFetch
+
+### Types
+
+```ts
+function fromFetch(
+  requestInfo: RequestInfo,
+  requestInit?: RequestInit,
+): IObservable<IFromFetchObservableNotifications>
+```
+
+### Definition
+
+Creates an Observable performing an HTTP request using the `fetch` api.
+
+For details, you may see [fromPromiseFactory](/docs/reference/from-promise-factory/).
+
+[//]: # (TODO)
+
+[//]: # (If you prefer to receive a JSON object instead, you may use `fromFetchJSON` instead.)
+
+### Examples
+
+#### Simple http request
+
+```ts
+const subscribe = fromFetch('https://some-url.site');
+
+subscribe((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+*if fulfilled*
+
+```text
+next: Response
+complete
+```
+
+*if rejected*
+
+```text
+error: Error
+```
+
+
+#### Simple http request with JSON response
+
+```ts
+const subscribe = fromFetchJSON('https://some-url.site');
+
+subscribe((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+*if fulfilled*
+
+```text
+next: { ...json content }
+complete
+```
+
+*if rejected*
+
+```text
+error: Error
+```

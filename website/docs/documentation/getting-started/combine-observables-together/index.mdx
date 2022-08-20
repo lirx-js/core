@@ -7,7 +7,7 @@ and will re-emit the values they send differently, according to the selected fun
 
 ### Re-emit all values
 
-The simplest combinator of Observable is **[merge](../../../reference/merge)**.
+The simplest combinator of Observable is **[merge](/docs/reference/merge/)**.
 
 It creates an output Observable which concurrently emits all values from every given input Observable.
 
@@ -36,7 +36,7 @@ Instead, we'll mostly use the following function.
 Usually, when grouping some Observables, we want to get all the last values they sent in the form of an Array,
 everytime a change occurs.
 
-This may be done with the function **[combineLatest](../../../reference/combine-latest)**.
+This may be done with the function **[combineLatest](/docs/reference/combine-latest/)**.
 
 For example, let's assume we have two Observables containing the firstname and the lastname of a user (ex: coming from two &lt;input&gt; elements),
 and we want to display the fullname of this user dynamically.
@@ -69,7 +69,7 @@ Finally, we'll see how to subscribe to many observables, and when one changes, w
 
 We may think about strings concatenation, performing a sum, etc.
 
-This function is called **[reactiveFunction](../../../reference/reactive-function)**.
+This function is called **[reactiveFunction](/docs/reference/reactive-function/)**.
 
 If we re-write our previous example:
 

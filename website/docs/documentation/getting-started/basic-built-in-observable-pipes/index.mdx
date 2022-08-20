@@ -6,8 +6,8 @@ In this tutorial, we'll **learn** to use some the **most essentials** Observable
 
 ### Filtering and mapping
 
-The most common pipes are [filter$$$](../../../reference/filter-observable-pipe/), [map$$$](../../../reference/map-observable-pipe/),
-and [distinct$$$](../../../reference/distinct-observable-pipe/).
+The most common pipes are [filter$$$](/docs/reference/filter-observable-pipe/), [map$$$](/docs/reference/map-observable-pipe/),
+and [distinct$$$](/docs/reference/distinct-observable-pipe/).
 
 For example, we may want to filter only even numbers, and then cast them to string:
 
@@ -39,10 +39,10 @@ However, it works with streams of data instead of static values.
 
 ### Debouncing values
 
-Sometimes, we need to delay incoming values and/or discard next values during this period.
+Sometimes, we need to delay incoming values and/or discard next values during a period.
 
-The most common pipes are [debounceTime$$$](../../../reference/debounce-time-observable-pipe/)
-and [throttleTime$$$](../../../reference/map-observable-pipe/).
+The most common pipes are [debounceTime$$$](/docs/reference/debounce-time-observable-pipe/)
+and [throttleTime$$$](/docs/reference/map-observable-pipe/).
 
 As an example, this is especially useful when we want to debounce user's click:
 
@@ -58,7 +58,7 @@ subscribe(() => {
 
 ### When an Observable emits a value, map this value and return another Observable
 
-One of the most used pipe is [switchMap$$$](../../../reference/merge-map-single-observable-pipe/).
+One of the most used pipe is [switchMap$$$](/docs/reference/merge-map-single-observable-pipe/).
 It maps the incoming values of an Observable to another one.
 
 It allows us to listen to an element's size selected by a user click for example:
@@ -84,10 +84,12 @@ subscribe(({ width, height }) => {
 });
 ```
 
+However, it it a little more complex than the previous one. So don't hesitate to play with it.
+
 ### Sharing values of an Observable (only subscribing once)
 
-Last common use case: if we want to subscribe many times to an Observable but subscribe only once to the original once, we may use
-[shareRL$$$](../../../reference/share-observable-pipe/share-observable-pipe-with-multicast-replay-last-source/).
+Last common use case: if we want to subscribe many times to an Observable but subscribe only once to the original one, we may use
+[shareRL$$$](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/).
 
 
 ```ts
@@ -109,5 +111,5 @@ subscribe((value: number) => {
 
 ### Going deeper
 
-Plenty of others *ObservablePipes* may be found on the **[reference page](../../../reference/observable-pipe/)**.
+Plenty of others *ObservablePipes* may be found on the **[reference page](/docs/tags/observable-pipe/)**.
 

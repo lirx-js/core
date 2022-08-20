@@ -1,0 +1,8 @@
+sequenceDiagram
+
+participant throwError as throwError(new Error('Aborted'))
+participant OUT
+
+throwError->>OUT: error: Error('Aborted')
+
+

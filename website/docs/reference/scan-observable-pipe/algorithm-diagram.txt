@@ -1,0 +1,12 @@
+sequenceDiagram
+
+participant observable
+participant scanObservablePipe as scanObservablePipe(reducer, accumulatedValue)
+participant OUT
+
+observable->>scanObservablePipe: value
+
+loop for each incoming value
+    Note over scanObservablePipe: accumulatedValue = reducer(accumulatedValue, value)
+    scanObservablePipe->>OUT: accumulatedValue
+end
