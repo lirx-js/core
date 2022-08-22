@@ -29,7 +29,7 @@ function main() {
 ```
 
 - erreurs presque jamais gérées: très souvent, le `catch` des promises est oublié, ainsi que toutes erreurs présentes dans des `setInterval` ou autres.
-Ne pas gérer ces erreurs résulte en une expérience utilisateur dégradée, car l'application risque de cesser de fonctionner brutalement et sans donner d'information à l'utilisateur.
+Ne pas traiter ces erreurs résulte en une expérience utilisateur dégradée, car l'application risque de cesser de fonctionner brutalement et sans donner d'information à l'utilisateur.
 
 - les taches asynchrones sont rarement stoppées:
 il est très fréquent de trouver des composants qui démarrent un `setTimeout`, `addEventListener` ou un `fetch`, et qui ne sont jamais détruits lorsque le composant n'est plus utilisé.
@@ -50,7 +50,7 @@ que pour le moteur JS.
 
 Je me suis donc lancé dans la conception de ma propre librairie, et après de [nombreuses itérations](https://www.npmjs.com/package/@lifaon/observables), voilà `@lirx/core`.
 C'est simplement la librairie [la plus rapide et la plus compacte](./performances.md) pour travailler en RP.
-J'ai donc choisi comme nom `LiRX` prononcé `lyrics`  et qui est un acronyme de `Light Reactive X`.
+J'ai alors choisi comme nom `LiRX` prononcé `lyrics`  et qui est un acronyme de `Light Reactive X`.
 
 ---
 

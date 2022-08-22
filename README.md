@@ -1,7 +1,9 @@
 <h1 align="center">LiRX/core - The fastest Reactive Programming framework</h1>
 
 <p align="center">
-  <img src="assets/lirx-core-logo.png" alt="lirx-core-logo" width="120px" height="120px"/>
+  <a href="https://core.lirx.org/">
+    <img src="assets/lirx-core-logo.png" alt="lirx-core-logo" width="120px" height="120px"/>
+  </a>
   <br>
   <i><strong>@lirx/core</strong> is an extremely performant framework to master asynchronous data streams using Observables and Observers.</i>
 </p>
@@ -17,10 +19,10 @@
 
 <hr>
 
-`@lirx/core` (pronounced `lyrics`) is simply the [fastest and smallest](./src/documentation/performances.md) javascript library for `Reactive Programming`,
+`@lirx/core` (pronounced `lyrics`) is simply the [fastest and smallest](https://core.lirx.org/docs/documentation/performances/) javascript library for `Reactive Programming`,
 providing different tools to generate, consume, and pipe Observables and Observers.
 
-If *Reactive Programming* does not tell you much or is a new concept to you, you may [take a look at this tutorial](./src/documentation/tutorial/01-introduction.md).
+If *Reactive Programming* does not tell you much or is a new concept to you, you may [take a look at this tutorial](https://core.lirx.org/docs/documentation/getting-started/introduction/).
 In a few words, if you deal frequently with async programming like *events*, *timeouts*, *promises* or *streams* (ex: front-end development),
 then `@lirx/core` is the perfect candidate for you.
 
@@ -44,22 +46,22 @@ subscribe((event: PointerEvent) => {
 Give it a try, and you'll love it !
 
 
-## 📖 Table of content
+## 📕 Documentation
 
-- [Introduction](./src/documentation/tutorial/01-introduction.md)
-- [Installation](./src/documentation/tutorial/02-installation.md)
-- [Your first Observable](./src/documentation/tutorial/03-your-first-observable.md)
-- [Using the built-in Observables](./src/documentation/tutorial/04-using-the-built-in-observables.md)
-- [Emitting values using sources](./src/documentation/tutorial/05-sources.md)
-- [Shortcuts](./src/documentation/tutorial/06-shortcuts.md)
-- [Practical example](./src/documentation/tutorial/07-practical-example/07-practical-example.md)
-- [Notifications replace RxJS events](./src/documentation/tutorial/08-notifications.md)
-- [Migrating from rxjs](./src/documentation/tutorial/09-migrating-from-rxjs.md)
-- [Migrating from Promise](./src/documentation/tutorial/10-migrating-from-promise.md)
-- [Should I use Observables ?](./src/documentation/tutorial/11-should-i-use-observables.md)
+You may find the documentation of `@lirx/core` on the official website: [https://core.lirx.org](https://core.lirx.org/),
+with a gentle [introduction here](https://core.lirx.org/docs/documentation/getting-started/introduction/)
+and the [reference page here](https://core.lirx.org/docs/reference/any-with-notifications/).
 
+Here are the essential links:
 
-- [CHANGELOG](./src/documentation/changelogs/CHANGELOG.md)
+- [Observable](https://core.lirx.org/docs/reference/observable/)
+- [Observer](https://core.lirx.org/docs/reference/observer/)
+- [ObservablePipe](https://core.lirx.org/docs/reference/observable-pipe/) (ak: Pipeable Operator)
+- [pipeObservable](https://core.lirx.org/docs/reference/pipe-observable/) (ak: Observable.pipe)
+- [pipeObservablePipes](https://core.lirx.org/docs/reference/pipe-observable-pipes/) (ak: pipe function)
+- [Notification](https://core.lirx.org/docs/reference/notification/) (ak: *next*, *complete* and *error*)
+- [MulticastSource](https://core.lirx.org/docs/reference/multicast-source/) (ak: Subject)
+- [ReplayLastSource](https://core.lirx.org/docs/reference/replay-last-source/) (ak: BehaviorSubject)
 
 
 ## 📦 Installation
@@ -70,22 +72,8 @@ yarn add @lirx/core
 npm install @lirx/core --save
 ```
 
-[Click here to read the installation manual](src/documentation/tutorial/02-installation.md)
+[Click here to read the installation manual](https://core.lirx.org/docs/documentation/getting-started/installation/)
 
-
-## 📕 Documentation
-
-- [Observable](src/observable/type/observable.md)
-- [Observer](src/observer/type/observer.md)
-- [ObservablePipe](src/observable/pipes/type/observable-pipe.md) (ak: Pipeable Operator)
-- [pipeObservable](src/observable/helpers/piping/pipe-observable/pipe-observable.md) (ak: Observable.pipe)
-- [pipeObservablePipes](src/observable/helpers/piping/pipe-observable-pipes/pipe-observable-pipes.md) (ak: pipe function)
-- [Notification](src/misc/notifications/notifications.md) (ak: *next*, *complete* and *error*)
-- [MulticastSource](src/observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.md) (ak: Subject)
-- [ReplayLastSource](src/observer-observable-pair/build-in/source/built-in/replay-last-source/replay-last-source.md) (ak: BehaviorSubject)
-- [Subscription](src/misc/subscription/subscription.md) (kind of: Subscription)
-
-Most of public functions or interfaces have their own documentation into a `.md` file in their respective directories.
 
 ## Ecosystem
 
@@ -114,7 +102,7 @@ Most of public functions or interfaces have their own documentation into a `.md`
   optimized by javascript engines. However, it has a minor cost: chaining operators or method calls are done through
   functions, which is a little less elegant (in terms of code readability).
 
-- no `next`, `complete` and `error`: instead this lib uses [notifications](src/misc/notifications/notifications.md).
+- no `next`, `complete` and `error`: instead this lib uses [notifications](https://core.lirx.org/docs/reference/notification/).
   In reality, not all *Observables* require to emit a final state. For example, the RxJS `interval`
   never reaches a `complete` state. It just sends numbers. Moreover, some *Observables* may want to emit more
   than this 3 *events*: we may imagine an XHR Observable which emits an `upload-progress` and `download-progress` *events*.

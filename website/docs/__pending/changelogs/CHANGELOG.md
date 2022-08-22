@@ -14,8 +14,8 @@ New pipe which emits the values emitted by the source Observable until another O
 
 Creates Observables around a *fetch request*, and map the result as text or stream of bytes
 
-- [fromFetchText](../../observable/built-in/from/with-notifications/http/from-fetch/derived/text/from-fetch-text.ts)
-- [fromFetchStream](../../observable/built-in/from/with-notifications/http/from-fetch/derived/stream/from-fetch-stream.ts)
+- [fromFetchText](../../../../src/observable/built-in/from/with-notifications/http/from-fetch/derived/text/from-fetch-text.ts)
+- [fromFetchStream](../../../../src/observable/built-in/from/with-notifications/http/from-fetch/derived/stream/from-fetch-stream.ts)
 
 
 #### anyWithNotifications

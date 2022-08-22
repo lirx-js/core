@@ -10,32 +10,32 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Fast and Small',
+    Svg: require('@site/static/img/illustrations/undraw/red/undraw_outer_space_re_u9vd.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        LiRX/core was designed from the ground up to be fast, small, and performant.
+        It <a href={'/docs/documentation/performances/'}>outperforms RxJS</a> in every aspects.
+      </>
+    ),
+  },
+  {
+    title: 'Build Complex Data Flows',
+    Svg: require('@site/static/img/illustrations/undraw/red/undraw_mind_map_re_nlb6.svg').default,
+    description: (
+      <>
+        Assemble many Observables to create custom data streams,
+        and adopt <i>Reactive Programming</i> for each of your async data sources.
       </>
     ),
   },
   {
     title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/img/illustrations/undraw/red/undraw_programmer_re_owql.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
-  },
-  {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        LiRX/core can create understandable and complex data pipelines with just a few lines of code.
+        Master data streams like a boss.
       </>
     ),
   },
