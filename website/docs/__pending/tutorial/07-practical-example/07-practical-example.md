@@ -7,7 +7,7 @@ display the current date and time formatted according to the selected locale.
 
 Here is the target workflow:
 
-![alt text](./example-01.png "schema")
+![alt text](example-01.png "schema")
 
 [comment]: <> (<img src="./example-01.png" width="600" alt="schema"/>)
 
@@ -209,7 +209,7 @@ const selectElementChange$ = fromEventTarget(selectElement, 'change');
 
 This creates an Observable that listen for the `change` Event on the `<select>` element.
 
-![alt text](./example-01-1.png "schema")
+![alt text](example-01-1.png "schema")
 
 ---
 
@@ -220,7 +220,7 @@ const locale$ = map$$(selectElementChange$, () => selectElement.value);
 This transforms the Event sent by the previous Observable, into the value of the `<select>`. So it's an Observable that
 emits the locale selected by the user.
 
-![alt text](./example-01-1-1.png "schema")
+![alt text](example-01-1-1.png "schema")
 
 However, because `selectElementChange$` only triggers when a *change* occurs, we will use the previous code in
 conjunction with `merge`, to dispatch the current `<select>` value.
@@ -240,7 +240,7 @@ const timer$ = interval(1000);
 
 Creates an Observable that emits every second.
 
-![alt text](./example-01-2.png "schema")
+![alt text](example-01-2.png "schema")
 
 
 ---
@@ -252,7 +252,7 @@ const date$ = map$$(timer$, () => Date.now());
 Transforms the "ticks" sent by the previous Observable, into the current date expressed as a timestamp. It's an
 Observable that emits the current date every second.
 
-![alt text](./example-01-2-1.png "schema")
+![alt text](example-01-2-1.png "schema")
 
 
 ---
@@ -267,7 +267,7 @@ const output$ = function$$(
 Transforms the locale and the date sent by the previous Observables (`locale$` and `date$`), through `formatDate`. It's
 an Observable that emits the current date formatted according to the selected language.
 
-![alt text](./example-01-3.png "schema")
+![alt text](example-01-3.png "schema")
 
 
 ---
@@ -281,7 +281,7 @@ const clean = output$((value: string) => {
 The last step is to subscribe to our Observable and display the result. Calling the `clean` function will stop the timer
 and remove the event listener automatically
 
-![alt text](./example-01-4.png "schema")
+![alt text](example-01-4.png "schema")
 
 ---
 
@@ -341,7 +341,7 @@ listen on some events. They work exceptionally well with the DOM.
 - [Using the built-in Observables](../04-using-the-built-in-observables.md)
 - [Emitting values using sources](../05-sources.md)
 - [Shortcuts](../06-shortcuts.md)
-- [Practical example](../07-practical-example/07-practical-example.md)
+- [Practical example](07-practical-example.md)
 - [Notifications replace RxJS events](../08-notifications.md)
 - [Migrating from rxjs](../09-migrating-from-rxjs.md)
 - [Migrating from Promise](../10-migrating-from-promise.md)
