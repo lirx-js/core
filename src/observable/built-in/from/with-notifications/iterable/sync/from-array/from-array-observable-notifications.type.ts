@@ -2,6 +2,6 @@ import { ICompleteNotification } from '../../../../../../../misc/notifications/b
 import { INextNotification } from '../../../../../../../misc/notifications/built-in/next/next-notification.type';
 
 export type IFromArrayObservableNotifications<GValue> =
-  INextNotification<GValue>
+  | INextNotification<GValue>
   | ICompleteNotification
   ;

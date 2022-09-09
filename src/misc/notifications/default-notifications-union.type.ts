@@ -4,13 +4,13 @@ import { INextNotification } from './built-in/next/next-notification.type';
 import { IGenericNotification } from './notification.type';
 
 export type IDefaultNotificationsUnion<GValue> =
-  INextNotification<GValue>
+  | INextNotification<GValue>
   | ICompleteNotification
   | IErrorNotification
   ;
 
 export type IDefaultInNotificationsUnion<GValue> =
-  IDefaultNotificationsUnion<GValue>
+  | IDefaultNotificationsUnion<GValue>
   | IGenericNotification;
 
 /* derived */
