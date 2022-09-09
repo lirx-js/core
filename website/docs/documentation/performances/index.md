@@ -125,4 +125,5 @@ function rxJSLightPerformancesExample() {
 rxJSLightPerformancesExample();
 ```
 
-[Click here to run the code](https://stackblitz.com/edit/vite-cfrug8?file=main.ts)
+[//]: # (TODO)
+[//]: # ([Click here to run the code]&#40;https://stackblitz.com/edit/vite-cfrug8?file=main.ts&#41;)

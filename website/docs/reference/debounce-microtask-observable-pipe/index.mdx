@@ -2,9 +2,11 @@
 tags: [FUNCTION, OBSERVABLE PIPE, TIME RELATED]
 ---
 
-# TODO debounceMicrotaskObservablePipe
+# debounceMicrotaskObservablePipe
 
 Alternative: `debounceMicrotask$$$`
+
+Inlined: `debounceMicrotaskObservable`, `debounceMicrotask$$`
 
 ### Types
 
@@ -14,11 +16,11 @@ function debounceMicrotaskObservablePipe<GValue>(): IObservablePipe<GValue, GVal
 
 ### Definition
 
-Awaits for the next event loop (`setMicrotask`) and emits the last value received from the source Observable.
+Awaits for the next event loop (`queueMicrotask`) and emits the last value received from the source Observable.
 
 ### Diagram
 
-TODO
+![](example-diagram.svg)
 
 ### Example
 

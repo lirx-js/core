@@ -1,0 +1,12 @@
+sequenceDiagram
+
+participant observable
+participant debounceImmediateObservablePipe as debounceImmediateObservablePipe()
+participant OUT
+
+observable->>debounceImmediateObservablePipe: 1
+Note over observable: before event loop ends
+observable->>debounceImmediateObservablePipe: 2
+Note over debounceImmediateObservablePipe: when events loop end
+debounceImmediateObservablePipe->>OUT: 2
+

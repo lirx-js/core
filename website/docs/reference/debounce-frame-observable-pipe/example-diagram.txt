@@ -1,0 +1,12 @@
+sequenceDiagram
+
+participant observable
+participant debounceFrameObservablePipe as debounceFrameObservablePipe()
+participant OUT
+
+observable->>debounceFrameObservablePipe: 1
+Note over observable: before next animation frame
+observable->>debounceFrameObservablePipe: 2
+Note over debounceFrameObservablePipe: on next animation frame
+debounceFrameObservablePipe->>OUT: 2
+

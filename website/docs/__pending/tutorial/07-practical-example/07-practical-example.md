@@ -167,7 +167,8 @@ function classic() {
 
 </details>
 
-[Click here to see the live demo](https://stackblitz.com/edit/typescript-ttzwzn?file=index.ts)
+[//]: # (TODO)
+[//]: # ([Click here to see the live demo]&#40;https://stackblitz.com/edit/typescript-ttzwzn?file=index.ts&#41;)
 
 As you may see it's pretty simple. However, we may quickly anticipate some limits:
 
@@ -194,7 +195,8 @@ function observables() {
 }
 ```
 
-[Click here to see the live demo](https://stackblitz.com/edit/typescript-fdrebf?file=index.ts)
+[//]: # (TODO)
+[//]: # ([Click here to see the live demo]&#40;https://stackblitz.com/edit/typescript-fdrebf?file=index.ts&#41;)
 
 I guess you noticed how compact is it in comparison to the *classic* example.
 That's where Reactive Programing shines: asynchronous event streams, and operations on them.
@@ -331,18 +333,3 @@ So, as you may see, the power of Observables comes from 3 factors:
 So, for any front-end work, they are a good solution to handle the state of your application, update the DOM nodes, and
 listen on some events. They work exceptionally well with the DOM.
 
----
-
-## Table of content
-
-- [Introduction](../01-introduction.md)
-- [Installation](../02-installation.md)
-- [Your first Observable](../03-your-first-observable.md)
-- [Using the built-in Observables](../04-using-the-built-in-observables.md)
-- [Emitting values using sources](../05-sources.md)
-- [Shortcuts](../06-shortcuts.md)
-- [Practical example](07-practical-example.md)
-- [Notifications replace RxJS events](../08-notifications.md)
-- [Migrating from rxjs](../09-migrating-from-rxjs.md)
-- [Migrating from Promise](../10-migrating-from-promise.md)
-- [Should I use Observables ?](../11-should-i-use-observables.md)

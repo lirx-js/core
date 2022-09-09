@@ -1,0 +1,16 @@
+sequenceDiagram
+
+participant observable
+participant closingObservable
+participant bufferObservablePipe as bufferObservablePipe(closingObservable)
+participant OUT
+
+observable->>bufferObservablePipe: 1
+observable->>bufferObservablePipe: 2
+closingObservable->>bufferObservablePipe: void
+bufferObservablePipe->>OUT: [1, 2]
+observable->>bufferObservablePipe: 3
+closingObservable->>bufferObservablePipe: void
+bufferObservablePipe->>OUT: [3]
+closingObservable->>bufferObservablePipe: void
+bufferObservablePipe->>OUT: []

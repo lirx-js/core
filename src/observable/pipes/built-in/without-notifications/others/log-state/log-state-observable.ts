@@ -1,6 +1,9 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 
+/**
+ * @deprecated use debugObservable instead
+ */
 export function logStateObservable<GValue>(
   subscribe: IObservable<GValue>,
   name: string,

@@ -81,10 +81,19 @@ const config = {
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
+      // announcementBar: ⭐️ If you like DocSearch, give it a star on GitHub! ⭐️
+      announcementBar: {
+        id: 'support_us',
+        content:
+          '⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/lirx-js/core">GitHub</a>! ⭐️',
+        backgroundColor: '#fafbfc',
+        textColor: '#091E42',
+        isCloseable: true,
+      },
       navbar: {
         title: 'LiRX/core',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'LiRX/core Logo',
           src: 'img/logos/lirx-core-logo.png',
         },
         items: [

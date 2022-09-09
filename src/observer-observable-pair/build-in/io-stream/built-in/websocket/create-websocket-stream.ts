@@ -5,15 +5,15 @@ import { createOpenNotification } from '../../../../../misc/notifications/built-
 import { fromEventTarget } from '../../../../../observable/built-in/from/without-notifications/dom/from-event-target/from-event-target';
 import { pipe$$ } from '../../../../../observable/helpers/piping/pipe-observable/pipe-observable.shortcut';
 import {
-  map$$$
+  map$$$,
 } from '../../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable-pipe.shortcut';
+import { map$$ } from '../../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable.shortcut';
 import { IUnsubscribe } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import {
   IWebSocketInValue, IWebSocketOutValue, IWebSocketStream, IWebSocketStreamObservable,
   IWebSocketStreamObservableNotifications,
 } from './web-socket-stream.type';
-
 
 export interface IWebSocketFactory {
   (): WebSocket;
@@ -46,13 +46,9 @@ export function createWebSocketStream(
           emit: (value: IWebSocketOutValue): void => {
             socket.send(value);
           },
-          subscribe: pipe$$(message$, [
-            // logStateSubscribePipe<MessageEvent<ArrayBuffer>>('socket'),
-            map$$$<MessageEvent<IWebSocketInValue>, IWebSocketInValue>((event: MessageEvent<IWebSocketInValue>): IWebSocketInValue => {
-              return event.data;
-            }),
-            // share$$$<ArrayBuffer>(),
-          ]),
+          subscribe: map$$<MessageEvent<IWebSocketInValue>, IWebSocketInValue>(message$, (event: MessageEvent<IWebSocketInValue>): IWebSocketInValue => {
+            return event.data;
+          }),
         });
 
         emit(createOpenNotification<GWebSocketStream>(stream));

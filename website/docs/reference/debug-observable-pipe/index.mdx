@@ -1,0 +1,49 @@
+---
+tags: [FUNCTION, OBSERVABLE PIPE]
+---
+
+# debugObservablePipe
+
+Alternative: `debug$$$`
+
+Inlined: `debugObservable`, `debug$$$`
+
+### Types
+
+```ts
+function debugObservablePipe<GValue>(
+  name: string,
+  color?: string,
+): IObservablePipe<GValue, GValue>
+```
+
+### Definition
+
+This ObservablePipe is a passthrough to log the state of an Observable.
+It is useful to debug your Observables and improve sometimes the performances.
+
+### Example
+
+#### Debug the state of on Observable
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  debug$$$('interval'),
+  scan$$$(_ => (_ + 1), 0),
+]);
+
+const unsubscribe = subscribe(() => {
+  // ...
+});
+
+setTimeout(unsubscribe, 2500);
+```
+
+Output:
+
+```text
+[ SUB ] interval
+[VALUE] interval 0
+[VALUE] interval 1
+[UNSUB] interval
+```

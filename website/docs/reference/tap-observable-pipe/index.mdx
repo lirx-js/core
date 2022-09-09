@@ -2,9 +2,11 @@
 tags: [FUNCTION, OBSERVABLE PIPE]
 ---
 
-# TODO tapObservablePipe
+# tapObservablePipe
 
 Alternative: `tap$$$`
+
+Inlined: `tapObservable`, `tap$$`
 
 ### Types
 
@@ -16,13 +18,37 @@ function tapObservablePipe<GValue>(
 
 ### Definition
 
-TODO definition
+This pipe returns an Observable identical to the source, but runs the specified callback for each item.
+
+This is mainly used when you want to affect outside state with a notification without altering the notification.
+
+The RxJS equivalent is [tap](https://rxjs-dev.firebaseapp.com/api/index/function/tap).
+
 
 ### Diagram
 
-TODO Diagram
+![](example-diagram.svg)
 
 ### Example
 
-TODO Example
+#### Log incoming values
+
+```ts
+const subscribe = pipe$$(of(0, 1, 2), [
+  tap$$$(x => console.log(x)),
+]);
+
+subscribe((value) => {
+  // ...
+});
+```
+
+Output:
+
+```text
+0
+1
+2
+```
+
 

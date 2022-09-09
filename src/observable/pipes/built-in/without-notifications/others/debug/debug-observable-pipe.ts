@@ -1,15 +1,13 @@
 import { IObservable } from '../../../../../type/observable.type';
 import { IObservablePipe } from '../../../../type/observable-pipe.type';
-import { logStateObservable } from './log-state-observable';
+import { debugObservable } from './debug-observable';
 
-/**
- * @deprecated use debugObservablePipe instead
- */
-export function logStateObservablePipe<GValue>(
+export function debugObservablePipe<GValue>(
   name: string,
+  color?: string,
 ): IObservablePipe<GValue, GValue> {
   return (subscribe: IObservable<GValue>): IObservable<GValue> => {
-    return logStateObservable<GValue>(subscribe, name);
+    return debugObservable<GValue>(subscribe, name, color);
   };
 }
 
