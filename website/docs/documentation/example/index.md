@@ -6,7 +6,7 @@ In this part, we will create an Observable based application, displaying the cur
 
 :::note
 
-Let's remember, that dates are formatted differently around the world, so Observables are really great for internationalization (called i18n).
+Let's remember that, dates are formatted differently around the world, so Observables are really great for internationalization (called i18n).
 
 :::
 
@@ -120,7 +120,7 @@ So we end up with an Observable emitting the locale selected by the user, when t
 However, because `selectElementChange$` **only triggers when a *change* occurs**, we have to use [reference](/docs/reference/reference/) and [merge](/docs/reference/merge/)
 in conjunction, to dispatch properly the **current** value of this &lt;select&gt;.
 
-Which finally give us:
+Which finally gives us:
 
 ```ts
 const locale$ = merge([
@@ -128,6 +128,9 @@ const locale$ = merge([
   map$$(fromEventTarget(selectElement, 'change'), () => selectElement.value)
 ]);
 ```
+
+If you're confused, do not hesitate to take a look at the documentation of these functions.
+At this point, we have an Observable emitting the locale selected by a user.
 
 ---
 

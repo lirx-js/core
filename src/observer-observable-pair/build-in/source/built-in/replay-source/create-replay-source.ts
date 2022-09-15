@@ -1,15 +1,13 @@
-import { IReplaySource } from './replay-source.type';
-import { IObserver } from '../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
+import { IObserver } from '../../../../../observer/type/observer.type';
 import { ISource } from '../../type/source.type';
-import { freeze } from '../../../../../misc/helpers/freeze';
+import { IReplaySource } from './replay-source.type';
 
 export function createReplaySource<GValue, GSource extends ISource<GValue>>(
   source: GSource,
   maxNumberOfValues: number = Number.POSITIVE_INFINITY,
 ): IReplaySource<GValue, GSource> {
   const values: GValue[] = [];
-
 
   const emit: IObserver<GValue> = (value: GValue): void => {
     values.push(value);
@@ -30,7 +28,7 @@ export function createReplaySource<GValue, GSource extends ISource<GValue>>(
     values.length = 0;
   };
 
-  return freeze({
+  return {
     ...source,
     getValues: (): readonly GValue[] => {
       return values;
@@ -38,6 +36,6 @@ export function createReplaySource<GValue, GSource extends ISource<GValue>>(
     reset,
     emit,
     subscribe,
-  });
+  };
 }
 

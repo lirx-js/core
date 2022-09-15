@@ -1,6 +1,5 @@
 import { createMulticastSource } from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
 import { IMulticastSource } from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
-import { freeze } from '../../../../../../misc/helpers/freeze';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 
@@ -17,10 +16,10 @@ function getResizeObserverAndSubscription(): IResizeObserverAndSubscription {
     const observer: ResizeObserver = new ResizeObserver((entries: ReadonlyArray<ResizeObserverEntry>): void => {
       source.emit(entries);
     });
-    RESIZE_OBSERVER_AND_SUBSCRIPTION_CACHED = freeze({
+    RESIZE_OBSERVER_AND_SUBSCRIPTION_CACHED = {
       subscribe: source.subscribe,
       observer,
-    });
+    };
   }
   return RESIZE_OBSERVER_AND_SUBSCRIPTION_CACHED;
 }

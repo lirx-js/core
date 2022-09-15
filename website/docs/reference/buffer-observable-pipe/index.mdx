@@ -2,9 +2,11 @@
 tags: [FUNCTION, OBSERVABLE PIPE]
 ---
 
-# TODO bufferObservablePipe
+# bufferObservablePipe
 
 Alternative: `buffer$$$`
+
+Inlined: `bufferObservable`, `buffer$$`
 
 ### Types
 
@@ -23,7 +25,7 @@ The RxJS equivalent is [buffer](https://rxjs.dev/api/operators/buffer).
 
 ### Diagram
 
-TODO
+![](example-diagram.svg)
 
 ### Example
 
@@ -43,5 +45,14 @@ subscribe((positions: number[]) => {
 Output:
 
 ```text
-TODO
+// t = 400ms => mouse move on X = 456
+// t = 600ms => mouse move on X = 897
+// t = 1000ms
+[456, 897]
+// t = 1300ms => mouse move on X = 54
+// t = 2000ms
+[54]
+// t = 3000ms
+[]
+// ...
 ```

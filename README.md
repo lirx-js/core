@@ -9,6 +9,12 @@
 </p>
 
 <p align="center">
+  <a href="https://core.lirx.org/">
+    FULL DOCUMENTATION
+  </a>
+</p>
+
+<p align="center">
   <a href="https://www.npmjs.com/package/@lirx/core">
     <img src="https://img.shields.io/npm/v/@lirx/core.svg" alt="npm package" />
   </a>
@@ -41,7 +47,8 @@ subscribe((event: PointerEvent) => {
 });
 ```
 
-[Click here to see the live demo](https://stackblitz.com/edit/typescript-sfkssg?devtoolsheight=33&file=index.ts)
+[//]: # (TODO)
+[//]: # ([Click here to see the live demo]&#40;https://stackblitz.com/edit/typescript-sfkssg?devtoolsheight=33&file=index.ts&#41;)
 
 Give it a try, and you'll love it !
 

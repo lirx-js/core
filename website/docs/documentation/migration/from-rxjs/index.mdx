@@ -4,7 +4,7 @@ Migrating from `rxjs` to `@lirx/core` is a great choice if you aim to improve th
 and reduce its overall size.
 
 However, currently no migration tool exists, so it cannot be done automatically for existing applications.
-Instead, you may start to use `@lirx/core`'s Observables, slowing replacing your old `rxjs`'s ones (both can coexist).
+Instead, you may start to use `@lirx/core`'s Observables, slowly replacing your old `rxjs`'s ones (both can coexist).
 Or, you may start a new project based exclusively on `@lirx/core`.
 
 ## Types
@@ -100,7 +100,7 @@ If we only have one pipe, we can even inline it:
 const subscription = map$$(of(1, 2, 3), String);
 ```
 
-You'll gain in performance and bundle size.
+It will improve the performances and bundle size.
 
 ## State of the Observable - next, complete and error
 

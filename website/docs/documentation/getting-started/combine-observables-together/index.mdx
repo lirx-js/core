@@ -65,7 +65,7 @@ In this example, if any of `firstName$` or `lastName$` changes, then the display
 
 ### Aggregates the values
 
-Finally, we'll see how to subscribe to many observables, and when one changes, we can aggregate the values and emit the result.
+Usually, when we group the values with `combineLatest`, we want to aggregate the incoming values as one, into a new Observable.
 
 We may think about strings concatenation, performing a sum, etc.
 
@@ -89,3 +89,6 @@ fullName$((fullName: string) => {
 });
 // logs 'Richard Stallman'
 ```
+
+It's particularity useful, when we have to transform many values coming from different Observables into one.
+This is the same behavior as a traditional function, but working with Observables instead.

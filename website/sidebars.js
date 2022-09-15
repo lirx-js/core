@@ -36,8 +36,8 @@ const sidebars = {
       ],
     },
     'documentation/example/index',
-    'documentation/decision-tree/index',
     'documentation/naming-convention/index',
+    'documentation/decision-tree/index',
     {
       type: 'category',
       label: 'Migration',

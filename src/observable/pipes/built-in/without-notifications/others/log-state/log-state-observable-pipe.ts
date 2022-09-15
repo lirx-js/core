@@ -2,6 +2,9 @@ import { IObservable } from '../../../../../type/observable.type';
 import { IObservablePipe } from '../../../../type/observable-pipe.type';
 import { logStateObservable } from './log-state-observable';
 
+/**
+ * @deprecated use debugObservablePipe instead
+ */
 export function logStateObservablePipe<GValue>(
   name: string,
 ): IObservablePipe<GValue, GValue> {

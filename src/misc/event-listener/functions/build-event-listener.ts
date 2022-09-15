@@ -1,7 +1,6 @@
-import { ISource } from '../../../observer-observable-pair/build-in/source/type/source.type';
-import { createMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
 import { IObservable } from '../../../observable/type/observable.type';
-import { freeze } from '../../helpers/freeze';
+import { createMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
+import { ISource } from '../../../observer-observable-pair/build-in/source/type/source.type';
 
 /* MAP **/
 
@@ -59,10 +58,10 @@ export interface IListenerDBuilderFunctions<GTarget extends object, GValue> {
 export function createListenerBuilderFunctions<GTarget extends object, GValue>(
   map: IListenersMap<GTarget, GValue>,
 ): IListenerDBuilderFunctions<GTarget, GValue> {
-  return freeze({
+  return {
     listener: createListenerFunction<GTarget, GValue>(map),
     dispatch: createListenerDispatchFunction<GTarget, GValue>(map),
-  });
+  };
 }
 
 

@@ -1,4 +1,3 @@
-import { freeze } from '../../../../../misc/helpers/freeze';
 import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { ISource } from '../../type/source.type';
@@ -33,13 +32,13 @@ export function createReplayLastSource<GValue, GSource extends ISource<GValue>>(
     return source.subscribe(emit);
   };
 
-  return freeze({
+  return {
     ...source,
     getValue: (): GValue => {
       return currentValue as GValue;
     },
     emit,
     subscribe,
-  });
+  };
 }
 

@@ -1,8 +1,16 @@
 # Roadmap
 
-# 1.0.0
+## 1.1.0
 
-- [ ] reference page: `Inline` for each ObservablePepe
-- [ ] import locally all mermaid svg(s)
+- [ ] stackblitz
+- [x] search
+- [x] reference page: `Inline` for each ObservablePepe
+- [x] import locally all mermaid svg(s) + optimize
 - [ ] finish TODO's
 - [ ] split `map$$$` diagrams
+
+### think about integration with frameworks as:
+
+#### angular
+
+-

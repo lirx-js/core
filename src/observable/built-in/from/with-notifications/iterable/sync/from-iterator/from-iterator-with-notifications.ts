@@ -1,5 +1,6 @@
 import { noop } from '../../../../../../../misc/helpers/noop';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
+import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
@@ -13,11 +14,15 @@ export function fromIteratorWithNotifications<GValue>(
 ): IObservable<IFromIteratorObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromIteratorObservableNotifications<GValue>;
   return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
-    let result: IteratorResult<GValue>;
-    while (!(result = iterator.next()).done) {
-      emit(createNextNotification<GValue>(result.value));
+    try {
+      let result: IteratorResult<GValue>;
+      while (!(result = iterator.next()).done) {
+        emit(createNextNotification<GValue>(result.value));
+      }
+      emit(STATIC_COMPLETE_NOTIFICATION);
+    } catch (error: unknown) {
+      emit(createErrorNotification(error));
     }
-    emit(STATIC_COMPLETE_NOTIFICATION);
     return noop;
   };
 }

@@ -2,9 +2,9 @@ import { ICompleteNotification } from '../../../../../../../misc/notifications/b
 import { INextNotification } from '../../../../../../../misc/notifications/built-in/next/next-notification.type';
 
 export type IRejectedObservableFulfilledNotifications<GInNextValue> =
-  INextNotification<GInNextValue>
+  | INextNotification<GInNextValue>
   | ICompleteNotification;
 
 export type IRejectedObservableOutNotifications<GInNextValue, GOut> =
-  GOut
+  | GOut
   | IRejectedObservableFulfilledNotifications<GInNextValue>;

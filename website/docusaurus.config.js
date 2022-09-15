@@ -23,15 +23,12 @@ const config = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/logos/favicon.ico',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName, // Usually your GitHub org/user name.
-  projectName, // Usually your repo name.
+  // github
+  organizationName,
+  projectName,
   trailingSlash: true,
 
-  // Even if you don't use internalization, you can use this field to set useful
-  // metadata like html lang. For example, if your site is Chinese, you may want
-  // to replace "en" with "zh-Hans".
+  // i18n
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -50,14 +47,10 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: `${githubURL}tree/main/website`,
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: `${githubURL}tree/main/website`,
         },
         theme: {
@@ -81,10 +74,18 @@ const config = {
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
+      announcementBar: {
+        id: 'support_us',
+        content:
+          '⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/lirx-js/core">GitHub</a>! ⭐️',
+        backgroundColor: '#fafbfc',
+        textColor: '#091E42',
+        isCloseable: true,
+      },
       navbar: {
         title: 'LiRX/core',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'LiRX/core Logo',
           src: 'img/logos/lirx-core-logo.png',
         },
         items: [
@@ -200,7 +201,7 @@ const config = {
               },
               {
                 label: 'Changelog',
-                to: '/docs/changelogs/1.0.0/',
+                to: '/docs/changelogs/1.1.0/',
               },
               {
                 label: 'GitHub',
@@ -233,6 +234,18 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+  plugins: [
+    // // https://github.com/cmfcmf/docusaurus-search-local
+    // require.resolve('@cmfcmf/docusaurus-search-local'),
+  ],
+  themes: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      {
+        hashed: true,
+      },
+    ],
+  ],
 };
 
 module.exports = config;

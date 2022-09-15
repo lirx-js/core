@@ -5,7 +5,7 @@ They are just raw streams of data.
 
 However, some streams have a final state, and we need a way to represent them with Observables.
 
-For example, an HTTP request finishes with a success state (and associated Response's Body)
+For example, an HTTP request finishes with a success state (and an associated Response's Body)
 or an error state (with an associated error) if it failed.
 
 `@lirx/core` uses [Notifications](/docs/reference/notification/) as a state replacement for Observables.
@@ -23,7 +23,7 @@ A Notification is simply a tuple composed of a `name` and a `value`.
 
 You may create one using a plain object or prefer the function **[createNotification](/docs/reference/create-notification/)**.
 
-The essentials Notifications are:
+The three essentials Notifications are:
 
 - [INextNotification](/docs/reference/next-notification/): to emit a value.
 - [ICompleteNotification](/docs/reference/complete-notification/): to notify of a 'complete' state.
@@ -46,7 +46,7 @@ We will start by defining the type of value that our Observable will emit:
 
 ```ts
 type IObservableFromPromiseNotifications<GValue> =
-  INextNotification<GValue>
+  | INextNotification<GValue>
   | ICompleteNotification
   | IErrorNotification
   ;
@@ -132,7 +132,7 @@ subscribe((notification: IObservableFromPromiseNotifications<number>) => {
 
 We simply switch on the incoming Notification's name.
 
-We may also use the function [defaultNotificationObserver](/docs/reference/default-notification-observer/) if we prefer a shorted syntax:
+We may also use the function [defaultNotificationObserver](/docs/reference/default-notification-observer/) if we prefer a shorter syntax:
 
 ```ts
 subscribe(
@@ -174,9 +174,9 @@ toPromiseLast(request$)
   });
 ```
 
-**Yes, we could have a shorter code with Promises.**
+**Yes, in this case, using Promises is easier and shorter.**
 
-However, with Observables we may create far more complex data flow - like streaming the response body:
+However, with Observables we may create far more powerful data flow - like streaming the response body:
 
 ```ts
 const request$ = pipe$$(fromFetch(`https://www.w3.org/TR/PNG/iso_8859-1.txt`), [

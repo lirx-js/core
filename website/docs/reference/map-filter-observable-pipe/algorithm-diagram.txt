@@ -7,7 +7,7 @@ participant OUT
 observable->>mapFilterObservablePipe: value
 
 alt if (newValue = mapFilterFunction(value)) returns MAP_FILTER_DISCARD: discard value
-    mapFilterObservablePipe--xOUT:
+    mapFilterObservablePipe--xOUT: never
 else else send newValue
     mapFilterObservablePipe->>OUT: newValue
 end
