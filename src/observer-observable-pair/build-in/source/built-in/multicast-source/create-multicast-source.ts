@@ -1,4 +1,3 @@
-import { freeze } from '../../../../../misc/helpers/freeze';
 import { noop } from '../../../../../misc/helpers/noop';
 import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
@@ -49,11 +48,11 @@ export function createMulticastSource<GValue>(): IMulticastSource<GValue> {
     };
   };
 
-  return freeze({
+  return {
     getObservers: (): readonly IObserver<GValue>[] => {
       return _emitFunctions;
     },
     emit,
     subscribe,
-  });
+  };
 }

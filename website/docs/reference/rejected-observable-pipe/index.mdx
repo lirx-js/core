@@ -6,6 +6,8 @@ tags: [FUNCTION, OBSERVABLE PIPE, NOTIFICATION]
 
 Alternative: `rejected$$$`
 
+Inlined: `rejectedObservable`, `rejected$$`
+
 ### Types
 
 ```ts
@@ -16,7 +18,7 @@ function rejectedObservablePipe<GInNextValue, GOut>(
 
 ```ts
 export type IRejectedObservableFulfilledNotifications<GInNextValue> =
-  INextNotification<GInNextValue>
+  | INextNotification<GInNextValue>
   | ICompleteNotification;
 
 export type IRejectedObservableOutNotifications<GInNextValue, GOut> =

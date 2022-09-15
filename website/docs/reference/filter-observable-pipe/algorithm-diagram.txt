@@ -9,6 +9,6 @@ observable->>filterObservablePipe: value
 alt if filterFunction(value) returns true
     filterObservablePipe->>OUT: value
 else else discard value
-    filterObservablePipe--xOUT:
+    filterObservablePipe--xOUT: never
 end
 

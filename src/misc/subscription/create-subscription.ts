@@ -1,6 +1,5 @@
 import { IObserver } from '../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../observable/type/observable.type';
-import { freeze } from '../helpers/freeze';
 import { ISubscription } from './subscription.type';
 
 /**
@@ -42,14 +41,14 @@ export function createSubscription<GValue>(
     }
   };
 
-  const subscription: ISubscription<GValue> = freeze({
+  const subscription: ISubscription<GValue> = {
     subscribe,
     emit,
     isActivated,
     activate,
     deactivate,
     toggle,
-  });
+  };
 
   return subscription;
 }

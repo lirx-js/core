@@ -1,10 +1,9 @@
-import { freeze } from '../helpers/freeze';
 
 export function createFastArrayIterator<GValue>(): IFastArrayIterator<GValue> {
   let _array: GValue[] = [];
   let _isIterating = false;
 
-  return freeze({
+  return {
     isIterating(): boolean {
       return _isIterating;
     },
@@ -35,7 +34,7 @@ export function createFastArrayIterator<GValue>(): IFastArrayIterator<GValue> {
         }
       }
     },
-  });
+  };
 }
 
 export interface IFastArrayIteratorCallback<GValue> {
