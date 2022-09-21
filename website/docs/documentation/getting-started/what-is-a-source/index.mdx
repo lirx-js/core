@@ -102,24 +102,23 @@ or the ObservablePipe [shareObservablePipeWithMulticastReplayLastSource](/docs/r
 
 Sources are a perfect bridge when we have to manually emit some values.
 
-In 99% cases we'll use the shortcut **[let$$](/docs/reference/create-multicast-replay-last-source/)** to create a MulticastReplayLastSource.
-And it will act like a regular variable, but having the faculties of an Observable.
+In 99% cases we'll use the shortcut **[let$$](/docs/reference/let/)** to create a MulticastReplayLastSource represented as a tuple.
+It will act like a regular variable, but having the faculties of an Observable.
 
 ```ts
-const $firstname$ = let$$<string>();
-const $lastname$ = let$$<string>();
+const [$firsName, firstName$] = let$$('Valentin');
+const [$lastName, lastName$] = let$$(); // it's possible to omit the value, in this case, the Observable is uninitialized
 
-const fullname$ = string$$`${$firstname$.subscribe} ${$lastname$.subscribe}`;
+const fullName$ = string$$`${firstName$} ${lastName$}`;
 
-fullname$((value) => {
+fullName$((value) => {
   console.log(value);
 });
 
-$firstname$.emit('Valentin');
-$lastname$.emit('Richard');
+lastName$('Richard');
 // OUT => Valentin Richard
 
-$firstname$.emit('Bob');
+firstName$('Bob');
 // OUT => Bob Richard
 ```
 
