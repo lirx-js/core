@@ -1,0 +1,14 @@
+sequenceDiagram
+
+participant IN
+participant mapObserverPipe as mapObserverPipe(x => x * 10)
+participant observer
+
+IN->>mapObserverPipe: 1
+mapObserverPipe->>observer: 10
+
+IN->>mapObserverPipe: 2
+mapObserverPipe->>observer: 20
+
+IN->>mapObserverPipe: 3
+mapObserverPipe->>observer: 30
