@@ -1,0 +1,73 @@
+---
+tags: [FUNCTION, OBSERVER OBSERVABLE PAIR, SOURCE, MULTICAST, REPLAY]
+---
+
+# let$$
+
+### Types
+
+```ts
+function let$$<GValue>(
+  ...initialValue: ICreateReplayLastSourceInitialValue<GValue>
+): ILetTuple<GValue>
+```
+
+```ts
+type ILetTuple<GValue> = [
+  emit: IObserver<GValue>,
+  subscribe: IObservable<GValue>,
+  getValue: () => GValue,
+];
+
+```
+
+### Definition
+
+This function is our best friend to create an Observable with a stored value, that we may update anytime.
+
+This is somehow like the `let` of javascript, but it works with Observables instead.
+
+This is a shortcut for [createReplayLastSource](/docs/reference/create-replay-last-source/),
+but it returns a tuple instead of an object.
+
+Its simply does:
+
+```ts
+function let$$<GValue>(
+  ...initialValue: ICreateReplayLastSourceInitialValue<GValue>
+): ILetTuple<GValue> {
+  const { emit, subscribe, getValue } = createMulticastReplayLastSource<GValue>(...initialValue);
+  return [
+    emit,
+    subscribe,
+    getValue,
+  ];
+}
+```
+
+### Example
+
+```ts
+const [$firsName, firstName$] = let$$('Valentin');
+const [$lastName, lastName$] = let$$(); // it's possible to omit the value, in this case, the Observable is uninitialized
+
+const fullName$ = string$$`${firstName$} ${lastName$}`;
+
+fullName$((value) => {
+  console.log(value);
+});
+
+lastName$('Richard');
+// OUT => Valentin Richard
+
+firstName$('Bob');
+// OUT => Bob Richard
+```
+
+Output:
+
+```text
+Valentin Richard
+Bob Richard
+```
+

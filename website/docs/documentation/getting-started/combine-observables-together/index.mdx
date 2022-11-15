@@ -79,7 +79,7 @@ const lastName$ = single('Stallman');
 
 const fullName$ = reactiveFunction(
   [firstName$, lastName$],
-  ([firstName, lastName]) => {
+  (firstName, lastName) => {
     return `${firstName} ${lastName}`;
   },
 );

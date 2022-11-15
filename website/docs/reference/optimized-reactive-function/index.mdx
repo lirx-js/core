@@ -36,11 +36,11 @@ return distinctObservable(debounceMicrotaskObservable(reactiveFunction<GFunction
 #### Perform the "sum" of two Observables in batch
 
 ```ts
-const obs1 = let$$<number>(0);
-const obs2 = let$$<number>(0);
+const [$value1, value1$] = let$$<number>(0);
+const [$value2, value2$] = let$$<number>(0);
 
 const subscribe = optimizedReactiveFunction(
-  [obs1.subscribe, obs2.subscribe],
+  [value1$, value2$],
   (a: number, b: number) => {
     return a + b;
   },
@@ -49,8 +49,8 @@ const subscribe = optimizedReactiveFunction(
 subscribe((sum: number) => {
   console.log(sum);
 });
-obs1.emit(2);
-obs2.emit(1);
+$value1(2);
+$value2(1);
 ```
 
 Output:

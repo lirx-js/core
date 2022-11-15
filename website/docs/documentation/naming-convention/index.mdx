@@ -70,7 +70,7 @@ We'll use it to distinguish Observers from other callback functions.
 Example: a Source of numbers
 
 ```ts
-const $count$ = let$$(5);
+const $count$ = createMulticastReplayLastSource(5);
 ```
 
 ## Alternatives and Inline

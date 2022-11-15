@@ -43,11 +43,12 @@ If you prefer to have a function which handles changes in batch you may want to 
 #### Perform the "sum" of two Observables
 
 ```ts
-const obs1 = let$$<number>(0);
-const obs2 = let$$<number>(0);
+const [$value1, value1$] = let$$<number>(0);
+const [$value2, value2$] = let$$<number>(0);
+
 
 const subscribe = reactiveFunction(
-  [obs1.subscribe, obs2.subscribe],
+  [value1$, value2$],
   (a: number, b: number) => {
     return a + b;
   },
@@ -57,8 +58,8 @@ subscribe((sum: number) => {
   console.log(sum);
 });
 // => 0
-obs1.emit(2); // => 2
-obs2.emit(1); // => 3
+$value1(2); // => 2
+$value2(1); // => 3
 ```
 
 Output:
