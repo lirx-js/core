@@ -149,14 +149,14 @@ This example focuses more on the notifications, and the performances associated 
 
 |           |  rxjs  | @lirx/core <br/> (with notification) | ratio         | @lirx/core <br/> (without notification) |     ratio      |
 |:---------:|:------:|:------------------------------------:|---------------|:----------------------------------:|:--------------:|
-|    time   | 3713ms |                3039ms                | 1.2x faster   |               1112ms               | 3.3x faster    |
+|    time   | 3713ms |                2379ms                | 1.56x faster  |               1112ms               | 3.3x faster    |
 |    size   | 14.3kb |                1.37kb                | 10.4x smaller |               0.56kb               | 25.5x smaller  |
 | (gzipped) | 4.95kb |                0.66kb                | 7.5x smaller  |               0.32kb               | 15.4x smaller  |
 
 
 
 This time, `RxJS` performs pretty well. It has been built for Observables having *states*.
-So it is finely tuned for these cases. `@lirx/core` is the winner, but by little.
+So it is finely tuned for these cases. `@lirx/core` is the winner, but by little (~30% less time).
 However, if we rewrite the pipeline to work without Notifications, we may see than `@lirx/core` takes the lead.
 
 Through this example, we may see that it's pretty important to select the right Observable and pipeline, as it could easily double our performances.
@@ -270,8 +270,8 @@ function performancesExample() {
   // withLiRXCoreAndNotifications();
 
   // time:
-  //  3039.64111328125 ms
-  //  => 1.2x faster
+  //  2379.6220703125 ms
+  //  => 1.56x faster
 
   // size:
   //  dist/assets/index.5ca1e5d4.js   1.37 KiB / gzip: 0.66 KiB
