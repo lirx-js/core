@@ -254,7 +254,7 @@ Reactive Programming raises the level of abstraction of our code, so we can focu
 business logic, rather than having to constantly fiddle with a large amount of implementation details.
 **Code in RP will likely be more concise.**
 
-Dynamic values are managed in a different way: instead of using some king of `refresh` function
+Dynamic values are managed in a different way: instead of using some kind of `refresh` function
 (to update for example many DOM nodes, if something changes), the variables (here some *Observables*) are always fresh and updated.
 So, we won't have to remember to call a `refresh()` when a change occurs, meaning less bugs and less code in our application.
 
@@ -269,27 +269,29 @@ This point, is frequently ignored by developers creating memory-leaks, or very d
 
 ### The drawbacks and advantages of RP
 
-Reactive Programming feels like it is essentially for **purists and advanced programmers**: they are difficult for beginners and
-involve complex and abstract logic (everything is a stream, and we must think async).
+Reactive Programming feels like it is essentially for **purists and advanced programmers**: it's difficult for beginners and
+involves complex and abstract logic (everything is a stream, and we must think async).
 
-But in my opinion, they are just like Promises in their time. Do you remember the first time you learned how Promises worked ?
+But in my opinion, the Observables are just like Promises in their time. Do you remember the first time you learned how Promises worked ?
 This was a new way of thinking our code, and I've seen many new developers struggling to understand how to use them.
 However, now, I'm pretty sure, you're using Promise **frequently without difficulties**.
 They became **essential** for everyone, because they help so much with async coding.
 They radically changed our way of developing and thinking our applications.
 
 Well Observables, are just like Promises: at first glance, they seem difficult to handle,
-but they radically solve every problem related to async stuff or data acting like a stream.
-They are the perfect answer in most of front-end applications, when we have to deal with fetch calls, dynamic variables, user events, etc...
+but they radically solve every problem related to async algorithms or data streams.
+They are a very good solution for front-end applications, simplifying fetch calls, dynamic variables in templates, user events, and much more...
 
-And the best part of it: it doesn't impact negatively the performances. On the contrary, you will surely see an improvement.
+And the best part of it: it doesn't impact negatively the performances.
+On the contrary, when tuned properly, you'll see an uge improvement in your application.
 
 
 ## Conclusion
 
-Now you are ready to begin with Reactive Programming, and discover an amazing world of streams, pipes, and dynamic values.
+Now, you are ready to begin with Reactive Programming, and discover an amazing world of streams, pipes, and dynamic values.
 
 I hope you enjoyed the beauty of this approach, and maybe I converted you to this awesome way of coding.
+Even if you're not convinced yet, you should do a quick try, as mastering RP will open you a new world of possibilities.
 
 Create a demo, share it with others, and help to build the web of tomorrow.
 
@@ -304,8 +306,9 @@ Create a demo, share it with others, and help to build the web of tomorrow.
 
 [@lirx/core](https://github.com/lirx-js/core) **is a Reactive Programing framework** with a lot of prebuild functions,
 clear documentations and many examples to teach you how to become a master of RP.
-It allows you to develop complex applications and pipelines that scale easily,
-simply because it is the [fastest and smallest](https://github.com/lirx-js/core/blob/master/src/documentation/performances.md)
+It allows you to develop complex applications and pipelines that scale easily.
+Moreover, it is the [fastest and smallest](https://github.com/lirx-js/core/blob/master/src/documentation/performances.md)
 javascript library for `Reactive Programming`.
+So it's a good candidate to start your journey with Observables.
 
 Feel free to test this library, share it and give your feedbacks.
