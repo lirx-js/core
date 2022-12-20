@@ -1,12 +1,12 @@
 ---
-slug: reactive-programing
+slug: reactive-programming
 authors: [vr]
 tags: [reactive programming, introduction]
 ---
 
-# Why Reactive Programing is so awesome ?
+# Why Reactive Programming is so awesome ?
 
-In this post I want to share my personal experience with Reactive Programing and why you should consider using it.
+In this post I want to share my personal experience with Reactive Programming and why you should consider using it.
 
 <p align="center">
 
@@ -53,7 +53,7 @@ It creates code with low readability, frequent uncovered cases, and inconsistent
 
 ## The answer
 
-> **Reactive Programing** is the perfect answer to manage streams of data, async flows, and evolving values.
+> **Reactive Programming** is the perfect answer to manage streams of data, async flows, and evolving values.
 
 With RP, we build streams of values called **Observables**.
 And, we will have an **amazing toolbox** of functions to combine, create and filter any of those streams.
@@ -63,7 +63,7 @@ We can merge two streams. We can filter a stream to get another one that has onl
 We can map data values from one stream to another new one. Etc.
 
 Actually, you're probably already familiar with async data streams: Promises, EventListeners, setInterval, etc.
-Reactive programing is all about this but on **steroids**.
+Reactive programming is all about this but on **steroids**.
 
 > You'll be able to create Observables of anything, not just from click and hover events:
 > variables, user inputs, properties, tasks, data structures,...
@@ -77,7 +77,7 @@ Reactive programing is all about this but on **steroids**.
 ## Reactive Programming by example
 
 You've probably heard of [RxJS](https://rxjs.dev/) which is the most commonly used RP library in javascript.
-However, I will promote here **[@lirx/core](https://github.com/lirx-js/core)**,
+However, I will promote here **[@lirx/core](/docs/documentation/getting-started/introduction/)**,
 a library strongly outperforming RxJS in performances, having a better documentation and trying to be simpler.
 
 Ok, let's start:
@@ -242,7 +242,7 @@ result$((result) => {
 [//]: # ([You can find a demo here]&#40;https://stackblitz.com/edit/typescript-eidguw?devtoolsheight=33&file=index.ts&#41;)
 
 
-Thinking in Reactive Programing gives us the opportunity to focus on our data flow, and not the complex implementation.
+Thinking in Reactive Programming gives us the opportunity to focus on our data flow, and not the complex implementation.
 Doing the same thing from scratch, requires more code and easily conducts to bugs and poor maintainability.
 
 This example is just the tip of the iceberg: we can apply the same operations on different kinds of streams,
@@ -304,10 +304,10 @@ Create a demo, share it with others, and help to build the web of tomorrow.
 
 ## About @lirx/core
 
-[@lirx/core](https://github.com/lirx-js/core) **is a Reactive Programing framework** with a lot of prebuild functions,
+[@lirx/core](/docs/documentation/getting-started/introduction/) **is a Reactive Programming framework** with a lot of prebuild functions,
 clear documentations and many examples to teach you how to become a master of RP.
 It allows you to develop complex applications and pipelines that scale easily.
-Moreover, it is the [fastest and smallest](https://github.com/lirx-js/core/blob/master/src/documentation/performances.md)
+Moreover, it is the [fastest and smallest](/docs/documentation/performances/)
 javascript library for `Reactive Programming`.
 So it's a good candidate to start your journey with Observables.
 

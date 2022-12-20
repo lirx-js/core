@@ -1,4 +1,4 @@
-export function createArrayBufferWebsocket(
+export function createArrayBufferWebSocket(
   url: string,
   protocols?: string | string[],
 ): WebSocket {

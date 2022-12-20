@@ -5,7 +5,7 @@ import {
 import { IObservable } from '../../../../../../../../observable/type/observable.type';
 import { IWebSocketInValue } from '../../../web-socket-stream.type';
 
-export function websocketInValueToArrayBufferObservable(
+export function webSocketInValueToArrayBufferObservable(
   subscribe: IObservable<IWebSocketInValue>,
 ): IObservable<ArrayBuffer> {
   return mapObservable<IWebSocketInValue, ArrayBuffer>(subscribe, (value: IWebSocketInValue): ArrayBuffer => {

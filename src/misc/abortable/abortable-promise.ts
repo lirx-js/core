@@ -1,85 +1,78 @@
-import { wrapPromiseFactoryWithAbortSignal } from './for-promise';
+import { fromEventTarget } from '../../observable/built-in/from/without-notifications/dom/from-event-target/from-event-target';
+import { empty } from '../../observable/built-in/from/without-notifications/values/empty/empty';
+import { IObservable } from '../../observable/type/observable.type';
+import { createAbortError } from '../errors/abort-error/create-abort-error';
 
 /** TYPES **/
 
-/* CONSTRUCTOR */
-
 export interface IAbortablePromiseResolveFunction<GValue> {
-  (value: GValue | PromiseLike<GValue>): void;
-}
-
-export interface IAbortablePromiseRejectFunction {
-  (reason?: any): void;
-}
-
-export interface IAbortablePromiseConstructorFunction<GValue> {
   (
-    resolve: IAbortablePromiseResolveFunction<GValue>,
-    reject: IAbortablePromiseRejectFunction,
-    signal: AbortSignal,
+    value: GValue | PromiseLike<GValue>,
   ): void;
 }
 
-/* ON FULFILLED */
-
-export interface IAbortablePromiseOnFulfilledFunction<GValue, GReturn> {
+export interface IAbortablePromiseRejectFunction {
   (
-    value: GValue,
-  ): GReturn | PromiseLike<GReturn>;
+    reason?: any,
+  ): void;
 }
 
-export type IAbortablePromiseOnFulfilled<GValue, GReturn> = IAbortablePromiseOnFulfilledFunction<GValue, GReturn> | undefined | null;
-
-/* ON REJECTED */
-
-export interface IAbortablePromiseOnRejectedFunction<GReturn> {
+export interface ICreateAbortablePromiseFactoryFunction<GValue> {
   (
-    reason: any,
-  ): GReturn | PromiseLike<GReturn>;
+    resolve: IAbortablePromiseResolveFunction<GValue>,
+    reject: IAbortablePromiseRejectFunction,
+    abort$: IObservable<Event>,
+  ): void;
 }
 
-export type IAbortablePromiseOnRejected<GReturn> = IAbortablePromiseOnRejectedFunction<GReturn> | undefined | null;
+/** FUNCTION **/
 
-/** CLASS **/
+export function createAbortablePromise<GValue>(
+  factory: ICreateAbortablePromiseFactoryFunction<GValue>,
+  signal: AbortSignal | undefined,
+): Promise<GValue> {
+  return new Promise<GValue>((
+    resolve: (value: GValue | PromiseLike<GValue>) => void,
+    reject: (reason?: any) => void,
+  ): void => {
+    if (signal?.aborted) {
+      reject(createAbortError({ signal }));
+    } else {
+      if (signal === void 0) {
+        factory(resolve, reject, empty());
+      } else {
+        const end = () => {
+          unsubscribeOfAbort();
+        };
 
-// export class AbortablePromise<GValue> implements Promise<GValue> {
-//   protected _promise: Promise<GValue>;
-//
-//   constructor(
-//     executor: IAbortablePromiseConstructorFunction<GValue>,
-//     signal: AbortSignal,
-//   ) {
-//     this._promise = wrapPromiseFactoryWithAbortSignal<GValue>(
-//       () => new Promise<GValue>(
-//         (
-//           resolve: IAbortablePromiseResolveFunction<GValue>,
-//           reject: IAbortablePromiseRejectFunction,
-//         ) => {
-//           executor(
-//             resolve,
-//             reject,
-//             signal,
-//           );
-//         },
-//       ),
-//       signal,
-//     );
-//   }
-//
-//   then<GResult1 = GValue, GResult2 = never>(
-//     onFulfilled?: IAbortablePromiseOnFulfilled<GValue, GResult1>,
-//     onRejected?: IAbortablePromiseOnRejected<GResult2>,
-//   ): Promise<GResult1 | GResult2> {
-//     return this._promise.then(
-//       () => {
-//
-//       },
-//       () => {
-//
-//       },
-//     );
-//   }
-//
-//   // finally(onfinally?: (() => void) | undefined | null): Promise<T>
-// }
-//
+        const _resolve = (
+          value: GValue | PromiseLike<GValue>,
+        ): void => {
+          end();
+          resolve(value);
+        };
+
+        const _reject = (
+          reason?: any,
+        ): void => {
+          end();
+          reject(reason);
+        };
+
+        const onAbort = () => {
+          _reject(createAbortError({ signal }));
+        };
+
+        const abort$ = fromEventTarget<'abort', Event>(signal, 'abort');
+
+        const unsubscribeOfAbort = abort$(onAbort);
+
+        try {
+          factory(_resolve, _reject, abort$);
+        } catch (error: unknown) {
+          _reject(error);
+        }
+      }
+    }
+  });
+}

@@ -172,8 +172,7 @@ const config = {
               },
               {
                 label: 'LiRX/dom',
-                // href: 'https://dom.lirx.org',
-                href: 'https://github.com/lirx-js/dom',
+                href: 'https://dom.lirx.org',
               },
               {
                 label: 'LiRX/router',

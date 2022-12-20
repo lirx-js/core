@@ -1,0 +1,117 @@
+---
+tags: [FUNCTION, TO]
+---
+
+# toObservable
+
+### Types
+
+```ts
+function toObservable<GValue extends INotAnObservable<GValue>>(
+  value: IObservableLike<GValue>,
+): IObservable<GValue>
+```
+
+```ts
+type IObservableLike<GValue> =
+  | GValue
+  | IObservable<GValue>
+  ;
+```
+
+### Definition
+
+Converts an Observable or any other value into an Observable.
+
+If the input is a function, we assume it's an Observable, so it is immediately returned, else it returns `single(value)`.
+
+This is useful in some cases, when you want to create a function that accepts an Observable or directly a value as input.
+
+### Alternatives
+
+#### toObservableThrowIfUndefined
+
+```ts
+function toObservableThrowIfUndefined<GValue extends INotAnObservable<GValue>>(
+  value: IObservableLike<GValue>,
+): IObservable<GValue>
+```
+
+Like `toObservable`, but throws an error if the input is `undefined`.
+
+#### toObservableStrict
+
+```ts
+function toObservableStrict<GValue extends INotAnObservable<GValue>>(
+  value: IObservableLike<GValue>,
+): IObservable<GValue>
+```
+
+Like `toObservable`, but throws an error if the input is not an Observable.
+
+### Example
+
+#### Creates an Observable formatting a number or an Observable of number to a string
+
+```ts
+export function formatNumberObservable(
+  input: IObservableLike<number>,
+): IObservable<string> {
+  return map$$(toObservable(input), (value: number): string => {
+    return new Intl.NumberFormat(navigator.languages).format(value);
+  });
+}
+```
+
+
+#### From an Observable
+
+```ts
+const subscribe = toObservable(of(1, 2, 3));
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+1
+2
+3
+```
+
+#### From a number
+
+```ts
+const subscribe = toObservable(4);
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+4
+```
+
+#### Throws if undefined
+
+```ts
+let value!: number;
+const subscribe = toObservableThrowIfUndefined(value); // throws an error
+value = 4; // oops, value initialized too late
+
+subscribe((value: number) => {
+  console.log(value);
+});
+```
+
+Output:
+
+```text
+TypeError(`Not an observable`)
+```
