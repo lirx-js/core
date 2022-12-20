@@ -1,0 +1,53 @@
+---
+tags: [FUNCTION, OBSERVABLE, RXJS]
+---
+
+# toRxJS
+
+:::info
+
+Only available [thought the bridge](/docs/documentation/migration/from-rxjs/#bridge).
+
+:::
+
+### Types
+
+```ts
+function toRxJS<GValue>(subscribe: IObservable<IDefaultNotificationsUnion<GValue>>): Observable<GValue>;
+```
+
+### Definition
+
+Creates a `rxjs`'s Observable from a `@lirx/core` one.
+
+### Example
+
+```ts
+import { of } from '@lirx/core';
+
+const lirx_observable = of(0, 1,2, 3);
+const rxjs_observable = toRxJS(lirx_observable);
+
+rxjs_observable.subscribe({
+  next: (value: number) => {
+    console.log('next', value);
+  },
+  error: (error: unknown) => {
+    console.log('error', error);
+  },
+  complete: () => {
+    console.log('complete');
+  },
+});
+```
+
+Output:
+
+```text
+next: 0
+next: 1
+next: 2
+next: 3
+complete
+```
+

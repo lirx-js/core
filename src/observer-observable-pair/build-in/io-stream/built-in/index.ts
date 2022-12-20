@@ -1,1 +1,1 @@
-export * from './websocket/index';
+export * from './web-socket/index';

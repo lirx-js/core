@@ -2,6 +2,6 @@ import { IErrorNotification } from '../../../../../../misc/notifications/built-i
 import { INextNotification } from '../../../../../../misc/notifications/built-in/next/next-notification.type';
 
 export type IFromGeolocationPositionObservableNotifications =
-  INextNotification<GeolocationPosition>
+  | INextNotification<GeolocationPosition>
   | IErrorNotification<GeolocationPositionError>
   ;

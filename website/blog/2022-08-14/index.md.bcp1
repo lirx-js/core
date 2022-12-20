@@ -1,12 +1,12 @@
 ---
-slug: reactive-programing
+slug: reactive-programming
 authors: [vr]
 tags: [reactive programming, introduction]
 ---
 
-# Why Reactive Programing is so awesome ?
+# Why Reactive Programming is so awesome ?
 
-In this post I want to share my personal experience with Reactive Programing and why you should consider using it.
+In this post I want to share my personal experience with Reactive Programming and why you should consider using it.
 
 <p align="center">
 
@@ -18,7 +18,7 @@ In this post I want to share my personal experience with Reactive Programing and
 
 ## Overview
 
-> **Reactive Programing** is a different way to develop, manage asynchronous data streams, and work with evolving values.
+> **Reactive Programming** is a different way to develop, manage asynchronous data streams, and work with evolving values.
 
 ### The problematic
 
@@ -43,9 +43,9 @@ Most of these **evolving values** are commonly managed by a framework:
 - etc.
 
 These frameworks all use a change detection algorithm, so you can create *sync* variables,
-and changing any of them, will automatically update the DOM. However, 
+and changing any of them, will automatically update the DOM. However,
 
-Reactive Programing uses a different approach: **we'll build many streams of values called *Observables*.**
+Reactive Programming uses a different approach: **we'll build many streams of values called *Observables*.**
 Then, RP libraries will give us an amazing toolbox of functions to combine, create and filter any of those streams.
 That's where the "functional" magic kicks in. A stream can be used as an input to another one.
 Even multiple streams can be used as inputs to another stream.
@@ -53,7 +53,7 @@ We can merge two streams. We can filter a stream to get another one that has onl
 We can map data values from one stream to another new one. Etc.
 
 Actually, you're probably already familiar with async data streams: Promises, EventListeners, setInterval, etc.
-Reactive programing is all about this but on steroids.
+Reactive programming is all about this but on steroids.
 
 > You'll be able to create Observables of anything, not just from click and hover events:
 variables, user inputs, properties, tasks, data structures,...
@@ -157,7 +157,7 @@ function createLocaleSelectElementObservable(
 ): IObservable<string> {
   const selectElement = createLocaleSelectElement(languages);
   document.body.appendChild(selectElement);
-  
+
   return merge([
     reference(() => selectElement.value),
     map$$(fromEventTarget(selectElement, 'change'), () => selectElement.value),

@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://core.lirx.org/">
-    FULL DOCUMENTATION
+    DOCUMENTATION
   </a>
 </p>
 

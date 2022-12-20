@@ -1,11 +1,56 @@
 # Migrating from RxJS
 
-Migrating from `rxjs` to `@lirx/core` is a great choice if you aim to improve the performances of your application
-and reduce its overall size.
+Migrating from `rxjs` to `@lirx/core` is a great choice if you aim to improve globally your applications:
 
-However, currently no migration tool exists, so it cannot be done automatically for existing applications.
-Instead, you may start to use `@lirx/core`'s Observables, slowly replacing your old `rxjs`'s ones (both can coexist).
-Or, you may start a new project based exclusively on `@lirx/core`.
+⚡ it strongly improves the performances and reduce the overall size.
+
+📑 it comes with a clear documentation, including direct references to the `rxjs`'s equivalent if one exists.
+In consequence, you'll never get lost.
+
+🪄 it's simpler by design, and the power of Observable sending data instead of states (no `comeplete` or `error` to manage),
+reduces the complexity of some elaborated pipes or aggregators like `switchMap`, `mergeAll`, etc...
+
+Using exclusively `@lirx/core` in replacement of `rxjs` is therefore good option,
+especially in new applications.
+
+For already existing applications, we recommend to slowly replace your old `rxjs`'s Observables with the `@lirx/core`'s ones.
+
+This documentation is here to help you in this migration 🏗️
+
+## Bridge
+
+To convert from the `rxjs`'s Observables to the `@lirx/core`'s one [you can use the bridge](https://github.com/lirx-js/rxjs-bridge).
+
+#### Installation
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="package-managers">
+  <TabItem value="npm" label="npm">
+
+```bash
+npm install @lirx/rxjs-bridge --save
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+
+```bash
+yarn add @lirx/rxjs-bridge
+```
+
+  </TabItem>
+</Tabs>
+
+The installation requires `rxjs` as a peer dependency.
+
+#### Functions
+
+- [fromRxJS](/docs/reference/from-rxjs/)
+- [toRxJS](/docs/reference/to-rxjs/)
+
+I guess they speak for themselves.
 
 ## Types
 
@@ -18,8 +63,8 @@ The same is true for `Observer` => [IObserver](/docs/reference/observer/).
 Moreover, `@lirx/core` tries to be more consistent in its naming:
 
 - functions are explicit about what they return (ex: ends with `ObservablePipe`).
-- it follows the Observable naming convention: a `$` is present at the end of a variable name representing an Observable (ex: `const value$ = of(5);`)
-, and it extends this rule with `$$` for a function that generates an Observable, and `$$$` for a function that generates an ObservablePipe.
+- it follows the Observable naming convention: a `$` is present at the end of a variable name representing an Observable (ex: `const value$ = of(5);`),
+and it extends this rule with `$$` for a function that generates an Observable, and `$$$` for a function that generates an ObservablePipe.
 
 ## Creating an Observable
 

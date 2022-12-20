@@ -1,0 +1,45 @@
+---
+tags: [FUNCTION, OBSERVABLE, RXJS]
+---
+
+# fromRxJS
+
+:::info
+
+Only available [thought the bridge](/docs/documentation/migration/from-rxjs/#bridge).
+
+:::
+
+### Types
+
+```ts
+function fromRxJS<GValue>(observable: Observable<GValue>): IObservable<IDefaultNotificationsUnion<GValue>>
+```
+
+### Definition
+
+Creates a `@lirx/core`'s Observable from a `rxjs` one.
+
+### Example
+
+```ts
+import { of } from 'rxjs';
+
+const rxjs_observable = of(0, 1,2, 3);
+const lirx_observable = fromRxJS(rxjs_observable);
+
+lirx_observable((notification) => {
+  console.log(notification.name, ':', notification.value);
+});
+```
+
+Output:
+
+```text
+next: 0
+next: 1
+next: 2
+next: 3
+complete
+```
+

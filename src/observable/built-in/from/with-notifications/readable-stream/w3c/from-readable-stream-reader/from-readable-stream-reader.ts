@@ -10,9 +10,14 @@ export function fromReadableStreamReader<GValue>(
 ): IObservable<IFromReadableStreamReaderObservableNotifications<GValue>> {
   return fromAsyncIterator((async function* () {
     try {
-      let result: ReadableStreamDefaultReadResult<GValue>;
-      while (!(result = await reader.read()).done) {
-        yield (result as ReadableStreamDefaultReadValueResult<GValue>).value;
+      // let result: ReadableStreamDefaultReadResult<GValue>;
+      // while (!(result = await reader.read()).done) {
+      //   yield (result as ReadableStreamDefaultReadValueResult<GValue>).value;
+      // }
+      // INFO temp fix as yarn pnp is not well supported
+      let result: any;
+      while (!(result = await (reader as any).read()).done) {
+        yield (result).value;
       }
     } finally {
       reader.releaseLock();

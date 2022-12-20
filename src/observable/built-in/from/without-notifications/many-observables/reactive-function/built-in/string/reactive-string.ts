@@ -43,6 +43,7 @@ export type IReactiveStringParameters = IReactiveStringKeyValueParameters | IRea
 /**
  * Creates an Observable from a string template.
  *  - reactiveString('a{{source1}}b{{source2}}c')
+ *  @deprecated
  */
 export function reactiveString(
   string: string,

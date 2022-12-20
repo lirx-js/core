@@ -1,4 +1,4 @@
-export * from './create-abort-controler-from-abort-signals/index';
+export * from './create-abort-controller-from-abort-signals/index';
 export * from './for-function/index';
 export * from './for-promise/index';
 export * from './is/index';
