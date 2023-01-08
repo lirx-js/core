@@ -3,7 +3,7 @@ import {
   IDefaultInNotificationsUnion,
   IDefaultNotificationsUnion,
 } from '../../../../../../misc/notifications/default-notifications-union.type';
-import { TupleTypes } from '../../../../../../misc/types/tuple-types';
+import { TupleTypes } from '@lirx/utils';
 import { IObservable } from '../../../../../type/observable.type';
 
 export type IGenericRaceWithNotificationsInNotifications = IDefaultInNotificationsUnion<any>;

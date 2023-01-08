@@ -1,4 +1,4 @@
-import { createNetworkErrorFromResponse } from '../../../../../../../../../misc/errors/network-error/create-network-error';
+import { createNetworkErrorFromResponse } from '@lirx/utils';
 import { fulfilledObservable } from '../../../../../../../../pipes/built-in/with-notifications/then/derived/fulfilled/fulfilled-observable';
 import { IThenObservableInNotifications } from '../../../../../../../../pipes/built-in/with-notifications/then/then-observable';
 import { IObservable } from '../../../../../../../../type/observable.type';

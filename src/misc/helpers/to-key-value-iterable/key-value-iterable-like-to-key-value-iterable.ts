@@ -1,5 +1,8 @@
 import { IKeyValueIterable, IKeyValueIterableLike } from './key-value-iterable';
 
+/**
+ * @deprecated
+ */
 export function keyValueIterableLikeToKeyValueIterable<GKey, GValue>(
   keyValueIterableLike: IKeyValueIterableLike<GKey, GValue>,
 ): IKeyValueIterable<GKey, GValue> {

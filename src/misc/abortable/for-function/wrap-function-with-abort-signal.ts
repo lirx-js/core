@@ -1,6 +1,5 @@
 import { IOnAborted } from '../for-promise/wrap-promise-with-abort-signal';
-import { isNullish } from '../../helpers/is-type/is-nullish';
-import { IGenericFunction } from '../../types/generic-function.type';
+import { isNullish, IGenericFunction } from '@lirx/utils';
 import { DEFAULT_ABORTED_THROW_FUNCTION } from '../default-aborted-throw-function.constant';
 
 export type IWrapFunctionWithAbortSignalReturnedFunctionReturn<GFunction extends IGenericFunction, GOnAborted extends IOnAborted> =

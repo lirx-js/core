@@ -1,4 +1,4 @@
-import { IGenericFunction } from '../../../../../../misc/types/generic-function.type';
+import { IGenericFunction } from '@lirx/utils';
 import { mapObservable } from '../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IMapValueTupleToObservableTuple } from '../../../../../type/helpers/map-value-tuple-to-observable-tuple.type';
 import { IObservable } from '../../../../../type/observable.type';

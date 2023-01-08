@@ -1,7 +1,5 @@
 import { isAbortSignal } from '../../../../../../misc/abortable/is/is-abort-signal';
-import { createAbortError } from '../../../../../../misc/errors/abort-error/create-abort-error';
-import { createEventListener, IRemoveEventListener } from '../../../../../../misc/event-listener/functions/create-event-listener';
-import { toTypedEventTarget } from '../../../../../../misc/event-listener/functions/to-typed-event-target';
+import { createAbortError, createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
 import {
   notificationsToLastValueObservable,
 } from '../../../../../pipes/built-in/with-notifications/others/notifications-to-values/derived/notifications-to-last-value/notifications-to-last-value-observable';

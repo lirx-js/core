@@ -1,4 +1,4 @@
-import { TupleTypes } from '../../../../../../misc/types/tuple-types';
+import { TupleTypes } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

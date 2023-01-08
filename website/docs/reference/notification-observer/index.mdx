@@ -1,0 +1,47 @@
+---
+tags: [INTERFACE, NOTIFICATION]
+---
+
+# notificationObserver
+
+### Types
+
+```ts
+function notificationObserver<GNotificationsUnion extends IGenericNotification>(
+  map: TInferNotificationsObserverMapFromNotificationsUnion<GNotificationsUnion>,
+): IObserver<GNotificationsUnion>
+```
+
+### Definition
+
+Creates an Observer of Notifications dispatching the incoming values to a map of named functions.
+This is an elegant manner to handle the different notifications.
+
+### Example
+
+#### Filter notifications' state
+
+```ts
+const subscribe = fromPromise(Promise.resolve(5));
+
+subscribe(
+  notificationObserver({
+    next: (value: number) => {
+      console.log('next', value);
+    },
+    complete: () => {
+      console.log('resolved');
+    },
+    error: (error: any) => {
+      console.log('rejected', error);
+    },
+  }),
+);
+```
+
+Output:
+
+```text
+next: 5
+resolved
+```

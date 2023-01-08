@@ -1,7 +1,7 @@
 import { fromEventTarget } from '../../observable/built-in/from/without-notifications/dom/from-event-target/from-event-target';
 import { empty } from '../../observable/built-in/from/without-notifications/values/empty/empty';
 import { IObservable } from '../../observable/type/observable.type';
-import { createAbortError } from '../errors/abort-error/create-abort-error';
+import { createAbortError } from '@lirx/utils';
 
 /** TYPES **/
 

@@ -2,6 +2,7 @@ export * from './create-abort-controller-from-abort-signals/index';
 export * from './for-function/index';
 export * from './for-promise/index';
 export * from './is/index';
+export * from './abortable-promise';
 export * from './default-aborted-promise-factory.constant';
 export * from './default-aborted-promise-factory.constant';
 export * from './is-abort-controller-supported';

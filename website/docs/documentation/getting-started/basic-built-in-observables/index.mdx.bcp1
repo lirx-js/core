@@ -139,7 +139,7 @@ Let me explain the new functions:
 
 ### Going deeper
 
-To be efficient with `@lirx/core` (and Reactive Programing in general),
+To be efficient with `@lirx/core` (and Reactive Programming in general),
 **you will have to take a look at many functions**.
 If you **skip** this part, you'll definitively **struggle** with RP.
 

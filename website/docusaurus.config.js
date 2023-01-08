@@ -16,7 +16,7 @@ const githubURL = `https://github.com/${organizationName}/${projectName}/`;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'LiRX/core',
-  tagline: 'The Reactive Programing framework',
+  tagline: 'The Reactive Programming framework',
   url: 'https://core.lirx.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -66,7 +66,7 @@ const config = {
       metadata: [
         {
           name: 'keywords',
-          content: 'Reactive Programing, framework',
+          content: 'Reactive Programming, framework',
         },
       ],
       colorMode: {
@@ -151,6 +151,11 @@ const config = {
               {
                 label: 'Example',
                 to: '/docs/documentation/example/',
+              },
+              {
+                type: 'link',
+                href: 'https://stackblitz.com/edit/typescript-5ksaqe?devToolsHeight=33&file=index.ts',
+                label: 'Playground',
               },
             ],
           },

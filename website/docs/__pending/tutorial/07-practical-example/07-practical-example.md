@@ -199,7 +199,7 @@ function observables() {
 [//]: # ([Click here to see the live demo]&#40;https://stackblitz.com/edit/typescript-fdrebf?file=index.ts&#41;)
 
 I guess you noticed how compact is it in comparison to the *classic* example.
-That's where Reactive Programing shines: asynchronous event streams, and operations on them.
+That's where Reactive Programming shines: asynchronous event streams, and operations on them.
 
 Ok, now let's decompose the code.
 

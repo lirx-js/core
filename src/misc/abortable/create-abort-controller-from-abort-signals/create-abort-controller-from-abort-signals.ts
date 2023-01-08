@@ -1,5 +1,5 @@
+import { createEventListener, IRemoveEventListener } from '@lirx/utils';
 import { isAbortSignal } from '../is/is-abort-signal';
-import { createEventListener, IRemoveEventListener } from '../../event-listener/__old/create-event-listener';
 
 /**
  * Creates an AbortController which will be aborted if/when one of the 'signals' is aborted

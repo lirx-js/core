@@ -1,7 +1,6 @@
+import { createIdle, IAbortTimer, IdleDeadline, IdleRequestOptions } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
-import { createIdle, IdleDeadline, IdleRequestOptions } from '../../../../../../misc/timer/create-idle';
-import { IAbortTimer } from '../../../../../../misc/timer/abort-timer.type';
 
 /**
  * Creates an Observable that emits when idle time is available.

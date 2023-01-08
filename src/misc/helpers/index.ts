@@ -1,5 +1,3 @@
-export * from './is-type/index';
-export * from './set-immediate/index';
 export * from './string/index';
 export * from './subscription/index';
 export * from './create-deferred-promise';

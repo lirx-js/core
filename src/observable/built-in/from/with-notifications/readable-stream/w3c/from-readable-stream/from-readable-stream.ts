@@ -1,4 +1,4 @@
-import { createLockError } from '../../../../../../../misc/errors/lock-error/create-lock-error';
+import { createLockError } from '@lirx/utils';
 import { noop } from '../../../../../../../misc/helpers/noop';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';

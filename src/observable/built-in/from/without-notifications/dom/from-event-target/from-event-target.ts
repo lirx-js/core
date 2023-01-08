@@ -1,6 +1,4 @@
-import { createEventListener } from '../../../../../../misc/event-listener/functions/create-event-listener';
-import { IEventListenerFromEventMap } from '../../../../../../misc/event-listener/types/event-listener.type';
-import { IReadonlyEventTarget } from '../../../../../../misc/event-listener/types/readonly-event-target.type';
+import { createEventListener, IEventListenerFromEventMap, IReadonlyEventTarget } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

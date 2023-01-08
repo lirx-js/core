@@ -47,6 +47,11 @@ const sidebars = {
       ],
     },
     'documentation/performances/index',
+    {
+      type: 'link',
+      href: 'https://stackblitz.com/edit/typescript-5ksaqe?devToolsHeight=33&file=index.ts',
+      label: 'Playground',
+    },
   ],
   reference: [
     {

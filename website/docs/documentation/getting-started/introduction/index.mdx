@@ -20,10 +20,10 @@ When I started using RxJS, which is the most used Observables library, it was a 
 it lacks of tutorials, the documentation is cryptic, and we can't find concrete use cases and examples.
 It's just a pile of documentation where the authors expect that everyone can read their mind 😑.
 
-But now, that I'm very confortable with Reactive Programing, **I simply cannot work without it**:
+But now, that I'm very confortable with Reactive Programming, **I simply cannot work without it**:
 it solves so many problems and allows me to create very consistent applications.
 
-The first thing to know is that Reactive Programing requires you to **think in reactive**.
+The first thing to know is that Reactive Programming requires you to **think in reactive**.
 Just like Promises on their time (*async thinking*), you'll have to be able to change your vision on variables and streams.
 
 So the first question to answer is: **when should I use an Observable ?**
@@ -52,7 +52,7 @@ Actually, this isn't new:
 - websockets
 - ... and many more...
 
-So, you've probably already played with asynchronous data streams. Reactive programing is all about this but on steroids.
+So, you've probably already played with asynchronous data streams. Reactive programming is all about this but on steroids.
 You'll be able to **create data streams of anything**, not just from click and hover events:
 variables, user inputs, properties, tasks, data structures,...
 
@@ -87,7 +87,7 @@ const unsubscribe = onClick$(() => console.log('clicked'));
 unsubscribe();
 ```
 
-The most important part of Reactive Programing, is that you have fine control of the flow of your values.
+The most important part of Reactive Programming, is that you have fine control of the flow of your values.
 
 Let's write a piece of code which displays the number of time the user clicked on the document:
 
@@ -162,10 +162,7 @@ fullname$((fullname) => {
 If `firstname$` or `lastname$` changes, then `fullname$` is immediately updated.
 So Observables **PUSHES** values. We don't have to **PULL** them. It's magic, and it's perfect for all async events.
 
-[//]: # (TODO)
-[//]: # ([You can test this code here]&#40;https://stackblitz.com/edit/typescript-psdoti?file=index.ts&#41;)
-
-> So Reactive Programing is excellent for every asynchronous stream of data.
+> So Reactive Programming is excellent for every asynchronous stream of data.
 This includes: computed/updated values, events, promises, timers, and many more.
 
 ## Why should you consider adopting RP ?

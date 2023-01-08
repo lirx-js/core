@@ -1,4 +1,4 @@
-import { IReadonlyEventTarget } from '../../../../../../../misc/event-listener/types/readonly-event-target.type';
+import { IReadonlyEventTarget } from '@lirx/utils';
 import { filterObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/filter/filter-observable';
 import { IObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../from-event-target';

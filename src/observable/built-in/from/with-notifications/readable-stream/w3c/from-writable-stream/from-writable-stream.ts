@@ -1,4 +1,4 @@
-import { createLockError } from '../../../../../../../misc/errors/lock-error/create-lock-error';
+import { createLockError } from '@lirx/utils';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
 import { fromWritableStreamDefaultWriter } from '../from-writable-stream-default-writer/from-writable-stream-default-writer';
 import { IFromWritableStreamObserverNotifications } from './from-writable-stream-observer-notifications.type';

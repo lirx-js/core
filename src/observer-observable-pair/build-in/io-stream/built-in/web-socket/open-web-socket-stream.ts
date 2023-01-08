@@ -112,7 +112,7 @@ export function openWebSocketStream(
         const unsubscribeOfAbortEvent = abort$(end);
       }
     } else {
-      reject(new Error(`Socket should be in a CONNECTING state`));
+      reject(new Error(`Socket should be in a CONNECTING or OPEN state`));
     }
   }, signal);
 }

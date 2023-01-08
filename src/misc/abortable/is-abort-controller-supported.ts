@@ -1,6 +1,5 @@
-import { isObject } from '../helpers/is-type/is-object';
+import { getGlobalThis } from '@lirx/utils';
 
 export function isAbortControllerSupported(): boolean {
-  return isObject(globalThis)
-    && ('AbortController' in globalThis);
+  return('AbortController' in getGlobalThis());
 }

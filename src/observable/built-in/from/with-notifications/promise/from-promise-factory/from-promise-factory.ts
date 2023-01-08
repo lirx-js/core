@@ -1,6 +1,5 @@
 import { isAbortSignal } from '../../../../../../misc/abortable/is/is-abort-signal';
-import { createEventListener, IRemoveEventListener } from '../../../../../../misc/event-listener/functions/create-event-listener';
-import { toTypedEventTarget } from '../../../../../../misc/event-listener/functions/to-typed-event-target';
+import { createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
 import { noop } from '../../../../../../misc/helpers/noop';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';

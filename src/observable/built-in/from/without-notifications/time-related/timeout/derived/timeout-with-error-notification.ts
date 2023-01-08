@@ -1,4 +1,4 @@
-import { ITimeoutError } from '../../../../../../../misc/errors/timeout-error/timeout-error.type';
+import { ITimeoutError } from '@lirx/utils';
 import { IErrorNotification } from '../../../../../../../misc/notifications/built-in/error/error-notification.type';
 import { IObservable } from '../../../../../../type/observable.type';
 import { timeout } from '../timeout';

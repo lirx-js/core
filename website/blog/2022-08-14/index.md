@@ -237,9 +237,7 @@ result$((result) => {
 });
 ```
 
-[//]: # (TODO)
-
-[//]: # ([You can find a demo here]&#40;https://stackblitz.com/edit/typescript-eidguw?devtoolsheight=33&file=index.ts&#41;)
+[You can find a demo here](https://stackblitz.com/edit/typescript-oee9wm?file=index.ts)
 
 
 Thinking in Reactive Programming gives us the opportunity to focus on our data flow, and not the complex implementation.

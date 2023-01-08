@@ -1,7 +1,4 @@
-import { createAbortError } from '../../../../../../misc/errors/abort-error/create-abort-error';
-import { createNetworkError } from '../../../../../../misc/errors/network-error/create-network-error';
-import { createEventListener, IRemoveEventListener } from '../../../../../../misc/event-listener/functions/create-event-listener';
-import { toTypedEventTarget } from '../../../../../../misc/event-listener/functions/to-typed-event-target';
+import { createAbortError, createNetworkError, createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
 
 /** TYPES **/
 
