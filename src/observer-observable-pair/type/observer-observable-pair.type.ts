@@ -1,5 +1,5 @@
 import { IGenericObservable, IObservable } from '../../observable/type/observable.type';
-import { IObserver, IGenericObserver } from '../../observer/type/observer.type';
+import { IGenericObserver, IObserver } from '../../observer/type/observer.type';
 
 export interface IObserverObservablePair<GObserverValue, GObservableValue> {
   readonly emit: IObserver<GObserverValue>;

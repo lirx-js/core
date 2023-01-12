@@ -1,5 +1,5 @@
+import { noop } from '@lirx/utils';
 import { IObserver } from '../../observer/type/observer.type';
-import { noop } from '../helpers/noop';
 import { throwFunction } from '../helpers/throw-function';
 import { IDefaultInNotificationsUnion } from './default-notifications-union.type';
 import { IGenericNotification } from './notification.type';

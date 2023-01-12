@@ -1,4 +1,4 @@
-import { noop } from '../../misc/helpers/noop';
+import { noop } from '@lirx/utils';
 import { IObservable, IUnsubscribe } from '../../observable/type/observable.type';
 import { IMapFunction } from '../../observer/pipes/built-in/map/map-function.type';
 import { IObserver } from '../../observer/type/observer.type';
@@ -29,7 +29,6 @@ export function mapObservableToObserver<GObservableValue, GObserverValue>(
     }),
   ];
 }
-
 
 // TODO doc
 

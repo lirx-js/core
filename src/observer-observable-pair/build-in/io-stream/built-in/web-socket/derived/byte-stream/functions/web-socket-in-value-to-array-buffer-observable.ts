@@ -1,6 +1,8 @@
-import { stringToUTF8EncodedStringBuffer } from '../../../../../../../../misc/helpers/string/converters/string-to-utf8-encoded-string-buffer';
 import {
-  mapObservable
+  stringToUTF8EncodedStringBuffer,
+} from '../../../../../../../../misc/helpers/string/converters/string-to-utf8-encoded-string-buffer';
+import {
+  mapObservable,
 } from '../../../../../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IObservable } from '../../../../../../../../observable/type/observable.type';
 import { IWebSocketInValue } from '../../../web-socket-stream.type';

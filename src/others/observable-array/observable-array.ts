@@ -76,7 +76,6 @@ export class ObservableArray<GValue> implements Iterable<IObservable<GValue>> {
     return this.getView(index).value$;
   }
 
-
   * values(): Generator<GValue> {
     for (let i = 0; i < this._data.length; i++) {
       yield this._data[i].value;

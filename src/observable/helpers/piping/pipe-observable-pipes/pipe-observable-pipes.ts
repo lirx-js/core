@@ -6,7 +6,7 @@ import { IGenericObservablePipe } from '../../../pipes/type/observable-pipe.type
 export type IObservablePipePipeConstraint<// generics
   GFunctions
   //
-  > =
+> =
   IPipeNowConstraint<any, GFunctions> extends readonly IGenericObservablePipe[]
     ? IPipeNowConstraint<any, GFunctions>
     : never;
@@ -14,13 +14,13 @@ export type IObservablePipePipeConstraint<// generics
 export type IPipeObservablePipesReturn<// generics
   GFunctions extends readonly IGenericObservablePipe[]
   //
-  >
+>
   = IInferPipeReturn<GFunctions>;
 
 export function pipeObservablePipes<// generics
   GFunctions extends IObservablePipePipeConstraint<GFunctions>
   //
-  >(
+>(
   fns: GFunctions,
 ): IPipeObservablePipesReturn<GFunctions> {
   return pipe<GFunctions>(fns);

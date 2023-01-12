@@ -1,5 +1,5 @@
 import {
-  distinctObservable
+  distinctObservable,
 } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
 import { mapObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IObservable } from '../../../../../../type/observable.type';

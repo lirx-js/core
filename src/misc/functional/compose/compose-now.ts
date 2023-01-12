@@ -1,6 +1,6 @@
+import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 import { compose } from './compose';
 import { IComposeConstraint } from './types/compose-constraint.type';
-import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 import { IComposeNowValueConstraint } from './types/compose-now-value-constraint.type';
 import { IInferComposeNowReturn } from './types/infer-compose-now-return.type';
 
@@ -9,7 +9,7 @@ export function composeNow<// generics
   GValue extends IComposeNowValueConstraint<GFunctions, GUnaryFunction>,
   GUnaryFunction extends IGenericUnaryFunction
   //
-  >(
+>(
   fns: GFunctions,
   value: GValue,
 ): IInferComposeNowReturn<GFunctions, GValue> {

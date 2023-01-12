@@ -1,9 +1,9 @@
+import { TupleTypes } from '@lirx/utils';
 import { INextNotification } from '../../../../../../misc/notifications/built-in/next/next-notification.type';
 import {
   IDefaultInNotificationsUnion,
   IDefaultNotificationsUnion,
 } from '../../../../../../misc/notifications/default-notifications-union.type';
-import { TupleTypes } from '@lirx/utils';
 import { IObservable } from '../../../../../type/observable.type';
 
 export type IGenericAnyWithNotificationsInNotifications = IDefaultInNotificationsUnion<any>;

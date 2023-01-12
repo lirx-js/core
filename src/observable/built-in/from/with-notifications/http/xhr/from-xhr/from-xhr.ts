@@ -1,5 +1,11 @@
-import { createEventListener, createNetworkErrorFromRequest, IRemoveEventListener, isAbortError, toTypedEventTarget } from '@lirx/utils';
-import { noop } from '../../../../../../../misc/helpers/noop';
+import {
+  createEventListener,
+  createNetworkErrorFromRequest,
+  IRemoveEventListener,
+  isAbortError,
+  noop,
+  toTypedEventTarget,
+} from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import {
   createDownloadProgressNotification,

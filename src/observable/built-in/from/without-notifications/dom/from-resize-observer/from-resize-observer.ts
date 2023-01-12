@@ -1,5 +1,9 @@
-import { createMulticastSource } from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
-import { IMulticastSource } from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
+import {
+  createMulticastSource,
+} from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
+import {
+  IMulticastSource,
+} from '../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

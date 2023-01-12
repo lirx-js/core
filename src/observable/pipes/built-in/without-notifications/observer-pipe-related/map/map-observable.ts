@@ -2,7 +2,6 @@ import { IMapFunction } from '../../../../../../observer/pipes/built-in/map/map-
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 
-
 export function mapObservable<GIn, GOut>(
   subscribe: IObservable<GIn>,
   mapFunction: IMapFunction<GIn, GOut>,

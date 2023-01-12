@@ -5,7 +5,7 @@ export type IComposeNowValueConstraint<// generics
   GFunctions extends readonly GUnaryFunction[],
   GUnaryFunction extends IGenericUnaryFunction
   //
-  > =
+> =
   IInferComposeReturn<GFunctions, GUnaryFunction> extends IUnaryFunction<infer GIn, any>
     ? GIn
     : never;

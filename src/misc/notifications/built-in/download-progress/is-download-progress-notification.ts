@@ -1,7 +1,7 @@
+import { IProgress } from '../../../progress/progress.type';
 import { isNotification } from '../../is-notification';
 import { DOWNLOAD_PROGRESS_NOTIFICATION_NAME } from './download-progress-notification-name.constant';
 import { IDownloadProgressNotification } from './download-progress-notification.type';
-import { IProgress } from '../../../progress/progress.type';
 
 export function isDownloadProgressNotification(
   value: any,

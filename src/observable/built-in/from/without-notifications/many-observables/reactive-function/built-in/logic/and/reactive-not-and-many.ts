@@ -1,7 +1,6 @@
 import { IObservable } from '../../../../../../../../type/observable.type';
-import { IReactiveFunctionObservables } from '../../../reactive-function';
 import { optimizedReactiveFunction } from '../../../alternatives/optimized-reactive-function';
-
+import { IReactiveFunctionObservables } from '../../../reactive-function';
 
 export function reactiveNotAndMany(
   ...observables: IReactiveFunctionObservables<typeof notAndMany>

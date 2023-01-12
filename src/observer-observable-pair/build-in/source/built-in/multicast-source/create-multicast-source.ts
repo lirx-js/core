@@ -1,4 +1,4 @@
-import { noop } from '../../../../../misc/helpers/noop';
+import { noop } from '@lirx/utils';
 import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { IMulticastSource } from './multicast-source.type';

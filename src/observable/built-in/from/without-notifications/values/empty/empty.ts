@@ -1,4 +1,4 @@
-import { noop } from '../../../../../../misc/helpers/noop';
+import { noop } from '@lirx/utils';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 
 export function empty<GValue = any>(): IObservable<GValue> {

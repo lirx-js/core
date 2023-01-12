@@ -1,6 +1,6 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { fromIterator } from '../from-iterator/from-iterator';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { fromIterator } from '../from-iterator/from-iterator';
 
 export function fromIterable<GValue>(
   iterable: Iterable<GValue>,
@@ -9,7 +9,6 @@ export function fromIterable<GValue>(
     return fromIterator<GValue>(iterable[Symbol.iterator]())(emit);
   };
 }
-
 
 // export function fromIterable<GValue>(
 //   iterable: Iterable<GValue>,

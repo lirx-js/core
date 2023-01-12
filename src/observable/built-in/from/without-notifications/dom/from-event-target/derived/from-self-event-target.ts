@@ -3,7 +3,6 @@ import { filterObservable } from '../../../../../../pipes/built-in/without-notif
 import { IObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../from-event-target';
 
-
 export function fromSelfEventTarget<GType extends string, GEvent extends Event>(
   target: IReadonlyEventTarget<Record<GType, GEvent>>,
   type: GType,

@@ -1,8 +1,6 @@
 import { IMapFunction } from '../../../../../../../../observer/pipes/built-in/map/map-function.type';
 import { IObserver } from '../../../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../../../type/observable.type';
-import { mapObservable } from '../../../../observer-pipe-related/map/map-observable';
-import { mergeAllSingleObservable } from '../../../merge-all/derived/merge-all-single/merge-all-single-observable';
 
 export function mergeMapSingleObservable<GIn, GOut>(
   subscribe: IObservable<GIn>,

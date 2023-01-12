@@ -1,4 +1,4 @@
-import { createAbortError, createNetworkError, createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
+import { createAbortError, createEventListener, createNetworkError, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
 
 /** TYPES **/
 

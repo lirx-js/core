@@ -1,6 +1,4 @@
-import { isAbortSignal } from '../../../../../../misc/abortable/is/is-abort-signal';
-import { createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
-import { noop } from '../../../../../../misc/helpers/noop';
+import { createEventListener, IRemoveEventListener, noop, toTypedEventTarget, INullish, isNullish } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';
@@ -25,12 +23,11 @@ export function fromPromiseFactory<GValue>(
   options?: IFromPromiseFactoryObservableOptions,
 ): IObservable<IFromPromiseFactoryObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromPromiseFactoryObservableNotifications<GValue>;
-  const signal: AbortSignal | null = ((options !== void 0) && isAbortSignal(options.signal))
-    ? options.signal
-    : null;
+
+  const signal: AbortSignal | INullish = options?.signal;
 
   return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
-    if ((signal !== null) && signal.aborted) {
+    if (signal?.aborted) {
       emit(createAbortErrorNotification({ signal }));
       return noop;
     } else {
@@ -74,7 +71,7 @@ export function fromPromiseFactory<GValue>(
 
       let removeAbortEventListener: IRemoveEventListener;
 
-      if (signal !== null) {
+      if (!isNullish(signal)) {
         removeAbortEventListener = createEventListener<'abort', Event>(
           toTypedEventTarget(signal),
           'abort',

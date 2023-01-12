@@ -1,12 +1,13 @@
 import { IDefaultNotificationsUnion } from '../../../../../../misc/notifications/default-notifications-union.type';
 import {
-  createUnicastReplaySource, IUnicastReplaySource,
+  createUnicastReplaySource,
+  IUnicastReplaySource,
 } from '../../../../../../observer-observable-pair/build-in/source/built-in/replay-source/derived/create-unicast-replay-source';
 import {
-  createUnicastSource
+  createUnicastSource,
 } from '../../../../../../observer-observable-pair/build-in/source/built-in/unicast-source/create-unicast-source';
 import {
-  raceWithNotifications
+  raceWithNotifications,
 } from '../../../../../built-in/from/with-notifications/many-observables/race-with-notifications/race-with-notifications';
 import { throwError } from '../../../../../built-in/from/with-notifications/others/throw-error/throw-error';
 import { singleWithNotifications } from '../../../../../built-in/from/with-notifications/values/single/single-with-notifications';
@@ -14,7 +15,7 @@ import { defer } from '../../../../../built-in/from/without-notifications/values
 import { pipeObservable } from '../../../../../helpers/piping/pipe-observable/pipe-observable';
 import { IObservable } from '../../../../../type/observable.type';
 import {
-  switchMapObservable
+  switchMapObservable,
 } from '../../../without-notifications/merge/merge-map/derived/merge-map-single/merge-map-single-observable.shortcut';
 import { shareObservablePipe } from '../../../without-notifications/source-related/built-in/share-observable-pipe';
 import { sourceObservablePipe } from '../../../without-notifications/source-related/source-observable-pipe';
@@ -30,7 +31,6 @@ export type ICacheObservableWithNotificationsResult<GValue> = [
   subscribe: IObservable<IDefaultNotificationsUnion<GValue>>,
   reset: IResetFunction,
 ];
-
 
 /**
  * This pipe caches the value(s) sent by a source NotificationObservable.

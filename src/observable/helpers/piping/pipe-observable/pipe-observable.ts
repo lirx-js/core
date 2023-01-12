@@ -8,7 +8,7 @@ export type IObservablePipeConstraint<// generics
   GObservable extends IGenericObservable,
   GFunctions
   //
-  > =
+> =
   IPipeNowConstraint<GObservable, GFunctions> extends readonly IGenericObservablePipe[]
     ? IPipeNowConstraint<GObservable, GFunctions>
     : never;
@@ -20,7 +20,7 @@ export type IObservablePipeReturn<// generics
   GObservable extends IGenericObservable,
   GFunctions extends readonly IGenericObservablePipe[]
   //
-  > = IInferPipeNowReturn<GObservable, GFunctions>;
+> = IInferPipeNowReturn<GObservable, GFunctions>;
 
 // export type IObservablePipeReturn<// generics
 //   GObservable extends IGenericObservable,
@@ -35,7 +35,7 @@ export function pipeObservable<// generics
   GObservable extends IGenericObservable,
   GFunctions extends IObservablePipeConstraint<GObservable, GFunctions>
   //
-  >(
+>(
   subscribe: GObservable,
   fns: GFunctions,
 ): IObservablePipeReturn<GObservable, GFunctions> {

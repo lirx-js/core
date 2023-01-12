@@ -1,25 +1,29 @@
-import { createAbortablePromise } from '../../../../../misc/abortable/abortable-promise';
-import { noop } from '../../../../../misc/helpers/noop';
+import {
+  createAbortablePromise,
+  IAbortablePromiseOnAbortFunction,
+  IAbortablePromiseOptions,
+  IPromise,
+  IPromiseInitRejectFunction,
+  IPromiseInitResolveFunction,
+} from '@lirx/promise';
+import { noop } from '@lirx/utils';
 import { fromEventTarget } from '../../../../../observable/built-in/from/without-notifications/dom/from-event-target/from-event-target';
 import { toPromise } from '../../../../../observable/built-in/to/without-notifications/promise/to-promise';
 import { mapObservable } from '../../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
-import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
+import { IUnsubscribe } from '../../../../../observable/type/observable.type';
 import { IWebSocketInValue, IWebSocketOutValue, IWebSocketStream } from './web-socket-stream.type';
 
-export interface IOpenWebSocketStreamOptions {
-  signal?: AbortSignal;
+export interface IOpenWebSocketStreamOptions extends IAbortablePromiseOptions {
 }
 
 export function openWebSocketStream(
   socket: WebSocket,
-  {
-    signal,
-  }: IOpenWebSocketStreamOptions = {},
-): Promise<IWebSocketStream> {
+  options?: IOpenWebSocketStreamOptions,
+): IPromise<IWebSocketStream> {
   return createAbortablePromise<IWebSocketStream>((
-    resolve: (value: IWebSocketStream) => void,
-    reject: (reason: Error) => void,
-    abort$: IObservable<Event>,
+    resolve: IPromiseInitResolveFunction<IWebSocketStream>,
+    reject: IPromiseInitRejectFunction,
+    abort$: IAbortablePromiseOnAbortFunction,
   ): void => {
     if (
       (socket.readyState === socket.CONNECTING)
@@ -114,6 +118,6 @@ export function openWebSocketStream(
     } else {
       reject(new Error(`Socket should be in a CONNECTING or OPEN state`));
     }
-  }, signal);
+  }, options);
 }
 

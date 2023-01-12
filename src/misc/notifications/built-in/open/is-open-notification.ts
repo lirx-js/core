@@ -1,6 +1,6 @@
+import { isNotification } from '../../is-notification';
 import { OPEN_NOTIFICATION_NAME } from './open-notification-name.constant';
 import { IOpenNotification } from './open-notification.type';
-import { isNotification } from '../../is-notification';
 
 export function isOpenNotification<GValue>(
   value: any,
