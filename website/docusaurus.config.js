@@ -56,6 +56,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        gtag: {
+          trackingID: 'G-GKZ4VJ309Z',
+          anonymizeIP: true,
+        },
       }),
     ],
   ],
@@ -77,7 +81,7 @@ const config = {
       announcementBar: {
         id: 'support_us',
         content:
-          '⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/lirx-js/core">GitHub</a>! ⭐️',
+          `⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="${githubURL}">GitHub</a>! ⭐️`,
         backgroundColor: '#fafbfc',
         textColor: '#091E42',
         isCloseable: true,

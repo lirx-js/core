@@ -7,6 +7,8 @@ import { IObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../from-event-target';
 
 /**
+ * Creates an Observable emitting a FocusEvent when a 'focusout' appends outside the element.
+ *
  * @experimental
  */
 export function focusLeaveElementObservable(

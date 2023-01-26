@@ -39,9 +39,9 @@ Feel free to share your own tests, as it helps `@lirx/core` to find the fastest 
 - CPU: Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz (6 cores / 12 threads)
 - Memory: 16Go
 - OS: Ubuntu 20.04 LTS
-- Browser: Chrome 105
-- Date: 2022-09-12
-- LiRX/core: 1.0.0
+- Browser: Chrome 109
+- Date: 2023-01-26
+- LiRX/core: 1.2.0
 
 ---
 

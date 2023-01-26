@@ -46,13 +46,13 @@ export function cacheObservableWithNotifications<GValue>(
 
   const { emit: $reset, subscribe: reset$ } = createUnicastSource<void>();
 
-  // const source: IMulticastReplaySource<IDefaultNotificationsUnion<GValue>> = createMulticastReplaySource<IDefaultNotificationsUnion<GValue>>();
+  // used to cache getData with racing result
   const source: IUnicastReplaySource<IDefaultNotificationsUnion<GValue>> = createUnicastReplaySource<IDefaultNotificationsUnion<GValue>>();
 
   const getData$ = pipeObservable(subscribe, [
     fulfilledObservablePipe(
       (value: GValue): IObservable<IDefaultNotificationsUnion<GValue>> => {
-        value$ = singleWithNotifications(value);
+        value$ = singleWithNotifications(value); // cache the value
         return value$;
       },
     ),
@@ -68,29 +68,37 @@ export function cacheObservableWithNotifications<GValue>(
       errorOnReset$,
     ]),
     [
+      // cache getData with racing result
       sourceObservablePipe<IDefaultNotificationsUnion<GValue>>({
         getSource: () => source,
       }),
+      // if rejected,
       rejectedObservablePipe<GValue, IDefaultNotificationsUnion<GValue>>((error: unknown): IObservable<IDefaultNotificationsUnion<GValue>> => {
-        value$ = void 0;
-        source.reset();
+        value$ = void 0; // reset cached value
+        source.reset(); // reset source
         return throwError(error);
       }),
+      // share getData with racing result
       shareObservablePipe<IDefaultNotificationsUnion<GValue>>(),
+      // when a complete or error is received, unsubscribe of the data, else we could not start a new session in case of error or reset.
       autoUnsubscribeObservablePipeWithNotifications<IDefaultNotificationsUnion<GValue>>(),
     ],
   );
 
+  const cached$ = defer((): IObservable<IDefaultNotificationsUnion<GValue>> => {
+    return (value$ === void 0)
+      ? racing$
+      : value$;
+  });
+
+  const reset = (): void => {
+    value$ = void 0;
+    source.reset();
+    $reset();
+  };
+
   return [
-    defer((): IObservable<IDefaultNotificationsUnion<GValue>> => {
-      return (value$ === void 0)
-        ? racing$
-        : value$;
-    }),
-    (): void => {
-      value$ = void 0;
-      source.reset();
-      $reset();
-    },
+    cached$,
+    reset,
   ];
 }

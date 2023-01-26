@@ -1,0 +1,40 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION, FETCH]
+---
+
+# fromFetchText
+
+### Types
+
+```ts
+function fromFetchText(
+  requestInfo: RequestInfo,
+  requestInit?: RequestInit,
+): IObservable<IFromFetchTextObservableNotifications>
+```
+
+```ts
+type IFromFetchTextObservableNotifications = IDefaultNotificationsUnion<string>;
+```
+
+### Definition
+
+Creates an Observable performing an HTTP request using the `fetch` api, then, converts the response into a **string**.
+
+---
+
+## responseToTextObservablePipe
+
+Alternative: `responseToText$$$`
+
+Inlined: `responseToTextObservable`, `responseToText$$`
+
+### Types
+
+```ts
+function responseToTextObservablePipe(): IObservablePipe<IThenObservableInNotifications<Response>, IFromFetchTextObservableNotifications>
+```
+
+### Definition
+
+Converts the Response sent by an Observable of Notifications into a string.

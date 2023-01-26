@@ -1,0 +1,40 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION, FETCH]
+---
+
+# fromFetchArrayBuffer
+
+### Types
+
+```ts
+function fromFetchArrayBuffer(
+  requestInfo: RequestInfo,
+  requestInit?: RequestInit,
+): IObservable<IFromFetchArrayBufferObservableNotifications>
+```
+
+```ts
+type IFromFetchArrayBufferObservableNotifications = IDefaultNotificationsUnion<ArrayBuffer>;
+```
+
+### Definition
+
+Creates an Observable performing an HTTP request using the `fetch` api, then, converts the response to an **ArrayBuffer**.
+
+---
+
+## responseToArrayBufferObservablePipe
+
+Alternative: `responseToArrayBuffer$$$`
+
+Inlined: `responseToArrayBufferObservable`, `responseToArrayBuffer$$`
+
+### Types
+
+```ts
+function responseToArrayBufferObservablePipe(): IObservablePipe<IThenObservableInNotifications<Response>, IFromFetchArrayBufferObservableNotifications>
+```
+
+### Definition
+
+Converts the Response sent by an Observable of Notifications into an ArrayBuffer.

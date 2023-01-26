@@ -1,6 +1,6 @@
 {
   "name": "@lirx/core",
-  "version": "1.2.0-beta.2",
+  "version": "1.2.0",
   "description": "Blazing fast Observables",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "license": "MIT",
   "access": "public",
   "dependencies": {
-    "@lirx/utils": "^1.0.0-beta.1",
-    "@lirx/promise": "^1.0.0-beta.1"
+    "@lirx/utils": "^1.0.0",
+    "@lirx/promise": "^1.0.0"
   }
 }

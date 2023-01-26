@@ -1,4 +1,4 @@
-import { verifyNumberInRange } from '../../misc/errors/range-error/verify-number-in-range';
+import { verifyNumberInRange } from '@lirx/utils';
 import { IObservable } from '../../observable/type/observable.type';
 import { createObservableView } from '../views/observable-view/create-observable-view';
 import { IObservableView } from '../views/observable-view/observable-view.type';

@@ -43,3 +43,18 @@ click: 71-268
 ...
 ```
 
+### Shortcuts
+
+#### fromSelfEventTarget
+
+```ts
+function fromSelfEventTarget<GType extends string, GEvent extends Event>(
+  target: IReadonlyEventTarget<Record<GType, GEvent>>,
+  type: GType,
+  options?: boolean | AddEventListenerOptions,
+): IObservable<GEvent>
+```
+
+Same as `fromEventTarget` but triggers only if `event.target === target`.
+This is useful if we want to listen for events only dispatched by the `target` itself.
+

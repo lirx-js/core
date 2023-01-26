@@ -9,6 +9,8 @@ import { fromEventTarget } from '../from-event-target';
 import { focusLeaveElementObservable } from './focus-leave-element-observable';
 
 /**
+ * Creates an Observable emitting true when the element if focused, and false when it is not.
+ *
  * @experimental
  */
 export function isFocusedElementObservable(

@@ -4,6 +4,8 @@ import { merge } from '../../../many-observables/merge/merge';
 import { fromSelfEventTarget } from './from-self-event-target';
 
 /**
+ * Creates an Observable emitting true when the element has the mouse over, and false when it has not.
+ *
  * @experimental
  */
 export function isMouseOverElementObservable(
