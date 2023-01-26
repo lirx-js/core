@@ -1,5 +1,5 @@
+import { noop } from '@lirx/utils';
 import { IUnsubscribe } from '../../../observable/type/observable.type';
-import { noop } from '../noop';
 
 export function unsubscribeOnce(
   unsubscribe: IUnsubscribe,

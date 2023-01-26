@@ -1,5 +1,4 @@
-import { IAbortTimer } from '../../../../../../misc/timer/abort-timer.type';
-import { createTimeout } from '../../../../../../misc/timer/create-timeout';
+import { createTimeout, IAbortTimer } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

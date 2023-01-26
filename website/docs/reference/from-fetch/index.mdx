@@ -1,5 +1,5 @@
 ---
-tags: [FUNCTION, OBSERVABLE, NOTIFICATION]
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION, FETCH]
 ---
 
 # fromFetch
@@ -19,9 +19,15 @@ Creates an Observable performing an HTTP request using the `fetch` api.
 
 For details, you may see [fromPromiseFactory](/docs/reference/from-promise-factory/).
 
-[//]: # (TODO)
+### Shortcuts
 
-[//]: # (If you prefer to receive a JSON object instead, you may use `fromFetchJSON` instead.)
+If you prefer to receive json, text, an array buffer, a blob or a stream, you may use the following functions:
+
+- [fromFetchJSON](/docs/reference/from-fetch-json/)
+- [fromFetchText](/docs/reference/from-fetch-text/)
+- [fromFetchArrayBuffer](/docs/reference/from-fetch-array-buffer/)
+- [fromFetchBlob](/docs/reference/from-fetch-blob/)
+- [fromFetchStream](/docs/reference/from-fetch-stream/)
 
 ### Examples
 

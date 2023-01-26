@@ -1,5 +1,5 @@
 import {
-  distinctObservable
+  distinctObservable,
 } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
 import { mapObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IObservable } from '../../../../../../type/observable.type';
@@ -9,6 +9,8 @@ import { fromEventTarget } from '../from-event-target';
 import { focusLeaveElementObservable } from './focus-leave-element-observable';
 
 /**
+ * Creates an Observable emitting true when the element if focused, and false when it is not.
+ *
  * @experimental
  */
 export function isFocusedElementObservable(

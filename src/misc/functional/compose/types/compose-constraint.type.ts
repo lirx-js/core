@@ -1,13 +1,13 @@
+import { IPipeNonTupleConstraint } from '../../shared-types/pipe-non-tuple-constraint.type';
 import { ISameLength } from '../../shared-types/shared.type';
 import { IGenericUnaryFunction } from '../../shared-types/unary-function.type';
-import { IPipeNonTupleConstraint } from '../../shared-types/pipe-non-tuple-constraint.type';
 
 export type IComposeConstraint<// generics
   GFunctions extends readonly GUnaryFunction[], // list of unary functions
   GFirstReturn, // type of the first expected returned value
   GUnaryFunction extends IGenericUnaryFunction // shape of the unary function
   //
-  > =
+> =
   [GFunctions] extends [[]] // to avoid circular constraint
     ? []
     : (

@@ -1,12 +1,14 @@
 import { MAP_FILTER_DISCARD } from '../../../../../../../observer/pipes/built-in/map-filter/map-filter-discard.constant';
 import { IMapFilterMapFunctionReturn } from '../../../../../../../observer/pipes/built-in/map-filter/map-filter-map-function.type';
 import {
-  mapFilterObservable
+  mapFilterObservable,
 } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map-filter/map-filter-observable';
 import { IObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../from-event-target';
 
 /**
+ * Creates an Observable emitting a FocusEvent when a 'focusout' appends outside the element.
+ *
  * @experimental
  */
 export function focusLeaveElementObservable(

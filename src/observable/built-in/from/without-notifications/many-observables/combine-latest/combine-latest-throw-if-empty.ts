@@ -1,4 +1,4 @@
-import { createEmptyError } from '../../../../../../misc/errors/empty-error/create-empty-error';
+import { createEmptyError } from '@lirx/utils';
 import { IGenericObservable, IObservable } from '../../../../../type/observable.type';
 import { combineLatest, ICombineLatestObservablesValues } from './combine-latest';
 

@@ -6,7 +6,7 @@ export interface NgZone {
   runOutsideAngular(fn: (...args: any[]) => any): any;
 }
 
-export function createAngularPipeLine(
+export function createAngularPipeline(
   ngZone: NgZone,
   component: any,
 ): any {

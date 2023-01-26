@@ -2,6 +2,7 @@ import { IGenericSource, ISource } from '../../type/source.type';
 
 export interface IReplaySourceMethods<GValue> {
   getValues(): readonly GValue[];
+
   reset(): void;
 }
 

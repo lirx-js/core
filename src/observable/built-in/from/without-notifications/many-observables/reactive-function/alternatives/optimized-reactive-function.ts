@@ -1,4 +1,4 @@
-import { IGenericFunction } from '../../../../../../../misc/types/generic-function.type';
+import { IGenericFunction } from '@lirx/utils';
 import {
   distinctObservable,
 } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
@@ -7,7 +7,7 @@ import {
   debounceMicrotaskObservable,
 } from '../../../../../../pipes/built-in/without-notifications/time-related/debounce-microtask/debounce-microtask-observable';
 import { combineLatest, ICombineLatestObservablesValues } from '../../combine-latest/combine-latest';
-import { IReactiveFunctionObservables, IReactiveFunctionReturn, reactiveFunction } from '../reactive-function';
+import { IReactiveFunctionObservables, IReactiveFunctionReturn } from '../reactive-function';
 
 export function optimizedReactiveFunction<GFunction extends IGenericFunction>(
   observables: IReactiveFunctionObservables<GFunction>,

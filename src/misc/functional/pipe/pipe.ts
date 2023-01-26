@@ -5,7 +5,7 @@ import { IPipeNowConstraint } from './types/pipe-now-constraint.type';
 export function pipe<// generics
   GFunctions extends IPipeNowConstraint<any, GFunctions>,
   //
-  >(
+>(
   fns: GFunctions,
 ): IInferPipeReturn<GFunctions> {
   return ((initialValue: unknown): unknown => {

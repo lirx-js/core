@@ -1,4 +1,4 @@
-import { isNullish } from '../is-type/is-nullish';
+import { isNullish } from '@lirx/utils';
 
 export interface IObjectPropertyPathOnIncomplete {
   (): any;

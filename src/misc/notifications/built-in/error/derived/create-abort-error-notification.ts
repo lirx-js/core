@@ -1,7 +1,6 @@
-import { IAbortError, IAbortErrorOptions } from '../../../../errors/abort-error/abort-error.type';
-import { IErrorNotification } from '../error-notification.type';
+import { createAbortError, IAbortError, IAbortErrorOptions } from '@lirx/utils';
 import { createErrorNotification } from '../create-error-notification';
-import { createAbortError } from '../../../../errors/abort-error/create-abort-error';
+import { IErrorNotification } from '../error-notification.type';
 
 export function createAbortErrorNotification(
   options?: IAbortErrorOptions,

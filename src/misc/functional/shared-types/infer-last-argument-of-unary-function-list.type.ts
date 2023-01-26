@@ -6,7 +6,7 @@ import { IGenericUnaryFunction } from './unary-function.type';
 export type IInferLastArgumentOfUnaryFunctionList<// generics
   GFunctions extends readonly IGenericUnaryFunction[] // list of unary functions
   //
-  > =
+> =
   GFunctions extends [...infer GRest, infer GLast]
     ? (
       GLast extends ((value: infer GLastArgument) => any)

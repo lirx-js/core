@@ -1,4 +1,4 @@
-import { createNetworkErrorFromResponse } from '../../../../../../../../misc/errors/network-error/create-network-error';
+import { createNetworkErrorFromResponse } from '@lirx/utils';
 import { IObservable } from '../../../../../../../type/observable.type';
 import { throwError } from '../../../../others/throw-error/throw-error';
 import { fromPromiseFactory } from '../../../../promise/from-promise-factory/from-promise-factory';

@@ -1,3 +1,3 @@
-export { distinctObserver as $$distinct } from './distinct-observer'
+export { distinctObserver as $$distinct } from './distinct-observer';
 
 

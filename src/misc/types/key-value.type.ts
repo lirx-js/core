@@ -1,5 +1,8 @@
 /** KEY VALUE TUPLE **/
 
+/**
+ * @deprecated
+ */
 export type IKeyValueTuple<GKey, GValue> = [key: GKey, value: GValue];
 
 export type IGenericKeyValueTuple = IKeyValueTuple<any, any>;

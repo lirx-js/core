@@ -1,5 +1,5 @@
+import { isObject } from '@lirx/utils';
 import { INotification } from './notification.type';
-import { isObject } from '../helpers/is-type/is-object';
 
 export function isNotification<GName extends string, GValue>(
   value: any,

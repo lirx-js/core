@@ -6,7 +6,7 @@ import { IObserver } from '../../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../../../../without-notifications/dom/from-event-target/from-event-target';
 import {
-  IFromPromiseFactoryObservableNotifications
+  IFromPromiseFactoryObservableNotifications,
 } from '../../../promise/from-promise-factory/from-promise-factory-observable-notifications.type';
 
 export type IFromImageSourceObservableNotifications = IFromPromiseFactoryObservableNotifications<HTMLImageElement>;

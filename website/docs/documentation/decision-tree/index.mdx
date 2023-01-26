@@ -105,16 +105,11 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - an http request
   - using fetch: **[fromFetch](/docs/reference/from-fetch/)**
-
-[//]: # (    - [fromFetchJSON]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/json/from-fetch-json.ts&#41;)
-
-[//]: # (    - [fromFetchText]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/text/from-fetch-text.ts&#41;)
-
-[//]: # (    - [fromFetchBlob]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/blob/from-fetch-blob.ts&#41;)
-
-[//]: # (    - [fromFetchArrayBuffer]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/array-buffer/from-fetch-array-buffer.ts&#41;)
-
-[//]: # (    - [fromFetchStream]&#40;src/observable/built-in/from/with-notifications/http/from-fetch/derived/stream/from-fetch-stream.ts&#41;)
+  - [fromFetchJSON](/docs/reference/from-fetch-json/)
+  - [fromFetchText](/docs/reference/from-fetch-text/)
+  - [fromFetchArrayBuffer](/docs/reference/from-fetch-array-buffer/)
+  - [fromFetchBlob](/docs/reference/from-fetch-blob/)
+  - [fromFetchStream](/docs/reference/from-fetch-stream/)
 
 [//]: # (  - using xhr: [fromXHR]&#40;src/observable/built-in/from/with-notifications/http/xhr/from-xhr/from-xhr.md&#41;)
 
@@ -203,10 +198,16 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - awaits to receive a `complete` or `error` Notification, and performs some kind of `mergeMap`:
   - **[thenObservablePipe](/docs/reference/then-observable-pipe/)**
-    - [fulfilledObservablePipe](/docs/reference/fulfilled-observable-pipe/)
-    - [rejectedObservablePipe](/docs/reference/rejected-observable-pipe/)
-    - [finallyObservablePipe](/docs/reference/finally-observable-pipe/)
-    - [thenAnyObservablePipe](/docs/reference/then-any-observable-pipe/)
+  - [fulfilledObservablePipe](/docs/reference/fulfilled-observable-pipe/)
+  - [rejectedObservablePipe](/docs/reference/rejected-observable-pipe/)
+  - [finallyObservablePipe](/docs/reference/finally-observable-pipe/)
+  - [thenAnyObservablePipe](/docs/reference/then-any-observable-pipe/)
+
+- converts an Observable of Notification to an Observable:
+  - accumulates `next` values in an array and send then when a `complete` is received:
+  [notificationsToValuesObservablePipe](/docs/reference/notifications-to-values-observable-pipe/)
+  - stores the last `next` value and send it when a `complete` is received:
+  [notificationsToLastValueObservablePipe](/docs/reference/notifications-to-last-value-observable-pipe/)
 
 #### emit a value myself => create a Source which emits values to
 

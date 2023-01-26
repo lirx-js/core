@@ -48,3 +48,44 @@ Output:
 30
 ```
 
+### Shortcuts
+
+#### toStringObservablePipe
+
+```ts
+toStringObservablePipe<GValue>(): IObservablePipe<GValue, string>;
+```
+
+Alternative: `toString$$$`
+
+Inlined: `toStringObservable`, `toString$$`
+
+Equivalent of `mapObservablePipe(String)`
+
+#### toNumberObservablePipe
+
+```ts
+toNumberObservablePipe<GValue>(): IObservablePipe<GValue, number>;
+```
+
+Alternative: `toNumber$$$`
+
+Inlined: `toNumberObservable`, `toNumber$$`
+
+Equivalent of `mapObservablePipe(Number)`
+
+
+
+#### toBooleanObservablePipe
+
+```ts
+toBooleanObservablePipe<GValue>(): IObservablePipe<GValue, boolean>;
+```
+
+Alternative: `toBoolean$$$`
+
+Inlined: `toBooleanObservable`, `toBoolean$$`
+
+Equivalent of `mapObservablePipe(Boolean)`
+
+

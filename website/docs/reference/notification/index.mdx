@@ -27,7 +27,7 @@ Moreover, you may use some pre-existing *Notifications*:
 - [ICompleteNotification](/docs/reference/complete-notification/)
 - [IErrorNotification](/docs/reference/error-notification/)
 
-### Example
+### Examples
 
 #### Create an Observable from a Promise
 
@@ -94,15 +94,7 @@ next: 5
 resolved
 ```
 
-[//]: # (TODO doc)
-
-You may also use the function `notificationObserver` if you prefer:
-
-```ts
-function notificationObserver<GNotificationsUnion extends IGenericNotification>(
-  map: TInferNotificationsObserverMapFromNotificationsUnion<GNotificationsUnion>,
-): IObserver<GNotificationsUnion>
-```
+You may also use the function [notificationObserver](/docs/reference/notification-observer/) if you prefer:
 
 ```ts
 subscribe(

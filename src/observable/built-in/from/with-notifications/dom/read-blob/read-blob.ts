@@ -1,5 +1,4 @@
-import { createEventListener, IRemoveEventListener } from '../../../../../../misc/event-listener/functions/create-event-listener';
-import { toTypedEventTarget } from '../../../../../../misc/event-listener/functions/to-typed-event-target';
+import { createEventListener, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';

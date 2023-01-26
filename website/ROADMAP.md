@@ -2,7 +2,7 @@
 
 ## 1.2.0
 
-- [ ] stackblitz
+- [x] stackblitz
 - [x] search
 - [x] reference page: `Inline` for each ObservablePepe
 - [x] import locally all mermaid svg(s) + optimize

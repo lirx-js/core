@@ -12,14 +12,17 @@ import { IObservable } from '../../../../../../type/observable.type';
 // }
 
 /**
+ * Creates an Observable emitting a KeyboardEvent when a 'keydown' appends with a specific key.
+ *
  * @experimental
  */
 export function filterKeyObservable(
   onKeyDown$: IObservable<KeyboardEvent>,
+  key: string,
 ): IObservable<KeyboardEvent> {
   return filterObservable(
     onKeyDown$,
     (event: KeyboardEvent): boolean => {
-      return (event.key === 'Escape');
+      return (event.key === key);
     });
 }

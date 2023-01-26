@@ -1,0 +1,40 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION, FETCH]
+---
+
+# fromFetchBlob
+
+### Types
+
+```ts
+function fromFetchBlob(
+  requestInfo: RequestInfo,
+  requestInit?: RequestInit,
+): IObservable<IFromFetchBlobObservableNotifications>
+```
+
+```ts
+type IFromFetchBlobObservableNotifications = IDefaultNotificationsUnion<Blob>;
+```
+
+### Definition
+
+Creates an Observable performing an HTTP request using the `fetch` api, then, converts the response to a **Blob**.
+
+---
+
+## responseToBlobObservablePipe
+
+Alternative: `responseToBlob$$$`
+
+Inlined: `responseToBlobObservable`, `responseToBlob$$`
+
+### Types
+
+```ts
+function responseToBlobObservablePipe(): IObservablePipe<IThenObservableInNotifications<Response>, IFromFetchBlobObservableNotifications>
+```
+
+### Definition
+
+Converts the Response sent by an Observable of Notifications into a Blob.

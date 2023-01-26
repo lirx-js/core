@@ -1,4 +1,4 @@
-import { noop } from '../../../../../../../../misc/helpers/noop';
+import { noop } from '@lirx/utils';
 import { futureUnsubscribe } from '../../../../../../../../misc/helpers/subscription/future-unsubscribe';
 import { defaultNotificationObserver } from '../../../../../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../../../../../misc/notifications/default-notifications-union.type';

@@ -25,7 +25,7 @@ Creates a `@lirx/core`'s Observable from a `rxjs` one.
 ```ts
 import { of } from 'rxjs';
 
-const rxjs_observable = of(0, 1,2, 3);
+const rxjs_observable = of(0, 1, 2, 3);
 const lirx_observable = fromRxJS(rxjs_observable);
 
 lirx_observable((notification) => {

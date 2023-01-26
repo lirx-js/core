@@ -1,4 +1,4 @@
-import { toTypedEventTarget } from '../../../../../../misc/event-listener/functions/to-typed-event-target';
+import { toTypedEventTarget } from '@lirx/utils';
 import { mapObservable } from '../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IObservable } from '../../../../../type/observable.type';
 import { fromEventTarget } from '../from-event-target/from-event-target';

@@ -1,12 +1,12 @@
+import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 import { IComposeConstraint } from './types/compose-constraint.type';
 import { IInferComposeReturn } from './types/infer-compose-return.type';
-import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 
 export function compose<// generics
   GFunctions extends IComposeConstraint<GFunctions, any, GUnaryFunction>,
   GUnaryFunction extends IGenericUnaryFunction
   //
-  >(
+>(
   fns: GFunctions,
 ): IInferComposeReturn<GFunctions, GUnaryFunction> {
   return ((firstArg: unknown): unknown => {

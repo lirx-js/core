@@ -1,12 +1,11 @@
 import { ISameLength } from '../../shared-types/shared.type';
 import { IUnaryFunction } from '../../shared-types/unary-function.type';
 
-
 export type IPipeNowConstraint<// generics
   GIn, // type of the first expected argument
   GFunctions, // list of unary functions
   //
-  > =
+> =
   [GFunctions] extends [[]] // first check if GFunctions is empty
     ? []
     : ( // if not empty
@@ -17,7 +16,7 @@ export type IPipeNowConstraint<// generics
             : [IUnaryFunction<GIn, any>, ...ISameLength<GRestFunctions>]
           )
         : readonly IUnaryFunction<GIn, GIn>[]
-        // : IPipeNowConstraintForArray<GIn, GFunctions>
+      // : IPipeNowConstraintForArray<GIn, GFunctions>
       );
 
 // type IPipeNowConstraintForArray<// generics

@@ -1,6 +1,4 @@
-import {
-  wrapFunctionWithOptionalAbortSignalAndThrow,
-} from '../../../../../../../misc/abortable/for-function/wrap-function-with-abort-signal';
+import { createAbortableFunction, IPromise } from '@lirx/promise';
 import { IOpenWebSocketStreamOptions, openWebSocketStream } from '../../open-web-socket-stream';
 import { convertWebSocketStreamToWebSocketByteStream } from './functions/convert-web-socket-stream-to-web-socket-byte-stream';
 import { createArrayBufferWebSocket } from './functions/create-array-buffer-web-socket';
@@ -17,7 +15,7 @@ export function openWebSocketByteStream(
     protocols,
     signal,
   }: IOpenWebSocketByteStreamOptions,
-): Promise<IWebSocketByteStream> {
+): IPromise<IWebSocketByteStream> {
   return openWebSocketStream(
     createArrayBufferWebSocket(
       url,
@@ -28,7 +26,7 @@ export function openWebSocketByteStream(
     },
   )
     .then(
-      wrapFunctionWithOptionalAbortSignalAndThrow(convertWebSocketStreamToWebSocketByteStream, signal),
+      createAbortableFunction(convertWebSocketStreamToWebSocketByteStream, { signal }),
     );
 }
 

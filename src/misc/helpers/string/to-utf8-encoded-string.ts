@@ -1,5 +1,5 @@
-import { IUTF8EncodedStringBuffer } from './types/utf8-encoded-string-buffer.type';
 import { stringToUTF8EncodedStringBuffer } from './converters/string-to-utf8-encoded-string-buffer';
+import { IUTF8EncodedStringBuffer } from './types/utf8-encoded-string-buffer.type';
 
 export type IStringOrUTF8EncodedStringBuffer = string | IUTF8EncodedStringBuffer;
 

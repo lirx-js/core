@@ -1,0 +1,40 @@
+---
+tags: [FUNCTION, OBSERVABLE, NOTIFICATION, FETCH]
+---
+
+# fromFetchStream
+
+### Types
+
+```ts
+function fromFetchStream(
+  requestInfo: RequestInfo,
+  requestInit?: RequestInit,
+): IObservable<IFromFetchStreamObservableNotifications>
+```
+
+```ts
+type IFromFetchStreamObservableNotifications = IDefaultNotificationsUnion<Uint8Array>;
+```
+
+### Definition
+
+Creates an Observable performing an HTTP request using the `fetch` api, then, converts the response to a **stream** of `Uint8Array`.
+
+---
+
+## responseToStreamObservablePipe
+
+Alternative: `responseToStream$$$`
+
+Inlined: `responseToStreamObservable`, `responseToStream$$`
+
+### Types
+
+```ts
+function responseToStreamObservablePipe(): IObservablePipe<IThenObservableInNotifications<Response>, IFromFetchStreamObservableNotifications>
+```
+
+### Definition
+
+Converts the Response sent by an Observable of Notifications into a stream of `Uint8Array`.

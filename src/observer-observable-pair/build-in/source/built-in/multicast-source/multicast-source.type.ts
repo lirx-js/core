@@ -1,5 +1,5 @@
-import { ISource } from '../../type/source.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
+import { ISource } from '../../type/source.type';
 
 /**
  * A MulticastSource is used to emit one value to multiple Observers

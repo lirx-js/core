@@ -16,7 +16,7 @@ const githubURL = `https://github.com/${organizationName}/${projectName}/`;
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'LiRX/core',
-  tagline: 'The Reactive Programing framework',
+  tagline: 'The Reactive Programming framework',
   url: 'https://core.lirx.org',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -56,6 +56,10 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        gtag: {
+          trackingID: 'G-GKZ4VJ309Z',
+          anonymizeIP: true,
+        },
       }),
     ],
   ],
@@ -66,7 +70,7 @@ const config = {
       metadata: [
         {
           name: 'keywords',
-          content: 'Reactive Programing, framework',
+          content: 'Reactive Programming, framework',
         },
       ],
       colorMode: {
@@ -77,7 +81,7 @@ const config = {
       announcementBar: {
         id: 'support_us',
         content:
-          '⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/lirx-js/core">GitHub</a>! ⭐️',
+          `⭐️ If you like LiRX/core, give it a star on <a target="_blank" rel="noopener noreferrer" href="${githubURL}">GitHub</a>! ⭐️`,
         backgroundColor: '#fafbfc',
         textColor: '#091E42',
         isCloseable: true,
@@ -151,6 +155,11 @@ const config = {
               {
                 label: 'Example',
                 to: '/docs/documentation/example/',
+              },
+              {
+                type: 'link',
+                href: 'https://stackblitz.com/edit/typescript-5ksaqe?devToolsHeight=33&file=index.ts',
+                label: 'Playground',
               },
             ],
           },

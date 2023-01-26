@@ -1,5 +1,5 @@
-import { IObserver } from '../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../observable/type/observable.type';
+import { IObserver } from '../../../observer/type/observer.type';
 import { futureUnsubscribe } from './future-unsubscribe';
 
 export function subscribeOnce<GValue>(

@@ -1,7 +1,6 @@
-import { createTimeoutError } from '../../../../errors/timeout-error/create-timeout-error';
-import { ITimeoutError, ITimeoutErrorOptions } from '../../../../errors/timeout-error/timeout-error.type';
-import { IErrorNotification } from '../error-notification.type';
+import { createTimeoutError, ITimeoutError, ITimeoutErrorOptions } from '@lirx/utils';
 import { createErrorNotification } from '../create-error-notification';
+import { IErrorNotification } from '../error-notification.type';
 
 export function createTimeoutErrorNotification(
   options?: ITimeoutErrorOptions,

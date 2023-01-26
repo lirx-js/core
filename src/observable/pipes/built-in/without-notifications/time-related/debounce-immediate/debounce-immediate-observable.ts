@@ -1,5 +1,4 @@
-import { IAbortTimer } from '../../../../../../misc/timer/abort-timer.type';
-import { createImmediate } from '../../../../../../misc/timer/create-immediate';
+import { createImmediate, IAbortTimer } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

@@ -1,5 +1,5 @@
-import { IProgress } from './progress.type';
 import { createProgress } from './create-progress';
+import { IProgress } from './progress.type';
 
 export function createProgressSafe(
   loaded?: number,

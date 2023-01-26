@@ -1,7 +1,9 @@
+import { IKeyValueIterable } from '../../../../../../../../misc/helpers/to-key-value-iterable/key-value-iterable';
+import {
+  keyValueIterableLikeToKeyValueIterable,
+} from '../../../../../../../../misc/helpers/to-key-value-iterable/key-value-iterable-like-to-key-value-iterable';
 import { IObservable } from '../../../../../../../type/observable.type';
 import { reactiveTemplateString } from './reactive-template-string';
-import { IKeyValueIterable } from '../../../../../../../../misc/helpers/to-key-value-iterable/key-value-iterable';
-import { keyValueIterableLikeToKeyValueIterable } from '../../../../../../../../misc/helpers/to-key-value-iterable/key-value-iterable-like-to-key-value-iterable';
 
 const VARIABLE_PATTERN: string = '{{(.*?)}}';
 const TRANSLATE_VARIABLE_REGEXP: RegExp = new RegExp(VARIABLE_PATTERN, 'g');

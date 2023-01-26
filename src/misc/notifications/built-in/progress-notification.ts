@@ -1,7 +1,7 @@
+import { createProgress } from '../../progress/create-progress';
+import { IProgress } from '../../progress/progress.type';
 import { createNotification } from '../create-notification';
 import { INotification } from '../notification.type';
-import { IProgress } from '../../progress/progress.type';
-import { createProgress } from '../../progress/create-progress';
 
 export type IProgressNotification = INotification<'progress', IProgress>;
 

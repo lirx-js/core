@@ -1,8 +1,11 @@
-import { isAbortError } from '../../../../../../../misc/errors/abort-error/is-abort-error';
-import { createNetworkErrorFromRequest } from '../../../../../../../misc/errors/network-error/create-network-error';
-import { createEventListener, IRemoveEventListener } from '../../../../../../../misc/event-listener/functions/create-event-listener';
-import { toTypedEventTarget } from '../../../../../../../misc/event-listener/functions/to-typed-event-target';
-import { noop } from '../../../../../../../misc/helpers/noop';
+import {
+  createEventListener,
+  createNetworkErrorFromRequest,
+  IRemoveEventListener,
+  isAbortError,
+  noop,
+  toTypedEventTarget,
+} from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import {
   createDownloadProgressNotification,

@@ -6,7 +6,7 @@ import { IGenericUnaryFunction, IUnaryFunction } from './unary-function.type';
 export type IInferLastReturnedValueOfUnaryFunctionList<// generics
   GFunctions extends readonly IGenericUnaryFunction[],
   //
-  > =
+> =
   GFunctions extends [...infer GRestFunctions, infer GLastFunction]
     ? (
       GLastFunction extends IUnaryFunction<any, infer GOut>
@@ -19,7 +19,7 @@ export type IInferLastReturnedValueOfUnaryFunctionListOrValue<// generics
   GFunctions extends readonly IGenericUnaryFunction[],
   GValue,
   //
-  > =
+> =
   GFunctions extends []
     ? GValue
     : IInferLastReturnedValueOfUnaryFunctionList<GFunctions>;

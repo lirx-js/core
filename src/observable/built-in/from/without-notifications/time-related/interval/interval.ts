@@ -1,4 +1,4 @@
-import { createInterval } from '../../../../../../misc/timer/create-interval';
+import { createInterval } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 

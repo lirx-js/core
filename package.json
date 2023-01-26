@@ -1,6 +1,6 @@
 {
   "name": "@lirx/core",
-  "version": "1.2.0-beta.1",
+  "version": "1.2.0",
   "description": "Blazing fast Observables",
   "repository": {
     "type": "git",
@@ -16,5 +16,9 @@
   "sideEffects": false,
   "author": "Valentin Richard",
   "license": "MIT",
-  "access": "public"
+  "access": "public",
+  "dependencies": {
+    "@lirx/utils": "^1.0.0",
+    "@lirx/promise": "^1.0.0"
+  }
 }
