@@ -116,7 +116,7 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
           return Reflect.apply(get, obj, []);
         };
 
-        console.warn(`getters are not well supported`);
+        console.warn(`Observing a getter is not well supported`);
         const valueGetter$ = mapObservable(idle(), _get);
 
         if (set === void 0) { // pure getter => readonly

@@ -1,21 +1,20 @@
-import { noop } from '@lirx/utils';
-import { futureUnsubscribe } from '../../../../../../../../misc/helpers/subscription/future-unsubscribe';
+import { futureUnsubscribe, noop } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../../../../../misc/notifications/default-notifications-union.type';
 import { IObserver } from '../../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../../type/observable.type';
 import { INotificationsToLastValueObservableOnErrorFunction } from './notifications-to-last-value-observable-on-error-function.type';
 
 export function notificationsToLastValueObservable<GValue>(
   subscribe: IObservable<IDefaultInNotificationsUnion<GValue>>,
   onError: INotificationsToLastValueObservableOnErrorFunction = noop,
 ): IObservable<GValue> {
-  return (emit: IObserver<GValue>): IUnsubscribe => {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     let lastValue: GValue;
 
     return futureUnsubscribe((
-      unsubscribe: IUnsubscribe,
-    ): IUnsubscribe => {
+      unsubscribe: IUnsubscribeOfObservable,
+    ): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GValue>(
           /* next */(value: GValue): void => {

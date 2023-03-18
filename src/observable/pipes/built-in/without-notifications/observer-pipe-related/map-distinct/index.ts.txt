@@ -1,0 +1,5 @@
+export * from './map-distinct-observable.shortcut';
+export * from './map-distinct-observable';
+export * from './map-distinct-observable-pipe.shortcut';
+export * from './map-distinct-observable-pipe';
+

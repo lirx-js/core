@@ -1,11 +1,10 @@
-import { futureUnsubscribe, IRunning } from '../../../../../../misc/helpers/subscription/future-unsubscribe';
-import { mergeUnsubscribeFunctions } from '../../../../../../misc/helpers/subscription/merge-unsubscribe-functions';
+import { futureUnsubscribe, IRunning, mergeUnsubscribeFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { defaultNotificationObserver } from '../../../../../../misc/notifications/default-notification-observer';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IGenericObservable, IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { emptyWithNotifications } from '../../values/empty/empty-with-notifications';
 import {
   IAnyWithNotificationsObservableNotifications,
@@ -24,21 +23,21 @@ export function anyWithNotifications<GObservables extends IGenericAnyWithNotific
   if (length === 0) {
     return emptyWithNotifications();
   } else {
-    return (emit: IObserver<GNotifications>): IUnsubscribe => {
+    return (emit: IObserver<GNotifications>): IUnsubscribeOfObservable => {
       const values: unknown[] = Array.from({ length });
       const errored: boolean[] = Array.from({ length });
       let errorCount: number = 0;
 
       return futureUnsubscribe((
-        unsubscribe: IUnsubscribe,
+        unsubscribe: IUnsubscribeOfObservable,
         running: IRunning,
-      ): IUnsubscribe => {
+      ): IUnsubscribeOfObservable => {
         return mergeUnsubscribeFunctions(
           observables
-            .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+            .map((subscribe: IGenericObservable, index: number): IUnsubscribeOfObservable => {
               return futureUnsubscribe((
-                localUnsubscribe: IUnsubscribe,
-              ): IUnsubscribe => {
+                localUnsubscribe: IUnsubscribeOfObservable,
+              ): IUnsubscribeOfObservable => {
                 return subscribe(
                   defaultNotificationObserver<GValues>(
                     /* next */(value: GValues): void => {

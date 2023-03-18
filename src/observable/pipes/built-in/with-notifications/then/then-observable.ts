@@ -1,8 +1,8 @@
-import { futureUnsubscribe } from '../../../../../misc/helpers/subscription/future-unsubscribe';
+import { futureUnsubscribe } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../../misc/notifications/default-notifications-union.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type';
 import { IThenObservableOnFulfilled } from './then-observable-on-fulfilled.type';
 import { IThenObservableOnRejected } from './then-observable-on-rejected.type';
 
@@ -13,13 +13,13 @@ export function thenObservable<GInNextValue, GOut>(
   onFulfilled: IThenObservableOnFulfilled<GInNextValue, GOut>,
   onRejected: IThenObservableOnRejected<GOut>,
 ): IObservable<GOut> {
-  return (emit: IObserver<GOut>): IUnsubscribe => {
-    let childUnsubscribe: IUnsubscribe;
+  return (emit: IObserver<GOut>): IUnsubscribeOfObservable => {
+    let childUnsubscribe: IUnsubscribeOfObservable;
     let lastValue: GInNextValue;
 
-    const unsubscribe: IUnsubscribe = futureUnsubscribe((
-      unsubscribe: IUnsubscribe,
-    ): IUnsubscribe => {
+    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe((
+      unsubscribe: IUnsubscribeOfObservable,
+    ): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GInNextValue>(
           /* next */(value: GInNextValue): void => {

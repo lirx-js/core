@@ -1,6 +1,6 @@
 import { createIdle, IAbortTimer, IdleDeadline, IdleRequestOptions } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 /**
  * Creates an Observable that emits when idle time is available.
@@ -8,7 +8,7 @@ import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 export function idle(
   options?: IdleRequestOptions,
 ): IObservable<IdleDeadline> {
-  return (emit: IObserver<IdleDeadline>): IUnsubscribe => {
+  return (emit: IObserver<IdleDeadline>): IUnsubscribeOfObservable => {
     let running: boolean = true;
     let abort: IAbortTimer;
     const loop = (): void => {

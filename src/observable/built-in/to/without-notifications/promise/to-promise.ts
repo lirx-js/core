@@ -1,6 +1,13 @@
-import { createAbortError, createEventListener, INullish, IRemoveEventListener, isNullish, toTypedEventTarget } from '@lirx/utils';
-import { futureUnsubscribe } from '../../../../../misc/helpers/subscription/future-unsubscribe';
-import { IObservable, IUnsubscribe } from '../../../../type/observable.type';
+import {
+  createAbortError,
+  createEventListener,
+  futureUnsubscribe,
+  INullish,
+  IRemoveEventListener,
+  isNullish,
+  toTypedEventTarget,
+} from '@lirx/utils';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type';
 
 export interface IObservableToPromiseOptions {
   signal?: AbortSignal;
@@ -32,9 +39,9 @@ export function toPromise<GValue>(
       }
     }
 
-    const unsubscribe: IUnsubscribe = futureUnsubscribe((
-      unsubscribe: IUnsubscribe,
-    ): IUnsubscribe => {
+    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe((
+      unsubscribe: IUnsubscribeOfObservable,
+    ): IUnsubscribeOfObservable => {
       return subscribe((value: GValue): void => {
         if (removeAbortEventListener !== void 0) {
           removeAbortEventListener();

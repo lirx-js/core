@@ -1,6 +1,6 @@
 # Roadmap
 
-## 1.2.0
+## 1.3.0
 
 - [x] stackblitz
 - [x] search
@@ -9,8 +9,5 @@
 - [ ] finish TODO's
 - [ ] split `map$$$` diagrams
 
-### think about integration with frameworks as:
+### think about integration with frameworks like - angular & react
 
-#### angular
-
--

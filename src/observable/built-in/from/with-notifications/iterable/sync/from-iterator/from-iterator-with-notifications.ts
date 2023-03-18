@@ -3,7 +3,7 @@ import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifica
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import { IFromIteratorObservableNotifications } from './from-iterator-observable-notifications.type';
 
 /**
@@ -13,7 +13,7 @@ export function fromIteratorWithNotifications<GValue>(
   iterator: Iterator<GValue>,
 ): IObservable<IFromIteratorObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromIteratorObservableNotifications<GValue>;
-  return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
+  return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     try {
       let result: IteratorResult<GValue>;
       while (!(result = iterator.next()).done) {

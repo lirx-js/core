@@ -1,20 +1,20 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 export function bufferObservable<GValue>(
   subscribe: IObservable<GValue>,
   closingObservable: IObservable<any>,
 ): IObservable<GValue[]> {
-  return (emit: IObserver<GValue[]>): IUnsubscribe => {
+  return (emit: IObserver<GValue[]>): IUnsubscribeOfObservable => {
     let currentBuffer: GValue[] = [];
 
-    const unsubscribeOfClosingObservable: IUnsubscribe = closingObservable((): void => {
+    const unsubscribeOfClosingObservable: IUnsubscribeOfObservable = closingObservable((): void => {
       const buffer: GValue[] = currentBuffer;
       currentBuffer = [];
       emit(buffer);
     });
 
-    const unsubscribeOfSourceObservable: IUnsubscribe = subscribe((value: GValue): void => {
+    const unsubscribeOfSourceObservable: IUnsubscribeOfObservable = subscribe((value: GValue): void => {
       currentBuffer.push(value);
     });
 

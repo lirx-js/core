@@ -1,13 +1,13 @@
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { IFromGeolocationPositionObservableNotifications } from './from-geolocation-position-observable-notifications.type';
 
 export function fromGeolocationPosition(
   options?: PositionOptions,
 ): IObservable<IFromGeolocationPositionObservableNotifications> {
-  return (emit: IObserver<IFromGeolocationPositionObservableNotifications>): IUnsubscribe => {
+  return (emit: IObserver<IFromGeolocationPositionObservableNotifications>): IUnsubscribeOfObservable => {
     let running: boolean = true;
 
     const watchId: number = navigator.geolocation.watchPosition(

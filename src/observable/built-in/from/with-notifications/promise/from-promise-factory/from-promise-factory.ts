@@ -4,7 +4,7 @@ import { createErrorNotification } from '../../../../../../misc/notifications/bu
 import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import {
   IFromPromiseFactoryCreatePromiseFunction,
   IFromPromiseFactoryObservableNotifications,
@@ -26,7 +26,7 @@ export function fromPromiseFactory<GValue>(
 
   const signal: AbortSignal | INullish = options?.signal;
 
-  return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
+  return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     if (signal?.aborted) {
       emit(createAbortErrorNotification({ signal }));
       return noop;
@@ -62,10 +62,12 @@ export function fromPromiseFactory<GValue>(
         }
       };
 
-      const abort = (): void => {
+      const abort = (
+        signal: AbortSignal,
+      ): void => {
         if (running) {
           end();
-          emit(createAbortErrorNotification({ signal: signal as AbortSignal }));
+          emit(createAbortErrorNotification({ signal }));
         }
       };
 
@@ -76,17 +78,25 @@ export function fromPromiseFactory<GValue>(
           toTypedEventTarget(signal),
           'abort',
           (): void => {
-            abort();
+            abort(signal);
             abortController.abort();
           },
         );
       }
 
-      createPromise(abortController.signal)
+      const newSignal: AbortSignal = abortController.signal;
+
+      createPromise(newSignal)
         .then(
           (value: GValue): void => {
-            next(value);
-            complete();
+            // INFO not necessary because newSignal is only aborted when we unsubscribe to this Observable,
+            //  meaning that next, complete or abort won't emit values
+            // if (newSignal.aborted) {
+            //   abort(newSignal);
+            // } else {
+              next(value);
+              complete();
+            // }
           },
           error,
         );

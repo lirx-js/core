@@ -1,7 +1,7 @@
 import { IFilterFunctionGeneric } from '../../../../../../observer/pipes/built-in/filter/generic/filter-function-generic.type';
 import { IFilterFunctionStrict } from '../../../../../../observer/pipes/built-in/filter/strict/filter-function-strict.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 export function filterObservable<GValue>(
   subscribe: IObservable<GValue>,
@@ -15,7 +15,7 @@ export function filterObservable<GIn, GOut extends GIn>(
   subscribe: IObservable<GIn>,
   filterFunction: IFilterFunctionStrict<GIn, GOut> | IFilterFunctionGeneric<GIn>,
 ): IObservable<GOut> {
-  return (emit: IObserver<GOut>): IUnsubscribe => {
+  return (emit: IObserver<GOut>): IUnsubscribeOfObservable => {
     return subscribe((value: GIn): void => {
       if (filterFunction(value)) {
         emit(value);

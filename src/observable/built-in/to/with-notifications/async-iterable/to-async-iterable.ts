@@ -1,6 +1,6 @@
 import { createDeferredPromise, IDeferredPromise } from '@lirx/promise';
 import { IDefaultInNotificationsUnion } from '../../../../../misc/notifications/default-notifications-union.type';
-import { IObservable, IUnsubscribe } from '../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type';
 import { IObservableToPromiseNotifications } from '../promise/all/to-promise-all';
 
 export type IObservableToAsyncGeneratorNotifications<GValue> = IDefaultInNotificationsUnion<GValue>;
@@ -11,7 +11,7 @@ export async function* toAsyncIterable<GValue>(
   const notifications: IObservableToPromiseNotifications<GValue>[] = [];
   let notificationPromise: IDeferredPromise<void> = createDeferredPromise<void>();
 
-  const unsubscribe: IUnsubscribe = subscribe((notification: IObservableToPromiseNotifications<GValue>): void => {
+  const unsubscribe: IUnsubscribeOfObservable = subscribe((notification: IObservableToPromiseNotifications<GValue>): void => {
     notifications.push(notification);
     notificationPromise.resolve();
   });

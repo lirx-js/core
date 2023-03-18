@@ -5,7 +5,7 @@ import {
   IMulticastSource,
 } from '../../../../../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import { IDOMObserver, IDOMObserverEntry, IDOMObserverFactory } from './dom-observer.type';
 
 export interface IDOMObserverObservableFactory<GOptions, GEntry extends IDOMObserverEntry> {
@@ -25,7 +25,7 @@ export function createDOMObserverObservableFactory<GOptions, GEntry extends IDOM
     element: Element,
     options?: GOptions,
   ): IObservable<GEntry> => {
-    return (emit: IObserver<GEntry>): IUnsubscribe => {
+    return (emit: IObserver<GEntry>): IUnsubscribeOfObservable => {
       let running: boolean = true;
 
       if (observer === void 0) {
@@ -36,7 +36,7 @@ export function createDOMObserverObservableFactory<GOptions, GEntry extends IDOM
         _subscribe = subscribe;
       }
 
-      const unsubscribe: IUnsubscribe = _subscribe((entries: ReadonlyArray<GEntry>): void => {
+      const unsubscribe: IUnsubscribeOfObservable = _subscribe((entries: ReadonlyArray<GEntry>): void => {
         for (let i = 0, l = entries.length; i < l; i++) {
           const entry: GEntry = entries[i];
           if (running && (entry.target === element)) {

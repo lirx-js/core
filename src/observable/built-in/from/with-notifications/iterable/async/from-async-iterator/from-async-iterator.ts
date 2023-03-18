@@ -2,14 +2,14 @@ import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifica
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import { IFromAsyncIteratorObservableNotifications } from './from-async-iterator-observable-notifications.type';
 
 export function fromAsyncIterator<GValue>(
   asyncIterator: AsyncIterator<GValue>,
 ): IObservable<IFromAsyncIteratorObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromAsyncIteratorObservableNotifications<GValue>;
-  return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
+  return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     let running: boolean = true;
 
     (async (): Promise<void> => {

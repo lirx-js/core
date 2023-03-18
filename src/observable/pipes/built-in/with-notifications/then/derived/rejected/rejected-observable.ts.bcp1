@@ -1,0 +1,70 @@
+import { futureUnsubscribe } from '../../../../../../../misc/helpers/subscription/future-unsubscribe';
+import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
+import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
+import { defaultNotificationObserver } from '../../../../../../../misc/notifications/default-notification-observer';
+import { IDefaultInNotificationsUnion } from '../../../../../../../misc/notifications/default-notifications-union.type';
+import { IObserver } from '../../../../../../../observer/type/observer.type';
+import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IThenObservableInNotifications } from '../../then-observable';
+import { IThenObservableOnRejected } from '../../then-observable-on-rejected.type';
+import { IRejectedObservableOutNotifications } from './rejected-observable-out-notifications.type';
+
+export function rejectedObservable<GInNextValue, GOut>(
+  subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  onRejected: IThenObservableOnRejected<GOut>,
+): IObservable<IRejectedObservableOutNotifications<GInNextValue, GOut>> {
+  return (emit: IObserver<IRejectedObservableOutNotifications<GInNextValue, GOut>>): IUnsubscribe => {
+    let childUnsubscribe: IUnsubscribe;
+    let lastValue: GInNextValue;
+
+    const unsubscribe: IUnsubscribe = futureUnsubscribe((
+      unsubscribe: IUnsubscribe,
+    ): IUnsubscribe => {
+      return subscribe(
+        defaultNotificationObserver<GInNextValue>(
+          /* next */(value: GInNextValue): void => {
+            lastValue = value;
+          },
+          /* complete */(): void => {
+            emit(createNextNotification<GInNextValue>(lastValue));
+            emit(STATIC_COMPLETE_NOTIFICATION);
+            unsubscribe();
+          },
+          /* error */(error: unknown): void => {
+            childUnsubscribe = onRejected(error)(emit);
+            unsubscribe();
+          },
+        ),
+      );
+
+      return subscribe((notification: IDefaultInNotificationsUnion<GInNextValue>): void => {
+        switch (notification.name) {
+          case 'next':
+            lastValue = notification.value;
+            break;
+          case 'complete':
+            emit(createNextNotification<GInNextValue>(lastValue));
+            emit(STATIC_COMPLETE_NOTIFICATION);
+            unsubscribe();
+            break;
+          case 'error':
+            childUnsubscribe = onRejected(notification.value)(emit);
+            unsubscribe();
+            break;
+        }
+      });
+    });
+
+    return (): void => {
+      unsubscribe();
+      if (childUnsubscribe !== void 0) {
+        childUnsubscribe();
+      }
+    };
+  };
+  // return thenObservable<GInNextValue, IRejectedObservableOutNotifications<GInNextValue, GOut>>(
+  //   subscribe,
+  //   singleWithNotifications,
+  //   onRejected,
+  // );
+}

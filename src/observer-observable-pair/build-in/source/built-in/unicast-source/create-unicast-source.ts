@@ -1,4 +1,4 @@
-import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { IUnicastSource } from './unicast-source.type';
 
@@ -11,7 +11,7 @@ export function createUnicastSource<GValue>(): IUnicastSource<GValue> {
     }
   };
 
-  const subscribe: IObservable<GValue> = (emit: IObserver<GValue>): IUnsubscribe => {
+  const subscribe: IObservable<GValue> = (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     if (_emitFunction === null) {
       let running: boolean = true;
       _emitFunction = emit;

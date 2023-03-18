@@ -1,7 +1,7 @@
 import { createLockError, noop } from '@lirx/utils';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import {
   IFromAsyncIteratorObservableNotifications,
 } from '../../../iterable/async/from-async-iterator/from-async-iterator-observable-notifications.type';
@@ -12,7 +12,7 @@ export function fromReadableStream<GValue>(
   readableStream: ReadableStream<GValue>,
 ): IObservable<IFromReadableStreamObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromAsyncIteratorObservableNotifications<GValue>;
-  return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
+  return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     if (readableStream.locked) {
       emit(createErrorNotification(createLockError()));
       return noop;

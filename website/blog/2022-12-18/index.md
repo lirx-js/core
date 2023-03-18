@@ -174,7 +174,7 @@ $b(10);
 
 ## Conclusion
 
-This is **just the tip of the iceberg**. As you probably guess, adopting a reactive programming approach gives you very powerful tools,
+This is **just the tip of the iceberg**. As you probably guess, adopting a reactive programming approach gives you very powerful tools
 to design **clear** and **organized** data flows.
 
 A stream can be used as an input to another one. Even multiple streams can be used as inputs to another stream.
