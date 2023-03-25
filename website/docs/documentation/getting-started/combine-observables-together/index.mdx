@@ -28,13 +28,13 @@ onMouseDownOrUp$((event: MouseEvent) => {
 // logs the mouse button when down or up
 ```
 
-However, on real applications, we will not end up using frequently this aggregator.
+Oftentimes, in real applications, we might not be using this aggregator.
 Instead, we'll mostly use the following function.
 
 ### Emit the values in the form of an Array
 
-Usually, when grouping some Observables, we want to get all the last values they sent in the form of an Array,
-everytime a change occurs.
+Usually, when grouping some Observables, we want to get all the latest values that were emitted in the form of an Array,
+anytime a change occurs.
 
 This may be done with the function **[combineLatest](/docs/reference/combine-latest/)**.
 
