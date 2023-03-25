@@ -1,9 +1,9 @@
-# Performances
+# Performance
 
-📈 Zero classes ! **Purely based on functions**.
-This allows extremely **efficient optimizations** from the bundler, the minifier and the js engine, both in size and execution time.
+📈 Zero classes! **Purely based on functions**.
+This allows extremely **efficient optimizations** by the bundler, the minifier and the js engine, both in size and execution time.
 
-🪣 Fully **tree-shakable**: bundle only what's your using and nothing more.
+🪣 Fully **tree-shakable**: bundle only what you are using and nothing more.
 
 💪 **Well optimized**, with efficient garbage collection, fast data flow, and freed resources.
 
