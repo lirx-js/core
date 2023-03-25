@@ -2,7 +2,7 @@
 
 *ObservablePipes* are the most important bricks to build complex data flow with our Observables.
 
-In this tutorial, we'll **learn** to use some the **most essentials** ObservablePipes provided by `@lirx/core`.
+In this tutorial, we'll **learn** how to use some of the **essentials** ObservablePipes provided by `@lirx/core`.
 
 ### Filtering and mapping
 
@@ -22,7 +22,7 @@ subscribe((value: string) => {
 });
 ```
 
-As you may see this is really similar with the `Array.map` and `Array.filter` functions:
+As you may have already noted, this is quite similar to the `Array.map` and `Array.filter` functions:
 
 ```ts
 const data = [0, 1, 2, 3, 4, 5]
@@ -88,7 +88,7 @@ However, it is a little more complex than the previous one. So don't hesitate to
 
 ### Sharing values of an Observable (only subscribing once)
 
-Last common use case: if we want to subscribe many times to an Observable but subscribe only once to the original one, we may use
+As a final example, another common use case: if we want to subscribe many times to an Observable but subscribe only once to the original one, we may use
 [shareRL$$$](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/).
 
 
@@ -113,7 +113,7 @@ subscribe((value: number) => {
 
 Plenty of others *ObservablePipes* may be found on the **[reference page](/docs/tags/observable-pipe/)**.
 
-They are the most powerful tools from this library, however, it requires you to browse carefully the documentation.
+They are some of the most powerful tools in this library. However, it requires you to browse carefully through the documentation.
 Some of these pipes are pretty complex to understand, **do not hesitate to play with them**, and take time to check the examples.
 Finally, everytime you're facing a problem and want to implement your own ObservablePipe,
 or if you're forced to perform some ugly trick, **there is probably an ObservablePipe** already existing and documented.
