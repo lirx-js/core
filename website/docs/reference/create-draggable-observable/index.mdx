@@ -1,0 +1,52 @@
+---
+tags: [FUNCTION, OBSERVABLE]
+---
+
+# createDraggableObservable
+
+### Types
+
+```ts
+function createDraggableObservable(
+  target: Element,
+): IObservable<IDraggableObservableNotifications>
+```
+
+```ts
+type IDraggableObservableNotifications =
+  | INotification<'drag-start', IDraggableObject>
+  | INotification<'drag-move', IDraggableObject>
+  | INotification<'drag-end', IDraggableObject>
+  ;
+
+interface IDraggableObject {
+  readonly origin: IPoint2D;
+  readonly delta: IPoint2D;
+}
+
+interface IPoint2D {
+  readonly x: number;
+  readonly y: number;
+}
+```
+
+### Definition
+
+Creates an Observable that allows us to "drag" an element.
+
+### Example
+
+#### Draggable element
+
+```ts
+const element: HTMLElement = document.querySelector('.draggable');
+
+const subscribe = createDraggableObservable(element);
+
+subscribe((notification: IDraggableObservableNotifications) => {
+  if (notification.name === 'drag-move') {
+    element.style.transform = `translate(${notification.value.delta.x}px, ${notification.value.delta.y}px)`;
+  }
+});
+```
+

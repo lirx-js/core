@@ -11,7 +11,9 @@ export function notificationObserver<GNotificationsUnion extends IGenericNotific
   map: IInferNotificationsObserverMapFromNotificationsUnion<GNotificationsUnion>,
 ): IObserver<GNotificationsUnion> {
   return (notification: GNotificationsUnion): void => {
+    // @ts-ignore
     if (map[notification.name] !== void 0) {
+      // @ts-ignore
       map[notification.name](notification.value);
     }
   };

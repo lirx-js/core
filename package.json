@@ -18,7 +18,6 @@
   "license": "MIT",
   "access": "public",
   "dependencies": {
-    "@lirx/utils": "^1.1.0",
-    "@lirx/promise": "^1.0.0"
+    "@lirx/utils": "^1.1.1"
   }
 }

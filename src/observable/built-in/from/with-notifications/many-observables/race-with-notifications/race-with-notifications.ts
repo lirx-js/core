@@ -24,7 +24,7 @@ export function raceWithNotifications<GObservables extends IGenericRaceWithNotif
     return emptyWithNotifications();
   } else {
     return (emit: IObserver<GNotifications>): IUnsubscribeOfObservable => {
-      const values: unknown[] = Array.from({ length });
+      let lastValue: GValues;
 
       return futureUnsubscribe((
         unsubscribe: IUnsubscribeOfObservable,
@@ -36,10 +36,10 @@ export function raceWithNotifications<GObservables extends IGenericRaceWithNotif
               return subscribe(
                 defaultNotificationObserver<GValues>(
                   /* next */(value: GValues): void => {
-                    values[index] = value;
+                    lastValue = value;
                   },
                   /* complete */(): void => {
-                    emit(createNextNotification<GValues>(values[index] as unknown as GValues));
+                    emit(createNextNotification<GValues>(lastValue));
                     if (running()) {
                       emit(STATIC_COMPLETE_NOTIFICATION);
                     }
