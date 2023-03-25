@@ -2,9 +2,9 @@
 
 This page contains all the available functions provided by `@lirx/core`.
 
-They are grouped in a decision tree to find the best one fulfilling your requirements.
+They are grouped in a decision tree to help you find the right function suitable for your requirements.
 
-In case of doubt, the most frequently used functions are in **bold**.
+Frequently used functions are in **bold**.
 
 ### I want to:
 
@@ -14,7 +14,7 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - nothing and emit no value: [empty](/docs/reference/empty/)
 
-- one value
+- one/single value
   - already defined: **[single](/docs/reference/single/)**
   - defined later: [reference](/docs/reference/reference/)
 
@@ -29,7 +29,7 @@ In case of doubt, the most frequently used functions are in **bold**.
   - an EventTarget: **[fromEventTarget](/docs/reference/from-event-target/)**
   - an IntersectionObserver: [fromIntersectionObserver](/docs/reference/from-intersection-observer/)
   - a ResizeObserver: [fromResizeObserver](/docs/reference/from-resize-observer/)
-  - a css @media query: [fromMatchMedia](/docs/reference/from-match-media/)
+  - a CSS @media query: [fromMatchMedia](/docs/reference/from-match-media/)
 
 - one Observable
   - defined later: [defer](/docs/reference/defer/)
@@ -75,7 +75,7 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - nothing and send a `complete` Notification: **[emptyWithNotifications](/docs/reference/empty-with-notifications/)**
 
-- one value
+- one/single value
   - already defined: **[singleWithNotifications](/docs/reference/single-with-notifications/)**
 
 - a list of values: **[ofWithNotifications](/docs/reference/of-with-notifications/)**
@@ -91,7 +91,7 @@ In case of doubt, the most frequently used functions are in **bold**.
     - async iterator ⚠️: [fromAsyncIterator](/docs/reference/from-async-iterator/)
 
 - something related to the DOM
-  - the position of the user (Geolocation): [fromGeolocationPosition](/docs/reference/from-geolocation-position/)
+  - the user's location (Geolocation): [fromGeolocationPosition](/docs/reference/from-geolocation-position/)
 
 - a promise
   - with a factory: **[fromPromiseFactory](/docs/reference/from-promise-factory/)**
@@ -144,7 +144,7 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - an async iterable: [toAsyncIterable](/docs/reference/to-async-iterable/)
 
-- a `rxjs`'s Observable: [toRxJS](/docs/reference/to-rxjs/)
+- an `RxJS`' Observable: [toRxJS](/docs/reference/to-rxjs/)
 
 
 #### create an ObservablePipe which
@@ -213,10 +213,10 @@ In case of doubt, the most frequently used functions are in **bold**.
 
 - multiple Observers: [createMulticastSource](/docs/reference/create-multicast-source/)
 - only one Observer: [createUnicastSource](/docs/reference/create-unicast-source/)
-- one or many Observer and stores all emitted values:
+- one or many Observers and stores all emitted values:
   [createReplaySource](/docs/reference/create-replay-source/),
   [createMulticastReplaySource](/docs/reference/create-multicast-replay-source/)
-- one or many Observer and stores the last emitted value:
+- one or many Observers and stores the last emitted value:
   [createReplayLastSource](/docs/reference/create-replay-last-source/),
   **[createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/)**,
 
