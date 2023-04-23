@@ -1,6 +1,6 @@
 # Roadmap
 
-## 1.2.0
+## 1.3.0
 
 - [x] stackblitz
 - [x] search
@@ -8,9 +8,7 @@
 - [x] import locally all mermaid svg(s) + optimize
 - [ ] finish TODO's
 - [ ] split `map$$$` diagrams
+- [ ] `signals`
 
-### think about integration with frameworks as:
+### think about integration with frameworks like - angular & react
 
-#### angular
-
--

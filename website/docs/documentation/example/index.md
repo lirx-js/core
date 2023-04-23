@@ -1,18 +1,18 @@
 # Example
 
-It's time to practice 👨‍💻️ !
+It's time to practice 👨‍💻️!
 
 In this part, we will create an Observable based application, displaying the current date and time formatted according to a selected language.
 
 :::note
 
-Let's remember that, dates are formatted differently around the world, so Observables are really great for internationalization (called i18n).
+Date (and Time) representations vary between countries, so Observables are really great for internationalization (often abbreviated to i18n).
 
 :::
 
-We will start by creating a &lt;select&gt; containing **a list of languages**.
-We'll conceive an Observable around it, which will emit the selected language as the user's locale.
-Then we will create another one from the **current date and time**,
+We will start by creating a &lt;select&gt; element containing **a list of languages**.
+We'll conceive an Observable around it, which will emit the selected language per the user's locale.
+We will then create another Observable from the **current date and time**,
 and **format** this date and time according to the selected locale.
 Finally, we'll display the result into an &lt;output&gt;.
 
@@ -22,11 +22,11 @@ I've created a dataflow to make it clearer:
 
 ## Set up the initial code
 
-I'm not going to dwell on this part, as it's just usual javascript.
+I'm not going to dwell on this part, as it's just usual javascript code.
 
 ### Create a select and output element
 
-The piece of code, will simply create a &lt;select&gt; containing a list of languages.
+The following piece of code, will simply create a &lt;select&gt; element containing a list of languages.
 
 ```ts
 const DEFAULT_LANGUAGES = [
@@ -56,7 +56,7 @@ function createLocaleSelectElement(
 }
 ```
 
-Then, we create and inject the &lt;select&gt; and &lt;output&gt; elements into the body.
+Next, we create and inject the &lt;select&gt; and &lt;output&gt; elements into the body.
 
 ```ts
 const selectElement = createLocaleSelectElement();
@@ -68,9 +68,9 @@ document.body.appendChild(outputElement);
 
 ### Format the date from a locale
 
-Dates are formatted differently around the world, so we have to account for the selected locale.
+Date representations vary differently between countries, so we have to account for the selected locale.
 
-Let's code a function accepting a *locale* and a *date*, and returning this formatted date and time as a
+Let's write a function that accepts a *locale* and a *date*, and returns this formatted date and time as a
 string:
 
 ```ts
@@ -86,7 +86,7 @@ function formatDate(
 ```
 
 It uses, the Intl API.
-If you're not familiar with it, you may consult [the documentation on the mdn website](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
+If you're not familiar with it, you may consult [the documentation on the MDN website](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat).
 
 ## Build the pipeline
 
@@ -113,12 +113,12 @@ As we want the &lt;select&gt;'s value, instead of a `change` Event, we have to `
 const locale$ = map$$(selectElementChange$, () => selectElement.value);
 ```
 
-This ObservablePipe, passes the incoming values through a `map` function and emits the result in a new Observable. 
+This ObservablePipe, passes the incoming values through a `map` function and emits the result into a new Observable. 
 In our case, it transforms the Events sent by `selectElementChange$` into the current value of the &lt;select&gt;.
 So we end up with an Observable emitting the locale selected by the user, when the &lt;select&gt; changes.
 
 However, because `selectElementChange$` **only triggers when a *change* occurs**, we have to use [reference](/docs/reference/reference/) and [merge](/docs/reference/merge/)
-in conjunction, to dispatch properly the **current** value of this &lt;select&gt;.
+in conjunction, to dispatch the **current** value of this &lt;select&gt; properly.
 
 Which finally gives us:
 
@@ -134,10 +134,10 @@ At this point, we have an Observable emitting the locale selected by a user.
 
 ---
 
-Let's focus now on the second part of the dataflow: the current date.
-For this, we have to create an Observable emitting **periodically** the current timestamp.
+Let's now focus on the second part of the data-flow i.e. the current date.
+For this, we have to create an Observable that **periodically** emits the current timestamp.
 
-Let's begin by using the function [interval](/docs/reference/interval/) to create an Observable emitting every second:
+Let's begin by using the function [interval](/docs/reference/interval/) to create an Observable emitting a value every second:
 
 ![schema](example-01-2.png)
 
@@ -155,7 +155,7 @@ const date$ = map$$(timer$, () => Date.now());
 ```
 
 It transforms the "ticks" sent by the previous Observable, into the current date expressed as a timestamp.
-So, we have now an Observable emitting the current date every second.
+So, we now have an Observable emitting the current date every second.
 
 ---
 
@@ -164,7 +164,7 @@ The last step is to combine the Observables `locale$` and `currentTimestamp$`, t
 ![schema](example-01-3.png)
 
 
-The easiest way to achieve it, is using the function [function$$](/docs/reference/optimized-reactive-function/).
+The easiest way to achieve this, is using the function [function$$](/docs/reference/optimized-reactive-function/).
 It combines many Observables, and, when any of them emits, it calls a "map" function to convert these values into another one.
 
 ```ts
@@ -178,9 +178,9 @@ If any of `locale$` or `date$` emits, the function `formatDate` is called with t
 and the result is emitted into a new Observable.
 
 So, we have now, an Observable sending every seconds the current date as a string, and this date is formatted according to a selected locale.
-This is exactly what we wanted !
+This is exactly what we wanted!
 
-In consequence, the last step is to subscribe to it, and output the received value into the &lt;output&gt; element:
+To conclude, the last step would be to subscribe to it, and output the received value into the &lt;output&gt; element:
 
 ```ts
 output$((value: string) => {
@@ -190,7 +190,7 @@ output$((value: string) => {
 
 ---
 
-If we regroup everything, it gives:
+Here's the entire snippet:
 
 ```ts
 const locale$ = merge([
@@ -210,15 +210,15 @@ output$((value: string) => {
 });
 ```
 
-This is **far shorted** that if we had to write it without Observables.
+This is **far concise** than what we would have had to write without Observables.
 
-We may notice some important points about Observables:
+Some important points to note about Observables:
 
-- they are easy to chain or combine, giving us the possibility to handle long and complex dataflow with just a few lines of code,
-inducing fewer errors.
+- they are easy to chain or combine, giving us the possibility to handle long and complex dataflow in just a few lines of code,
+thereby decreasing the chances of errors.
 - they are PUSH sources, meaning they are extremely useful when a state or a value depends on others:
-  if some of them change, sub computed values will update too.
+  if some of them change, derived values will update too.
 - subscribing and unsubscribing is especially simple, and guarantees no memory leak (all resources are properly freed).
 
-In front-end application, Observables are particularly useful to manage the state of all our components, update the DOM nodes, and
+In front-end applications, Observables are particularly useful to manage the state of all our components, update the DOM nodes, and
 listen on some events. They work exceptionally well with the DOM.

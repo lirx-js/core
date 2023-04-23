@@ -1,12 +1,12 @@
-import { IObservable, IUnsubscribe } from '../../../observable/type/observable.type';
+import { futureUnsubscribe } from '@lirx/utils';
+import { IObservable, IUnsubscribeOfObservable } from '../../../observable/type/observable.type';
 import { IObserver } from '../../../observer/type/observer.type';
-import { futureUnsubscribe } from './future-unsubscribe';
 
 export function subscribeOnce<GValue>(
   subscribe: IObservable<GValue>,
   emit: IObserver<GValue>,
-): IUnsubscribe {
-  return futureUnsubscribe((unsubscribe: IUnsubscribe): IUnsubscribe => {
+): IUnsubscribeOfObservable {
+  return futureUnsubscribe((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
     return subscribe((value: GValue): void => {
       unsubscribe();
       emit(value);

@@ -1,11 +1,11 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { fromIterator } from '../from-iterator/from-iterator';
 
 export function fromIterable<GValue>(
   iterable: Iterable<GValue>,
 ): IObservable<GValue> {
-  return (emit: IObserver<GValue>): IUnsubscribe => {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     return fromIterator<GValue>(iterable[Symbol.iterator]())(emit);
   };
 }

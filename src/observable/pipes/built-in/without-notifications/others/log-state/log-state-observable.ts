@@ -1,5 +1,5 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 /**
  * @deprecated use debugObservable instead
@@ -8,9 +8,9 @@ export function logStateObservable<GValue>(
   subscribe: IObservable<GValue>,
   name: string,
 ): IObservable<GValue> {
-  return (emit: IObserver<GValue>): IUnsubscribe => {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     console.log(`${name} -> subscribe`);
-    const unsubscribe: IUnsubscribe = subscribe(emit);
+    const unsubscribe: IUnsubscribeOfObservable = subscribe(emit);
     return (): void => {
       console.log(`${name} -> unsubscribe`);
       unsubscribe();

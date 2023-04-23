@@ -1,0 +1,183 @@
+import { createMulticastSource, IObservable, IUnsubscribeOfObservable, IObserver, $log } from '@lirx/core';
+
+export interface ISignal<GValue> {
+  (): GValue;
+}
+
+export interface IWritableSignal<GValue> extends ISignal<GValue> {
+  set(value: GValue): void;
+
+  update(updateFn: (value: GValue) => GValue): void;
+
+  mutate(mutatorFn: (value: GValue) => void): void;
+}
+
+
+let CURRENT_EFFECT: ((subscribe: IObservable<void>) => any) | undefined = void 0;
+
+export function signal<GValue>(
+  initialValue: GValue,
+): IWritableSignal<GValue> {
+  const source = createMulticastSource<void>();
+
+  const signal = (): GValue => {
+    if (CURRENT_EFFECT) {
+      CURRENT_EFFECT(source.subscribe);
+    }
+    return initialValue;
+  };
+
+  signal.set = (
+    value: GValue,
+    force: boolean = false,
+  ): void => {
+    if (CURRENT_EFFECT) {
+      throw new Error(`Values cannot be updated in an effect context`);
+    } else {
+      if (
+        force
+        || (value !== initialValue)
+      ) {
+        initialValue = value;
+        source.emit();
+      }
+    }
+  };
+
+  signal.update = (
+    updateFn: (value: GValue) => GValue,
+  ): void => {
+    signal.set(updateFn(initialValue));
+  };
+
+  signal.mutate = (
+    mutatorFn: (value: GValue) => void,
+  ): void => {
+    mutatorFn(initialValue);
+    signal.set(initialValue, true);
+  };
+
+  return signal;
+}
+
+export interface IEffetFunction {
+  (): void;
+}
+
+export function effect(
+  effectFunction: IEffetFunction,
+): IUnsubscribeOfObservable {
+  const subscriptions = new Map<IObservable<void>, IUnsubscribeOfObservable>();
+
+  const clear = (): void => {
+    const iterator: Iterator<IUnsubscribeOfObservable> = subscriptions.values();
+    let result: IteratorResult<IUnsubscribeOfObservable>;
+    while (!(result = iterator.next()).done) {
+      result.value();
+    }
+    subscriptions.clear();
+  };
+
+  const update = () => {
+    CURRENT_EFFECT = (
+      subscribe: IObservable<void>,
+    ): void => {
+      if (!subscriptions.has(subscribe)) {
+        subscriptions.set(
+          subscribe,
+          subscribe((): void => {
+            clear();
+            update();
+          }),
+        );
+      }
+    };
+
+    effectFunction();
+
+    CURRENT_EFFECT = void 0;
+  };
+
+  update();
+
+  return clear;
+}
+
+export interface IComputedFunction<GValue> {
+  (): GValue;
+}
+
+export function computed<GValue>(
+  computedFunction: IComputedFunction<GValue>,
+): ISignal<GValue> {
+  const source = createMulticastSource<void>();
+  let value: GValue;
+
+  return (): GValue => {
+    if (CURRENT_EFFECT) {
+      CURRENT_EFFECT(source.subscribe);
+
+      CURRENT_EFFECT = (
+        subscribe: IObservable<void>,
+      ): void => {
+        if (!subscriptions.has(subscribe)) {
+          subscriptions.set(
+            subscribe,
+            subscribe((): void => {
+              clear();
+              update();
+            }),
+          );
+        }
+      };
+    }
+
+    const _value: GValue = computedFunction();
+
+    if (_value !== value) {
+      value = _value;
+      source.emit();
+    }
+
+    return value;
+  };
+}
+
+export function signalToObservable<GValue>(
+  signal: ISignal<GValue>,
+): IObservable<GValue> {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
+    return effect((): void => {
+      emit(signal());
+    });
+  };
+}
+
+export function debugSignals(): void {
+  const a = signal(1);
+  const b = signal(2);
+
+  const c = computed(() => a() + b());
+
+  const unsub = effect(() => {
+    // console.log('effect', a() + b());
+    console.log('effect', c());
+  });
+
+  const c$ = signalToObservable(c);
+  c$($log);
+
+  // effect(() => {
+  //   // console.log('effect', a() + b());
+  //   console.log('effect', c());
+  // });
+
+  a.set(3);
+  unsub();
+  b.set(3);
+
+
+
+}
+
+

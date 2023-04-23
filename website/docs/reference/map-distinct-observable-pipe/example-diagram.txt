@@ -1,0 +1,19 @@
+sequenceDiagram
+
+participant observable
+participant mapDistinctObservablePipe as mapDistinctObservablePipe(i => i * 2)
+participant OUT
+
+observable->>mapDistinctObservablePipe: 0
+mapDistinctObservablePipe->>OUT: 0
+
+observable->>mapDistinctObservablePipe: 1
+mapDistinctObservablePipe->>OUT: 2
+
+observable->>mapDistinctObservablePipe: 1
+
+observable->>mapDistinctObservablePipe: 2
+mapDistinctObservablePipe->>OUT: 4
+
+observable->>mapDistinctObservablePipe: 1
+mapDistinctObservablePipe->>OUT: 2

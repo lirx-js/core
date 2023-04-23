@@ -18,7 +18,7 @@ export function isFocusedElementObservable(
 ): IObservable<boolean> {
   return distinctObservable(
     merge([
-      reference(() => document.activeElement === element),
+      reference(() => element.contains(document.activeElement)),
       mapObservable<FocusEvent, boolean>(
         fromEventTarget<'focusin', FocusEvent>(element, 'focusin'),
         () => true,

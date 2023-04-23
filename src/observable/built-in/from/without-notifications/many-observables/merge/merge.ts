@@ -1,6 +1,6 @@
 import { TupleTypes } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IGenericObservable, IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 export type IMergeObservablesValues<GObservables extends readonly IGenericObservable[]> = TupleTypes<{
   [GKey in keyof GObservables]: GObservables[GKey] extends IObservable<infer GValue>
@@ -15,9 +15,9 @@ export function merge<GObservables extends readonly IGenericObservable[]>(
   observables: GObservables,
 ): IObservable<IMergeObservablesValues<GObservables>> {
   type GValue = IMergeObservablesValues<GObservables>;
-  return (emit: IObserver<GValue>): IUnsubscribe => {
-    const unsubscribe: IUnsubscribe[] = observables
-      .map((subscribe: IGenericObservable): IUnsubscribe => {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
+    const unsubscribe: IUnsubscribeOfObservable[] = observables
+      .map((subscribe: IGenericObservable): IUnsubscribeOfObservable => {
         return subscribe(emit);
       });
     return (): void => {

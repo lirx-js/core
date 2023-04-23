@@ -7,7 +7,7 @@ import { createProgressNotification } from '../../../../../../misc/notifications
 import { createProgressFromProgressEvent } from '../../../../../../misc/progress/create-progress-from-progress-event';
 import { IProgress } from '../../../../../../misc/progress/progress.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import {
   IFileReaderReadType,
   IInferFileReaderReturnTypeFromReadType,
@@ -20,7 +20,7 @@ export function readBlob<GReadType extends IFileReaderReadType>(
 ): IObservable<IReadBlobObservableNotifications<GReadType>> {
   type GReturnType = IInferFileReaderReturnTypeFromReadType<GReadType>;
   type GNotificationsUnion = IReadBlobObservableNotifications<GReadType>;
-  return (emit: IObserver<GNotificationsUnion>): IUnsubscribe => {
+  return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     const fileReader: FileReader = new FileReader();
     let running: boolean = true;
 

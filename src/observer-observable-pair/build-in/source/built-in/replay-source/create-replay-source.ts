@@ -1,4 +1,4 @@
-import { IObservable, IUnsubscribe } from '../../../../../observable/type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { ISource } from '../../type/source.type';
 import { IReplaySource } from './replay-source.type';
@@ -17,7 +17,7 @@ export function createReplaySource<GValue, GSource extends ISource<GValue>>(
     source.emit(value);
   };
 
-  const subscribe: IObservable<GValue> = (emit: IObserver<GValue>): IUnsubscribe => {
+  const subscribe: IObservable<GValue> = (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     for (let i = 0; i < values.length; i++) {
       emit(values[i]);
     }

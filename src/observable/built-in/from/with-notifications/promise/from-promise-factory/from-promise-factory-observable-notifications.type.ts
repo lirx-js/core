@@ -1,8 +1,7 @@
 import { IDefaultNotificationsUnion } from '../../../../../../misc/notifications/default-notifications-union.type';
-import { IAbortablePromiseOptions } from '@lirx/promise';
 
-export interface IFromPromiseFactoryObservableOptions extends IAbortablePromiseOptions {
-
+export interface IFromPromiseFactoryObservableOptions {
+  signal?: AbortSignal | null;
 }
 
 export interface IFromPromiseFactoryCreatePromiseFunction<GValue> {

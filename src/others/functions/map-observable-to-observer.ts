@@ -1,5 +1,5 @@
 import { noop } from '@lirx/utils';
-import { IObservable, IUnsubscribe } from '../../observable/type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../observable/type/observable.type';
 import { IMapFunction } from '../../observer/pipes/built-in/map/map-function.type';
 import { IObserver } from '../../observer/type/observer.type';
 
@@ -8,7 +8,7 @@ import { IObserver } from '../../observer/type/observer.type';
  */
 export type IMapObservableToObserverResult<GObserverValue> = [
   emit: IObserver<GObserverValue>,
-  UNSUBSCRIBE: IUnsubscribe,
+  unsubscribe: IUnsubscribeOfObservable,
 ];
 
 /**

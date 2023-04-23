@@ -1,6 +1,6 @@
 import { createInterval } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 /**
  * Creates an Observable that emits no value (void) every specified interval of time.
@@ -8,7 +8,7 @@ import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
 export function interval(
   period: number,
 ): IObservable<void> {
-  return (emit: IObserver<void>): IUnsubscribe => {
+  return (emit: IObserver<void>): IUnsubscribeOfObservable => {
     return createInterval(emit, period);
   };
 }

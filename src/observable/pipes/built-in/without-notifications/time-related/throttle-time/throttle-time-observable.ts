@@ -1,6 +1,6 @@
 import { createTimeout, IAbortTimer } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { IThrottleTimeObservablePipeOptions } from './throttle-time-observable-pipe-options.type';
 
 export function throttleTimeObservable<GValue>(
@@ -11,7 +11,7 @@ export function throttleTimeObservable<GValue>(
     trailing = true,
   }: IThrottleTimeObservablePipeOptions = {},
 ): IObservable<GValue> {
-  return (emit: IObserver<GValue>): IUnsubscribe => {
+  return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
 
     let lastSendValueTime: number = leading
       ? Number.NEGATIVE_INFINITY
@@ -25,7 +25,7 @@ export function throttleTimeObservable<GValue>(
       emit(value);
     };
 
-    const unsubscribe: IUnsubscribe = subscribe((value: GValue): void => {
+    const unsubscribe: IUnsubscribeOfObservable = subscribe((value: GValue): void => {
       const elapsedTime: number = Math.max(0, Date.now() - lastSendValueTime);
       if (elapsedTime >= duration) {
         if (abortTimeout !== null) {

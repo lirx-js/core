@@ -1,9 +1,9 @@
-import { mergeUnsubscribeFunctions } from '../../../../../../../misc/helpers/subscription/merge-unsubscribe-functions';
+import { mergeUnsubscribeFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../../../../without-notifications/dom/from-event-target/from-event-target';
 import {
   IFromPromiseFactoryObservableNotifications,
@@ -14,7 +14,7 @@ export type IFromImageSourceObservableNotifications = IFromPromiseFactoryObserva
 export function fromImageSource(
   src: string,
 ): IObservable<IFromImageSourceObservableNotifications> {
-  return (emit: IObserver<IFromImageSourceObservableNotifications>): IUnsubscribe => {
+  return (emit: IObserver<IFromImageSourceObservableNotifications>): IUnsubscribeOfObservable => {
     let running: boolean = true;
     const image: HTMLImageElement = new Image();
 

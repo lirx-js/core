@@ -10,9 +10,9 @@ We will discuss of these particular use-cases in this tutorial.
 First, we need to understand the differences between a Promise and an Observable:
 
 - A Promise sends only **one** value, where an Observable may emit **many values**.
-- A Promise canot be **cancelled** (or with special tricks like `AbortSignal`).
-But, the Observables are based on a **subscribe/unsubscribe** mechanism, so cancellation is native for them.
-- A Promise is executed **immediately**. However, with the Observables we define first the pipeline, and then, by subscribing **later**, we run this pipeline.
+- A Promise cannot be **cancelled** (or with special tricks like `AbortSignal`).
+But, Observables are based on a **subscribe/unsubscribe** mechanism, so cancellation is native for them.
+- A Promise is executed **immediately**, whereas with Observables, we first define the pipeline, and then, by subscribing **later**, we run this pipeline.
 
 So if we're facing one of these limits, then an Observable is the perfect candidate.
 
@@ -23,13 +23,13 @@ A Promise has an internal state:
   - `fulfilled`: the Promise is resolved without error and has a `value`
   - `rejected`: the Promise is rejected with an `error`
 
-However, an Observable may emit **any kind of value**, so to mimic the behaviour of a Promise we will use some **[Notifications](/docs/documentation/getting-started/what-is-a-notification/)**:
+However, an Observable may emit **any kind of value**. In order to mimic the behaviour of a Promise we will use some **[Notifications](/docs/documentation/getting-started/what-is-a-notification/)**:
 
 - [INextNotification](/docs/reference/next-notification/): used to emit a value
 - [ICompleteNotification](/docs/reference/complete-notification/): used to notify of a `complete` state (success/fulfilled)
 - [IErrorNotification](/docs/reference/error-notification/): used to notify of an `error` state (rejected)
 
-So to represent a `fulfilled` Promise:
+To represent a `fulfilled` Promise:
 
 - we have to emit a `next` Notification
 - followed by a `complete` one
@@ -38,7 +38,7 @@ And to represent a `rejected` Promise:
 
 - we have to emit an `error` Notification
 
-It's a little tricky, so we will see now some examples.
+It's a little trick. We will see now some examples.
 
 ### Observable equivalent of the Promise's methods
 

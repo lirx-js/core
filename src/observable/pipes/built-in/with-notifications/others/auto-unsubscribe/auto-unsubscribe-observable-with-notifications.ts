@@ -1,9 +1,9 @@
-import { futureUnsubscribe, IRunning } from '../../../../../../misc/helpers/subscription/future-unsubscribe';
+import { futureUnsubscribe, IRunning } from '@lirx/utils';
 import { ICompleteNotification } from '../../../../../../misc/notifications/built-in/complete/complete-notification.type';
 import { IErrorNotification } from '../../../../../../misc/notifications/built-in/error/error-notification.type';
 import { IGenericNotification } from '../../../../../../misc/notifications/notification.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 export type IAutoUnsubscribeObservableNotifications =
   | ICompleteNotification
@@ -19,11 +19,11 @@ export type IAutoUnsubscribeObservableNotifications =
 export function autoUnsubscribeObservableWithNotifications<GNotifications extends IAutoUnsubscribeObservableNotifications>(
   subscribe: IObservable<GNotifications>,
 ): IObservable<GNotifications> {
-  return (emit: IObserver<GNotifications>): IUnsubscribe => {
+  return (emit: IObserver<GNotifications>): IUnsubscribeOfObservable => {
     return futureUnsubscribe((
-      unsubscribe: IUnsubscribe,
+      unsubscribe: IUnsubscribeOfObservable,
       running: IRunning,
-    ): IUnsubscribe => {
+    ): IUnsubscribeOfObservable => {
       return subscribe((notification: GNotifications): void => {
         if (running()) {
           if (

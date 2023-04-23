@@ -1,6 +1,6 @@
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IMapObservableTupleToValueTuple } from '../../../../../type/helpers/map-observable-tuple-to-value-tuple.type';
-import { IGenericObservable, IObservable, IUnsubscribe } from '../../../../../type/observable.type';
+import { IGenericObservable, IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { single } from '../../values/single/single';
 
 export type ICombineLatestObservablesValues<GObservables extends readonly IGenericObservable[]> =
@@ -19,12 +19,12 @@ export function combineLatest<GObservables extends readonly IGenericObservable[]
   if (length === 0) {
     return single<GValue>([] as unknown as GValue);
   } else {
-    return (emit: IObserver<GValue>): IUnsubscribe => {
+    return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
       const values: unknown[] = Array.from({ length });
       const received: boolean[] = Array.from({ length });
       let receivedCount: number = 0;
-      const unsubscribe: IUnsubscribe[] = observables
-        .map((subscribe: IGenericObservable, index: number): IUnsubscribe => {
+      const unsubscribe: IUnsubscribeOfObservable[] = observables
+        .map((subscribe: IGenericObservable, index: number): IUnsubscribeOfObservable => {
           return subscribe((value: GValue): void => {
             values[index] = value;
             if (!received[index]) {

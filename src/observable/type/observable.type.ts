@@ -1,12 +1,11 @@
+import { IUnsubscribe } from '@lirx/utils';
 import { IObserver } from '../../observer/type/observer.type';
 
 export interface IObservable<GValue> {
-  (emit: IObserver<GValue>): IUnsubscribe;
+  (emit: IObserver<GValue>): IUnsubscribeOfObservable;
 }
 
-export interface IUnsubscribe {
-  (): void;
-}
+export type IUnsubscribeOfObservable = IUnsubscribe;
 
 /* derived */
 

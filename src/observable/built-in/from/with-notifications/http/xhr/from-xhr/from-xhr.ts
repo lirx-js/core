@@ -25,7 +25,7 @@ import {
 import { createProgressFromProgressEvent } from '../../../../../../../misc/progress/create-progress-from-progress-event';
 import { IProgress } from '../../../../../../../misc/progress/progress.type';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
-import { IObservable, IUnsubscribe } from '../../../../../../type/observable.type';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import {
   areReadableStreamSupported,
   initAndSendXHRFromRequest,
@@ -54,7 +54,7 @@ export function fromXHR(
         : options.useReadableStream
     );
 
-  return (emit: IObserver<IFromXHRObservableNotifications>): IUnsubscribe => {
+  return (emit: IObserver<IFromXHRObservableNotifications>): IUnsubscribeOfObservable => {
     if (request.signal.aborted) {
       emit(createAbortErrorNotification({ signal: request.signal }));
       return noop;
