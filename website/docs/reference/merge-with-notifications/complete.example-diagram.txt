@@ -1,0 +1,17 @@
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant mergeWithNotifications as mergeWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>mergeWithNotifications: next: b1
+mergeWithNotifications->>OUT: next: b1
+A->>mergeWithNotifications: next: a1
+mergeWithNotifications->>OUT: next: a1
+A->>mergeWithNotifications: complete
+B->>mergeWithNotifications: next: b2
+mergeWithNotifications->>OUT: next: b2
+B->>mergeWithNotifications: complete
+mergeWithNotifications->>OUT: complete
+

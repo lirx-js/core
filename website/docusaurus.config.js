@@ -209,7 +209,7 @@ const config = {
               },
               {
                 label: 'Changelog',
-                to: '/docs/changelogs/1.2.0/',
+                to: '/docs/changelogs/1.3.0/',
               },
               {
                 label: 'GitHub',

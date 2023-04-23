@@ -8,6 +8,7 @@
 - [x] import locally all mermaid svg(s) + optimize
 - [ ] finish TODO's
 - [ ] split `map$$$` diagrams
+- [ ] `signals`
 
 ### think about integration with frameworks like - angular & react
 

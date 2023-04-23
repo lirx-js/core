@@ -1,0 +1,411 @@
+import { createMulticastSource, IMulticastSource, IObservable, IObserver, IUnsubscribeOfObservable, merge, reference } from '@lirx/core';
+
+// https://en.wikipedia.org/wiki/Reactive_programming
+
+/** SIGNAL **/
+
+export interface ISignalToObservableOptions {
+  emitCurrentValue?: boolean;
+}
+
+/*--*/
+
+interface IRegisterSignal<GValue> {
+  (
+    signal: RawSignal<GValue>,
+  ): void;
+}
+
+type IRegisterSignalOrUndefined = IRegisterSignal<any> | undefined;
+
+let REGISTER_SIGNAL: IRegisterSignalOrUndefined = void 0;
+let ALLOW_SIGNAL_WRITES: boolean = false;
+
+/*--*/
+
+export interface IEqualFunction<GValue> {
+  (
+    a: GValue,
+    b: GValue,
+  ): boolean;
+}
+
+export interface ISignalOptions<GValue> {
+  equal?: IEqualFunction<GValue>;
+}
+
+export const DEFAULT_SIGNAL_EQUAL_FUNCTION: IEqualFunction<unknown> = (
+  a: unknown,
+  b: unknown,
+): boolean => {
+  const typeA = typeof a;
+  const typeB = typeof a;
+  if (typeA === typeB) {
+    if (typeA === 'object') {
+      return (a === null) && (b === null);
+    } else {
+      return a === b;
+    }
+  } else {
+    return false;
+  }
+};
+
+export class RawSignal<GValue> {
+  #value: GValue;
+  #value$: IObservable<GValue>;
+  #$value: IObserver<GValue>;
+  #equal: IEqualFunction<GValue>;
+
+  constructor(
+    initialValue: GValue,
+    {
+      equal = DEFAULT_SIGNAL_EQUAL_FUNCTION,
+    }: ISignalOptions<GValue> = {},
+  ) {
+    this.#value = initialValue;
+    const source: IMulticastSource<GValue> = createMulticastSource<GValue>();
+    this.#value$ = source.subscribe;
+    this.#$value = source.emit;
+    this.#equal = equal;
+  }
+
+  get(): GValue {
+    if (REGISTER_SIGNAL !== void 0) {
+      REGISTER_SIGNAL(this);
+    }
+    return this.#value;
+  }
+
+  set(
+    value: GValue,
+    force: boolean = false,
+  ): void {
+    if (
+      (REGISTER_SIGNAL === void 0)
+      || ALLOW_SIGNAL_WRITES
+    ) {
+      if (
+        force
+        || this.#equal(value, this.#value)
+      ) {
+        this.#value = value;
+        this.#$value(value);
+      }
+    } else {
+      throw new Error(`Values cannot be updated in an effect context`);
+    }
+  }
+
+  toObservable(
+    {
+      emitCurrentValue = true,
+    }: ISignalToObservableOptions = {},
+  ): IObservable<GValue> {
+    if (emitCurrentValue) {
+      return merge([
+        reference(() => this.#value),
+        this.#value$,
+      ]);
+    } else {
+      return this.#value$;
+    }
+  }
+}
+
+/*--*/
+
+export interface ISignal<GValue> {
+  (): GValue;
+
+  toObservable(
+    options?: ISignalToObservableOptions,
+  ): IObservable<GValue>;
+}
+
+export type IGenericSignal = ISignal<any>;
+
+export interface IWritableSignal<GValue> extends ISignal<GValue> {
+  set(value: GValue): void;
+
+  update(updateFn: (value: GValue) => GValue): void;
+
+  mutate(mutatorFn: (value: GValue) => void): void;
+
+  asReadonly(): ISignal<GValue>;
+}
+
+/*--*/
+
+export function signal<GValue>(
+  initialValue: GValue,
+): IWritableSignal<GValue> {
+  const {
+    subscribe,
+    emit,
+  }: IMulticastSource<GValue> = createMulticastSource<GValue>();
+
+  const get = (): GValue => {
+    if (REGISTER_SIGNAL !== void 0) {
+      REGISTER_SIGNAL(subscribe);
+    }
+    return initialValue;
+  };
+
+  const toObservable = (
+    {
+      emitCurrentValue = true,
+    }: ISignalToObservableOptions = {},
+  ): IObservable<GValue> => {
+    if (emitCurrentValue) {
+      return merge([
+        reference(() => initialValue),
+        subscribe,
+      ]);
+    } else {
+      return subscribe;
+    }
+  };
+
+  const set = (
+    value: GValue,
+    force: boolean = false,
+  ): void => {
+    if (
+      (REGISTER_SIGNAL === void 0)
+      || ALLOW_SIGNAL_WRITES
+    ) {
+      if (
+        force
+        || (value !== initialValue)
+      ) {
+        initialValue = value;
+        emit(value);
+      }
+    } else {
+      throw new Error(`Values cannot be updated in an effect context`);
+    }
+  };
+
+  const update = (
+    updateFn: (value: GValue) => GValue,
+  ): void => {
+    _signal.set(updateFn(initialValue));
+  };
+
+  const mutate = (
+    mutatorFn: (value: GValue) => void,
+  ): void => {
+    mutatorFn(initialValue);
+    _signal.set(initialValue, true);
+  };
+
+  const asReadonly = (): ISignal<GValue> => {
+    const _signal = (): GValue => {
+      return get();
+    };
+
+    _signal.toObservable = toObservable;
+
+    return _signal;
+  };
+
+  const _signal = (): GValue => {
+    return get();
+  };
+
+  _signal.toObservable = toObservable;
+  _signal.set = set;
+  _signal.update = update;
+  _signal.mutate = mutate;
+  _signal.asReadonly = asReadonly;
+
+  return _signal;
+}
+
+/** CONTEXT **/
+
+interface ISignalContextFunction {
+  (): void;
+}
+
+export declare interface IRunSignalContextOptions {
+  allowSignalWrites?: boolean;
+}
+
+function runSignalContext(
+  signalContextFunction: ISignalContextFunction,
+  {
+    allowSignalWrites = false,
+  }: ICreateEffectOptions = {},
+): Set<IGenericSignal> {
+  const signals: Set<IGenericSignal> = new Set<IGenericSignal>();
+
+  const parentRegisterSignal: IRegisterSignalOrUndefined = REGISTER_SIGNAL;
+  const parentAllowSignalWrites: boolean = ALLOW_SIGNAL_WRITES;
+
+  REGISTER_SIGNAL = (
+    signal: IGenericSignal,
+  ): void => {
+    signals.add(signal);
+  };
+
+  ALLOW_SIGNAL_WRITES = allowSignalWrites;
+
+  signalContextFunction();
+
+  REGISTER_SIGNAL = parentRegisterSignal;
+  ALLOW_SIGNAL_WRITES = parentAllowSignalWrites;
+
+  return signals;
+}
+
+/** EFFECT **/
+
+export interface IEffetFunction {
+  (): void;
+}
+
+export type ICreateEffectOptions = IRunSignalContextOptions;
+
+export function effect(
+  effectFunction: IEffetFunction,
+  options?: ICreateEffectOptions,
+): IUnsubscribeOfObservable {
+  let unsubscribeOfSignals: IUnsubscribeOfObservable;
+
+  const update = () => {
+    const signals: Set<IGenericSignal> = runSignalContext(
+      effectFunction,
+      options,
+    );
+
+    const signalsChange$: IObservable<any> = merge(
+      Array.from(signals, (signal: IGenericSignal): IObservable<any> => {
+        return signal.toObservable({ emitCurrentValue: false });
+      }),
+    );
+
+    unsubscribeOfSignals = signalsChange$((): void => {
+      unsubscribeOfSignals();
+      update();
+    });
+  };
+
+  update();
+
+  return (): void => {
+    unsubscribeOfSignals();
+  };
+}
+
+/** COMPUTED **/
+
+export interface IComputedFunction<GValue> {
+  (): GValue;
+}
+
+export function computed<GValue>(
+  computedFunction: IComputedFunction<GValue>,
+): ISignal<GValue> {
+  const _signal: IWritableSignal<GValue> = signal<GValue>(void 0 as GValue);
+
+  const _computed = (): GValue => {
+    return _signal();
+  };
+
+  _computed.toObservable = _signal.toObservable;
+
+  effect((): void => {
+    _signal.set(computedFunction());
+  }, { allowSignalWrites: true });
+
+  return _computed;
+}
+
+/** FROM SIGNAL **/
+
+export type ICreateSignalFromObservableReturn<GValue> = [
+  siganl: ISignal<GValue>,
+  unsubscribe: IUnsubscribeOfObservable,
+];
+
+export function toSignal<GValue>(
+  value$: IObservable<GValue>,
+): ICreateSignalFromObservableReturn<GValue> {
+  const _valueSignal: IWritableSignal<GValue> = signal<GValue>(void 0 as GValue);
+
+  const _signal = (): GValue => {
+    return _valueSignal();
+  };
+
+  _signal.toObservable = _valueSignal.toObservable;
+
+  const unsubscribe = value$(_valueSignal.set);
+
+  return [
+    _signal,
+    unsubscribe,
+  ];
+}
+
+/*--------*/
+
+function debugSignals1(): void {
+  const a = signal(1);
+  const b = signal(2);
+
+  const c = computed(() => a() + b());
+
+  const unsub = effect(() => {
+    // console.log('effect', a() + b());
+    console.log('effect', c());
+  });
+
+  // const c$ = signalToObservable(c);
+  // c$($log);
+
+  // effect(() => {
+  //   // console.log('effect', a() + b());
+  //   console.log('effect', c());
+  // });
+
+  a.set(3);
+  // unsub();
+  b.set(3);
+}
+
+function debugSignals2(): void {
+  const seconds = signal(1);
+  const t = computed(() => seconds() + 1);
+  const g = computed(() => t() > seconds());
+
+  const unsub = effect(() => {
+    console.log('effect', t(), g());
+  });
+
+  seconds.set(3);
+}
+
+function debugSignals3(): void {
+  const seconds = signal(0);
+  const t: any = computed<number>(() => seconds() > 0 ? (t() + 1) : 0);
+
+  const unsub = effect(() => {
+    console.log('effect', t());
+  });
+
+  seconds.set(1);
+}
+
+/*--------*/
+
+// https://en.wikipedia.org/wiki/Reactive_programming
+
+export function debugSignals(): void {
+  // debugSignals1();
+  // debugSignals2();
+  debugSignals3();
+}
+
+

@@ -7,21 +7,30 @@ tags: [FUNCTION, OBSERVABLE]
 ### Types
 
 ```ts
-function createDraggableObservable(
-  target: Element,
-): IObservable<IDraggableObservableNotifications>
+function createDraggableObservable<GElement extends Element>(
+  element: Element,
+): IObservable<IDraggableObservableNotifications<GElement>>
 ```
 
 ```ts
-type IDraggableObservableNotifications =
-  | INotification<'drag-start', IDraggableObject>
-  | INotification<'drag-move', IDraggableObject>
-  | INotification<'drag-end', IDraggableObject>
+type IDraggableObservableNotifications<GElement extends Element> =
+  | IDragStartNotification<GElement>
+  | IDragMoveNotification<GElement>
+  | IDragEndNotification<GElement>
   ;
+
+type IDragStartNotification<GElement extends Element> = INotification<'drag-start', IDraggableElementObject<GElement>>;
+type IDragMoveNotification<GElement extends Element> = INotification<'drag-move', IDraggableElementObject<GElement>>;
+type IDragEndNotification<GElement extends Element> = INotification<'drag-end', IDraggableElementObject<GElement>>;
+
 
 interface IDraggableObject {
   readonly origin: IPoint2D;
   readonly delta: IPoint2D;
+}
+
+interface IDraggableElementObject<GElement extends Element> extends IDraggableObject {
+  readonly element: GElement;
 }
 
 interface IPoint2D {
@@ -41,10 +50,10 @@ Creates an Observable that allows us to "drag" an element.
 ```ts
 const element: HTMLElement = document.querySelector('.draggable');
 
-const subscribe = createDraggableObservable(element);
+const subscribe = createDraggableObservable<HTMLElement>(element);
 
-subscribe((notification: IDraggableObservableNotifications) => {
-  if (notification.name === 'drag-move') {
+subscribe((notification: IDraggableObservableNotifications<HTMLElement>) => {
+  if (isDragMoveNotification(notification)) {
     element.style.transform = `translate(${notification.value.delta.x}px, ${notification.value.delta.y}px)`;
   }
 });

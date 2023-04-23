@@ -1,8 +1,11 @@
 import { createNotification } from '../../../../../../misc/notifications/create-notification';
-import { INotification, TInferNotificationGName } from '../../../../../../misc/notifications/notification.type';
+import { TInferNotificationGName } from '../../../../../../misc/notifications/notification.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { fromEventTarget } from '../../../without-notifications/dom/from-event-target/from-event-target';
+import { IDragEndNotification } from './notifications/drag-end/drag-end-notification.type';
+import { IDragMoveNotification } from './notifications/drag-move/drag-move-notification.type';
+import { IDragStartNotification } from './notifications/drag-start/drag-start-notification.type';
 import { createPoint2D, IPoint2D } from './point-2d';
 
 export interface IDraggableObject {
@@ -10,72 +13,84 @@ export interface IDraggableObject {
   readonly delta: IPoint2D;
 }
 
-export type IDraggableObservableNotifications =
-  | INotification<'drag-start', IDraggableObject>
-  | INotification<'drag-move', IDraggableObject>
-  | INotification<'drag-end', IDraggableObject>
+export interface IDraggableElementObject<GElement extends Element> extends IDraggableObject {
+  readonly element: GElement;
+}
+
+export type IDraggableObservableNotifications<GElement extends Element> =
+  | IDragStartNotification<GElement>
+  | IDragMoveNotification<GElement>
+  | IDragEndNotification<GElement>
   ;
 
 /*---------------*/
 
-
-export function createDraggableObservable(
-  target: Element,
-): IObservable<IDraggableObservableNotifications> {
-  return (emit: IObserver<IDraggableObservableNotifications>): IUnsubscribeOfObservable => {
+export function createDraggableObservable<GElement extends Element>(
+  element: Element,
+): IObservable<IDraggableObservableNotifications<GElement>> {
+  return (emit: IObserver<IDraggableObservableNotifications<GElement>>): IUnsubscribeOfObservable => {
     let origin: IPoint2D;
-    let unsubscribeOfMouseDown: IUnsubscribeOfObservable;
-    let unsubscribeOfMouseMove: IUnsubscribeOfObservable;
-    let unsubscribeOfMouseUp: IUnsubscribeOfObservable;
+    let unsubscribeOfPointerDown: IUnsubscribeOfObservable;
+    let unsubscribeOfPointerMove: IUnsubscribeOfObservable;
+    let unsubscribeOfPointerUp: IUnsubscribeOfObservable;
 
     const dispatch = (
-      name: TInferNotificationGName<IDraggableObservableNotifications>,
-      event: MouseEvent,
+      name: TInferNotificationGName<IDraggableObservableNotifications<GElement>>,
+      event: PointerEvent,
     ): void => {
       emit(createNotification(name, {
+        element,
         origin,
         delta: createPoint2D(
           event.clientX - origin.x,
-          event.clientY - origin.y
-        )
-      }) as IDraggableObservableNotifications);
+          event.clientY - origin.y,
+        ),
+      }) as IDraggableObservableNotifications<GElement>);
     };
 
-    const onMouseDown = (event: MouseEvent) => {
+    const subscribeToPointerDown = (): void => {
+      unsubscribeOfPointerDown = pointerDown$(onPointerDown);
+    };
+
+    const preventDefault = (event: PointerEvent): void => {
       event.stopImmediatePropagation();
       event.preventDefault();
+    };
+
+    const onPointerDown = (event: PointerEvent): void => {
+      unsubscribeOfPointerDown();
+      preventDefault(event);
       origin = createPoint2D(event.clientX, event.clientY);
       dispatch('drag-start', event);
       dispatch('drag-move', event);
-      unsubscribeOfMouseMove = mouseMove$(onMouseMove);
-      unsubscribeOfMouseUp = mouseUp$(onMouseUp);
+      unsubscribeOfPointerMove = pointerMove$(onPointerMove);
+      unsubscribeOfPointerUp = pointerUp$(onPointerUp);
     };
 
-    const onMouseMove = (event: MouseEvent) => {
-      event.stopImmediatePropagation();
-      event.preventDefault();
+    const onPointerMove = (event: PointerEvent): void => {
+      preventDefault(event);
       dispatch('drag-move', event);
     };
 
-    const onMouseUp = (event: MouseEvent) => {
-      event.stopImmediatePropagation();
-      event.preventDefault();
+    const onPointerUp = (event: PointerEvent): void => {
+      preventDefault(event);
       dispatch('drag-move', event);
       dispatch('drag-end', event);
-      unsubscribeOfMouseMove();
-      unsubscribeOfMouseUp();
+      unsubscribeOfPointerMove();
+      unsubscribeOfPointerUp();
+      subscribeToPointerDown();
     };
 
-    const mouseDown$ = fromEventTarget<'mousedown', MouseEvent>(target, 'mousedown');
-    const mouseMove$ = fromEventTarget<'mousemove', MouseEvent>(window, 'mousemove');
-    const mouseUp$ = fromEventTarget<'mouseup', MouseEvent>(window, 'mouseup');
+    const pointerDown$ = fromEventTarget<'pointerdown', PointerEvent>(element, 'pointerdown');
+    const pointerMove$ = fromEventTarget<'pointermove', PointerEvent>(window, 'pointermove');
+    const pointerUp$ = fromEventTarget<'pointerup', PointerEvent>(window, 'pointerup');
 
-    unsubscribeOfMouseDown = mouseDown$(onMouseDown);
+    subscribeToPointerDown();
 
     return (): void => {
-      unsubscribeOfMouseDown();
-      unsubscribeOfMouseMove();
-      unsubscribeOfMouseUp();
+      unsubscribeOfPointerDown();
+      unsubscribeOfPointerMove();
+      unsubscribeOfPointerUp();
     };
   };
 }
