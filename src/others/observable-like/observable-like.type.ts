@@ -1,4 +1,5 @@
-import { IGenericObservable, IObservable } from '../../../../../type/observable.type';
+import { IGenericObservable, IObservable } from '../../observable/type/observable.type';
+import { ISignal } from '../signals/signal/signal.type';
 
 export type INotAnObservable<GValue> = [GValue] extends [IGenericObservable]
   ? { MUST_NOT_BE_AN_OBSERVABLE: never }
@@ -7,4 +8,5 @@ export type INotAnObservable<GValue> = [GValue] extends [IGenericObservable]
 export type IObservableLike<GValue extends INotAnObservable<GValue>> =
   | GValue
   | IObservable<GValue>
+  | ISignal<GValue>
   ;

@@ -1,0 +1,126 @@
+# Introduction
+
+A *Signal* is the **sync** version of an Observable.
+It contains a value that can be read at any time, and, just like Observables, it is capable of notifying interested consumers when that value changes.
+
+A Signal is extremely similar to a [MulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/),
+however, it works with specific functions designed especially for them (these functions do magic stuff to make signals appearing sync).
+
+This usually **greatly simplify the design** of your applications.
+However, this pattern is still in early stage and requires special attention to avoid misuse.
+
+## Example
+
+```ts
+// create a writable signal
+const counter = signal(0);
+
+// create a computed signal
+const isEven = computed(() => counter() % 2 === 0);
+
+// computed properties are signals themselves
+const color = computed(() => (isEven() ? 'red' : 'blue'));
+
+// log the values of our signals, and log them again when either (or all) changes.
+effect(() => {
+  console.log('counter', counter(), 'isEven', isEven(), 'color', color());
+});
+
+// create an observable triggered on a click on the window
+fromEventTarget(window, 'click')(() => {
+  // update signal's value based on the current one
+  counter.update((currentValue) => currentValue + 1);
+});
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-kcgprl?devToolsHeight=33&file=index.ts)
+
+## Advantages
+
+#### Easier to use
+
+As you may notice, using Signals **is usually easier than using Observables**.
+Developers are generally used to *sync* code and development (ECMAScript even introduced *async/await* to mimic sync code).
+In consequence, a part of them (and maybe you, and even me) usually struggle playing with pure *async* pieces of code,
+causing rejection of great frameworks.
+
+It's not a shame, Observables introduce a **very different approach** and manner of thinking,
+that requires a lot of time and efforts to master.
+Something that is not easy to learn or integrate, especially transitioning from pure *sync* code to pure *async* code.
+
+To solve this issue, Signals help to bridge the gap between reactivity and *sync* code.
+You get *sync* access, with *async* notifications to their observers.
+
+#### Glitch free
+
+The Observables are not [glitch-free](https://en.wikipedia.org/wiki/Reactive_programming#Glitches) by nature.
+
+Let's expose this with an example:
+
+```ts
+const [$counter, counter$] = let$$(0);
+
+const isEven$ = map$$(counter$, (value) => value % 2 === 0);
+
+const message$ = map$$(
+  combineLatest([counter$, isEven$]),
+  ([counter, isEven]) => `${counter} is ${isEven ? 'even' : 'odd'}`
+);
+
+message$(console.log);
+$counter(1);
+```
+
+Running this example gives the output which shows the glitch:
+
+```text
+0 is even
+1 is even
+1 is odd
+```
+
+In asynchronous code, glitches are not typically an issue because async operations naturally resolve at different times.
+However, in some case, these inconsistent intermediate results can have unwanted or dangerous consequences for the application
+(like expensive and unnecessary operations, or soft lock).
+This may be fixed using [function$$](/docs/reference/optimized-reactive-function/) but this is another discussion.
+
+Because Signals are *sync*, they must be and are glitch-free in this implementation.
+
+
+## Limits
+
+#### Magic
+
+Signals introduce some "magic" as their related functions have important side effects.
+
+If not well understood, the Signals could be misused, which may lead to code with bugs really hard to inspect and fix.
+
+One common error consists of creating an unwanted "reactive loop": a signal `A` that updates another one, and from a hidden loop and chain of other Signals,
+ends by updating the signal `A` itself. This causes an infinite loop of updates, crashing the application.
+
+Hopefully the framework provides some protections against such cases: it will try to warn you, and throw errors when necessary.
+However, it cannot cover all possibilities, but the more the framework is used and tested,
+the more it will be improved and will cover such complex cases and prevent such errors.
+
+In consequences, it is suggested to read carefully this tutorial to avoid "dangerous" practices or patterns.
+
+#### Slightly less performant
+
+Using Signals adds a little extra layer of complexity that slightly reduces performance against pure Observables.
+So if performances are critical for you, you may consider using Observables only.
+However, in most situations, you won't notice any performances' degradation.
+
+#### Complement not replacement
+
+Finally, Signals are a complement to the Observables, not a replacement.
+
+A Signal is similar to a classic variable, however it includes the possibility to subscribe to its changes. Nothing more.
+
+In consequence:
+
+- to get *async* data, you still want to use some Observables. For exemple, using `fromFetch`, `fromAsyncIterable` or `fromEventTarget`.
+- a Signal cannot be cancelled, because this is not a **pull** source (where the subscriber ask for data), but a **push** source (where an emitter send data).
+
+That means that is you have to play with stream of data, or purely async data, Observables are the proper answer.
+
+

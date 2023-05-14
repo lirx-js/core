@@ -1,4 +1,4 @@
-import { IObservable } from '../../../../../type/observable.type';
+import { IObservable } from '../../observable/type/observable.type';
 
 export function isMaybeObservable<GValue>(
   value: unknown,

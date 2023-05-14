@@ -139,12 +139,16 @@ export interface ISignal<GValue> {
 
 export type IGenericSignal = ISignal<any>;
 
+export type Writable<T> = {
+  - readonly [P in keyof T]: T[P];
+};
+
 export interface IWritableSignal<GValue> extends ISignal<GValue> {
   set(value: GValue): void;
 
   update(updateFn: (value: GValue) => GValue): void;
 
-  mutate(mutatorFn: (value: GValue) => void): void;
+  mutate(mutatorFn: (value: Writable<GValue>) => void): void;
 
   asReadonly(): ISignal<GValue>;
 }
@@ -181,10 +185,10 @@ export function signal<GValue>(
   };
 
   newSignal.mutate = (
-    mutatorFn: (value: GValue) => void,
+    mutatorFn: (value: Writable<GValue>) => void,
   ): void => {
     const value: GValue = _signal.get();
-    mutatorFn(value);
+    mutatorFn(value as Writable<GValue>);
     _signal.set(value, true);
   };
 

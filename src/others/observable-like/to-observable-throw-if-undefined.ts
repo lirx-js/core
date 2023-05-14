@@ -1,4 +1,4 @@
-import { IObservable } from '../../../../../type/observable.type';
+import { IObservable } from '../../observable/type/observable.type';
 import { INotAnObservable, IObservableLike } from './observable-like.type';
 import { toObservable } from './to-observable';
 
