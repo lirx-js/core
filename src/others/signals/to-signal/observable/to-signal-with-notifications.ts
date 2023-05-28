@@ -2,51 +2,28 @@ import { futureUnsubscribe } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../misc/notifications/default-notifications-union.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../observable/type/observable.type';
-import { SuperSignal } from '../../internal/super-signal.class';
+import { SignalClass } from '../../internal/signal.class';
 import { ISignalToObservableOptions } from '../../signal/signal-to-observable-options.type';
 import { SIGNAL } from '../../signal/signal.symbol';
 import { ISignalFromObservable } from './signal-from-observable.type';
-import {
-  IToSignalOptions,
-  IToSignalOptionsWithInitialValue,
-  IToSignalOptionsWithRequireSync,
-  normalizeToSignalOptions,
-} from './to-signal-options.type';
+import { IToSignalOptions } from './to-signal-options.type';
 
-// export function toSignalWithNotifications<GValue>(
-//   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-// ): ISignalFromObservable<GValue | undefined>;
-// export function toSignalWithNotifications<GValue, GInitialValue extends (GValue | null | undefined)>(
-//   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-//   options: IToSignalOptionsWithInitialValue<GInitialValue>,
-// ): ISignalFromObservable<GValue | GInitialValue>;
-// export function toSignalWithNotifications<GValue>(
-//   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-//   options: IToSignalOptionsWithRequireSync,
-// ): ISignalFromObservable<GValue>;
-// export function toSignalWithNotifications<GValue>(
-//   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-//   options: any = {},
-// ): ISignalFromObservable<GValue>
-
+export function toSignalWithNotifications<GValue>(
+  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
+): ISignalFromObservable<GValue>;
 export function toSignalWithNotifications<GValue, GInitialValue extends (GValue | null | undefined)>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptionsWithInitialValue<GInitialValue>,
+  options: IToSignalOptions<GInitialValue>,
 ): ISignalFromObservable<GValue | GInitialValue>;
 export function toSignalWithNotifications<GValue>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options?: IToSignalOptionsWithRequireSync,
-): ISignalFromObservable<GValue>;
-export function toSignalWithNotifications<GValue>(
-  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptions<any>,
+  options?: IToSignalOptions<any>,
 ): ISignalFromObservable<GValue> {
-  const {
-    initialValue,
-    requireSync,
-  } = normalizeToSignalOptions<GValue>(options);
-
-  const _signal = new SuperSignal<GValue>(initialValue as GValue);
+  const _signal = new SignalClass<GValue>(
+    (options === void 0)
+      ? (void 0 as GValue)
+      : options.initialValue,
+  );
 
   let _active: boolean = false;
   let _unsubscribe: IUnsubscribeOfObservable;
@@ -112,7 +89,10 @@ export function toSignalWithNotifications<GValue>(
 
   newSignal.activate();
 
-  if (requireSync && _awaitingValue) {
+  if (
+    (options === void 0)
+    && _awaitingValue
+  ) {
     _unsubscribe!();
     throw new Error(`Provided Observable is not sync`);
   }

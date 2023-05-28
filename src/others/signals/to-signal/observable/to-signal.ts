@@ -1,5 +1,5 @@
 import { IObservable, IUnsubscribeOfObservable } from '../../../../observable/type/observable.type';
-import { SuperSignal } from '../../internal/super-signal.class';
+import { SignalClass } from '../../internal/signal.class';
 import { ISignalToObservableOptions } from '../../signal/signal-to-observable-options.type';
 import { SIGNAL } from '../../signal/signal.symbol';
 import { ISignalFromObservable } from './signal-from-observable.type';
@@ -34,7 +34,7 @@ export function toSignal<GValue>(
   value$: IObservable<GValue>,
   options?: IToSignalOptions<any>,
 ): ISignalFromObservable<GValue> {
-  const _signal = new SuperSignal<GValue>(
+  const _signal = new SignalClass<GValue>(
     (options === void 0)
       ? (void 0 as GValue)
       : options.initialValue,

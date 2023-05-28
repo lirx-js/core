@@ -11,7 +11,9 @@ Inlined: `distinctObservable`, `distinct$$`
 ### Types
 
 ```ts
-function distinctObservablePipe<GValue>(): IObservablePipe<GValue, GValue>
+function distinctObservablePipe<GValue>(
+   previousValue?: GValue,
+): IObservablePipe<GValue, GValue>
 ```
 
 ### Definition

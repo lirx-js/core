@@ -31,17 +31,12 @@ Conversely, it is possible to convert an Observable to a Signal by using the `to
 ```ts
 function toSignal<GValue>(
   value$: IObservable<GValue>,
-): ISignalFromObservable<GValue | undefined>
+): ISignalFromObservable<GValue>;
 
 function toSignal<GValue, GInitialValue extends (GValue | null | undefined)>(
   value$: IObservable<GValue>,
-  options: IToSignalOptionsWithInitialValue<GInitialValue>,
+  options: IToSignalOptions<GInitialValue>,
 ): ISignalFromObservable<GValue | GInitialValue>;
-
-function toSignal<GValue>(
-  value$: IObservable<GValue>,
-  options: IToSignalOptionsWithRequireSync,
-): ISignalFromObservable<GValue>;
 ```
 
 ```ts
@@ -52,23 +47,11 @@ interface ISignalFromObservable<GValue> extends ISignal<GValue> {
     active?: boolean, // default: true
   ): this;
 }
-```
 
-<details>
-  <summary>IToSignalOptions</summary>
-
-```ts
-interface IToSignalOptionsWithInitialValue<GInitialValue> {
+interface IToSignalOptions<GInitialValue> {
   initialValue: GInitialValue;
-  requireSync?: false;
-}
-
-interface IToSignalOptionsWithRequireSync {
-  requireSync: true;
 }
 ```
-</details>
-
 
 The `toSignal` function internally subscribes to the given Observable and updates the returned Signal any time the Observable emits a value.
 
@@ -96,76 +79,70 @@ You must call `activate(false)` when you want to dispose of the Signal, to free 
 Observables can be used to model both synchronous and asynchronous data flow.
 However, they don't distinguish these two cases in their API - any Observable *might* be synchronous, or it *might* be asynchronous.
 Signals, on the other hand, are always synchronous.
-The signature of the toSignal function supports both synchronous and asynchronous Observables.
+The signature of the `toSignal` function supports both synchronous and asynchronous Observables.
+
+#### Synchronous emit
+
+Some Observables are known to emit synchronously, which is the desired behaviour for a Signal.
+
+In those cases, you may omit to provide the second arguments `options`.
+
+```ts
+// this emits synchronously:
+const count$ = single(50);
+
+const count: Signal<number> = toSignal(count$);
+```
+
+However, if `count$` is ever made asynchronous (such as by adding a debounce operation, for example), `toSignal` will throw an error.
+
 
 #### Initial Values
 
-Before the Observable emits, the signal returned by `toSignal` must have an "initial" value.
+If an Observable is known to emit only asynchronously, then, we'll have to define an **initial value**.
+If it is synchronous, this initial value is optional.
 
-If not provided explicitly, this initial value is `undefined`.
-
-```ts
-const mousePosition: Signal<MouseEvent | undefined> = toSignal(fromEventTarget(window, mousemove));
-console.log(mousePosition()); // "undefined" before the data is available
-```
-
-
-There are many cases where `undefined` is not the best choice of initial value.
-For these cases, `toSignal` allows the initial value to be configured directly:
+The initial value may have the same type as the Observable:
 
 ```ts
-// The first value will not be emitted until 1 second later
+// the first value will not be emitted until 1 second later
 const secounds$ = scan$$(interval(1000), _ => _ + 1, 0);
-// Provide an initial value of zero.
+// provide an initial value of zero
 const seconds = toSignal(secounds$, { initialValue: 0 });
 effect(() => {
   console.log(seconds());
 });
 ```
 
-#### Requiring synchronous emit
-
-Some Observables are known to emit synchronously.
-In those cases, you can have `toSignal` verify that the Observable produces a value immediately, and forgo providing or dealing with an initial value.
+**OR** may be `undefined` or `null`:
 
 ```ts
-// singlw emit synchronously:
-const count$ = single(50);
-
-const count: Signal<number> = toSignal(count$, { requireSync: true });
+const mousePosition: Signal<MouseEvent | undefined> = toSignal(fromEventTarget(window, mousemove), { initialValue: undefined });
+console.log(mousePosition()); // "undefined" before the data is available
 ```
 
-This is a trade-off: requiring a synchronous emit avoids any need for handling of `undefined` values (or manually configuring initial values)
-However, if `count$` is ever made asynchronous (such as by adding a debounce operation, for example), `toSignal` will throw an error.
 
 ## toSignalWithNotifications(...)
 
-`toSignal` works with Observables sending values. If you have Observables sending Notifications, you should use `toSignalWithNotifications`:
+`toSignal` works with Observables sending simple values.
+If you have Observables sending Notifications, you should use `toSignalWithNotifications`:
 
 ```ts
 function toSignalWithNotifications<GValue>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-): ISignalFromObservable<GValue | undefined>;
+): ISignalFromObservable<GValue>;
 
 function toSignalWithNotifications<GValue, GInitialValue extends (GValue | null | undefined)>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptionsWithInitialValue<GInitialValue>,
+  options: IToSignalOptions<GInitialValue>,
 ): ISignalFromObservable<GValue | GInitialValue>;
-
-function toSignalWithNotifications<GValue>(
-  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptionsWithRequireSync,
-): ISignalFromObservable<GValue>;
 ```
 
-A signal is a wrapper around a value, which is capable of notifying interested consumers when that value changes.
 
-A Notifications Observable has three types of Notifications when an Observer subscribes to it: `next`, `error`, and `complete`.
 
-A Signal's value is directly linked to the values coming from the `next` notification of the Observable.
+If a `next` Notification is received, then the Signal will take this Notification's value.
 
-When the Observer created by `toSignalWithNotifications` is notified of an `error`,
-it will throw this error the next time the Signal is read.
+In the case of an `error` Notification, then the Signal will throw this error the next time the Signal is read.
 This error can be handled the same way any other error coming from a Signal would be:
 
 ```ts
@@ -177,19 +154,6 @@ try {
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Finally, if a `complete` or `error` Notification occurs, then the Observable is simply unsubscribed, **but remains active**.
 
 

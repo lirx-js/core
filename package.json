@@ -13,11 +13,17 @@
     "observable",
     "stream"
   ],
+  "scripts": {
+    "reinstall": "rm -rf ./node_modules && rm -f ./yarn.lock && yarn install"
+  },
   "sideEffects": false,
   "author": "Valentin Richard",
   "license": "MIT",
   "access": "public",
   "dependencies": {
     "@lirx/utils": "latest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.1"
   }
 }

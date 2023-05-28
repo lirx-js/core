@@ -1,3 +1,5 @@
+import { ISignalWriteMode } from '../misc/types/signal-write-mode.type';
+
 export interface IEffectOptions {
-  allowSignalWrites?: boolean; // (default: false)
+  signalWriteMode?: ISignalWriteMode; // (default: 'forbid')
 }

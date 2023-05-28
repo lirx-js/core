@@ -7,6 +7,8 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const ROOT_PATH = join(__dirname, '../../../');
 const SRC_PATH = join(ROOT_PATH, 'src');
 
+const FILE_NAME_REGEXP = new RegExp('^(.*(?<!(?:test|spec|index)))\\.ts$')
+
 function generateIndexFiles(
   {
     dry = true,
@@ -30,19 +32,20 @@ function generateIndexFiles(
                       ]
                       : [];
                   });
-              } else if (
-                entryName.endsWith('.ts')
-                && (entryName !== 'index.ts')
-              ) {
-                return [
-                  `export * from './${entryName.slice(0, -3)}';`
-                ];
               } else {
-                return [];
+                FILE_NAME_REGEXP.lastIndex = 0;
+                const match = FILE_NAME_REGEXP.exec(entryName);
+                if (match === null) {
+                  return [];
+                } else {
+                  return [
+                    `export * from './${match[1]}';`
+                  ];
+                }
               }
             }),
           )
-            .then((lines) => lines.flat());
+            .then((lines) => lines.sort().flat());
         };
 
         const writeLines = (lines) => {

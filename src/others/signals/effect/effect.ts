@@ -5,36 +5,36 @@ import {
 import { IObservable, IUnsubscribeOfObservable } from '../../../observable/type/observable.type';
 import { createMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
 import { IMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
-import { runSignalContextAndObserveChanges } from '../internal/run-signal-context';
+import { runSignalWriteModeContext } from '../internal/allow-signal-writes/allow-signal-writes-context';
+import { observeSignalChangesInContext } from '../internal/register-signal/signal-get-called';
 import { IEffectOptions } from './effect-options.type';
 import { IEffetFunction } from './effet-function.type';
 
 export function effect(
   effectFunction: IEffetFunction,
   {
-    allowSignalWrites = false,
+    signalWriteMode = 'forbid',
   }: IEffectOptions = {},
 ): IUnsubscribe {
+  // TODO prevent effect in effect
   let unsubscribeOfSignals: IUnsubscribeOfObservable;
   let cleanUpSource: IMulticastSource<void>;
 
-  const update = (): void => {
-    if (cleanUpSource !== void 0) {
-      cleanUpSource.emit();
-    }
-    cleanUpSource = createMulticastSource<void>();
+  const signalsChange$: IObservable<unknown> = debounceMicrotaskObservable(
+    observeSignalChangesInContext((): void => {
+      if (cleanUpSource !== void 0) {
+        cleanUpSource.emit();
+      }
+      cleanUpSource = createMulticastSource<void>();
 
-    const signalsChange$: IObservable<unknown> = runSignalContextAndObserveChanges(
-      (): void => {
+      runSignalWriteModeContext(signalWriteMode, (): void => {
         effectFunction(cleanUpSource.subscribe);
-      },
-      {
-        allowSignalWrites,
-        throwIfChildSignalContext: true,
-      },
-    );
+      });
+    }),
+  );
 
-    unsubscribeOfSignals = debounceMicrotaskObservable(signalsChange$)((): void => {
+  const update = (): void => {
+    unsubscribeOfSignals = signalsChange$((): void => {
       unsubscribeOfSignals();
       update();
     });

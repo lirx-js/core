@@ -1,1 +1,1 @@
-export * from './writable.type';
+export * from './signal-write-mode.type';

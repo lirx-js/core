@@ -1,6 +1,6 @@
+import { DeepWritable } from '@lirx/utils';
 import { IObservable } from '../../../observable/type/observable.type';
-import { SuperSignal } from '../internal/super-signal.class';
-import { DeepWritable, Writable } from '../misc/types/writable.type';
+import { SignalClass } from '../internal/signal.class';
 import { ISignalOptions } from './signal-options.type';
 import { ISignalToObservableOptions } from './signal-to-observable-options.type';
 import { SIGNAL } from './signal.symbol';
@@ -13,7 +13,7 @@ export function signal<GValue>(
   initialValue: GValue,
   options?: ISignalOptions<GValue>,
 ): IWritableSignal<GValue> {
-  const _signal = new SuperSignal<GValue>(initialValue, options);
+  const _signal = new SignalClass<GValue>(initialValue, options);
 
   const newSignal: IWritableSignal<GValue> = ((): GValue => {
     return _signal.get();

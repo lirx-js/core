@@ -22,8 +22,14 @@ interface IEffetFunction {
 type IOnCleanUpFunction = IObservable<void>;
 
 interface IEffectOptions {
-  allowSignalWrites?: boolean; // (default: false)
+  signalWriteMode?: ISignalWriteMode; // (default: 'forbid')
 }
+
+type ISignalWriteMode =
+  | 'allow'
+  | 'forbid'
+  | 'queue'
+  ;
 ```
 
 Usage example:
@@ -96,10 +102,10 @@ unsubscribeOfEffect();
 
 #### Effects writing to signals
 
-We generally consider that **writing to signals from effects can lead to unexpected behavior** (infinite loops) and hard to follow data flow.
+We generally consider that **writing to signals from effects can lead to unexpected behavior** (mostly infinite loops) and hard to follow data flow.
 As such any attempt of writing to a signal from an effect will be **reported as an error and blocked**.
 
-This default behavior can be overridden by passing the `allowSignalWrites` options to the effect creation function, ex.:
+This default behavior can be overridden by passing the `signalWriteMode` options to the effect creation function, ex.:
 
 
 ```ts
@@ -112,7 +118,7 @@ effect(() => {
   } else {
     isBig.set(false);
   }
-}, { allowSignalWrites: true });
+}, { signalWriteMode: 'allow' });
 ```
 
 Please note that `computed` is often a more declarative, straightforward and predictable solution to synchronizing data:

@@ -1,4 +1,4 @@
-import { DeepWritable } from '../../misc/types/writable.type';
+import { DeepWritable } from '@lirx/utils';
 
 export interface IWritableSignalMutateFunction<GValue> {
   (

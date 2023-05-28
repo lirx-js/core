@@ -3,3 +3,4 @@ export * from './effect/index';
 export * from './misc/index';
 export * from './signal/index';
 export * from './to-signal/index';
+export * from './untracked/index';

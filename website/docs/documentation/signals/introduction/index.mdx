@@ -4,7 +4,7 @@ A *Signal* is the **sync** version of an Observable.
 It contains a value that can be read at any time, and, just like Observables, it is capable of notifying interested consumers when that value changes.
 
 A Signal is extremely similar to a [MulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/),
-however, it works with specific functions designed especially for them (these functions do magic stuff to make signals appearing sync).
+however, it works with specific functions designed especially for them (these functions do *magic stuff* to make signals appearing sync).
 
 This usually **greatly simplify the design** of your applications.
 However, this pattern is still in early stage and requires special attention to avoid misuse.
@@ -41,7 +41,7 @@ fromEventTarget(window, 'click')(() => {
 
 As you may notice, using Signals **is usually easier than using Observables**.
 Developers are generally used to *sync* code and development (ECMAScript even introduced *async/await* to mimic sync code).
-In consequence, a part of them (and maybe you, and even me) usually struggle playing with pure *async* pieces of code,
+In consequence, many of them usually struggle playing with pure *async* pieces of code,
 causing rejection of great frameworks.
 
 It's not a shame, Observables introduce a **very different approach** and manner of thinking,
@@ -82,12 +82,12 @@ Running this example gives the output which shows the glitch:
 In asynchronous code, glitches are not typically an issue because async operations naturally resolve at different times.
 However, in some case, these inconsistent intermediate results can have unwanted or dangerous consequences for the application
 (like expensive and unnecessary operations, or soft lock).
-This may be fixed using [function$$](/docs/reference/optimized-reactive-function/) but this is another discussion.
+This may be fixed in various ways, like using [function$$](/docs/reference/optimized-reactive-function/), but this is another discussion.
 
-Because Signals are *sync*, they must be and are glitch-free in this implementation.
+Because Signals are *sync*, they must be and **are glitch-free** in this implementation.
 
 
-## Limits
+## Could cause troubles
 
 #### Magic
 
@@ -114,12 +114,14 @@ However, in most situations, you won't notice any performances' degradation.
 
 Finally, Signals are a complement to the Observables, not a replacement.
 
-A Signal is similar to a classic variable, however it includes the possibility to subscribe to its changes. Nothing more.
+A Signal is similar to a classic variable with the capacity to subscribe to its changes. Nothing more.
 
 In consequence:
 
-- to get *async* data, you still want to use some Observables. For exemple, using `fromFetch`, `fromAsyncIterable` or `fromEventTarget`.
+- to get *async* data (like mouse events, api fetch, etc.), you still want to use some Observables.
+For exemple, using `fromFetch`, `fromAsyncIterable` or `fromEventTarget`.
 - a Signal cannot be cancelled, because this is not a **pull** source (where the subscriber ask for data), but a **push** source (where an emitter send data).
+So, if the data set into a Signal come from an async source, this source will have to be cancelled by yourself.
 
 That means that is you have to play with stream of data, or purely async data, Observables are the proper answer.
 

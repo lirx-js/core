@@ -5,8 +5,8 @@ import { IObserver } from '../../../type/observer.type';
  */
 export function distinctObserver<GValue>(
   emit: IObserver<GValue>,
+  previousValue?: GValue,
 ): IObserver<GValue> {
-  let previousValue: GValue;
   return (value: GValue): void => {
     if (value !== previousValue) {
       previousValue = value;
