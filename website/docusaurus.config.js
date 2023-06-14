@@ -175,7 +175,7 @@ const config = {
               },
               {
                 label: 'Changelog',
-                to: '/docs/changelogs/1.4.0/',
+                to: '/docs/changelogs/1.5.0/',
               },
               {
                 label: 'GitHub',

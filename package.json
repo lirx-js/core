@@ -1,6 +1,6 @@
 {
   "name": "@lirx/core",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Blazing fast Observables",
   "repository": {
     "type": "git",
