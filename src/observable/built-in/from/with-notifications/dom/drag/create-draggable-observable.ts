@@ -58,27 +58,33 @@ export function createDraggableObservable<GElement extends Element>(
     };
 
     const onPointerDown = (event: PointerEvent): void => {
-      unsubscribeOfPointerDown();
-      preventDefault(event);
-      origin = createPoint2D(event.clientX, event.clientY);
-      dispatch('drag-start', event);
-      dispatch('drag-move', event);
-      unsubscribeOfPointerMove = pointerMove$(onPointerMove);
-      unsubscribeOfPointerUp = pointerUp$(onPointerUp);
+      if (event.button === 0) {
+        unsubscribeOfPointerDown();
+        preventDefault(event);
+        origin = createPoint2D(event.clientX, event.clientY);
+        dispatch('drag-start', event);
+        dispatch('drag-move', event);
+        unsubscribeOfPointerMove = pointerMove$(onPointerMove);
+        unsubscribeOfPointerUp = pointerUp$(onPointerUp);
+      }
     };
 
     const onPointerMove = (event: PointerEvent): void => {
-      preventDefault(event);
-      dispatch('drag-move', event);
+      if (event.button === 0) {
+        preventDefault(event);
+        dispatch('drag-move', event);
+      }
     };
 
     const onPointerUp = (event: PointerEvent): void => {
-      preventDefault(event);
-      dispatch('drag-move', event);
-      dispatch('drag-end', event);
-      unsubscribeOfPointerMove();
-      unsubscribeOfPointerUp();
-      subscribeToPointerDown();
+      if (event.button === 0) {
+        preventDefault(event);
+        dispatch('drag-move', event);
+        dispatch('drag-end', event);
+        unsubscribeOfPointerMove();
+        unsubscribeOfPointerUp();
+        subscribeToPointerDown();
+      }
     };
 
     const pointerDown$ = fromEventTarget<'pointerdown', PointerEvent>(element, 'pointerdown');

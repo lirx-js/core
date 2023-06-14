@@ -1,4 +1,4 @@
-import { IEqualFunction } from '../misc/equal-function/equal-function.type';
+import { IEqualFunction } from '@lirx/utils';
 
 export interface ISignalOptions<GValue> {
   equal?: IEqualFunction<GValue>;

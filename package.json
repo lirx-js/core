@@ -24,6 +24,6 @@
     "@lirx/utils": "latest"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.1"
+    "@types/jest": "^29.5.2"
   }
 }

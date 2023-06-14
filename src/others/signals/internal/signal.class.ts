@@ -1,3 +1,4 @@
+import { EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE, IEqualFunction } from '@lirx/utils';
 import { merge } from '../../../observable/built-in/from/without-notifications/many-observables/merge/merge';
 import { reference } from '../../../observable/built-in/from/without-notifications/values/reference/reference';
 import {
@@ -7,8 +8,6 @@ import { IObservable } from '../../../observable/type/observable.type';
 import { createMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
 import { IMulticastSource } from '../../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
 import { IObserver } from '../../../observer/type/observer.type';
-import { DEFAULT_SIGNAL_EQUAL_FUNCTION } from '../misc/equal-function/default-signal-equal-function.constant';
-import { IEqualFunction } from '../misc/equal-function/equal-function.type';
 import { ISignalOptions } from '../signal/signal-options.type';
 import { ISignalToObservableOptions } from '../signal/signal-to-observable-options.type';
 import { getSignalWriteMode } from './allow-signal-writes/allow-signal-writes-context';
@@ -25,7 +24,7 @@ export class SignalClass<GValue> {
   constructor(
     initialValue: GValue,
     {
-      equal = DEFAULT_SIGNAL_EQUAL_FUNCTION,
+      equal = EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE,
     }: ISignalOptions<GValue> = {},
   ) {
     this.#value = initialValue;

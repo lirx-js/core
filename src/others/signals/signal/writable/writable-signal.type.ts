@@ -14,7 +14,7 @@ export interface IWritableSignal<GValue> extends ISignal<GValue> {
    */
   set(
     value: GValue,
-    force?: boolean, // (default: true)
+    force?: boolean, // (default: false)
   ): void;
 
   /**

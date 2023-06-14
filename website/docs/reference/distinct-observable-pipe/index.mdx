@@ -12,15 +12,28 @@ Inlined: `distinctObservable`, `distinct$$`
 
 ```ts
 function distinctObservablePipe<GValue>(
-   previousValue?: GValue,
+  options?: IDistinctOptions<GValue>,
 ): IObservablePipe<GValue, GValue>
+```
+
+```ts
+interface IDistinctOptions<GValue> {
+  initialValue?: GValue;
+  equal?: (a: GValue, b: GValue) => boolean;
+}
 ```
 
 ### Definition
 
 Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the last previous value.
 
-The RxJS equivalent is [distinctUntilChanged](https://rxjs-dev.firebaseapp.com/api/operators/distinct).
+The RxJS equivalent is [distinctUntilChanged](https://rxjs-dev.firebaseapp.com/api/operators/distinctUntilChanged).
+
+It accepts an optional `options` argument:
+
+- `initialValue`: if provided, the pipe is initialized with this value, and the first emitted value is compared with this one (`initialValue`).
+Else, the first value is always transmitted.
+- `equal`: this function is called to compare the *previous* and *current* value. By default, it is the strict equality comparison `===`.
 
 ### Diagram
 

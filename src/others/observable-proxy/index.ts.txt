@@ -1,2 +1,2 @@
 export * from './derived/index';
-export * from './create-observable-proxy';
+export * from './observable-proxy.class';

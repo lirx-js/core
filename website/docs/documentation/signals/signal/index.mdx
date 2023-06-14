@@ -36,7 +36,7 @@ This Signals library provides a default implementation of the writable signal th
 interface IWritableSignal<GValue> extends ISignal<GValue> {
   set(
     value: GValue,
-    force?: boolean, // (default: true)
+    force?: boolean, // (default: false)
   ): void;
 
   update(

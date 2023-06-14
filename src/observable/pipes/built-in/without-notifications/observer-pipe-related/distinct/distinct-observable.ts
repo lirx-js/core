@@ -1,13 +1,27 @@
+import {
+  EQUAL_FUNCTION_STRICT_EQUAL,
+  getDistinctPreviousValueFromDistinctInitialValueOptions,
+  IDistinctOptions,
+  IUninitializedToken,
+  UNINITIALIZED_TOKEN,
+} from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
 export function distinctObservable<GValue>(
   subscribe: IObservable<GValue>,
-  previousValue?: GValue,
+  {
+    equal = EQUAL_FUNCTION_STRICT_EQUAL,
+    ...options
+  }: IDistinctOptions<GValue> = {},
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
+    let previousValue: GValue | IUninitializedToken = getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
     return subscribe((value: GValue): void => {
-      if (value !== previousValue) {
+      if (
+        (previousValue === UNINITIALIZED_TOKEN)
+        || !equal(value, previousValue)
+      ) {
         previousValue = value;
         emit(value);
       }

@@ -128,6 +128,52 @@ const counter = signal(0);
 const isBig = computed(() => counter() > 5);
 ```
 
+#### Reading without tracking dependencies
 
+Rarely, you may want to execute code which may read signals in a reactive function such as `computed` or `effect` *without creating a dependency*.
 
+For example, suppose that when `currentUser` changes, the value of a `counter` should be logged.
+Creating an effect which reads both signals:
 
+```ts
+effect(() => {
+  console.log(`User set to `${currentUser()}` and the counter is ${counter()}`);
+});
+```
+
+This example logs a message when either `currentUser` or `counter` changes.
+However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
+
+You can prevent a signal read from being tracked by calling its getter with `untracked`:
+
+```ts
+function untracked<GReturn>(
+  callback: () => GReturn
+): GReturn;
+```
+
+```ts
+effect(() => {
+  console.log(`User set to `${currentUser()}` and the counter is ${untracked(counter)}`);
+});
+```
+
+`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
+
+```ts
+effect(() => {
+  const user = currentUser();
+
+  untracked(() => {
+    // if `store` uses some signals, they won't be tracked
+    store.update(user);
+  });
+});
+```
+
+:::tip
+
+It is important to note that `effect` may usually be replaced by `computed` to `.toObservable`, which are generally more adequate.
+`effect` is really powerful, so it *SHOULD* be used with **caution**.
+
+:::

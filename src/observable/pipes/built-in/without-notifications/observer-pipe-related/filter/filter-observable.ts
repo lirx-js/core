@@ -18,7 +18,7 @@ export function filterObservable<GIn, GOut extends GIn>(
   return (emit: IObserver<GOut>): IUnsubscribeOfObservable => {
     return subscribe((value: GIn): void => {
       if (filterFunction(value)) {
-        emit(value);
+        emit(value as GOut);
       }
     });
   };
