@@ -1,0 +1,206 @@
+# Signal
+
+## Fundamentals
+
+A Signal is simply a function returning immediately its value (as opposed to an Observable whose value is async):
+
+```ts
+interface ISignal<GValue> {
+  (): GValue;
+
+  toObservable(
+    options?: ISignalToObservableOptions,
+  ): IObservable<GValue>;
+
+  [SIGNAL]: unknown;
+}
+```
+
+This function is marked with the `SIGNAL` symbol so the framework can recognize signals and apply internal optimizations.
+
+Signals are fundamentally read-only: we can ask for the current value and observe change notification.
+
+This function is used to access the current value *and* record signal read in a reactive context - this is an essential operation that builds the reactive dependencies graph.
+
+Signal reads outside of the reactive context are permitted.
+This means that non-reactive code (ex.: existing, 3rd party libraries) can always read the signal's value, without being aware of its reactive nature.
+
+The documentation of the `toObservable` method [can be found here](/docs/documentation/signals/observables-and-signals/#signaltoobservable).
+
+## Writable signals
+
+This Signals library provides a default implementation of the writable signal that can be changed through the built-in modification methods (set, update, mutate):
+
+
+```ts
+interface IWritableSignal<GValue> extends ISignal<GValue> {
+  set(
+    value: GValue,
+    force?: boolean, // (default: false)
+  ): void;
+
+  update(
+    updateFunction: IWritableSignalUpdateFunction<GValue>,
+  ): void;
+
+  mutate(
+    mutateFunction: IWritableSignalMutateFunction<GValue>,
+  ): void;
+
+  asReadonly(): ISignal<GValue>;
+}
+```
+
+### set(...)
+
+This method directly sets the Signal to a new value, and notifies any dependents.
+
+Useful for changing primitive values or replacing data structures when
+the new value is independent of the old one.
+
+If `force` is set to true, then the Signal is updated even if the provided
+value is equal to its own current value.
+
+### update(...)
+
+This method updates the value of the Signal based on its current value, and notifies any dependents.
+
+Useful for setting a new value that depends on the old value, such as updating an immutable data structure.
+
+It accepts an `updateFunction`:
+
+```ts
+interface IWritableSignalUpdateFunction<GValue> {
+  (
+    value: GValue,
+  ): GValue;
+}
+```
+
+### mutate(...)
+
+This method updates the current value by mutating it in-place and notifying any dependents.
+
+Useful for making internal changes to the Signal's value without changing
+its identity, such as pushing to an array stored in the Signal.
+
+It accepts a `mutateFunction`:
+
+```ts
+interface IWritableSignalMutateFunction<GValue> {
+  (
+    value: Writable<GValue>,
+  ): void;
+}
+
+type Writable<T> = {
+  - readonly [P in keyof T]: T[P];
+};
+```
+
+`update` and `mutate` are simply shorter and convenient manners to combine a signal read and write in one call (`count.update(c => c + 1)` <=> `count.set(count() + 1)`).
+
+### asReadonly()
+
+Returns a non-writable `Signal` which accesses this `WritableSignal` but does not allow mutation.
+
+
+## Create a Signal
+
+An instance of a writable Signal can be created using the `signal` creation function:
+
+```ts
+function signal<GValue>(
+  initialValue: GValue,
+  options?: ISignalOptions<GValue>,
+): IWritableSignal<GValue>
+```
+
+This functions receives a mandatory `initialValue` (because signals are sync, so they must immediately have a value),
+and an optional `ISignalOptions` argument:
+
+
+```ts
+interface ISignalOptions<GValue> {
+  equal?: IEqualFunction<GValue>;
+}
+
+interface IEqualFunction<GValue> {
+  (
+    a: GValue,
+    b: GValue,
+  ): boolean;
+}
+```
+
+
+- `equal`: this function is used to compare values passed to the `set` method.
+If this equality function determines that 2 values are equal, and `force` is not `true`, then the value is simply ignored, and the change propagation is skipped.
+  - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: (default) - The default equality function compares primitive values (numbers, strings, etc) using `===` semantics
+  but treats objects and arrays as "always unequal".
+  This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
+  - `EQUAL_FUNCTION_STRICT_EQUAL`: compares values using the strict equality `===`.
+
+## Examples
+
+### Create a signal and set its value
+
+```ts
+// create a writable signal
+const counter = signal(0);
+
+// set a new signal value, completely replacing the current one
+counter.set(5);
+
+// update signal's value based on the current one
+counter.update(currentValue => currentValue + 1);
+```
+
+### Create a signal with an immutable value
+
+```ts
+const names = signal<readonly string[]>(['Alice'], { equal: EQUAL_FUNCTION_STRICT_EQUAL });
+
+// "update" is convenient to modify immutable data structures
+names.update(names => ([
+  ...names,
+  'Bob',
+]));
+```
+
+### Create a signal with a mutable array as value
+
+```ts
+const names = signal<string[]>(['Alice'], { equal: EQUAL_FUNCTION_STRICT_EQUAL });
+
+// "mutate" is convenient to modify data structures whose content changes but not their reference (objects and arrays)
+names.mutate(names => {
+  names.push('Bob');
+});
+```
+
+### Cast a Signal to an Observable
+
+```ts
+const counter = signal(0);
+
+const counter$ = counter.toObservable();
+
+counter$((count: number) => {
+  console.log(`count: ${count}`);
+});
+
+window.onclick = () => {
+  counter.set(counter() + 1);
+};
+```
+
+Outputs:
+
+```text
+count: 0
+// on click
+count: 1
+// ...
+```
+

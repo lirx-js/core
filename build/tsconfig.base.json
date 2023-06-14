@@ -7,13 +7,11 @@
     "downlevelIteration": false,
     "emitDecoratorMetadata": false,
     "experimentalDecorators": true,
-
     "noEmitHelpers": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitUseStrict": false,
     "noLib": false,
     "pretty": true,
-
     "removeComments": true,
     "preserveConstEnums": false,
     "sourceMap": true,
@@ -32,6 +30,11 @@
     "lib": [
       "ESNext",
       "DOM"
+    ],
+    "types": [
+      "@types/jest",
+      "jest",
+      "node"
     ]
   },
   "formatCodeOptions": {

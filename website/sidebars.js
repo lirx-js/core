@@ -40,6 +40,17 @@ const sidebars = {
     'documentation/decision-tree/index',
     {
       type: 'category',
+      label: 'Signals',
+      items: [
+        'documentation/signals/introduction/index',
+        'documentation/signals/signal/index',
+        'documentation/signals/computed/index',
+        'documentation/signals/effect/index',
+        'documentation/signals/observables-and-signals/index',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Migration',
       items: [
         'documentation/migration/from-promise/index',

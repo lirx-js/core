@@ -1,0 +1,80 @@
+# Computed
+
+Computed signals create derived values, based on one or more dependency signal values.
+The derived value is updated in response to changes in the dependency signal values.
+Computed values are not updated if there was no update to the dependent signals.
+
+Example:
+
+```ts
+const counter = signal(0);
+
+// creating a computed signal
+const isEven = computed(() => counter() % 2 === 0);
+
+// computed properties are signals themselves
+const color = computed(() => isEven() ? 'red' : 'blue');
+```
+
+The signature of the computed is:
+
+```ts
+function computed<GValue>(
+  computedFunction: IComputedFunction<GValue>,
+  options?: IComputedOptions<GValue>,
+): ISignal<GValue>
+```
+
+```ts
+interface IComputedFunction<GValue> {
+  (): GValue;
+}
+
+interface IComputedOptions<GValue> extends ISignalOptions<GValue> {
+}
+```
+
+The computation function is expected to be side-effect free: it should only access values of the dependent signals
+(and / or other values being part of the computation) and avoid any mutation operations.
+In particular, the computation function should not write to other signals (the library's implementation will detect attempts of writing to signals from computed and raise an error).
+
+Similarly to the writable signals, computed signals can (optionally) specify the equality function.
+When provided, the equality function can stop recomputation of the deeper dependency chain if two values are determined to be equal. Example (with the default equality):
+
+```ts
+const counter = signal(0);
+
+// creating a computed signal
+const isEven = computed(() => counter() % 2 === 0);
+
+// computed properties are signals themselves
+const color = computed(() => isEven() ? 'red' : 'blue');
+
+// providing a different, even value, to the counter signal means that:
+// - isEven must be recomputed (its dependency changed)
+// - color don't need to be recomputed (isEven() value stays the same)
+counter.set(2);
+```
+
+
+The algorithm chosen to implement the computed functionality makes strong guarantees about the timing and correctness of computations:
+
+- **Computations are lazy**: the computation function is not invoked, unless someone is interested in (reads) its value.
+- **Computations are disposed of automatically**: as soon as the computed signal reference is out of scope
+it is automatically eligible for garbage collection.
+No explicit cleanup boundaries and / or operations are exposed by the library.
+- **Computations are glitch-free*-like***: the computation function **may** be executed many times in response to dependencies change,
+but the *sync* result will always be one expected.
+
+#### Branching in Computations
+
+Computed signals keep track of which signals were read in their computations, in order to know when recomputation is necessary.
+This dependency set is dynamic, and self-adjusts with each computation.
+So in the conditional computation:
+
+```ts
+const greeting = computed(() => showName() ? `Hello, ${name()}!` : 'Hello!');
+```
+
+The `greeting` will always be recomputed if the `showName` signal changes, but if `showName` is false,
+the `name` signal is not a dependency of the `greeting` and will not cause it to recompute.

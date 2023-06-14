@@ -1,15 +1,16 @@
+import { IDistinctEqualFunctionOptions } from '@lirx/utils';
 import { merge } from '../../../observable/built-in/from/without-notifications/many-observables/merge/merge';
 import { idle } from '../../../observable/built-in/from/without-notifications/time-related/idle/idle';
 import {
-  distinctObservable
+  distinctObservable,
 } from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
 import { mapObservable } from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import {
-  shareObservableWithMulticastReplayLastSource
+  shareObservableWithMulticastReplayLastSource,
 } from '../../../observable/pipes/built-in/without-notifications/source-related/built-in/derived/multicast-replay-last-source/share-observable-with-multicast-replay-last-source';
 import { IObservable } from '../../../observable/type/observable.type';
 import {
-  createMulticastReplayLastSource
+  createMulticastReplayLastSource,
 } from '../../../observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-multicast-replay-last-source';
 
 function getObjectPropertyDescriptor<GValue>(
@@ -30,8 +31,11 @@ function getObjectPropertyDescriptor<GValue>(
   }
 }
 
-
 const CACHE = new WeakMap<any, Map<PropertyKey, IObservable<any>>>();
+
+export interface ICreateObjectPropertyObservableOptions<GValue> extends IDistinctEqualFunctionOptions<GValue> {
+  allowGetters?: 'throw' | 'warn' | 'allow';
+}
 
 /**
  * @experimental
@@ -39,6 +43,10 @@ const CACHE = new WeakMap<any, Map<PropertyKey, IObservable<any>>>();
 export function createObjectPropertyObservable<GObject, GPropertyKey extends keyof GObject>(
   obj: GObject,
   propertyKey: GPropertyKey,
+  {
+    allowGetters = 'warn',
+    ...options
+  }: ICreateObjectPropertyObservableOptions<GObject[GPropertyKey]> = {},
 ): IObservable<GObject[GPropertyKey]> {
   type GValue = GObject[GPropertyKey];
 
@@ -116,7 +124,14 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
           return Reflect.apply(get, obj, []);
         };
 
-        console.warn(`Observing a getter is not well supported`);
+        switch (allowGetters) {
+          case 'throw':
+            throw new Error(`Observing a getter is not allowed`);
+          case 'warn':
+            console.warn(`Observing a getter is not well supported`);
+            break;
+        }
+
         const valueGetter$ = mapObservable(idle(), _get);
 
         if (set === void 0) { // pure getter => readonly
@@ -135,7 +150,7 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
         }
 
         _value$ = shareObservableWithMulticastReplayLastSource(
-          distinctObservable(_value$),
+          distinctObservable(_value$, options),
         );
       }
     }

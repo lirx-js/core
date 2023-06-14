@@ -1,0 +1,179 @@
+# Effect
+
+An effect is a side-effectful operation which reads the value of zero or more signals,
+and is automatically scheduled to be re-run whenever any of those signals changes.
+
+The basic API for an effect has the following signature:
+
+```ts
+function effect(
+  effectFunction: IEffetFunction,
+  options?: IEffectOptions,
+): IUnsubscribe;
+```
+
+```ts
+interface IEffetFunction {
+  (
+    onCleanUp: IOnCleanUpFunction,
+  ): void;
+}
+
+type IOnCleanUpFunction = IObservable<void>;
+
+interface IEffectOptions {
+  signalWriteMode?: ISignalWriteMode; // (default: 'forbid')
+}
+
+type ISignalWriteMode =
+  | 'allow'
+  | 'forbid'
+  | 'queue'
+  ;
+```
+
+Usage example:
+
+```ts
+const firstName = signal('John');
+const lastName  = signal('Doe');
+
+// This effect logs the first and last names, and will log them again when either (or both) changes.
+effect(() => console.log(firstName(), lastName()));
+```
+
+Effects have a variety of use cases, including:
+
+- synchronizing data between multiple independent models
+- triggering network requests
+- performing rendering actions
+
+Effect functions can, optionally, register a cleanup function.
+If registered, cleanup functions will be executed before the next effect run.
+The cleanup function makes it possible to "cancel" any work that the previous effect run might have started. Example:
+
+```ts
+effect((onCleanup) => {
+  const countValue = count();
+
+  let secsFromChange = 0;
+  const id = setInterval(() => {
+    console.log(
+      `${countValue} had its value unchanged for ${++secsFromChange} seconds`
+    );
+  }, 1000);
+
+  onCleanup(() => {
+    console.log('Clearing and re-scheduling effect');
+    clearInterval(id);
+  });
+});
+```
+
+
+#### Scheduling and timing of effects
+
+Effects are **always executed after** the operation of changing a signal has completed.
+
+Given the variety of effect use-cases, there is a wide spectrum of possible execution timings.
+This is why **the actual effect execution timing is not guaranteed** and this framework might choose different strategies.
+Application developers should not depend on any observed execution timing.
+The only thing that can be guaranteed is that:
+
+- effects will execute at least once
+- effects will execute in response to their dependencies changes at some point in the future
+- effects will execute minimal number of times: if an effect depends on multiple signals and several of them change at once, only one effect execution will be scheduled.
+
+#### Stopping effects
+
+An effect will be scheduled to run every time one of its dependencies change.
+In this sense an effect is "always alive" and ready to respond to the changes in a reactive graph.
+Such "infinite" lifespan is obviously undesired as **effects should be shut down** when an application stops (or some other life-scope ends).
+
+Effects can be explicitly stopped / destroyed by calling the `IUnsubscribe` function returned from the effect creation:
+
+```ts
+// create an effect
+const unsubscribeOfEffect = effect(() => {...});
+
+// later on, explicitly destroy / stop this effect
+unsubscribeOfEffect();
+```
+
+#### Effects writing to signals
+
+We generally consider that **writing to signals from effects can lead to unexpected behavior** (mostly infinite loops) and hard to follow data flow.
+As such any attempt of writing to a signal from an effect will be **reported as an error and blocked**.
+
+This default behavior can be overridden by passing the `signalWriteMode` options to the effect creation function, ex.:
+
+
+```ts
+const counter = signal(0);
+const isBig = signal(false);
+
+effect(() => {
+  if (counter() > 5) {
+    isBig.set(true);
+  } else {
+    isBig.set(false);
+  }
+}, { signalWriteMode: 'allow' });
+```
+
+Please note that `computed` is often a more declarative, straightforward and predictable solution to synchronizing data:
+
+```ts
+const counter = signal(0);
+const isBig = computed(() => counter() > 5);
+```
+
+#### Reading without tracking dependencies
+
+Rarely, you may want to execute code which may read signals in a reactive function such as `computed` or `effect` *without creating a dependency*.
+
+For example, suppose that when `currentUser` changes, the value of a `counter` should be logged.
+Creating an effect which reads both signals:
+
+```ts
+effect(() => {
+  console.log(`User set to `${currentUser()}` and the counter is ${counter()}`);
+});
+```
+
+This example logs a message when either `currentUser` or `counter` changes.
+However, if the effect should only run when `currentUser` changes, then the read of `counter` is only incidental and changes to `counter` shouldn't log a new message.
+
+You can prevent a signal read from being tracked by calling its getter with `untracked`:
+
+```ts
+function untracked<GReturn>(
+  callback: () => GReturn
+): GReturn;
+```
+
+```ts
+effect(() => {
+  console.log(`User set to `${currentUser()}` and the counter is ${untracked(counter)}`);
+});
+```
+
+`untracked` is also useful when an effect needs to invoke some external code which shouldn't be treated as a dependency:
+
+```ts
+effect(() => {
+  const user = currentUser();
+
+  untracked(() => {
+    // if `store` uses some signals, they won't be tracked
+    store.update(user);
+  });
+});
+```
+
+:::tip
+
+It is important to note that `effect` may usually be replaced by `computed` to `.toObservable`, which are generally more adequate.
+`effect` is really powerful, so it *SHOULD* be used with **caution**.
+
+:::

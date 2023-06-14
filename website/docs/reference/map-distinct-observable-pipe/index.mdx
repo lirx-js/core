@@ -13,8 +13,11 @@ Inlined: `mapDistinctObservable`, `mapDistinct$$`
 ```ts
 function mapDistinctObservablePipe<GIn, GOut>(
   mapFunction: IMapFunction<GIn, GOut>,
+  options?: IDistinctOptions<GValue>,
 ): IObservablePipe<GIn, GOut>
 ```
+
+See [distinctObservablePipe](/docs/reference/distinct-observable-pipe/) for the `options`.
 
 ### Definition
 
@@ -25,7 +28,7 @@ The equivalent is:
 ```ts
 pipe([
   mapObservablePipe(mapFunction),
-  distinctObservablePipe(mapFunction),
+  distinctObservablePipe(options),
 ])
 ```
 

@@ -1,12 +1,16 @@
 {
   "name": "ts-lib-seed",
-  "version": "2.0.0",
+  "version": "2.1.3",
   "description": "Seed to build a library",
   "main": "index.js",
   "scripts": {
     "build": "yarn run build:package",
     "dev": "yarn run dev:package",
+    "test": "jest",
     "": "",
+    "___________BUILD_AND_PUBLISH___________": "",
+    "build:dev": "yarn run comment:build:package && yarn run bump:publish:package:dev",
+    "build:prod": "yarn run comment:build:package && yarn run publish:package",
     "_________________BUILD_________________": "",
     "build:package": "echo 'build:package' && yarn run clean:dist && yarn run build:package:tsc && yarn run build:package:scss && yarn run assemble:package",
     "build:package:tsc": "echo 'build:package:tsc' && yarn run build:package:tsc:module:mjs && yarn run build:package:tsc:cjs:cjs",
@@ -41,8 +45,9 @@
     "_________________INDEX_FILES_________________": "",
     "comment:index-files": "node tools/index/comment-index-files.mjs",
     "uncomment:index-files": "node tools/index/comment-index-files.mjs --uncomment",
+    "regenerate:index-files": "yarn run remove:index-files && yarn run generate:index-files",
     "generate:index-files": "node tools/index/generate-index-files.mjs",
-    "remove:index-files": "echo 'remove:index-files' && find ../ -path '../src/**/index.ts' -delete",
+    "remove:index-files": "find ../ -path '../src/**/index.ts.txt' -delete && find ../ -path '../src/**/index.ts' -delete",
     "_________________MANAGE_PACKAGE_______________": "",
     "bump:publish:package:dev": "yarn run bump:package:version && yarn run publish:package:dev",
     "bump:package:version": "echo 'bump:package:version' && node tools/package/bump-package-version.mjs",
@@ -53,7 +58,6 @@
     "_________________OTHERS_________________": "",
     "clean:dist": "echo 'clean:dist' && find ../ -path '../dist/*' -delete",
     "comment:build:package": "yarn run uncomment:index-files && yarn run build:package && yarn run comment:index-files",
-    "build:dev": "yarn run comment:build:package && yarn run bump:publish:package:dev",
     "ncu": "npx npm-check-updates"
   },
   "repository": {
@@ -65,16 +69,19 @@
   "license": "MIT",
   "access": "public",
   "devDependencies": {
+    "@types/jest": "^29.5.2",
     "acorn": "^8.8.2",
     "acorn-walk": "^8.2.0",
-    "astring": "^1.8.4",
-    "cssnano": "^5.1.15",
-    "html-minifier-terser": "^7.1.0",
-    "postcss": "^8.4.21",
-    "sass": "^1.59.3",
-    "tsc-watch": "^6.0.0",
-    "tslib": "^2.5.0",
-    "typescript": "^5.0.2"
+    "astring": "^1.8.6",
+    "cssnano": "^6.0.1",
+    "html-minifier-terser": "^7.2.0",
+    "jest": "^29.5.0",
+    "postcss": "^8.4.24",
+    "sass": "1.62.1",
+    "ts-jest": "^29.1.0",
+    "tsc-watch": "^6.0.4",
+    "tslib": "^2.5.3",
+    "typescript": "^5.1.3"
   },
   "packageManager": "yarn@3.5.0"
 }

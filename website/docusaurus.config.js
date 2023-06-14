@@ -105,36 +105,11 @@ const config = {
             sidebarId: 'reference',
             position: 'left',
           },
-          // {
-          //   label: 'Decision tree',
-          //   type: 'doc',
-          //   docId: 'documentation/decision-tree/index',
-          //   position: 'left',
-          // },
-          // {
-          //   label: 'Decision tree',
-          //   to: 'docs/documentation/decision-tree',
-          //   position: 'left',
-          // },
           {
             label: 'Blog',
             to: '/blog',
             position: 'left',
           },
-          // {
-          //   type: 'localeDropdown',
-          //   position: 'right',
-          //   // dropdownItemsAfter: [
-          //   //   {
-          //   //     type: 'html',
-          //   //     value: '<hr style="margin: 0.3rem 0;">',
-          //   //   },
-          //   //   {
-          //   //     href: 'https://github.com/facebook/docusaurus/issues/3526',
-          //   //     label: 'Help Us Translate',
-          //   //   },
-          //   // ],
-          // },
           {
             label: 'GitHub',
             href: githubURL,
@@ -163,15 +138,6 @@ const config = {
               },
             ],
           },
-          // {
-          //   title: 'Community',
-          //   items: [
-          //     {
-          //       label: 'Ask for a functionality',
-          //       href: 'https://github.com/lirx-js/core/discussions',
-          //     },
-          //   ],
-          // },
           {
             title: 'Ecosystem',
             items: [
@@ -209,7 +175,7 @@ const config = {
               },
               {
                 label: 'Changelog',
-                to: '/docs/changelogs/1.3.0/',
+                to: '/docs/changelogs/1.4.0/',
               },
               {
                 label: 'GitHub',
@@ -221,19 +187,6 @@ const config = {
               },
             ],
           },
-          // {
-          //   title: 'More',
-          //   items: [
-          //     {
-          //       label: 'Blog',
-          //       to: '/blog',
-          //     },
-          //     {
-          //       label: 'GitHub',
-          //       href: 'https://github.com/facebook/docusaurus',
-          //     },
-          //   ],
-          // },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} @lirx/core, owned by Valentin Richard and maintained with love by all the community ♥.`,
       },

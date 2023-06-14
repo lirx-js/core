@@ -26,6 +26,7 @@ function generatePackageJSON() {
           'require': './cjs/index.cjs',
         },
         resolutions: {},
+        devDependencies: {},
       };
 
       return writeFile(join(DIST_PATH, 'package.json'), JSON.stringify(pkg, null, 2));

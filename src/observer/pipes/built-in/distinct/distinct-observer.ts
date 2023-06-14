@@ -1,3 +1,9 @@
+import {
+  EQUAL_FUNCTION_STRICT_EQUAL,
+  getDistinctPreviousValueFromDistinctInitialValueOptions,
+  IDistinctOptions,
+  IUninitializedToken, UNINITIALIZED_TOKEN,
+} from '@lirx/utils';
 import { IObserver } from '../../../type/observer.type';
 
 /**
@@ -5,10 +11,17 @@ import { IObserver } from '../../../type/observer.type';
  */
 export function distinctObserver<GValue>(
   emit: IObserver<GValue>,
+  {
+    equal = EQUAL_FUNCTION_STRICT_EQUAL,
+    ...options
+  }: IDistinctOptions<GValue> = {},
 ): IObserver<GValue> {
-  let previousValue: GValue;
+  let previousValue: GValue | IUninitializedToken = getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
   return (value: GValue): void => {
-    if (value !== previousValue) {
+    if (
+      (previousValue === UNINITIALIZED_TOKEN)
+      || !equal(value, previousValue)
+    ) {
       previousValue = value;
       emit(value);
     }
