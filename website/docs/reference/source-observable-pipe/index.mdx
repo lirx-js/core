@@ -7,39 +7,47 @@ tags: [FUNCTION, OBSERVABLE PIPE, SHARE]
 ### Types
 
 ```ts
-function sourceObservablePipe<GValue>(
+function sourceObservable<GValue>(
+  subscribe: IObservable<GValue>,
   options: ISourceObservableOptions<GValue>,
-): IObservablePipe<GValue, GValue>
+): IObservable<GValue>
 ```
 
 ```ts
 interface ISourceObservableOptions<GValue> {
-  getSource: ISourceObservablePipeGetSource<GValue>;
-  subscribePoint?: number;
-  unsubscribePoint?: number;
+  createSource: ISourceObservablePipeCreateSource<GValue>;
+  onSubscribe: ISourceObservableOnSubscribeFunction<GValue>;
+  onUnsubscribe: ISourceObservableOnUnsubscribeFunction<GValue>;
 }
 
-interface ISourceObservablePipeGetSource<GValue> {
+interface ISourceObservablePipeCreateSource<GValue> {
   (): ISource<GValue>;
 }
+
+
+interface ISourceObservableOnSubscribeFunction<GValue> {
+  (
+    emit: IObserver<GValue>,
+  ): boolean;
+}
+
+interface ISourceObservableOnUnsubscribeFunction<GValue> {
+  (
+    emit: IObserver<GValue>,
+  ): boolean;
+}
+
 ```
 
 ### Definition
 
 This ObservablePipe does the bridge between a Source which is not lazy loaded, and an Observable (which is lazy loaded).
 
-It counts the number of subscriptions and subscribes (only once) to the Observable if the number of
-subscriptions is equal to `subscribePoint` (default: 1). The received value is then emitted in the source.
+Its purpose is to *subscribe* to the **provided Observable** when `onSubscribe` returns `true`,
+and *unsubscribe* to it when `onUnsubscribe` returns `true`.
 
-If the number of subscriptions is equal to `unsubscribePoint` (default: 0), it unsubscribes from the Observable.
+`onSubscribe` and `onUnsubscribe` are called everytime the **returned Observable** is subscribed or unsubscribed respectively.
 
-When a subscription occurs, it is transmitted to the Source (same when unsubscribing).
-
-So by default, this pipe subscribes to the original observable on the first subscription,
-and unsubscribes of it when no one remains.
-
-This is partially equivalent to the *[multicast](https://rxjs-dev.firebaseapp.com/api/operators/multicast)*
-and *[refCount](https://rxjs-dev.firebaseapp.com/api/operators/refCount)* operators, but it is more generic.
 
 :::caution
 
@@ -50,36 +58,4 @@ or
 
 :::
 
-### Diagram
-
-![](example-diagram.svg)
-
-### Example
-
-#### Sharing the same Observable
-
-```ts
-const subscribe = pipe$$(interval(1000), [
-  scan$$$<void, number>(count => (count + 1), 0),
-  sourceObservablePipe<number>({ getSource: createMulticastSource }),
-]);
-
-subscribe((value: number) => {
-  console.log('value - A:', value);
-});
-
-subscribe((value: number) => {
-  console.log('value - B:', value);
-});
-```
-
-Output:
-
-```text
-value - A: 0
-value - B: 0
-value - A: 1
-value - B: 1
-...
-```
 

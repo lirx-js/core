@@ -18,11 +18,18 @@ function shareObservablePipe<GValue>(
 
 ### Definition
 
-This ObservablePipe is a shortcut for:
+This ObservablePipe uses the function `sourceObservablePipe` with a `IMulticastSource`.
 
-```ts
-sourceObservablePipe<GValue>({ getSource: createMulticastSource })
-```
+It counts the number of subscriptions and subscribes (only once) to the original Observable if the number of
+subscriptions is equal to 1. The received value and all the following are then emitted to all the subscribers.
+
+If the number of subscriptions is equal to 0, it unsubscribes from the Observable.
+
+**In one line:** this pipe subscribes to the original observable on the first subscription,
+and unsubscribes of it when no one remains, while sharing all the received values.
+
+This is partially equivalent to the *[multicast](https://rxjs-dev.firebaseapp.com/api/operators/multicast)*
+and *[refCount](https://rxjs-dev.firebaseapp.com/api/operators/refCount)* operators, but it is more generic.
 
 See [sourceObservablePipe](/docs/reference/source-observable-pipe)
 and [createMulticastSource](/docs/reference/create-multicast-source/).

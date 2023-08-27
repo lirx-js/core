@@ -34,8 +34,12 @@ export function createReplayLastSource<GValue, GSource extends ISource<GValue>>(
 
   return {
     ...source,
-    getValue: (): GValue => {
-      return currentValue as GValue;
+    getValue: (unsafe?: boolean): GValue => {
+      if (initialized || unsafe) {
+        return currentValue as GValue;
+      } else {
+        throw new Error(`No value received`);
+      }
     },
     emit,
     subscribe,

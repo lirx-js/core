@@ -5,7 +5,7 @@
 A Signal is simply a function returning immediately its value (as opposed to an Observable whose value is async):
 
 ```ts
-interface ISignal<GValue> {
+interface IReadonlySignal<GValue> {
   (): GValue;
 
   toObservable(
@@ -29,25 +29,24 @@ The documentation of the `toObservable` method [can be found here](/docs/documen
 
 ## Writable signals
 
-This Signals library provides a default implementation of the writable signal that can be changed through the built-in modification methods (set, update, mutate):
-
+When creating a Signal with the [signal](#create-a-signal) function (explained later), you'll receive a writable signal:
 
 ```ts
-interface IWritableSignal<GValue> extends ISignal<GValue> {
+interface ISignal<GValue> extends IReadonlySignal<GValue> {
   set(
     value: GValue,
     force?: boolean, // (default: false)
   ): void;
 
   update(
-    updateFunction: IWritableSignalUpdateFunction<GValue>,
+    updateFunction: ISignalUpdateFunctionCallback<GValue>,
   ): void;
 
   mutate(
-    mutateFunction: IWritableSignalMutateFunction<GValue>,
+    mutateFunction: ISignalMutateFunctionCallback<GValue>,
   ): void;
 
-  asReadonly(): ISignal<GValue>;
+  asReadonly(): IReadonlySignal<GValue>;
 }
 ```
 
@@ -70,7 +69,7 @@ Useful for setting a new value that depends on the old value, such as updating a
 It accepts an `updateFunction`:
 
 ```ts
-interface IWritableSignalUpdateFunction<GValue> {
+interface ISignalUpdateFunctionCallback<GValue> {
   (
     value: GValue,
   ): GValue;
@@ -87,7 +86,7 @@ its identity, such as pushing to an array stored in the Signal.
 It accepts a `mutateFunction`:
 
 ```ts
-interface IWritableSignalMutateFunction<GValue> {
+interface ISignalMutateFunctionCallback<GValue> {
   (
     value: Writable<GValue>,
   ): void;
@@ -102,7 +101,7 @@ type Writable<T> = {
 
 ### asReadonly()
 
-Returns a non-writable `Signal` which accesses this `WritableSignal` but does not allow mutation.
+Returns a non-writable Signal (`IReadonlySignal`) which accesses this Signal but does not allow mutation.
 
 
 ## Create a Signal
@@ -113,7 +112,7 @@ An instance of a writable Signal can be created using the `signal` creation func
 function signal<GValue>(
   initialValue: GValue,
   options?: ISignalOptions<GValue>,
-): IWritableSignal<GValue>
+): ISignal<GValue>
 ```
 
 This functions receives a mandatory `initialValue` (because signals are sync, so they must immediately have a value),
@@ -136,10 +135,10 @@ interface IEqualFunction<GValue> {
 
 - `equal`: this function is used to compare values passed to the `set` method.
 If this equality function determines that 2 values are equal, and `force` is not `true`, then the value is simply ignored, and the change propagation is skipped.
-  - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: (default) - The default equality function compares primitive values (numbers, strings, etc) using `===` semantics
-  but treats objects and arrays as "always unequal".
-  This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
-  - `EQUAL_FUNCTION_STRICT_EQUAL`: compares values using the strict equality `===`.
+  - `EQUAL_FUNCTION_STRICT_EQUAL`: (default) - compares values using the strict equality `===`.
+  - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: compares primitive values (numbers, strings, etc) using `===` semantics
+    but treats objects and arrays as "always unequal".
+    This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
 
 ## Examples
 
@@ -159,7 +158,7 @@ counter.update(currentValue => currentValue + 1);
 ### Create a signal with an immutable value
 
 ```ts
-const names = signal<readonly string[]>(['Alice'], { equal: EQUAL_FUNCTION_STRICT_EQUAL });
+const names = signal<readonly string[]>(['Alice']);
 
 // "update" is convenient to modify immutable data structures
 names.update(names => ([
@@ -171,7 +170,7 @@ names.update(names => ([
 ### Create a signal with a mutable array as value
 
 ```ts
-const names = signal<string[]>(['Alice'], { equal: EQUAL_FUNCTION_STRICT_EQUAL });
+const names = signal<string[]>(['Alice']);
 
 // "mutate" is convenient to modify data structures whose content changes but not their reference (objects and arrays)
 names.mutate(names => {

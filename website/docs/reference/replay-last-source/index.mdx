@@ -8,7 +8,8 @@ tags: [INTERFACE, OBSERVER OBSERVABLE PAIR, SOURCE, REPLAY]
 
 ```ts
 interface IReplayLastSourceMethods<GValue> {
-  getValue(): GValue;
+  getValue(unsafe?: false): GValue;
+  getValue(unsafe: true): GValue | undefined;
 }
 
 type IReplayLastSource<GValue, GSource extends ISource<GValue>> =
@@ -25,5 +26,13 @@ This is the perfect candidate if you have to keep the last emitted value.
 You can create a *IReplayLastSource* with the function [createReplayLastSource](/docs/reference/create-replay-last-source/).
 
 This is equivalent to the *[BehaviorSubject](https://rxjs-dev.firebaseapp.com/guide/subject)* if you provide a *MulticastSource*.
+
+#### getValue(...)
+
+Returns the current value stored in this Source.
+
+If the Source is not initialized (no `initialValue`, or `emit(...)` called), then,
+if `unsafe` is `false` or `undefined`, an Error will be thrown, as no value exists.
+On the contrary, if `unsafe` is `true`, `undefined` will be returned.
 
 

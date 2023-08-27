@@ -1,7 +1,7 @@
-import { runOutsideSignalChangesContext } from '../internal/register-signal/signal-get-called';
+import { runOutsideSignalChangesContext } from '../internal/register-signal/signal-get-called.private';
 
 export function untracked<GReturn>(
-  callback: () => GReturn
+  callback: () => GReturn,
 ): GReturn {
   return runOutsideSignalChangesContext<GReturn>(callback);
 }

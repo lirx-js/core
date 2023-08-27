@@ -1,6 +1,6 @@
-import { signal } from '../signal/signal';
-import { ISignal } from '../signal/signal.type';
-import { computed } from './computed';
+import { signal } from '../signal/implementations/function/signal.function';
+import { computed } from './function/computed.function';
+import { IReadonlySignal } from '../readonly-signal/readonly-signal.type';
 
 describe('computed', () => {
   test('basic test', () => {
@@ -35,7 +35,6 @@ describe('computed', () => {
     expect(b()).toBe(3);
   });
 
-
   test('test glitch-free 2', () => {
     const counter = signal(0);
     expect(counter()).toBe(0);
@@ -57,7 +56,7 @@ describe('computed', () => {
     const seconds = signal(0);
     expect(seconds()).toBe(0);
 
-    const t: ISignal<number> = computed<number>(() => seconds() > 0 ? (t() + 1) : 0);
+    const t: IReadonlySignal<number> = computed<number>(() => seconds() > 0 ? (t() + 1) : 0);
     expect(t()).toBe(0);
 
     seconds.set(1);
@@ -75,7 +74,7 @@ describe('computed', () => {
     expect(a()).toBe(1);
 
     const b = computed(() => {
-      expect(() =>  a.set(5)).toThrow();
+      expect(() => a.set(5)).toThrow();
       return a();
     });
 

@@ -1,10 +1,10 @@
-import { futureUnsubscribe } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../../misc/notifications/default-notifications-union.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type';
 import { IThenObservableOnFulfilled } from './then-observable-on-fulfilled.type';
 import { IThenObservableOnRejected } from './then-observable-on-rejected.type';
+import { futureUnsubscribe } from '@lirx/unsubscribe';
 
 export type IThenObservableInNotifications<GInNextValue> = IDefaultInNotificationsUnion<GInNextValue>;
 

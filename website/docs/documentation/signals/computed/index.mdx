@@ -20,17 +20,17 @@ The signature of the computed is:
 
 ```ts
 function computed<GValue>(
-  computedFunction: IComputedFunction<GValue>,
-  options?: IComputedOptions<GValue>,
-): ISignal<GValue>
+  computedFunction: IComputedSignalFunction<GValue>,
+  options?: IComputedSignalOptions<GValue>,
+): IReadonlySignal<GValue>
 ```
 
 ```ts
-interface IComputedFunction<GValue> {
+interface IComputedSignalFunction<GValue> {
   (): GValue;
 }
 
-interface IComputedOptions<GValue> extends ISignalOptions<GValue> {
+interface IComputedSignalOptions<GValue> extends ISignalOptions<GValue> {
 }
 ```
 

@@ -45,9 +45,3 @@ export function combineLatest<GObservables extends readonly IGenericObservable[]
   }
 }
 
-export function combineLatestSpread<GObservables extends readonly IGenericObservable[]>(
-  ...observables: GObservables
-): IObservable<ICombineLatestObservablesValues<GObservables>> {
-  return combineLatest<GObservables>(observables);
-}
-

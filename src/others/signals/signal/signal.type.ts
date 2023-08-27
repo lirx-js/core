@@ -1,19 +1,25 @@
-import { IObservable } from '../../../observable/type/observable.type';
-import { ISignalToObservableOptions } from './signal-to-observable-options.type';
-import { SIGNAL } from './signal.symbol';
+import { ISignalSetTrait } from './traits/set/signal.set.trait';
+import { ISignalAsReadonlyTrait } from './traits/as-readonly/signal.as-readonly.trait';
+import { IPureReadonlySignal } from '../readonly-signal/readonly-signal.type';
+import { IReadonlySignalGetFunction } from '../readonly-signal/traits/get/readonly-signal.get.function-definition';
+import { ISignalUpdateTrait } from './traits/update/signal.update.trait';
+import { ISignalMutateTrait } from './traits/mutate/signal.mutate.trait';
 
-export interface ISignal<GValue> {
-  (): GValue;
+export interface IPureSignal<GValue> extends IPureReadonlySignal<GValue>, //
+  ISignalSetTrait<GValue>,
+  ISignalUpdateTrait<GValue>,
+  ISignalMutateTrait<GValue>,
+  ISignalAsReadonlyTrait<GValue>
+  //
+{
 
-  /**
-   * Converts the Signal to an Observable.
-   */
-  toObservable(
-    options?: ISignalToObservableOptions,
-  ): IObservable<GValue>;
+}
 
-  [SIGNAL]: unknown;
+export interface ISignal<GValue> extends IPureSignal<GValue>, //
+  IReadonlySignalGetFunction<GValue>
+  //
+{
+
 }
 
 export type IGenericSignal = ISignal<any>;
-

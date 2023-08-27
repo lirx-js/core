@@ -35,20 +35,20 @@ function toSignal<GValue>(
 
 function toSignal<GValue, GInitialValue extends (GValue | null | undefined)>(
   value$: IObservable<GValue>,
-  options: IToSignalOptions<GInitialValue>,
+  options: ISignalFromObservableOptions<GInitialValue>,
 ): ISignalFromObservable<GValue | GInitialValue>;
 ```
 
 ```ts
-interface ISignalFromObservable<GValue> extends ISignal<GValue> {
+interface ISignalFromObservable<GValue> extends IReadonlySignal<GValue> {
   isActive(): boolean;
 
   activate(
     active?: boolean, // default: true
-  ): this;
+  ): void;
 }
 
-interface IToSignalOptions<GInitialValue> {
+interface ISignalFromObservableOptions<GInitialValue> {
   initialValue: GInitialValue;
 }
 ```
@@ -91,7 +91,7 @@ In those cases, you may omit to provide the second arguments `options`.
 // this emits synchronously:
 const count$ = single(50);
 
-const count: Signal<number> = toSignal(count$);
+const count = toSignal(count$);
 ```
 
 However, if `count$` is ever made asynchronous (such as by adding a debounce operation, for example), `toSignal` will throw an error.
@@ -106,9 +106,9 @@ The initial value may have the same type as the Observable:
 
 ```ts
 // the first value will not be emitted until 1 second later
-const secounds$ = scan$$(interval(1000), _ => _ + 1, 0);
+const seconds$ = scan$$(interval(1000), _ => _ + 1, 0);
 // provide an initial value of zero
-const seconds = toSignal(secounds$, { initialValue: 0 });
+const seconds = toSignal(seconds$, { initialValue: 0 });
 effect(() => {
   console.log(seconds());
 });
@@ -134,7 +134,7 @@ function toSignalWithNotifications<GValue>(
 
 function toSignalWithNotifications<GValue, GInitialValue extends (GValue | null | undefined)>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptions<GInitialValue>,
+  options: ISignalFromObservableOptions<GInitialValue>,
 ): ISignalFromObservable<GValue | GInitialValue>;
 ```
 

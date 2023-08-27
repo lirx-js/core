@@ -21,9 +21,10 @@
   "license": "MIT",
   "access": "public",
   "dependencies": {
-    "@lirx/utils": "^1.1.3"
+    "@lirx/utils": "latest",
+    "@lirx/unsubscribe": "latest"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.2"
+    "@types/jest": "^29.5.3"
   }
 }

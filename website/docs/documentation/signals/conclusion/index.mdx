@@ -1,0 +1,51 @@
+# Conclusion
+
+Signals are very powerful, and provide a nice solution to transition between sync and async coding.
+
+Using Signals, you may create complex reactive applications, easier to read,
+mixing sync and async sources, and handle more easily interdependent values (like in a Store).
+
+For example we may imagine a simple `todo list`:
+
+```ts
+// list of todos
+const todos = signal([
+  { title: 'Buy groceries', completed: false },
+  { title: 'Do laundry', completed: true },
+  { title: 'Walk the dog', completed: false }
+]);
+
+// flag indicating whether completed todos should be shown
+const showCompleted = signal(false);
+
+// computed signal to filter todos based on the showCompleted flag
+const filteredTodos = computed(() =>
+  todos().filter(todo => showCompleted() || !todo.completed)
+);
+
+// computed signal to count the number of remaining todos
+const remainingTodosCount = computed(() =>
+  todos().reduce((count, todo) => (todo.completed ? count : count + 1), 0)
+);
+
+// effect to log the filtered todos and remaining count whenever they change
+effect(() => {
+  console.log('Filtered Todos:');
+  console.log(filteredTodos());
+  console.log(`Remaining Todos: ${remainingTodosCount()}`);
+});
+
+// update the values of the writable signals
+todos.mutate(value => {
+  value.push({ id: 4, title: 'Clean the house', completed: false });
+  value[1].completed = false;
+});
+
+// update the showCompleted flag
+showCompleted.set(true);
+```
+
+[//]: # (TODO stackblitz)
+
+Your imagination is the only limit 🎡 !
+

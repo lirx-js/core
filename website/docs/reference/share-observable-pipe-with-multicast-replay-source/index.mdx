@@ -23,7 +23,7 @@ This ObservablePipe is a shortcut for:
 ```ts
 shareObservablePipe<GValue>({
   ...options,
-  getSource: () => createMulticastReplaySource<GValue>(maxNumberOfValues),
+  createSource: () => createMulticastReplaySource<GValue>(maxNumberOfValues),
 })
 ```
 

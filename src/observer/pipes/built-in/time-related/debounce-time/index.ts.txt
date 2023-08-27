@@ -1,5 +1,0 @@
-export * from './debounce-time-observer.shortcut';
-export * from './debounce-time-observer';
-export * from './debounce-time-observer-pipe.shortcut';
-export * from './debounce-time-observer-pipe';
-

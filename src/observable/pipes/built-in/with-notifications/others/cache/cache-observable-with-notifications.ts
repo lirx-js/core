@@ -18,7 +18,6 @@ import {
   switchMapObservable,
 } from '../../../without-notifications/merge/merge-map/derived/merge-map-single/merge-map-single-observable.shortcut';
 import { shareObservablePipe } from '../../../without-notifications/source-related/built-in/share-observable-pipe';
-import { sourceObservablePipe } from '../../../without-notifications/source-related/source-observable-pipe';
 import { fulfilledObservablePipe } from '../../then/derived/fulfilled/fulfilled-observable-pipe';
 import { rejectedObservablePipe } from '../../then/derived/rejected/rejected-observable-pipe';
 import { autoUnsubscribeObservablePipeWithNotifications } from '../auto-unsubscribe/auto-unsubscribe-observable-pipe-with-notifications';
@@ -69,8 +68,8 @@ export function cacheObservableWithNotifications<GValue>(
     ]),
     [
       // cache getData with racing result
-      sourceObservablePipe<IDefaultNotificationsUnion<GValue>>({
-        getSource: () => source,
+      shareObservablePipe<IDefaultNotificationsUnion<GValue>>({
+        createSource: () => source,
       }),
       // if rejected,
       rejectedObservablePipe<GValue, IDefaultNotificationsUnion<GValue>>((error: unknown): IObservable<IDefaultNotificationsUnion<GValue>> => {

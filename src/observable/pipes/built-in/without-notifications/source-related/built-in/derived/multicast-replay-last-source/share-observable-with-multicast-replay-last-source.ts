@@ -13,6 +13,6 @@ export function shareObservableWithMulticastReplayLastSource<GValue>(
 ): IObservable<GValue> {
   return shareObservable<GValue>(subscribe, {
     ...options,
-    getSource: createMulticastReplayLastSource,
+    createSource: createMulticastReplayLastSource,
   });
 }

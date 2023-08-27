@@ -1,4 +1,3 @@
-import { futureUnsubscribe } from '@lirx/utils';
 import { IErrorNotification } from '../../../../../../../misc/notifications/built-in/error/error-notification.type';
 import { IDefaultInNotificationsUnion } from '../../../../../../../misc/notifications/default-notifications-union.type';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
@@ -6,6 +5,7 @@ import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/ob
 import { IThenObservableInNotifications } from '../../then-observable';
 import { IThenObservableOnFulfilled } from '../../then-observable-on-fulfilled.type';
 import { IFulfilledObservableOutNotifications } from './fulfilled-observable-out-notifications.type';
+import { futureUnsubscribe } from '@lirx/unsubscribe';
 
 export function fulfilledObservable<GInNextValue, GOut>(
   subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,

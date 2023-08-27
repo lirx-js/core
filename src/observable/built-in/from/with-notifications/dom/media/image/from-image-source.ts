@@ -1,4 +1,3 @@
-import { mergeUnsubscribeFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
@@ -8,6 +7,7 @@ import { fromEventTarget } from '../../../../without-notifications/dom/from-even
 import {
   IFromPromiseFactoryObservableNotifications,
 } from '../../../promise/from-promise-factory/from-promise-factory-observable-notifications.type';
+import { mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
 
 export type IFromImageSourceObservableNotifications = IFromPromiseFactoryObservableNotifications<HTMLImageElement>;
 

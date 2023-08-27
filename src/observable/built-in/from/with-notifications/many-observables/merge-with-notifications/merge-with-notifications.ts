@@ -1,4 +1,3 @@
-import { futureUnsubscribe, mergeUnsubscribeFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
@@ -11,6 +10,7 @@ import {
   IMergeWithNotificationsObservableNotifications,
   IMergeWithNotificationsObservablesValues,
 } from './merge-with-notifications-observable-notifications.type';
+import { futureUnsubscribe, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
 
 export function mergeWithNotifications<GObservables extends IGenericMergeWithNotificationsInObservables>(
   observables: GObservables,

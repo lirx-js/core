@@ -1,7 +1,7 @@
-import { futureUnsubscribe, IRunning } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { ITakeWhileObservablePredicateFunction } from './take-while-observable-predicate-function.type';
+import { futureUnsubscribe, IRunning } from '@lirx/unsubscribe';
 
 export function takeWhileObservable<GValue>(
   subscribe: IObservable<GValue>,

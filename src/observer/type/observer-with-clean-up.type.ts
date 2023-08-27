@@ -1,4 +1,4 @@
-import { IUnsubscribe } from '@lirx/utils';
+import { IUnsubscribe } from '@lirx/unsubscribe';
 
 /**
  * @deprecated

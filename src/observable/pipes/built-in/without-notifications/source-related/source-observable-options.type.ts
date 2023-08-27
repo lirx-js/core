@@ -1,7 +1,9 @@
-import { ISourceObservablePipeGetSource } from './source-observable-pipe-get-source.type';
+import { ISourceObservablePipeCreateSource } from './source-observable-pipe-create-source.type';
+import { ISourceObservableOnUnsubscribeFunction } from './source-observable-on-unsubscribe-function.type';
+import { ISourceObservableOnSubscribeFunction } from './source-observable-on-subscribe-function.type';
 
 export interface ISourceObservableOptions<GValue> {
-  getSource: ISourceObservablePipeGetSource<GValue>;
-  subscribePoint?: number; // Integer [1, MAX_INT]
-  unsubscribePoint?: number; // Integer [0, subscribePoint - 1]
+  createSource: ISourceObservablePipeCreateSource<GValue>;
+  onSubscribe: ISourceObservableOnSubscribeFunction<GValue>;
+  onUnsubscribe: ISourceObservableOnUnsubscribeFunction<GValue>;
 }

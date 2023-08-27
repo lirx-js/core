@@ -47,6 +47,7 @@ const sidebars = {
         'documentation/signals/computed/index',
         'documentation/signals/effect/index',
         'documentation/signals/observables-and-signals/index',
+        'documentation/signals/conclusion/index',
       ],
     },
     {
