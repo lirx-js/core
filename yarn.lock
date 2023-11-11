@@ -50,17 +50,17 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@lirx/unsubscribe@latest":
-  version "1.0.0-dev.1692709094159"
-  resolved "http://localhost:4873/@lirx/unsubscribe/-/unsubscribe-1.0.0-dev.1692709094159.tgz#d688f5444a639e1d9b90aeb9346dccb650aa64a4"
-  integrity sha512-hHlKop/raJqmhvSUxo5jVBvTTRe0KQEPXvqi7yftWXqV7MEg+2pzy8TLG1G+Zp1kKhZw+Ep6pMpB3S73ZPMzJw==
+"@lirx/unsubscribe@^1.0.0":
+  version "1.0.0"
+  resolved "http://localhost:4873/@lirx/unsubscribe/-/unsubscribe-1.0.0.tgz#9399395d6496c9b2c85e860237c02fed7996f31c"
+  integrity sha512-Z1OlR1/TPBfEx1XI/dd9/9K+AZGcw/tjDCGnpLROeeok9XqzhMCryNCzgIUpuht6MA7Ho880d5mTypioPrZgSg==
 
-"@lirx/utils@latest":
-  version "1.3.0-dev.1692773318650"
-  resolved "http://localhost:4873/@lirx/utils/-/utils-1.3.0-dev.1692773318650.tgz#b3a91f193d6586ab6695024de9a34ef7d6083225"
-  integrity sha512-XTuN/3rwMdUozDWDVxKmsQR2CYkPICQ+4WNaHjhV7NpkRb3Odjlb/owT0g37IVfN5YD4BYQG+msy4Z2/tkiW5A==
+"@lirx/utils@^1.3.0":
+  version "1.3.0"
+  resolved "http://localhost:4873/@lirx/utils/-/utils-1.3.0.tgz#9860a54e80f0eae1a0a539773b18f945ed379bbe"
+  integrity sha512-3nBmcKz94/8aQN1zagwVdyM9xqpo4AuxVJ67qcUI56gnMdLlb2IIMZYVr3YLstioRuZ9T0s89UfkzpR9uWAJtA==
   dependencies:
-    "@lirx/unsubscribe" latest
+    "@lirx/unsubscribe" "^1.0.0"
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
