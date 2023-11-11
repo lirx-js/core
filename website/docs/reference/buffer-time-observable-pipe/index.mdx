@@ -46,7 +46,24 @@ There is not RxJS equivalent.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant bufferTimeObservablePipe as bufferTimeObservablePipe(1000)
+participant OUT
+
+Note over observable: t = 400ms
+observable->>bufferTimeObservablePipe: 1
+Note over observable: t = 600ms
+observable->>bufferTimeObservablePipe: 2
+Note over bufferTimeObservablePipe: t = 1400ms
+bufferTimeObservablePipe->>OUT: [1, 2]
+Note over observable: t = 5000ms
+observable->>bufferTimeObservablePipe: 3
+Note over bufferTimeObservablePipe: t = 6000ms
+bufferTimeObservablePipe->>OUT: [3]
+```
 
 ### Example
 

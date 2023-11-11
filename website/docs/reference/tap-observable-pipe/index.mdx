@@ -27,7 +27,20 @@ The RxJS equivalent is [tap](https://rxjs-dev.firebaseapp.com/api/index/function
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant tapObservablePipe as tapObservablePipe(x => console.log(x))
+participant OUT
+
+observable->>tapObservablePipe: 1
+Note over tapObservablePipe: logs: 1
+tapObservablePipe->>OUT: 1
+observable->>tapObservablePipe: 2
+Note over tapObservablePipe: logs: 2
+tapObservablePipe->>OUT: 2
+```
 
 ### Example
 

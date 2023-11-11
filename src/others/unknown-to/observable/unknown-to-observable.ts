@@ -5,7 +5,7 @@ import { isMaybeObservable } from './is-maybe-observable';
 import { single } from '../../../observable/built-in/from/without-notifications/values/single/single';
 import { IUnknownToObservableMode } from '../unknown-to-observable-mode.type';
 import { IReadonlySignal } from '../../signals/readonly-signal/readonly-signal.type';
-import { ISignalToObservableOptions } from '../../signals/readonly-signal/traits/to-observable/signal-to-observable-options.type';
+import { ISignalToValueObservableOptions } from '../../signals/readonly-signal/traits/to-observable/signal-to-observable-options.type';
 import { isReadonlySignal } from '../../signals/readonly-signal/is/is-readonly-signal';
 
 // export type IUnknownToObservableValue<GInput, GMode extends IUnknownToObservableMode> =
@@ -42,9 +42,7 @@ export type IUnknownToObservable<GInput, GMode extends IUnknownToObservableMode>
           )
       );
 
-export interface IUnknownToObservableOptions extends ISignalToObservableOptions {
-
-}
+export type IUnknownToObservableOptions = ISignalToValueObservableOptions<any>;
 
 export function unknownToObservable<GInput>(
   input: GInput,

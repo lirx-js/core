@@ -25,7 +25,14 @@ This is not equivalent of the RxJS [single](https://rxjs.dev/api/index/function/
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as single('Hello World !')
+participant OUT
+
+A->>OUT: 'Hello World !'
+```
 
 ### Example
 

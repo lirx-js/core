@@ -20,7 +20,14 @@ It is somehow equivalent of a `Promise.reject`.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant throwError as throwError(new Error('Aborted'))
+participant OUT
+
+throwError->>OUT: error: Error('Aborted')
+```
 
 ### Examples
 

@@ -18,7 +18,16 @@ Creates an Observable that emits when idle time is available.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as idle()
+participant OUT
+
+loop when idle time is available
+    A->>OUT: void
+end
+```
 
 ### Example
 

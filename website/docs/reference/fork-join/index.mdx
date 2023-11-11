@@ -30,11 +30,38 @@ This is equivalent of `Promise.all`.
 
 #### If all completed
 
-![](complete.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant forkJoin as forkJoin([observablesA, observablesB])
+participant OUT
+
+B->>forkJoin: next: b1
+A->>forkJoin: next: a1
+A->>forkJoin: complete
+B->>forkJoin: next: b2
+B->>forkJoin: complete
+forkJoin->>OUT: next: [a1, b2]
+forkJoin->>OUT: complete
+```
 
 #### If one errored
 
-![](error.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant forkJoin as forkJoin([observablesA, observablesB])
+participant OUT
+
+B->>forkJoin: next: b1
+B->>forkJoin: complete
+A->>forkJoin: error: errorA
+forkJoin->>OUT: error: errorA
+```
 
 ### Example
 

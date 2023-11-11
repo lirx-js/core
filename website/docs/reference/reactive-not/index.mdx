@@ -20,7 +20,18 @@ Creates an Observable which performs the boolean `NOT` operation (`!`) on the va
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observable
+participant reactiveNot as reactiveNot(observable)
+participant OUT
+
+A->>reactiveNot: false
+reactiveNot->>OUT: true
+A->>reactiveNot: true
+reactiveNot->>OUT: false
+```
 
 ### Example
 

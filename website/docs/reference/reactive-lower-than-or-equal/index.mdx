@@ -21,7 +21,20 @@ Creates an Observable which performs a lower than or equal comparison (`>=`) bet
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveLowerThanOrEqual as reactiveLowerThanOrEqual(observableA, observableB)
+participant OUT
+
+A->>reactiveLowerThanOrEqual: 2
+B->>reactiveLowerThanOrEqual: 1
+reactiveLowerThanOrEqual->>OUT: false
+B->>reactiveLowerThanOrEqual: 1
+reactiveLowerThanOrEqual->>OUT: true
+```
 
 ### Example
 

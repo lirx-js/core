@@ -21,7 +21,20 @@ Creates an Observable which performs a strict not equal comparison (`!==`) betwe
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveNotEqual as reactiveNotEqual(observableA, observableB)
+participant OUT
+
+A->>reactiveNotEqual: 'a'
+B->>reactiveNotEqual: 'b'
+reactiveNotEqual->>OUT: true
+B->>reactiveNotEqual: 'a'
+reactiveNotEqual->>OUT: false
+```
 
 ### Example
 

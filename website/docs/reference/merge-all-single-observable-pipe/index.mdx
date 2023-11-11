@@ -24,4 +24,19 @@ The RxJS equivalent is [switchAll](https://rxjs.dev/api/index/function/switchAll
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mergeAllSingleObservablePipe as mergeAllSingleObservablePipe(observable)
+participant OUT
+
+observable->>mergeAllSingleObservablePipe: observable A
+Note over mergeAllSingleObservablePipe: subscribes to observable A
+mergeAllSingleObservablePipe-->>OUT: values send by observable A
+
+observable->>mergeAllSingleObservablePipe: observable B
+Note over mergeAllSingleObservablePipe: unsubscribes of observable A
+Note over mergeAllSingleObservablePipe: subscribes to observable B
+mergeAllSingleObservablePipe-->>OUT: values send by observable B
+```

@@ -1,6 +1,6 @@
 import { effect } from './effect';
 import { signal } from '../signal/implementations/function/signal.function';
-import { computed } from '../computed/function/computed.function';
+import { computed } from '../computed/implementations/function/computed.function';
 
 describe('effect', () => {
   const sleep = (t: number) => {

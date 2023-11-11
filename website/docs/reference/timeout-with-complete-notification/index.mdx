@@ -20,7 +20,16 @@ Creates an Observable that emits a `complete` Notification after a specified dur
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as timeoutWithCompleteNotification(1000)
+participant OUT
+
+Note over A,OUT: After 1000ms
+
+A->>OUT: complete
+```
 
 ### Example
 

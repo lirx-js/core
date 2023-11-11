@@ -10,13 +10,14 @@ const DIST_ESM_PATH = join(DIST_PATH, 'src');
 
 function copyScssFiles() {
   return exploreDirectory(SRC_PATH, (entryPath, entry) => {
+    const name = entry.name;
     if (
       entry.isFile()
       && (
-        entryPath.endsWith('variables.scss')
-        || entryPath.endsWith('functions.scss')
-        || entryPath.endsWith('mixins.scss')
-        || (/^_(.*)\.scss$/).test(entryPath)
+        name.endsWith('variables.scss')
+        || name.endsWith('functions.scss')
+        || name.endsWith('mixins.scss')
+        || (/^_(.*)\.scss$/).test(name)
       )
     ) {
       const destPath = join(DIST_ESM_PATH, relative(SRC_PATH, entryPath));

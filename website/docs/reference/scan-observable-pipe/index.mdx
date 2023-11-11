@@ -26,11 +26,42 @@ This accumulated value is then emitted.
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant scanObservablePipe as scanObservablePipe(reducer, accumulatedValue)
+participant OUT
+
+observable->>scanObservablePipe: value
+
+loop for each incoming value
+    Note over scanObservablePipe: accumulatedValue = reducer(accumulatedValue, value)
+    scanObservablePipe->>OUT: accumulatedValue
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant scanObservablePipe as scanObservablePipe((a, b) => (a + b), 0)
+participant OUT
+
+observable->>scanObservablePipe: 0
+scanObservablePipe->>OUT: 0
+
+observable->>scanObservablePipe: 1
+scanObservablePipe->>OUT: 1
+
+observable->>scanObservablePipe: 2
+scanObservablePipe->>OUT: 3
+
+observable->>scanObservablePipe: 3
+scanObservablePipe->>OUT: 6
+```
 
 ### Example
 

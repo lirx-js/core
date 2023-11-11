@@ -1,13 +1,11 @@
-import { Writable } from '@lirx/utils';
-
-export interface ISignalMutateFunctionCallback<GValue> {
+export interface ISignalMutateFunctionCallback<GMutableValue> {
   (
-    value: Writable<GValue>,
+    value: GMutableValue,
   ): void;
 }
 
 export interface ISignalMutateFunction<GValue> {
-  (
-    mutateFunction: ISignalMutateFunctionCallback<GValue>,
+  <GMutableValue extends GValue>(
+    mutateFunction: ISignalMutateFunctionCallback<GMutableValue>,
   ): void;
 }

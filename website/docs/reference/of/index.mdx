@@ -20,7 +20,17 @@ This is the spread equivalent of [fromArray](/docs/reference/from-array/).
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as of(0, 1, 2, 3)
+participant OUT
+
+A->>OUT: 0
+A->>OUT: 1
+A->>OUT: 2
+A->>OUT: 3
+```
 
 ### Example
 

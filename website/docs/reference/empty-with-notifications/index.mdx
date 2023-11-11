@@ -20,7 +20,14 @@ It is somehow equivalent of a `Promise.resolve`, but without any value.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant emptyWithNotifications as emptyWithNotifications()
+participant OUT
+
+emptyWithNotifications->>OUT: complete
+```
 
 ### Example
 

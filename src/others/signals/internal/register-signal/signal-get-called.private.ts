@@ -33,6 +33,7 @@ export function observeSignalChangesInContext(
           return signal.toObservable({
             emitCurrentValue: false,
             debounce: false,
+            mode: 'notification',
           });
         },
       ),

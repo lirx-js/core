@@ -1,5 +1,5 @@
 import { signal } from '../signal/implementations/function/signal.function';
-import { computed } from './function/computed.function';
+import { computed } from './implementations/function/computed.function';
 import { IReadonlySignal } from '../readonly-signal/readonly-signal.type';
 
 describe('computed', () => {

@@ -29,7 +29,25 @@ You may provide:
 
 ### Diagram
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant notificationsToLastValueObservablePipe as notificationsToLastValueObservablePipe(onError)
+participant OUT
+
+observable->>notificationsToLastValueObservablePipe: next: value_0
+observable->>notificationsToLastValueObservablePipe: next: value_1
+
+alt
+    observable->>notificationsToLastValueObservablePipe: complete
+    notificationsToLastValueObservablePipe->>OUT: value_1
+else
+    observable->>notificationsToLastValueObservablePipe: error: error
+    Note over notificationsToLastValueObservablePipe: calls onError(error)
+    notificationsToLastValueObservablePipe--xOUT: never
+end
+```
 
 ### Example
 

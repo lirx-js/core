@@ -6,7 +6,6 @@ describe('is-readonly-signal', () => {
     const a = signal(1);
 
     expect(isReadonlySignal(a)).toBe(true);
-    expect(isReadonlySignal(a.asReadonly())).toBe(true);
     expect(isReadonlySignal(1)).toBe(false);
     expect(isReadonlySignal({})).toBe(false);
   });

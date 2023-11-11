@@ -23,7 +23,16 @@ Creates an Observable that emits void or the return of `getValue` after a specif
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as timeout(1000)
+participant OUT
+
+Note over A,OUT: After 1000ms
+
+A->>OUT: void
+```
 
 ### Example
 

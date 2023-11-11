@@ -1,8 +1,0 @@
-sequenceDiagram
-
-participant A as interval(1000)
-participant OUT
-
-loop Every 1000ms
-    A->>OUT: void
-end

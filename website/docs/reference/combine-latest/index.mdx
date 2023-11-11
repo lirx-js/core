@@ -24,7 +24,23 @@ The RxJS equivalent is [combineLatest](https://rxjs.dev/api/index/function/combi
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observables[0]
+participant B as observables[1]
+participant combineLatest as combineLatest(observables)
+participant OUT
+
+B->>combineLatest: b1
+A->>combineLatest: a1
+combineLatest->>OUT: [a1, b1]
+A->>combineLatest: a2
+combineLatest->>OUT: [a2, b1]
+B->>combineLatest: b2
+combineLatest->>OUT: [a2, b2]
+```
+
 
 ### Example
 

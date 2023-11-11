@@ -2,52 +2,65 @@
 tags: [FUNCTION, TO]
 ---
 
-# toObservable
+# unknownToObservable
 
 ### Types
 
 ```ts
-function toObservable<GValue extends INotAnObservable<GValue>>(
-  value: IObservableLike<GValue>,
-): IObservable<GValue>
-```
-
-```ts
-type IObservableLike<GValue> =
-  | GValue
-  | IObservable<GValue>
-  ;
+function unknownToObservable<GInput>(
+  input: GInput,
+): IUnknownToObservable<GInput, 'not-undefined'>;
+function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
+  input: GInput,
+  mode: GMode,
+  options?: IUnknownToObservableOptions,
+): IUnknownToObservable<GInput, GMode>;
+function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
+  input: GInput,
+  mode: GMode = 'not-undefined' as GMode,
+  options?: IUnknownToObservableOptions,
+): IUnknownToObservable<GInput, GMode>
 ```
 
 ### Definition
 
-Converts an Observable or any other value into an Observable.
+Converts an Observable, a Signal or any other value into an Observable.
 
-If the input is a function, we assume it's an Observable, so it is immediately returned, else it returns `single(value)`.
+If the input is a Signal, we return `input.toObservable(...)`
+Else, if the input is a function, we assume it's an Observable and return it.
+Finally, if the input is none of the above we return `single(value)`.
 
-This is useful in some cases, when you want to create a function that accepts an Observable or directly a value as input.
+This is useful in some cases, when you want to create a function that accepts an Observable, a Signal or directly a value as input.
+
+The `mode` if used to determine what to do when a *raw* value is provided as input:
+
+- `strict`: raw values are forbidden, and we throw an Error.
+- `not-undefined` (default): all values are accepted, except `undefined`.
+- `any` (default): all values are accepted.
 
 ### Alternatives
 
-#### toObservableThrowIfUndefined
+#### unknownToObservableNotUndefined
 
 ```ts
-function toObservableThrowIfUndefined<GValue extends INotAnObservable<GValue>>(
-  value: IObservableLike<GValue>,
-): IObservable<GValue>
+function unknownToObservableNotUndefined<GInput>(
+  input: GInput,
+  options?: IUnknownToObservableOptions,
+): IUnknownToObservableNotUndefined<GInput>
 ```
 
-Like `toObservable`, but throws an error if the input is `undefined`.
+Alias for `unknownToObservable` with `mode: 'not-undefined'`.
 
-#### toObservableStrict
+#### unknownToObservableStrict
 
 ```ts
-function toObservableStrict<GValue extends INotAnObservable<GValue>>(
-  value: IObservableLike<GValue>,
-): IObservable<GValue>
+function unknownToObservableStrict<GInput>(
+  input: GInput,
+  options?: IUnknownToObservableOptions,
+): IUnknownToObservableStrict<GInput>
 ```
 
-Like `toObservable`, but throws an error if the input is not an Observable.
+Alias for `unknownToObservable` with `mode: 'strict'`.
 
 ### Example
 
@@ -57,7 +70,7 @@ Like `toObservable`, but throws an error if the input is not an Observable.
 export function formatNumberObservable(
   input: IObservableLike<number>,
 ): IObservable<string> {
-  return map$$(toObservable(input), (value: number): string => {
+  return map$$(unknownToObservable(input), (value: number): string => {
     return new Intl.NumberFormat(navigator.languages).format(value);
   });
 }
@@ -67,7 +80,7 @@ export function formatNumberObservable(
 #### From an Observable
 
 ```ts
-const subscribe = toObservable(of(1, 2, 3));
+const subscribe = unknownToObservable(of(1, 2, 3));
 
 subscribe((value: number) => {
   console.log(value);
@@ -85,7 +98,7 @@ Output:
 #### From a number
 
 ```ts
-const subscribe = toObservable(4);
+const subscribe = unknownToObservable(4);
 
 subscribe((value: number) => {
   console.log(value);
@@ -102,7 +115,7 @@ Output:
 
 ```ts
 let value!: number;
-const subscribe = toObservableThrowIfUndefined(value); // throws an error
+const subscribe = unknownToObservableNotUndefined(value); // throws an error
 value = 4; // oops, value initialized too late
 
 subscribe((value: number) => {

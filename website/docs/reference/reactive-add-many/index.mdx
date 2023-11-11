@@ -20,7 +20,22 @@ Creates an Observable which performs an addition (`+`) between the values sent b
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant C as observableC
+participant reactiveAddMany as reactiveAddMany(observableA, observableB, observableC)
+participant OUT
+
+A->>reactiveAddMany: 5
+B->>reactiveAddMany: 10
+C->>reactiveAddMany: 20
+reactiveAddMany->>OUT: 35
+B->>reactiveAddMany: 2
+reactiveAddMany->>OUT: 27
+```
 
 ### Example
 

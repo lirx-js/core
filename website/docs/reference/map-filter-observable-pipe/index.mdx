@@ -24,11 +24,44 @@ Applies a given `mapFunction` function to each value emitted by the source Obser
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapFilterObservablePipe as mapFilterObservablePipe(mapFilterFunction)
+participant OUT
+
+observable->>mapFilterObservablePipe: value
+
+alt if (newValue = mapFilterFunction(value)) returns MAP_FILTER_DISCARD: discard value
+    mapFilterObservablePipe--xOUT: never
+else else send newValue
+    mapFilterObservablePipe->>OUT: newValue
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapFilterObservablePipe as mapFilterObservablePipe(x => (x % 2 === 0) ? (x / 2) : MAP_FILTER_DISCARD)
+participant OUT
+
+observable->>mapFilterObservablePipe: 0
+mapFilterObservablePipe->>OUT: 0
+
+observable->>mapFilterObservablePipe: 1
+
+observable->>mapFilterObservablePipe: 2
+mapFilterObservablePipe->>OUT: 1
+
+observable->>mapFilterObservablePipe: 3
+
+observable->>mapFilterObservablePipe: 4
+mapFilterObservablePipe->>OUT: 2
+```
 
 ### Example
 

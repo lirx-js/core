@@ -1,8 +1,0 @@
-sequenceDiagram
-
-participant A as single('Hello World !')
-participant OUT
-
-A->>OUT: 'Hello World !'
-
-

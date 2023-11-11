@@ -43,7 +43,19 @@ You may provide a `IObservableFromPromiseFactoryOptions`, which may be used to f
 
 ### Diagram
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant fromPromiseFactory as fromPromiseFactory(() => promise)
+participant OUT
+
+alt fulfilled with <value>
+    fromPromiseFactory->>OUT: next: value
+    fromPromiseFactory->>OUT: complete
+else rejected with <error>
+    fromPromiseFactory->>OUT: error: error
+end
+```
 
 ### Example
 

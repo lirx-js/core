@@ -21,7 +21,20 @@ Creates an Observable which performs a subtraction (`-`) between the values sent
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveSubtract as reactiveSubtract(observableA, observableB)
+participant OUT
+
+A->>reactiveSubtract: 10
+B->>reactiveSubtract: 5
+reactiveSubtract->>OUT: 5
+B->>reactiveSubtract: 2
+reactiveSubtract->>OUT: 8
+```
 
 ### Perform the "subtraction" of two Observables
 

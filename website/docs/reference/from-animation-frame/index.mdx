@@ -16,7 +16,16 @@ Creates an Observable that emits 'void' on every animation frame.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as fromAnimationFrame()
+participant OUT
+
+loop when an animation frame is triggered
+    A->>OUT: void
+end
+```
 
 ### Example
 

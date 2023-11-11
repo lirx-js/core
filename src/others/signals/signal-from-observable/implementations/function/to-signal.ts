@@ -1,21 +1,27 @@
 import { IObservable } from '../../../../../observable/type/observable.type';
 import { ISignalFromObservable } from '../../signal-from-observable.type';
-import { ISignalFromObservableOptions } from '../../types/signal-from-observable-options.type';
+import {
+  ISignalFromObservableOptions,
+  ISignalFromValueObservableOptions,
+  ISignalFromNotificationsObservableOptions,
+} from '../../types/signal-from-observable-options.type';
 import { SignalFromObservable } from '../class/signal-from-observable.class';
+import { IDefaultInNotificationsUnion } from '../../../../../misc/notifications/default-notifications-union.type';
 
 export function toSignal<GValue>(
   value$: IObservable<GValue>,
+  options?: ISignalFromValueObservableOptions<GValue>
 ): ISignalFromObservable<GValue>;
-export function toSignal<GValue, GInitialValue extends (GValue | null | undefined)>(
-  value$: IObservable<GValue>,
-  options: ISignalFromObservableOptions<GInitialValue>,
-): ISignalFromObservable<GValue | GInitialValue>;
 export function toSignal<GValue>(
-  value$: IObservable<GValue>,
-  options?: ISignalFromObservableOptions<any>,
+  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
+  options: ISignalFromNotificationsObservableOptions<GValue>,
+): ISignalFromObservable<GValue>;
+export function toSignal<GValue>(
+  value$: IObservable<GValue> | IObservable<IDefaultInNotificationsUnion<GValue>>,
+  options?: ISignalFromObservableOptions<GValue> | ISignalFromNotificationsObservableOptions<GValue>,
 ): ISignalFromObservable<GValue> {
   return new SignalFromObservable<GValue>(
-    value$,
+    value$ as any,
     options,
   );
 }

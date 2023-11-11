@@ -9,8 +9,11 @@ interface IReadonlySignal<GValue> {
   (): GValue;
 
   toObservable(
-    options?: ISignalToObservableOptions,
+    options?: ISignalToValueObservableOptions<GValue>,
   ): IObservable<GValue>;
+  toObservable(
+    options: ISignalToNotificationsObservableOptions,
+  ): IObservable<ISignalNotifications<GValue>>;
 
   [SIGNAL]: unknown;
 }
@@ -42,11 +45,13 @@ interface ISignal<GValue> extends IReadonlySignal<GValue> {
     updateFunction: ISignalUpdateFunctionCallback<GValue>,
   ): void;
 
-  mutate(
-    mutateFunction: ISignalMutateFunctionCallback<GValue>,
+  mutate<GMutableValue extends GValue>(
+    mutateFunction: ISignalMutateFunctionCallback<GMutableValue>,
   ): void;
 
-  asReadonly(): IReadonlySignal<GValue>;
+  throw(
+    error: any,
+  ): void;
 }
 ```
 
@@ -86,23 +91,22 @@ its identity, such as pushing to an array stored in the Signal.
 It accepts a `mutateFunction`:
 
 ```ts
-interface ISignalMutateFunctionCallback<GValue> {
+interface ISignalMutateFunctionCallback<GMutableValue> {
   (
-    value: Writable<GValue>,
+    value: GMutableValue,
   ): void;
 }
-
-type Writable<T> = {
-  - readonly [P in keyof T]: T[P];
-};
 ```
 
-`update` and `mutate` are simply shorter and convenient manners to combine a signal read and write in one call (`count.update(c => c + 1)` <=> `count.set(count() + 1)`).
+`update` and `mutate` are simply shorter and convenient manners to combine a signal read and write in one call (`count.update(c => c + 1)` &lt;=&gt; `count.set(count() + 1)`).
 
-### asReadonly()
+### throw(...)
 
-Returns a non-writable Signal (`IReadonlySignal`) which accesses this Signal but does not allow mutation.
+This method puts the signal in *"error"* state, and notifies any dependents.
 
+When getting the value of the signal by calling it (ex: `const value = count();`), it will throw the provided error.
+
+**This state is not definitive:** an errored signal may re-enter in a *"normal"* state when setting a value through `set(...)` for example.
 
 ## Create a Signal
 
@@ -110,18 +114,24 @@ An instance of a writable Signal can be created using the `signal` creation func
 
 ```ts
 function signal<GValue>(
-  initialValue: GValue,
+  initialValue: GValue | SignalThrow,
   options?: ISignalOptions<GValue>,
 ): ISignal<GValue>
 ```
 
-This functions receives a mandatory `initialValue` (because signals are sync, so they must immediately have a value),
-and an optional `ISignalOptions` argument:
+This functions receives as first argument an `initialValue`:
+
+- if this value is an instance of `SignalThrow`, then the signal is initialized with an *"error"* state.
+- else the signal is initialized with this value.
+
+Because signals are sync, the `initialValue` must be given to set the initial state of this signal.
+
+Then, it's possible to provide an optional `ISignalOptions` argument:
 
 
 ```ts
 interface ISignalOptions<GValue> {
-  equal?: IEqualFunction<GValue>;
+  readonly equal?: IEqualFunction<GValue>;
 }
 
 interface IEqualFunction<GValue> {
@@ -139,6 +149,28 @@ If this equality function determines that 2 values are equal, and `force` is not
   - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: compares primitive values (numbers, strings, etc) using `===` semantics
     but treats objects and arrays as "always unequal".
     This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
+
+#### thrownSignal
+
+```ts
+function thrownSignal<GValue>(
+  error: any,
+  options?: ISignalOptions<GValue>,
+): ISignal<GValue>
+```
+
+This is simply a shortcut to `signal<GValue>(new SignalThrow(error), options)`.
+
+
+#### uninitializedSignal
+
+```ts
+function uninitializedSignal<GValue>(
+  options?: ISignalOptions<GValue>,
+): ISignal<GValue>
+```
+
+This is simply a shortcut to `thrownSignal<GValue>(new Error(`The signal has no value.`), options)`.
 
 ## Examples
 
@@ -170,10 +202,10 @@ names.update(names => ([
 ### Create a signal with a mutable array as value
 
 ```ts
-const names = signal<string[]>(['Alice']);
+const names = signal<readonly string[]>(['Alice']);
 
 // "mutate" is convenient to modify data structures whose content changes but not their reference (objects and arrays)
-names.mutate(names => {
+names.mutate<string[]>(names => {
   names.push('Bob');
 });
 ```
@@ -201,5 +233,24 @@ count: 0
 // on click
 count: 1
 // ...
+```
+
+### Creates a signal in an "error" state
+
+```ts
+const counter = thrownSignal<number>(new Error(`Not a Number`));
+
+const run = () => {
+  try {
+    if (counter() > 0) {
+      // ... do something
+    }
+  } catch {
+    console.log('Oops, counter is errored.');
+    // let's fix it
+    counter.set(1);
+    run();
+  }
+};
 ```
 

@@ -21,7 +21,20 @@ Creates an Observable which performs the boolean `AND` operation (`&&`) between 
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveAnd as reactiveAnd(observableA, observableB)
+participant OUT
+
+A->>reactiveAnd: true
+B->>reactiveAnd: false
+reactiveAnd->>OUT: false
+B->>reactiveAnd: true
+reactiveAnd->>OUT: true
+```
 
 ### Example
 

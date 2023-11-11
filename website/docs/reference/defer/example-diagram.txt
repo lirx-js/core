@@ -1,8 +1,0 @@
-sequenceDiagram
-
-participant A as defer(() => of(0, 1, 2))
-participant OUT
-
-A->>OUT: 0
-A->>OUT: 1
-A->>OUT: 2
