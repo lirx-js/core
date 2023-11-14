@@ -29,11 +29,35 @@ This is equivalent of `Promise.race`.
 
 #### If one completes
 
-![](complete.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant raceWithNotifications as raceWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>raceWithNotifications: next: b1
+A->>raceWithNotifications: next: a1
+A->>raceWithNotifications: complete
+raceWithNotifications->>OUT: next: a1
+raceWithNotifications->>OUT: complete
+```
 
 #### If one errored
 
-![](error.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant raceWithNotifications as raceWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>raceWithNotifications: next: b1
+A->>raceWithNotifications: error: errorA
+raceWithNotifications->>OUT: error: errorA
+```
 
 ### Example
 

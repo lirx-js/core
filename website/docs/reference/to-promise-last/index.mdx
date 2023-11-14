@@ -24,11 +24,42 @@ but it returns the last received `next` value instead of an Array.
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable as observable
+participant toPromiseLast as toPromiseLast(observable)
+participant THEN as .then
+participant CATCH as .catch
+
+observable->>toPromiseLast: next: value1
+observable->>toPromiseLast: next: value2
+observable->>toPromiseLast: next: value3
+
+alt if complete
+    observable->>toPromiseLast: complete
+    toPromiseLast->>THEN: value3
+else if error
+    observable->>toPromiseLast: error: error
+    toPromiseLast->>CATCH:  error
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable as ofWithNotifications(1, 2, 3)
+participant toPromiseLast as toPromiseLast(_)
+participant THEN as .then
+
+observable->>toPromiseLast: next: 1
+observable->>toPromiseLast: next: 2
+observable->>toPromiseLast: next: 3
+observable->>toPromiseLast: complete
+toPromiseLast->>THEN: 3
+```
 
 ### Examples
 

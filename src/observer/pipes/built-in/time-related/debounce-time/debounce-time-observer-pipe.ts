@@ -1,4 +1,3 @@
-
 import { IObserver } from '../../../../type/observer.type';
 import { IObserverPipe } from '../../../type/observer-pipe.type';
 import { debounceTimeObserver } from './debounce-time-observer';

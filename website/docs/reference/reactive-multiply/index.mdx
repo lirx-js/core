@@ -21,7 +21,20 @@ Creates an Observable which performs an multiplication (`*`) between the values 
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveMultiply as reactiveMultiply(observableA, observableB)
+participant OUT
+
+A->>reactiveMultiply: 10
+B->>reactiveMultiply: 5
+reactiveMultiply->>OUT: 50
+B->>reactiveMultiply: 2
+reactiveMultiply->>OUT: 20
+```
 
 ### Example
 

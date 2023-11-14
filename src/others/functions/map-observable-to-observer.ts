@@ -5,6 +5,7 @@ import { IObserver } from '../../observer/type/observer.type';
 
 /**
  * @experimental
+ * @deprecated
  */
 export type IMapObservableToObserverResult<GObserverValue> = [
   emit: IObserver<GObserverValue>,
@@ -13,6 +14,7 @@ export type IMapObservableToObserverResult<GObserverValue> = [
 
 /**
  * @experimental
+ * @deprecated
  */
 export function mapObservableToObserver<GObservableValue, GObserverValue>(
   subscribe: IObservable<GObservableValue>,

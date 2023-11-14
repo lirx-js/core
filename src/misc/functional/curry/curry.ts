@@ -1,5 +1,5 @@
-import { IGenericFunction } from '../../types/generic-function.type';
 import { ISameLength } from '../shared-types/shared.type';
+import { IGenericFunction } from '@lirx/utils';
 
 export type IAllTuplesRightToLeft<GTuple extends any[]> =
   GTuple extends []

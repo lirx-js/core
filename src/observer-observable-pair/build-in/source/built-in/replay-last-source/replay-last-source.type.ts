@@ -1,7 +1,9 @@
 import { IGenericSource, ISource } from '../../type/source.type';
 
 export interface IReplayLastSourceMethods<GValue> {
-  getValue(): GValue;
+  getValue(unsafe?: false): GValue;
+
+  getValue(unsafe: true): GValue | undefined;
 }
 
 export type IReplayLastSource<GValue, GSource extends ISource<GValue>> =

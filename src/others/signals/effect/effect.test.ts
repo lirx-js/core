@@ -1,6 +1,6 @@
-import { computed } from '../computed/computed';
-import { signal } from '../signal/signal';
 import { effect } from './effect';
+import { signal } from '../signal/implementations/function/signal.function';
+import { computed } from '../computed/implementations/function/computed.function';
 
 describe('effect', () => {
   const sleep = (t: number) => {
@@ -31,7 +31,6 @@ describe('effect', () => {
     _c = 5;
 
     await sleep(10);
-
 
     b.set(1);
     expect(c()).toBe(4);

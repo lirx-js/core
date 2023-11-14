@@ -1,7 +1,7 @@
-import { futureUnsubscribe, IRunning } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { IFindObservablePipeConditionFunction } from './find-observable-pipe-condition-function.type';
+import { futureUnsubscribe, IRunning } from '@lirx/unsubscribe';
 
 export function findObservable<GValue>(
   subscribe: IObservable<GValue>,

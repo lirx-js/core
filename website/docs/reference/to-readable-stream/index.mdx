@@ -18,7 +18,30 @@ Converts an Observable of notifications into a ReadableStream.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable as ofWithNotifications(1, 2, 3)
+participant toPromise as toReadableStream(_)
+participant OUT as OUT
+
+observable->>toPromise: next: 1
+toPromise->>OUT: next() -> 1
+
+observable->>toPromise: next: 2
+toPromise->>OUT: next() -> 2
+
+observable->>toPromise: next: 3
+toPromise->>OUT: next() -> 3
+
+observable->>toPromise: complete
+toPromise-->>OUT: close()
+
+opt Hypothetical error instead of complete
+observable->>toPromise: error
+toPromise-->>OUT: error(error)
+end
+```
 
 ### Example
 

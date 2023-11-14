@@ -27,7 +27,18 @@ It emits the array's values one by one in the form of `next` Notifications and t
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as fromArrayWithNotifications([0, 1, 2, 3])
+participant OUT
+
+A->>OUT: next: 0
+A->>OUT: next: 1
+A->>OUT: next: 2
+A->>OUT: next:3
+A->>OUT: complete
+```
 
 ### Example
 

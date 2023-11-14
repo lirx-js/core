@@ -2,7 +2,8 @@ import {
   EQUAL_FUNCTION_STRICT_EQUAL,
   getDistinctPreviousValueFromDistinctInitialValueOptions,
   IDistinctOptions,
-  IUninitializedToken, UNINITIALIZED_TOKEN,
+  IUninitializedToken,
+  UNINITIALIZED_TOKEN,
 } from '@lirx/utils';
 import { IMapFunction } from '../../../../../../observer/pipes/built-in/map/map-function.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';

@@ -60,11 +60,32 @@ Instead, use `throwError`.
 
 #### fulfilled
 
-![](fulfilled.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant thenObservablePipe as thenObservablePipe(onFulfilled, onRejected)
+participant OUT
+
+observable->>thenObservablePipe: next: value
+observable->>thenObservablePipe: complete
+Note over thenObservablePipe: onFulfilled(value)
+thenObservablePipe-->>OUT: values send by the observable returned by onFulfille
+```
 
 #### rejected
 
-![](rejected.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant thenObservablePipe as thenObservablePipe(onFulfilled, onRejected)
+participant OUT
+
+observable->>thenObservablePipe: error: error
+Note over thenObservablePipe: onRejected(error)
+thenObservablePipe-->>OUT: values send by the observable returned by onRejected
+```
 
 ### Example
 

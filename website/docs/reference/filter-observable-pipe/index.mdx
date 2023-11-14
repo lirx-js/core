@@ -26,11 +26,43 @@ The RxJS equivalent is [filter](https://rxjs-dev.firebaseapp.com/api/operators/f
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant filterObservablePipe as filterObservablePipe(filterFunction)
+participant OUT
+
+observable->>filterObservablePipe: value
+
+alt if filterFunction(value) returns true
+    filterObservablePipe->>OUT: value
+else else discard value
+    filterObservablePipe--xOUT: never
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant filterObservablePipe as filterObservablePipe(x => x % 2 === 1)
+participant OUT
+
+observable->>filterObservablePipe: 0
+
+observable->>filterObservablePipe: 1
+filterObservablePipe->>OUT: 1
+
+observable->>filterObservablePipe: 2
+
+observable->>filterObservablePipe: 3
+filterObservablePipe->>OUT: 3
+
+observable->>filterObservablePipe: 4
+```
 
 ### Example
 

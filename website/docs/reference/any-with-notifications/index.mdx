@@ -30,11 +30,35 @@ This is equivalent of `Promise.any`.
 
 #### If one completes
 
-![](complete.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant anyWithNotifications as anyWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>anyWithNotifications: error
+A->>anyWithNotifications: next: a1
+A->>anyWithNotifications: complete
+anyWithNotifications->>OUT: next: a1
+anyWithNotifications->>OUT: complete
+```
 
 #### If one errored
 
-![](error.example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observablesA
+participant B as observablesB
+participant anyWithNotifications as anyWithNotifications([observablesA, observablesB])
+participant OUT
+
+B->>anyWithNotifications: error: errorB
+A->>anyWithNotifications: error: errorA
+anyWithNotifications->>OUT: error: AggregateError([errorA, errorB])
+```
 
 ### Examples
 

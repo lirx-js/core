@@ -17,6 +17,6 @@ export function shareObservableWithMulticastReplaySource<GValue>(
 ): IObservable<GValue> {
   return shareObservable<GValue>(subscribe, {
     ...options,
-    getSource: () => createMulticastReplaySource<GValue>(maxNumberOfValues),
+    createSource: () => createMulticastReplaySource<GValue>(maxNumberOfValues),
   });
 }

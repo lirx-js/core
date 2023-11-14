@@ -22,8 +22,6 @@ export async function* toAsyncIterable<GValue>(
 ): AsyncGenerator<GValue> {
   const notifications: IObservableToPromiseNotifications<GValue>[] = [];
 
-
-
   let notificationPromise = createDeferredPromise();
 
   const unsubscribe: IUnsubscribeOfObservable = subscribe((notification: IObservableToPromiseNotifications<GValue>): void => {

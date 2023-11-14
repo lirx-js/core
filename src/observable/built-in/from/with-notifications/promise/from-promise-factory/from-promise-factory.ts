@@ -94,8 +94,8 @@ export function fromPromiseFactory<GValue>(
             // if (newSignal.aborted) {
             //   abort(newSignal);
             // } else {
-              next(value);
-              complete();
+            next(value);
+            complete();
             // }
           },
           error,

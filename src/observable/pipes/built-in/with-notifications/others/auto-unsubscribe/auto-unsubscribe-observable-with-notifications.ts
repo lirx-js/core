@@ -1,9 +1,9 @@
-import { futureUnsubscribe, IRunning } from '@lirx/utils';
 import { ICompleteNotification } from '../../../../../../misc/notifications/built-in/complete/complete-notification.type';
 import { IErrorNotification } from '../../../../../../misc/notifications/built-in/error/error-notification.type';
 import { IGenericNotification } from '../../../../../../misc/notifications/notification.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
+import { futureUnsubscribe, IRunning } from '@lirx/unsubscribe';
 
 export type IAutoUnsubscribeObservableNotifications =
   | ICompleteNotification

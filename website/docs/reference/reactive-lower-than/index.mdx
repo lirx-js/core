@@ -21,7 +21,20 @@ Creates an Observable which performs a lower than comparison (`<`) between the v
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveLowerThan as reactiveLowerThan(observableA, observableB)
+participant OUT
+
+A->>reactiveLowerThan: 1
+B->>reactiveLowerThan: 2
+reactiveLowerThan->>OUT: true
+B->>reactiveLowerThan: 0
+reactiveLowerThan->>OUT: false
+```
 
 ### Example
 

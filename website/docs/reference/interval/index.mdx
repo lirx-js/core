@@ -18,7 +18,16 @@ Creates an Observable that emits "void" every specified interval of time.
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as interval(1000)
+participant OUT
+
+loop Every 1000ms
+    A->>OUT: void
+end
+```
 
 ### Example
 

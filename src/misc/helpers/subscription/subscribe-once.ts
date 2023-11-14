@@ -1,4 +1,4 @@
-import { futureUnsubscribe } from '@lirx/utils';
+import { futureUnsubscribe } from '@lirx/unsubscribe';
 import { IObservable, IUnsubscribeOfObservable } from '../../../observable/type/observable.type';
 import { IObserver } from '../../../observer/type/observer.type';
 

@@ -2,7 +2,8 @@ import {
   EQUAL_FUNCTION_STRICT_EQUAL,
   getDistinctPreviousValueFromDistinctInitialValueOptions,
   IDistinctOptions,
-  IUninitializedToken, UNINITIALIZED_TOKEN,
+  IUninitializedToken,
+  UNINITIALIZED_TOKEN,
 } from '@lirx/utils';
 import { IObserver } from '../../../type/observer.type';
 

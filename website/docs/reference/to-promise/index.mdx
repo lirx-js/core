@@ -39,7 +39,23 @@ or **[toPromiseAll](/docs/reference/to-promise-all/)**
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable as of(1, 2, 3)
+participant toPromise as toPromise(_)
+participant OUT as .then
+
+observable->>toPromise: 1
+toPromise->>OUT: 1
+
+toPromise-->>observable: unsubscribe
+
+opt Hypothetical next values
+observable->>toPromise: 2
+observable->>toPromise: 3
+end
+```
 
 ### Example
 

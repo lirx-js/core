@@ -20,7 +20,19 @@ Awaits for the next event loop (`queueMicrotask`) and emits the last value recei
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant debounceMicrotaskObservablePipe as debounceMicrotaskObservablePipe()
+participant OUT
+
+observable->>debounceMicrotaskObservablePipe: 1
+Note over observable: before event loop ends
+observable->>debounceMicrotaskObservablePipe: 2
+Note over debounceMicrotaskObservablePipe: when events loop end
+debounceMicrotaskObservablePipe->>OUT: 2
+```
 
 ### Example
 

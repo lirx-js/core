@@ -21,7 +21,20 @@ Creates an Observable which performs a strict equal comparison (`===`) between t
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveEqual as reactiveEqual(observableA, observableB)
+participant OUT
+
+A->>reactiveEqual: 'a'
+B->>reactiveEqual: 'b'
+reactiveEqual->>OUT: false
+B->>reactiveEqual: 'a'
+reactiveEqual->>OUT: true
+```
 
 ### Example
 

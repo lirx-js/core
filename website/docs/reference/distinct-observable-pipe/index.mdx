@@ -39,11 +39,45 @@ Else, the first value is always transmitted.
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant distinctObservablePipe as distinctObservablePipe()
+participant OUT
+
+observable->>distinctObservablePipe: value
+
+alt if <value> is different from the previous value
+    distinctObservablePipe->>OUT: value
+else else discard value
+    distinctObservablePipe--xOUT: <never>
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant distinctObservablePipe as distinctObservablePipe()
+participant OUT
+
+observable->>distinctObservablePipe: 0
+distinctObservablePipe->>OUT: 0
+
+observable->>distinctObservablePipe: 1
+distinctObservablePipe->>OUT: 1
+
+observable->>distinctObservablePipe: 1
+
+observable->>distinctObservablePipe: 2
+distinctObservablePipe->>OUT: 2
+
+observable->>distinctObservablePipe: 1
+distinctObservablePipe->>OUT: 1
+```
 
 ### Example
 

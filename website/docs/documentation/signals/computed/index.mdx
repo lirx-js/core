@@ -20,17 +20,17 @@ The signature of the computed is:
 
 ```ts
 function computed<GValue>(
-  computedFunction: IComputedFunction<GValue>,
-  options?: IComputedOptions<GValue>,
-): ISignal<GValue>
+  computedFunction: IComputedSignalFunction<GValue>,
+  options?: IComputedSignalOptions<GValue>,
+): IReadonlySignal<GValue>
 ```
 
 ```ts
-interface IComputedFunction<GValue> {
+interface IComputedSignalFunction<GValue> {
   (): GValue;
 }
 
-interface IComputedOptions<GValue> extends ISignalOptions<GValue> {
+interface IComputedSignalOptions<GValue> extends ISignalOptions<GValue> {
 }
 ```
 
@@ -78,3 +78,35 @@ const greeting = computed(() => showName() ? `Hello, ${name()}!` : 'Hello!');
 
 The `greeting` will always be recomputed if the `showName` signal changes, but if `showName` is false,
 the `name` signal is not a dependency of the `greeting` and will not cause it to recompute.
+
+#### Errors in Computations
+
+Errors in computed signals are permitted. In such case, the computed signal will enter an *"error"* state, eventually cascading it to its dependents.
+
+```ts
+// creates an invalid date
+const date = signal(new Date(Number.isNaN));
+
+// creating a computed signal that throw is the date is invalid
+const hours = computed(() => {
+  if (Number.isNaN(date().getTime())) {
+    throw new Error(`Invalid date`);
+  } else {
+    return date().getHours();
+  }
+});
+
+const logHours = () => {
+  try {
+    console.log(`${hours()}h`);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+logHours(); // logs: Invalid date
+
+date.set(new Date(2023, 1, 10, 8, 42));
+logHours(); // logs: 8
+```
+

@@ -21,7 +21,27 @@ See [fromAsyncIterator](/docs/reference/from-async-iterator/) for more details.
 
 ### Diagram
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant fromAsyncIterable as fromAsyncIterable(iterable)
+participant OUT
+
+
+loop until: complete, error, or unsubscribe
+    Note over fromAsyncIterable,OUT: calls 'iterable.next' and awaits
+
+    alt fulfilled with <state>
+        alt state isn't done
+            fromAsyncIterable->>OUT: next: state.value
+        else state is done
+            fromAsyncIterable->>OUT: complete
+        end
+    else rejected with <error>
+        fromAsyncIterable->>OUT: error: error
+    end
+end
+```
 
 ### Example
 

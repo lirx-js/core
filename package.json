@@ -1,6 +1,6 @@
 {
   "name": "@lirx/core",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Blazing fast Observables",
   "repository": {
     "type": "git",
@@ -21,9 +21,15 @@
   "license": "MIT",
   "access": "public",
   "dependencies": {
-    "@lirx/utils": "^1.1.3"
+    "@lirx/unsubscribe": "^1.0.0",
+    "@lirx/utils": "^1.3.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.2"
-  }
+    "@types/jest": "^29.5.7"
+  },
+  "localDependencies": [
+    "@lirx/unsubscribe",
+    "@lirx/utils"
+  ],
+  "packageManager": "yarn@4.0.1"
 }

@@ -24,7 +24,23 @@ The RxJS equivalent is [combineLatest](https://rxjs.dev/api/index/function/combi
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observables[0]
+participant B as observables[1]
+participant combineLatest as combineLatest(observables)
+participant OUT
+
+B->>combineLatest: b1
+A->>combineLatest: a1
+combineLatest->>OUT: [a1, b1]
+A->>combineLatest: a2
+combineLatest->>OUT: [a2, b1]
+B->>combineLatest: b2
+combineLatest->>OUT: [a2, b2]
+```
+
 
 ### Example
 
@@ -59,5 +75,56 @@ Output:
 1050ms: [1, 'b']
 1500ms: [2, 'b']
 1600ms: [2, 'c']
+...
+```
+
+## combineLatestObject
+
+### Types
+
+```ts
+function combineLatestObject<GObject extends IRecordOfObservables>(
+  obj: GObject,
+): IObservable<InferCombineLatestObjectValue<GObject>>;
+```
+
+### Definition
+
+Similar to `combineLatest`, but accepts an `object` where its properties are `Observables`.
+It emits an object with the same keys, but having the Observables' values as properties.
+
+### Example
+
+#### Combine values of 2 Observables as array
+
+```ts
+// observable generating 0, 1, 2, 3,... every 500ms
+const valueA = pipe$$(interval(500), [
+  scan$$$<void, number>((i) => (i + 1), 0),
+]);
+
+// observable generating 'a', 'b', 'c',... every 550ms
+const valueB = pipe$$(interval(500), [
+  scan$$$<void, number>((i) => (i + 1), 97),
+  map$$$<void, string>(String.fromCharCode),
+]);
+
+// highlight-next-line
+const subscribe = combineLatestObject({ valueA, valueB });
+
+let startTime: number = Date.now();
+subscribe(({ valueA, valueB }) => {
+  console.log(`${ (Date.now() - startTime).toString(10) }ms`, valueA, valueB);
+});
+```
+
+Output:
+
+```text
+550ms: 0 'a'
+1000ms: 1 'a'
+1050ms: 1 'b'
+1500ms: 2 'b'
+1600ms: 2 'c'
 ...
 ```

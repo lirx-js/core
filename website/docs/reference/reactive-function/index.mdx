@@ -36,7 +36,20 @@ If you prefer to have a function which handles changes in batch you may want to 
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveFunction as reactiveFunction([observableA, observableB], (a, b) => a + b)
+participant OUT
+
+A->>reactiveFunction: 10
+B->>reactiveFunction: 5
+reactiveFunction->>OUT: 15
+B->>reactiveFunction: 2
+reactiveFunction->>OUT: 12
+```
 
 ### Example
 

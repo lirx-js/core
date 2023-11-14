@@ -20,7 +20,21 @@ The RxJS equivalent is [merge](https://rxjs.dev/api/index/function/merge).
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observables[0]
+participant B as observables[1]
+participant merge as merge(observables)
+participant OUT
+
+B->>merge: b1
+merge->>OUT: b1
+A->>merge: a1
+merge->>OUT: a1
+A->>merge: a2
+merge->>OUT: a1
+```
 
 ### Example
 

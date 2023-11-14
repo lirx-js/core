@@ -6,15 +6,15 @@ This projet is open to everyone. Feel free to test the library, share it, improv
 
 #### Root
 
-The library requires `nodejs 19+`, `yarn` and optionally `verdaccio` (if not required, you may comment the `.yarnrc` file. See later the explanation).
+The library requires `nodejs ^20.9.0`, `yarn` and optionally `verdaccio` (if not required, you may comment the `.yarnrc` file. See later the explanation).
 
 So the first commands to run are:
-
-If you have `nvm` (skip it if you're already using nodejs 19+):
 
 ```shell
 nvm use
 ```
+
+*If you don't have nvm, please use manually nodejs 20+.*
 
 Then:
 
@@ -32,8 +32,10 @@ This is where you'll find the core components, functions, classes and types of t
 This library contains a specific folder called `build`.
 It contains all the scripts to build the library, develop it, and some common operations.
 
-It uses `yarn 2` with plug-and-play. So you can immediately start developing using `npm` or `yarn`.
-`nodejs 19+` is required (previous versions may work but have not been tested).
+```shell
+cd build
+yarn install
+```
 
 To build the lib: `yarn run build`. It will create an `esm` and a `cjs` version of the library with type definitions.
 The resulting build is compatible with modern and old bundlers, and is located in the `dist` directory.
@@ -57,7 +59,7 @@ verdaccio
 Then to build and publish the lib to `verdaccio`:
 
 ```shell
-yarn run build:dev
+yarn build:dev
 ```
 
 The `build` folder must be kept untouched, but you can submit changes [here](https://github.com/lifaon74/ts-lib-seed).

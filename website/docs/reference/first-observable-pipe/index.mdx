@@ -22,7 +22,23 @@ The RxJS equivalent is [first](https://rxjs.dev/api/operators/first).
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant firstObservablePipe as firstObservablePipe()
+participant OUT
+
+observable->>firstObservablePipe: 1
+firstObservablePipe->>OUT: 1
+
+firstObservablePipe-->>observable: unsubscribe
+
+opt Hypothetical next values
+observable->>firstObservablePipe: 2
+observable->>firstObservablePipe: 3
+end
+```
 
 ### Example
 

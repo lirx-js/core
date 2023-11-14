@@ -24,7 +24,38 @@ The RxJS equivalent is [map](https://rxjs-dev.firebaseapp.com/api/operators/map)
 
 ### Diagram
 
-![](example-diagram.svg)
+#### Algorithm
+
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapObservablePipe as mapObservablePipe(mapFunction)
+participant OUT
+
+observable->>mapObservablePipe: value
+Note over mapObservablePipe: calls mapFunction(value)
+mapObservablePipe-->>OUT: value returned by mapFunction
+```
+
+#### Example
+
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapObservablePipe as mapObservablePipe(x => x * 10)
+participant OUT
+
+observable->>mapObservablePipe: 1
+mapObservablePipe->>OUT: 10
+
+observable->>mapObservablePipe: 2
+mapObservablePipe->>OUT: 20
+
+observable->>mapObservablePipe: 3
+mapObservablePipe->>OUT: 30
+```
 
 ### Example
 

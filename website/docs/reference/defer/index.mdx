@@ -25,7 +25,16 @@ Creates an Observable, which on subscribe, will call `factory` and transmit the 
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as defer(() => of(0, 1, 2))
+participant OUT
+
+A->>OUT: 0
+A->>OUT: 1
+A->>OUT: 2
+```
 
 ### Example
 

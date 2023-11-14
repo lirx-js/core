@@ -22,7 +22,20 @@ If any of the members (Observables) of the template string change, it re-generat
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as observableA
+participant B as observableB
+participant reactiveTemplateString as reactiveTemplateString`a: ${observableA}, b: ${observableB}`
+participant OUT
+
+A->>reactiveTemplateString: 'Alice'
+B->>reactiveTemplateString: 'Bob'
+reactiveTemplateString->>OUT: 'a: Alice, b: Bob'
+B->>reactiveTemplateString: 'Carol'
+reactiveTemplateString->>OUT: 'a: Alice, b: Carol'
+```
 
 ### Example
 

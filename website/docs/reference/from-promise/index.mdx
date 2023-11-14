@@ -33,7 +33,19 @@ cancel any pending tasks.
 
 ### Diagram
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant fromPromise as fromPromise(promise)
+participant OUT
+
+alt fulfilled with <value>
+    fromPromise->>OUT: next: value
+    fromPromise->>OUT: complete
+else rejected with <error>
+    fromPromise->>OUT: error: error
+end
+```
 
 ### Examples
 

@@ -6,17 +6,48 @@ That's why, we may cast a Signal to an Observable and vice-versa.
 
 ## signal.toObservable(...)
 
-The `toObservable` method is used to convert a Signal to an Observable.
-
-It accepts an optional `ISignalToObservableOptions` argument:
-
 ```ts
-interface ISignalToObservableOptions {
-  emitCurrentValue?: boolean; // (default: true)
-  debounce?: boolean; // (default: true)
+interface IReadonlySignal<GValue> {
+  // ...
+  toObservable(
+    options?: ISignalToValueObservableOptions<GValue>,
+  ): IObservable<GValue>;
+  toObservable(
+    options: ISignalToNotificationsObservableOptions,
+  ): IObservable<ISignalNotifications<GValue>>;
 }
 ```
 
+The `toObservable` method is used to convert a Signal to an Observable.
+
+It accepts an optional `ISignalToXXXObservableOptions` argument:
+
+```ts
+interface ISignalToObservableSharedOptions {
+  readonly emitCurrentValue?: boolean; // (default: true)
+  readonly debounce?: boolean; // (default: true)
+}
+
+interface ISignalToValueObservableOnErrorFunction<GValue> {
+  (
+    error: unknown,
+  ): IMapFilterMapFunctionReturn<GValue>;
+}
+
+interface ISignalToValueObservableOptions<GValue> extends ISignalToObservableSharedOptions {
+  readonly mode?: 'value'; // (default: 'value')
+  readonly onError?: ISignalToValueObservableOnErrorFunction<GValue>; // (default: logs the error, and discards the value)
+}
+
+interface ISignalToNotificationObservableOptions extends ISignalToObservableSharedOptions {
+  readonly mode: 'notification';
+}
+```
+
+- `mode`: (default: `value`) - it defines the type of values send by the returned Observable.
+  - `value`: values only are sent. If the signal enters an "error" state, then an error is thrown.
+  - `notification`: notifications are sent. If the signal enters an "error" state, then an `error` notification is sent. Else, the signal values are sent through `next` notifications.
+- `onError`: called if the `mode` is `value` and the signal enters an "error" state.
 - `emitCurrentValue`: (default: `true`) - if set to `true`, then, when the returned Observable is subscribed, the Signal will immediately emit its current value.
   Else, the values are sent only when the Signal changes.
 - `debounce`: (default: `true`) - Observables are not [glitch-free](https://en.wikipedia.org/wiki/Reactive_programming#Glitches) by nature.
@@ -31,29 +62,48 @@ Conversely, it is possible to convert an Observable to a Signal by using the `to
 ```ts
 function toSignal<GValue>(
   value$: IObservable<GValue>,
+  options?: ISignalFromValueObservableOptions<GValue>
 ): ISignalFromObservable<GValue>;
-
-function toSignal<GValue, GInitialValue extends (GValue | null | undefined)>(
-  value$: IObservable<GValue>,
-  options: IToSignalOptions<GInitialValue>,
-): ISignalFromObservable<GValue | GInitialValue>;
+function toSignal<GValue>(
+  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
+  options: ISignalFromNotificationsObservableOptions<GValue>,
+): ISignalFromObservable<GValue>;
 ```
 
 ```ts
-interface ISignalFromObservable<GValue> extends ISignal<GValue> {
+interface ISignalFromObservable<GValue> extends IReadonlySignal<GValue> {
   isActive(): boolean;
 
   activate(
     active?: boolean, // default: true
-  ): this;
+  ): void;
 }
 
-interface IToSignalOptions<GInitialValue> {
-  initialValue: GInitialValue;
+interface ISignalFromObservableSharedOptions<GValue> extends ISignalOptions<GValue> {
+}
+
+interface ISignalFromValueObservableOptions<GValue> extends ISignalFromObservableSharedOptions<GValue> {
+  readonly mode?: 'value'; // (default: 'value')
+}
+
+interface ISignalFromNotificationsObservableOptions<GValue> extends ISignalFromObservableSharedOptions<GValue> {
+  readonly mode: 'notification';
+  readonly unsubscribeOnError?: boolean; // (default: true)
 }
 ```
 
-The `toSignal` function internally subscribes to the given Observable and updates the returned Signal any time the Observable emits a value.
+The `toSignal` function internally subscribes to the given Observable and updates the returned Signal any time the Observable emits a value or notification.
+
+### Options
+
+The `toSignal` function accepts 2 modes:
+
+- `value`: when a value is sent by the Observable, the Signal is updated with this value.
+- `notification`: when a notification is sent by the Observable
+  - if it's a `next` notification, then the Signal is updated with this notification's value
+  - else in case of `error` notification, the signal enters an "error" state.
+    If `unsubscribeOnError` is true, then the provided Observable will unsubscribe too.
+
 
 ### Returned Signal
 
@@ -74,86 +124,69 @@ When a value is sent by the Observable, the Signal is updated with this value.
 By nature, a Signal has no cancellation as opposed to an Observable. This is why an `activate` function is required.
 You must call `activate(false)` when you want to dispose of the Signal, to free resources and avoir memory leaks.
 
-### Options
+### Examples
 
-Observables can be used to model both synchronous and asynchronous data flow.
-However, they don't distinguish these two cases in their API - any Observable *might* be synchronous, or it *might* be asynchronous.
-Signals, on the other hand, are always synchronous.
-The signature of the `toSignal` function supports both synchronous and asynchronous Observables.
-
-#### Synchronous emit
+#### Synchronous vs Asynchronous Observables
 
 Some Observables are known to emit synchronously, which is the desired behaviour for a Signal.
 
-In those cases, you may omit to provide the second arguments `options`.
+In those cases, you may get the signal's value immediately:
 
 ```ts
 // this emits synchronously:
 const count$ = single(50);
 
-const count: Signal<number> = toSignal(count$);
+const count = toSignal(count$);
+
+console.log(count());
 ```
 
-However, if `count$` is ever made asynchronous (such as by adding a debounce operation, for example), `toSignal` will throw an error.
+However, if `count$` is ever made asynchronous (such as by adding a debounce operation, for example),
+getting the signal's value before the Observable emits, will throw an error:
 
+```ts
+// this emits asynchronously:
+const count$ = debounceTime$$(single(50), 100);
+
+const count = toSignal(count$);
+
+console.log(count()); // throws !
+```
 
 #### Initial Values
 
-If an Observable is known to emit only asynchronously, then, we'll have to define an **initial value**.
-If it is synchronous, this initial value is optional.
-
-The initial value may have the same type as the Observable:
+If an Observable is known to emit only asynchronously, then, we may want to make it synchronous:
 
 ```ts
 // the first value will not be emitted until 1 second later
-const secounds$ = scan$$(interval(1000), _ => _ + 1, 0);
+const secondsAsynchonous$ = scan$$(interval(1000), _ => _ + 1, 0);
+const secondsSynchonous$ = merge([
+  single(0), // initial value
+  secondsAsynchonous$,
+]);
 // provide an initial value of zero
-const seconds = toSignal(secounds$, { initialValue: 0 });
+const seconds = toSignal(secondsSynchonous$);
+
 effect(() => {
   console.log(seconds());
 });
 ```
 
-**OR** may be `undefined` or `null`:
+#### Observable of Notifications
 
 ```ts
-const mousePosition: Signal<MouseEvent | undefined> = toSignal(fromEventTarget(window, mousemove), { initialValue: undefined });
-console.log(mousePosition()); // "undefined" before the data is available
+const requestSignal = toSignal(fromFetch('https://example.com'), { mode: 'notification' });
+
+effect(() => {
+  try {
+    const response = requestSignal();
+  } catch (e: unknown) {
+    if (!(e instanceof SignalUninitializedError)) {
+      // Handle the error from the observable here
+    }
+  }
+});
 ```
 
-
-## toSignalWithNotifications(...)
-
-`toSignal` works with Observables sending simple values.
-If you have Observables sending Notifications, you should use `toSignalWithNotifications`:
-
-```ts
-function toSignalWithNotifications<GValue>(
-  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-): ISignalFromObservable<GValue>;
-
-function toSignalWithNotifications<GValue, GInitialValue extends (GValue | null | undefined)>(
-  value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: IToSignalOptions<GInitialValue>,
-): ISignalFromObservable<GValue | GInitialValue>;
-```
-
-
-
-If a `next` Notification is received, then the Signal will take this Notification's value.
-
-In the case of an `error` Notification, then the Signal will throw this error the next time the Signal is read.
-This error can be handled the same way any other error coming from a Signal would be:
-
-```ts
-const requestSignal = toSignalWithNotifications(fromFerch('https://example.com'));
-try {
-  requestSignal();
-} catch (e: unknown) {
-  // Handle the error from the observable here
-}
-```
-
-Finally, if a `complete` or `error` Notification occurs, then the Observable is simply unsubscribed, **but remains active**.
 
 

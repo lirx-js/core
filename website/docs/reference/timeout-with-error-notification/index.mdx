@@ -20,7 +20,16 @@ Creates an Observable that emits an `error` Notification after a specified durat
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant A as timeoutWithErrorNotification(1000)
+participant OUT
+
+Note over A,OUT: After 1000ms
+
+A->>OUT: error
+```
 
 ### Example
 

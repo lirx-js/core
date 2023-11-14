@@ -1,10 +1,9 @@
-
-
 export interface IDOMObserverSimple<GOptions> {
   observe(
     target: Element,
     options?: GOptions,
   ): void;
+
   disconnect(): void;
 }
 
@@ -23,7 +22,6 @@ export interface IDOMObserverFactoryCallback<GEntry extends IDOMObserverEntry> {
     entries: ReadonlyArray<GEntry>,
   ): void;
 }
-
 
 export interface IDOMObserverSimpleFactory<GOptions, GEntry extends IDOMObserverEntry> {
   (

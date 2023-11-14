@@ -36,11 +36,47 @@ pipe([
 
 #### Algorithm
 
-![](algorithm-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapDistinctObservablePipe as mapDistinctObservablePipe(mapFunction)
+participant OUT
+
+observable->>mapDistinctObservablePipe: value
+
+Note over mapDistinctObservablePipe: calls mapFunction(value) -> newValue
+
+alt if <newValue> is different from the previous value
+    mapDistinctObservablePipe->>OUT: newValue
+else else discard value
+    mapDistinctObservablePipe--xOUT: <never>
+end
+```
 
 #### Example
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant mapDistinctObservablePipe as mapDistinctObservablePipe(i => i * 2)
+participant OUT
+
+observable->>mapDistinctObservablePipe: 0
+mapDistinctObservablePipe->>OUT: 0
+
+observable->>mapDistinctObservablePipe: 1
+mapDistinctObservablePipe->>OUT: 2
+
+observable->>mapDistinctObservablePipe: 1
+
+observable->>mapDistinctObservablePipe: 2
+mapDistinctObservablePipe->>OUT: 4
+
+observable->>mapDistinctObservablePipe: 1
+mapDistinctObservablePipe->>OUT: 2
+```
 
 ### Example
 

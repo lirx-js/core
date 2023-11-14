@@ -24,7 +24,19 @@ The RxJS equivalent is [debounceTime](https://rxjs-dev.firebaseapp.com/api/opera
 
 ### Diagram
 
-![](example-diagram.svg)
+```mermaid
+sequenceDiagram
+
+participant observable
+participant debounceTimeObservablePipe as debounceTimeObservablePipe(200)
+participant OUT
+
+observable->>debounceTimeObservablePipe: 1
+Note over observable: 100ms
+observable->>debounceTimeObservablePipe: 2
+Note over debounceTimeObservablePipe: 200ms
+debounceTimeObservablePipe->>OUT: 2
+```
 
 ### Example
 

@@ -4,21 +4,31 @@ import {
 import { IObservable } from '../../../../../type/observable.type';
 import { sourceObservable } from '../source-observable';
 import { ISourceObservableOptions } from '../source-observable-options.type';
-import { IShareObservablePipeGetMultiCastSource } from './share-observable-pipe-get-multi-cast-source.type';
+import { IShareObservablePipeCreateSource } from './share-observable-pipe-create-source.type';
 
-export interface IShareObservableOptions<GValue> extends Omit<ISourceObservableOptions<GValue>, 'getSource'> {
-  getSource?: IShareObservablePipeGetMultiCastSource<GValue>;
+export interface IShareObservableOptions<GValue> extends Omit<ISourceObservableOptions<GValue>, 'createSource' | 'onSubscribe' | 'onUnsubscribe'> {
+  createSource?: IShareObservablePipeCreateSource<GValue>;
 }
 
 export function shareObservable<GValue>(
   subscribe: IObservable<GValue>,
   {
-    getSource = createMulticastSource,
+    createSource = createMulticastSource,
     ...options
   }: IShareObservableOptions<GValue> = {},
 ): IObservable<GValue> {
+  let observersCount: number = 0;
+
   return sourceObservable<GValue>(subscribe, {
-    getSource,
+    createSource,
+    onSubscribe: (): boolean => {
+      observersCount++;
+      return (observersCount === 1);
+    },
+    onUnsubscribe: (): boolean => {
+      observersCount--;
+      return (observersCount === 0);
+    },
     ...options,
   });
 }
