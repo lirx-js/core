@@ -1,6 +1,6 @@
+import { futureUnsubscribe } from '@lirx/unsubscribe';
 import { createAbortError, createEventListener, INullish, IRemoveEventListener, isNullish, toTypedEventTarget } from '@lirx/utils';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type';
-import { futureUnsubscribe } from '@lirx/unsubscribe';
 
 export interface IObservableToPromiseOptions {
   signal?: AbortSignal;

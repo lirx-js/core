@@ -1,0 +1,318 @@
+import { IUnsubscribe } from '@lirx/unsubscribe';
+import { Callable, EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction, noop } from '@lirx/utils';
+import { createErrorNotification } from '../../../../misc/notifications/built-in/error/create-error-notification';
+import { createNextNotification } from '../../../../misc/notifications/built-in/next/create-next-notification';
+import { merge } from '../../../../observable/built-in/from/without-notifications/many-observables/merge/merge';
+import { reference } from '../../../../observable/built-in/from/without-notifications/values/reference/reference';
+import {
+  distinctObservable,
+} from '../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
+import {
+  mapFilterObservable,
+} from '../../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map-filter/map-filter-observable';
+import {
+  debounceMicrotaskObservable,
+} from '../../../../observable/pipes/built-in/without-notifications/time-related/debounce-microtask/debounce-microtask-observable';
+import { IObservable, IUnsubscribeOfObservable } from '../../../../observable/type/observable.type';
+import { IMapFilterMapFunctionReturn } from '../../../../observer/pipes/built-in/map-filter/map-filter-map-function.type';
+import { IObserver } from '../../../../observer/type/observer.type';
+import { SignalContextError } from '../../../error/signal-context-error.class';
+import { SignalThrow } from '../../../error/signal-throw.class';
+import { getSignalWriteMode } from '../../../internal/allow-signal-writes/allow-signal-writes-context.private';
+import { getCurrentSignalChangeListener, ISignalChangeListener } from '../../../internal/register-signal/signal-get-called.private';
+import { SIGNAL } from '../../../readonly-signal/traits/symbol/signal.symbol';
+import {
+  DEFAULT_SIGNAL_TO_VALUE_OBSERVABLE_ON_ERROR_FUNCTION,
+  ISignalToNotificationsObservableOptions,
+  ISignalToObservableOptions,
+  ISignalToValueObservableOptions,
+} from '../../../readonly-signal/traits/to-observable/signal-to-observable-options.type';
+import { IPureSignal } from '../../signal.type';
+import { ISignalMutateFunctionCallback } from '../../traits/mutate/signal.mutate.function-definition';
+import { ISignalUpdateFunctionCallback } from '../../traits/update/signal.update.function-definition';
+import { ISignalConstructor } from '../../types/signal-constructor.type';
+import { ISignalNotifications } from '../../types/signal-notifications.type';
+import { ISignalOptions } from '../../types/signal-options.type';
+
+/**
+ * The Signal class.
+ */
+export class PureSignal<GValue> implements IPureSignal<GValue> {
+
+  /**
+   * Returns a thrown Signal.
+   */
+  static throw<GValue>(
+    error: any,
+  ): PureSignal<GValue> {
+    return new PureSignal<GValue>(new SignalThrow(error));
+  }
+
+  #value: ISignalNotifications<GValue>;
+  #signalChangeListeners: ISignalChangeListener[];
+
+  // readonly #value$: IObservable<ISignalNotifications<GValue>>;
+  // readonly #$value: IObserver<ISignalNotifications<GValue>>;
+  readonly #equal: IEqualFunction<GValue>;
+
+  constructor(
+    initialValue: GValue | SignalThrow,
+    {
+      equal = EQUAL_FUNCTION_STRICT_EQUAL,
+    }: ISignalOptions<GValue> = {},
+  ) {
+    this.#value = (initialValue instanceof SignalThrow)
+      ? createErrorNotification(initialValue)
+      : createNextNotification(initialValue);
+
+    this.#signalChangeListeners = [];
+
+    // const valueSource: IMulticastSource<ISignalNotifications<GValue>> = createMulticastSource<ISignalNotifications<GValue>>();
+    // this.#value$ = valueSource.subscribe;
+    // this.#$value = valueSource.emit;
+    this.#equal = equal;
+  }
+
+  get [SIGNAL](): unknown {
+    return true;
+  }
+
+  // #observe(
+  //   listener: ISignalChangeListener,
+  // ): IUnsubscribe {
+  //   const signalChangeListeners: ISignalChangeListener[] = this.#signalChangeListeners;
+  //   const index: number = signalChangeListeners.push(listener) - 1;
+  //
+  //   return (): void => {
+  //     if (this.#signalChangeListeners === signalChangeListeners) {
+  //       signalChangeListeners[index] = noop;
+  //     }
+  //   };
+  // }
+
+  /**
+   * Updates the value of the signal, and notifies all listeners.
+   */
+  #setValue(
+    value: ISignalNotifications<GValue>,
+  ): void {
+    // TODO maybe remove getSignalWriteMode and instead prevent `#setValue` is already setting
+    this.#value = value;
+    const signalChangeListeners: ISignalChangeListener[] = this.#signalChangeListeners;
+    this.#signalChangeListeners = [];
+    for (let i = 0, l = signalChangeListeners.length; i < l; i++) {
+      signalChangeListeners[i]();
+    }
+  }
+
+  // get #value$(): IObservable<ISignalNotifications<GValue>> {
+  //   return (
+  //     emit: IObserver<ISignalNotifications<GValue>>
+  //   ): IUnsubscribeOfObservable => {
+  //     let running: boolean = true;
+  //
+  //     const loop = (): void => {
+  //       this.#signalChangeListeners.push((): void => {
+  //         if (running) {
+  //           emit(this.#value);
+  //         }
+  //         if (running) {
+  //           loop();
+  //         }
+  //       });
+  //     };
+  //
+  //     return (): void => {
+  //       running = false;
+  //     };
+  //   };
+  // }
+
+  get #value$(): IObservable<ISignalNotifications<GValue>> {
+    return (
+      emit: IObserver<ISignalNotifications<GValue>>
+    ): IUnsubscribeOfObservable => {
+      let running: boolean = true;
+
+      let signalChangeListeners: ISignalChangeListener[];
+      let index: number;
+
+      const loop = (): void => {
+        signalChangeListeners = this.#signalChangeListeners;
+        index = signalChangeListeners.length;
+        signalChangeListeners.push((): void => {
+          emit(this.#value);
+          if (running) {
+            loop();
+          }
+        });
+      };
+
+      return (): void => {
+        if (running) {
+          running = false;
+          signalChangeListeners[index] = noop;
+        }
+      };
+    };
+  }
+
+  /**
+   * Returns the signal's value, or throws if the signal is into an "error" state.
+   *
+   * - if run into a signal's context, it notifies this context that the signal has been used.
+   */
+  get(): GValue {
+    const currentSignalChangeListener: ISignalChangeListener | undefined = getCurrentSignalChangeListener();
+    if (currentSignalChangeListener !== void 0) {
+      this.#signalChangeListeners.push(currentSignalChangeListener);
+    }
+    if (this.#value.name === 'next') {
+      return this.#value.value;
+    } else {
+      throw this.#value.value;
+    }
+  }
+
+  /**
+   * Sets a new value for this signal.
+   *
+   * - checks that the current signal's value and the new value differ, or `force` is `true`, before this value is actually set.
+   * - if run into a signal's context, it ensures that writing is allowed.
+   */
+  set(
+    value: GValue,
+    force: boolean = false,
+  ): void {
+    switch (getSignalWriteMode()) {
+      case 'allow':
+        if (
+          force
+          || (this.#value.name === 'error')
+          || !this.#equal(value, this.#value.value)
+        ) {
+          this.#setValue(createNextNotification(value));
+        }
+        break;
+      case 'forbid':
+        throw new SignalContextError(`The signal cannot be updated in this context.`);
+      case 'queue':
+        queueMicrotask((): void => this.set(value, force));
+        break;
+    }
+  }
+
+  update(
+    updateFunction: ISignalUpdateFunctionCallback<GValue>,
+  ): void {
+    return this.set(
+      updateFunction(this.get()),
+    );
+  }
+
+  mutate<GMutableValue extends GValue>(
+    mutateFunction: ISignalMutateFunctionCallback<GMutableValue>,
+  ): void {
+    const value: GValue = this.get();
+    mutateFunction(value as GMutableValue);
+    this.set(value, true);
+  }
+
+  /**
+   * Sets the signal into an "error" state.
+   *
+   * - if run into a signal's context, it ensures that writing is allowed.
+   */
+  throw(
+    error: any,
+  ): void {
+    switch (getSignalWriteMode()) {
+      case 'allow':
+        this.#setValue(createErrorNotification(error));
+        break;
+      case 'forbid':
+        throw new SignalContextError(`The signal cannot be updated in this context.`);
+      case 'queue':
+        queueMicrotask((): void => this.throw(error));
+        break;
+    }
+  }
+
+  /**
+   * Converts this signal into an Observable.
+   *
+   * Options:
+   *  - `mode`: 2 modes are available
+   *    - `value` (default): only the values are sent. if the signal enters into an "error" state, then `onError` is called (as default it simply logs the error).
+   *    - `notification`: the signal state is sent as `next` or `error` notifications.
+   *  - `emitCurrentValue` (default: `true`): if true, the observable will send the signal's current value.
+   *  - `debounce` (default: `true`): if true, values will be debounced using `debounceMicrotaskObservable`. This improves performances when setting multiple times the signal's value during the same event loop.
+   *  - `distinct` (default: `true`): if true, only distinct values are sent. This is only useful when `debounce` is `true`.
+   */
+  toObservable(
+    options?: ISignalToValueObservableOptions<GValue>,
+  ): IObservable<GValue>;
+  toObservable(
+    options: ISignalToNotificationsObservableOptions,
+  ): IObservable<ISignalNotifications<GValue>>;
+  toObservable(
+    {
+      emitCurrentValue = true,
+      debounce = true,
+      distinct = true,
+      mode = 'value',
+      // @ts-ignore
+      onError = DEFAULT_SIGNAL_TO_VALUE_OBSERVABLE_ON_ERROR_FUNCTION,
+    }: ISignalToObservableOptions<GValue> = {},
+  ): IObservable<GValue> | IObservable<ISignalNotifications<GValue>> {
+    if (mode === 'notification') {
+      if (debounce) {
+        const value$: IObservable<ISignalNotifications<GValue>> = emitCurrentValue
+          ? merge([
+            reference(() => this.#value),
+            debounceMicrotaskObservable(this.#value$),
+          ])
+          : debounceMicrotaskObservable(this.#value$);
+
+        return distinct
+          ? distinctObservable(
+            value$,
+            {
+              equal: (a: ISignalNotifications<GValue>, b: ISignalNotifications<GValue>): boolean => {
+                return (a.name === 'next')
+                  && (b.name === 'next')
+                  && this.#equal(a.value, b.value);
+              },
+            },
+          )
+          : value$;
+      } else {
+        return emitCurrentValue
+          ? merge([
+            reference(() => this.#value),
+            this.#value$,
+          ])
+          : this.#value$;
+      }
+    } else {
+      return mapFilterObservable(
+        this.toObservable({
+          emitCurrentValue,
+          debounce,
+          mode: 'notification',
+        }),
+        (notification: ISignalNotifications<GValue>): IMapFilterMapFunctionReturn<GValue> => {
+          return (notification.name === 'next')
+            ? notification.value
+            : onError(notification.value);
+        },
+      );
+    }
+  }
+}
+
+export const Signal = Callable<typeof PureSignal, ISignalConstructor>(PureSignal, function(this: PureSignal<any>) {
+  return this.get();
+});
+
+

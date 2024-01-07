@@ -1,6 +1,6 @@
 {
   "name": "ts-lib-seed",
-  "version": "2.5.0-beta.0",
+  "version": "2.5.0-beta.1",
   "description": "Seed to build a library",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "": "",
     "___________BUILD_AND_PUBLISH___________": "",
     "build:dev": "yarn run build:package:index-file && yarn run bump:publish:package:dev",
-    "build:prod": "yarn run build:package:index-file && yarn run publish:package:prod",
+    "build:prod": "yarn run install:prod && yarn run build:package:index-file && yarn run publish:package:prod",
     "_________________BUILD_________________": "",
     "build:package:index-file": "echo \"build:package:index-file\" && yarn run generate:index-file && yarn run build:package && yarn run remove:index-file",
     "build:package": "echo \"build:package\" && yarn run clean:dist && yarn run build:package:tsc && yarn run build:package:scss && yarn run assemble:package",

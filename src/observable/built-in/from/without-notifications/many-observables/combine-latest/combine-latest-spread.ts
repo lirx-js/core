@@ -1,5 +1,5 @@
 import { IGenericObservable, IObservable } from '../../../../../type/observable.type';
-import { ICombineLatestObservablesValues, combineLatest } from './combine-latest';
+import { combineLatest, ICombineLatestObservablesValues } from './combine-latest';
 
 export function combineLatestSpread<GObservables extends readonly IGenericObservable[]>(
   ...observables: GObservables

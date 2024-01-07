@@ -1,7 +1,7 @@
+import { IUnsubscribe } from '@lirx/unsubscribe';
 import { createTimeout, IAbortTimer } from '@lirx/utils';
 import { IObserverWithCleanUp } from '../../../../type/observer-with-clean-up.type';
 import { IObserver } from '../../../../type/observer.type';
-import { IUnsubscribe } from '@lirx/unsubscribe';
 
 /**
  * @deprecated

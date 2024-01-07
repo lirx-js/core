@@ -8,7 +8,6 @@ The basic API for an effect has the following signature:
 ```ts
 function effect(
   effectFunction: IEffetFunction,
-  options?: IEffectOptions,
 ): IUnsubscribe;
 ```
 
@@ -20,16 +19,6 @@ interface IEffetFunction {
 }
 
 type IOnCleanUpFunction = IObservable<void>;
-
-interface IEffectOptions {
-  signalWriteMode?: ISignalWriteMode; // (default: 'forbid')
-}
-
-type ISignalWriteMode =
-  | 'allow'
-  | 'forbid'
-  | 'queue'
-  ;
 ```
 
 Usage example:
@@ -103,10 +92,7 @@ unsubscribeOfEffect();
 #### Effects writing to signals
 
 We generally consider that **writing to signals from effects can lead to unexpected behavior** (mostly infinite loops) and hard to follow data flow.
-As such any attempt of writing to a signal from an effect will be **reported as an error and blocked**.
-
-This default behavior can be overridden by passing the `signalWriteMode` options to the effect creation function, ex.:
-
+As such any attempt of writing to a signal from an effect **should be forbidden**:
 
 ```ts
 const counter = signal(0);
@@ -118,7 +104,7 @@ effect(() => {
   } else {
     isBig.set(false);
   }
-}, { signalWriteMode: 'allow' });
+});
 ```
 
 Please note that `computed` is often a more declarative, straightforward and predictable solution to synchronizing data:
@@ -127,6 +113,7 @@ Please note that `computed` is often a more declarative, straightforward and pre
 const counter = signal(0);
 const isBig = computed(() => counter() > 5);
 ```
+
 
 #### Reading without tracking dependencies
 
@@ -173,7 +160,7 @@ effect(() => {
 
 :::tip
 
-It is important to note that `effect` may usually be replaced by `computed` or `.toObservable`, which are generally more adequate.
+It is important to note that `effect` may usually be replaced by `computed`, which is generally more adequate.
 `effect` is really powerful, so it *SHOULD* be used with **caution**.
 
 :::

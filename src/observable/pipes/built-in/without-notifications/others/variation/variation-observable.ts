@@ -1,5 +1,5 @@
-import { IObservable } from '../../../../../type/observable.type';
 import { UNINITIALIZED_TOKEN } from '@lirx/utils';
+import { IObservable } from '../../../../../type/observable.type';
 import { scanObservable } from '../../observer-pipe-related/scan/scan-observable';
 import { IVariation } from './variation.type';
 

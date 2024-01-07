@@ -1,5 +1,5 @@
-import { IObservable } from '../../../observable/type/observable.type';
 import { isFunction } from '@lirx/utils';
+import { IObservable } from '../../../observable/type/observable.type';
 
 export function isMaybeObservable<GValue>(
   value: unknown,

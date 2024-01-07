@@ -1,12 +1,12 @@
 import { isNullish } from '@lirx/utils';
+import { single } from '../../../observable/built-in/from/without-notifications/values/single/single';
 import { IObservable } from '../../../observable/type/observable.type';
 import { IObserverObservablePair } from '../../../observer-observable-pair/type/observer-observable-pair.type';
-import { isMaybeObservable } from './is-maybe-observable';
-import { single } from '../../../observable/built-in/from/without-notifications/values/single/single';
+import { isReadonlySignal } from '../../../signals/readonly-signal/is/is-readonly-signal';
+import { IReadonlySignal } from '../../../signals/readonly-signal/readonly-signal.type';
+import { fromSignal } from '../../../signals/signal-to-observable/without-notifications/from-signal';
 import { IUnknownToObservableMode } from '../unknown-to-observable-mode.type';
-import { IReadonlySignal } from '../../signals/readonly-signal/readonly-signal.type';
-import { ISignalToValueObservableOptions } from '../../signals/readonly-signal/traits/to-observable/signal-to-observable-options.type';
-import { isReadonlySignal } from '../../signals/readonly-signal/is/is-readonly-signal';
+import { isMaybeObservable } from './is-maybe-observable';
 
 // export type IUnknownToObservableValue<GInput, GMode extends IUnknownToObservableMode> =
 //   GInput extends ISignal<infer GValue>
@@ -42,23 +42,19 @@ export type IUnknownToObservable<GInput, GMode extends IUnknownToObservableMode>
           )
       );
 
-export type IUnknownToObservableOptions = ISignalToValueObservableOptions<any>;
-
 export function unknownToObservable<GInput>(
   input: GInput,
 ): IUnknownToObservable<GInput, 'not-undefined'>;
 export function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
   input: GInput,
   mode: GMode,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservable<GInput, GMode>;
 export function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
   input: GInput,
   mode: GMode = 'not-undefined' as GMode,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservable<GInput, GMode> {
   if (isReadonlySignal(input)) {
-    return input.toObservable(options) as IUnknownToObservable<GInput, GMode>;
+    return fromSignal(input) as IUnknownToObservable<GInput, GMode>;
   } else if (!isNullish(input) && isMaybeObservable((input as any).subscribe)) {
     return (input as any).subscribe;
   } else if (isMaybeObservable(input)) {
@@ -87,12 +83,10 @@ export type IUnknownToObservableStrict<GInput> = IUnknownToObservable<GInput, 's
 
 export function unknownToObservableStrict<GInput>(
   input: GInput,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservableStrict<GInput> {
   return unknownToObservable<GInput, 'strict'>(
     input,
     'strict',
-    options,
   );
 }
 
@@ -102,12 +96,10 @@ export type IUnknownToObservableNotUndefined<GInput> = IUnknownToObservable<GInp
 
 export function unknownToObservableNotUndefined<GInput>(
   input: GInput,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservableNotUndefined<GInput> {
   return unknownToObservable<GInput, 'not-undefined'>(
     input,
     'not-undefined',
-    options,
   );
 }
 
@@ -117,11 +109,9 @@ export type IUnknownToObservableAny<GInput> = IUnknownToObservable<GInput, 'any'
 
 export function unknownToObservableAny<GInput>(
   input: GInput,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservableAny<GInput> {
   return unknownToObservable<GInput, 'any'>(
     input,
     'any',
-    options,
   );
 }

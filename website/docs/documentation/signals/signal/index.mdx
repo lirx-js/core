@@ -8,13 +8,6 @@ A Signal is simply a function returning immediately its value (as opposed to an 
 interface IReadonlySignal<GValue> {
   (): GValue;
 
-  toObservable(
-    options?: ISignalToValueObservableOptions<GValue>,
-  ): IObservable<GValue>;
-  toObservable(
-    options: ISignalToNotificationsObservableOptions,
-  ): IObservable<ISignalNotifications<GValue>>;
-
   [SIGNAL]: unknown;
 }
 ```
@@ -23,12 +16,28 @@ This function is marked with the `SIGNAL` symbol so the framework can recognize 
 
 Signals are fundamentally read-only: we can ask for the current value and observe change notification.
 
+### Read a signal
+
+To read a signal, we simply have to call it like a function:
+
+```ts
+const value = count();
+```
+
 This function is used to access the current value *and* record signal read in a reactive context - this is an essential operation that builds the reactive dependencies graph.
 
 Signal reads outside of the reactive context are permitted.
 This means that non-reactive code (ex.: existing, 3rd party libraries) can always read the signal's value, without being aware of its reactive nature.
 
-The documentation of the `toObservable` method [can be found here](/docs/documentation/signals/observables-and-signals/#signaltoobservable).
+
+### Errored signals
+
+A Signal may be in an *"error"* state.
+
+When getting the value of such a signal (ex: `const value = count();`), it will **throw** the error.
+
+**This state is not definitive:** an errored signal may re-enter in a *"normal"* state, for example, when setting a new value.
+
 
 ## Writable signals
 
@@ -37,16 +46,11 @@ When creating a Signal with the [signal](#create-a-signal) function (explained l
 ```ts
 interface ISignal<GValue> extends IReadonlySignal<GValue> {
   set(
-    value: GValue,
-    force?: boolean, // (default: false)
+    value: GValue | SignalThrow,
   ): void;
 
   update(
     updateFunction: ISignalUpdateFunctionCallback<GValue>,
-  ): void;
-
-  mutate<GMutableValue extends GValue>(
-    mutateFunction: ISignalMutateFunctionCallback<GMutableValue>,
   ): void;
 
   throw(
@@ -59,11 +63,25 @@ interface ISignal<GValue> extends IReadonlySignal<GValue> {
 
 This method directly sets the Signal to a new value, and notifies any dependents.
 
-Useful for changing primitive values or replacing data structures when
+This is useful for changing primitive values or replacing data structures when
 the new value is independent of the old one.
 
-If `force` is set to true, then the Signal is updated even if the provided
-value is equal to its own current value.
+#### SignalThrow
+
+An instance of `SignalThrow` may be given as a value:
+
+```ts
+class SignalThrow<GError = any> {
+  readonly error: GError;
+
+  constructor(
+    error: GError,
+  );
+}
+```
+
+In such case, it will put the signal in an *"error"* state (and notifies any dependents).
+
 
 ### update(...)
 
@@ -77,36 +95,19 @@ It accepts an `updateFunction`:
 interface ISignalUpdateFunctionCallback<GValue> {
   (
     value: GValue,
-  ): GValue;
+  ): GValue | SignalThrow;
 }
 ```
 
-### mutate(...)
+If an error is thrown from this function or a `SignalThrow` is returned, then the signal enters in an *"error"* state.
 
-This method updates the current value by mutating it in-place and notifying any dependents.
-
-Useful for making internal changes to the Signal's value without changing
-its identity, such as pushing to an array stored in the Signal.
-
-It accepts a `mutateFunction`:
-
-```ts
-interface ISignalMutateFunctionCallback<GMutableValue> {
-  (
-    value: GMutableValue,
-  ): void;
-}
-```
-
-`update` and `mutate` are simply shorter and convenient manners to combine a signal read and write in one call (`count.update(c => c + 1)` &lt;=&gt; `count.set(count() + 1)`).
+`update` is simply a shorter and convenient manner to combine a signal read and write in one call (`count.update(c => c + 1)` is similar to `count.set(count() + 1)`).
 
 ### throw(...)
 
 This method puts the signal in *"error"* state, and notifies any dependents.
 
-When getting the value of the signal by calling it (ex: `const value = count();`), it will throw the provided error.
-
-**This state is not definitive:** an errored signal may re-enter in a *"normal"* state when setting a value through `set(...)` for example.
+This is a shortcut for `signal.set(new SignalThrow(error))`.
 
 ## Create a Signal
 
@@ -144,7 +145,7 @@ interface IEqualFunction<GValue> {
 
 
 - `equal`: this function is used to compare values passed to the `set` method.
-If this equality function determines that 2 values are equal, and `force` is not `true`, then the value is simply ignored, and the change propagation is skipped.
+If this equality function determines that 2 values are equal, then the value is simply ignored, and the change propagation is skipped.
   - `EQUAL_FUNCTION_STRICT_EQUAL`: (default) - compares values using the strict equality `===`.
   - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: compares primitive values (numbers, strings, etc) using `===` semantics
     but treats objects and arrays as "always unequal".
@@ -202,37 +203,13 @@ names.update(names => ([
 ### Create a signal with a mutable array as value
 
 ```ts
-const names = signal<readonly string[]>(['Alice']);
+// note that we MUST use a different `equal` function if we want to be able to mutate non-primitive values. Else the signal won't update.
+const names = signal<string[]>(['Alice'], { equal: EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE });
 
-// "mutate" is convenient to modify data structures whose content changes but not their reference (objects and arrays)
-names.mutate<string[]>(names => {
+names.update(names => {
   names.push('Bob');
+  return names;
 });
-```
-
-### Cast a Signal to an Observable
-
-```ts
-const counter = signal(0);
-
-const counter$ = counter.toObservable();
-
-counter$((count: number) => {
-  console.log(`count: ${count}`);
-});
-
-window.onclick = () => {
-  counter.set(counter() + 1);
-};
-```
-
-Outputs:
-
-```text
-count: 0
-// on click
-count: 1
-// ...
 ```
 
 ### Creates a signal in an "error" state
