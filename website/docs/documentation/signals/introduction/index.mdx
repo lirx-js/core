@@ -93,16 +93,15 @@ Because Signals are *sync*, they must be and **are glitch-free** in this impleme
 
 Signals introduce some "magic" as their related functions have important side effects.
 
-If not well understood, the Signals could be misused, which may lead to code with bugs really hard to inspect and fix.
+If not well understood, the Signals could be misused, which may lead to code with bugs hard to inspect and fix.
 
 One common error consists of creating an unwanted "reactive loop": a signal `A` that updates another one, and from a hidden loop and chain of other Signals,
-ends by updating the signal `A` itself. This causes an infinite loop of updates, crashing the application.
+ends by updating the signal `A` itself. This causes an infinite loop of updates, usually crashing the application.
 
-Hopefully the framework provides some protections against such cases: it will try to warn you, and throw errors when necessary.
-However, it cannot cover all possibilities, but the more the framework is used and tested,
-the more it will be improved and will cover such complex cases and prevent such errors.
+The framework is able to detect such loops and will report them as error instead of having an application crash.
+However, it assumes that the developers are responsible to limit these cases and avoid signal's contexts having side effects.
 
-In consequences, it is suggested to read carefully this tutorial to avoid "dangerous" practices or patterns.
+In consequences, it is suggested to read carefully this tutorial to prevent "dangerous" practices or patterns.
 
 #### Slightly less performant
 

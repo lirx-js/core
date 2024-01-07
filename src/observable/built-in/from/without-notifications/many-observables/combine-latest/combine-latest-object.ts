@@ -1,5 +1,5 @@
-import { IGenericObservable, IObservable } from '../../../../../type/observable.type';
 import { mapObservable } from '../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
+import { IGenericObservable, IObservable } from '../../../../../type/observable.type';
 import { combineLatest } from './combine-latest';
 
 export type IRecordOfObservables = {

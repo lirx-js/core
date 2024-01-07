@@ -1,4 +1,4 @@
-import { useState, useEffect, DependencyList } from 'react';
+import { DependencyList, useEffect, useState } from 'react';
 import { IObservable } from '../../observable/type/observable.type';
 
 export function useObservableFactory<GValue>(

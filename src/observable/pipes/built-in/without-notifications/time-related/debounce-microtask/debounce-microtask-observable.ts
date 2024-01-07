@@ -1,6 +1,6 @@
+import { createMicrotask, IAbortTimer } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
-import { IAbortTimer, createMicrotask } from '@lirx/utils';
 
 export function debounceMicrotaskObservable<GValue>(
   subscribe: IObservable<GValue>,

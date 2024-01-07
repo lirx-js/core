@@ -13,12 +13,10 @@ function unknownToObservable<GInput>(
 function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
   input: GInput,
   mode: GMode,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservable<GInput, GMode>;
 function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
   input: GInput,
   mode: GMode = 'not-undefined' as GMode,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservable<GInput, GMode>
 ```
 
@@ -26,7 +24,7 @@ function unknownToObservable<GInput, GMode extends IUnknownToObservableMode>(
 
 Converts an Observable, a Signal or any other value into an Observable.
 
-If the input is a Signal, we return `input.toObservable(...)`
+If the input is a Signal, we return `fromSignal(input)`
 Else, if the input is a function, we assume it's an Observable and return it.
 Finally, if the input is none of the above we return `single(value)`.
 
@@ -45,7 +43,6 @@ The `mode` if used to determine what to do when a *raw* value is provided as inp
 ```ts
 function unknownToObservableNotUndefined<GInput>(
   input: GInput,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservableNotUndefined<GInput>
 ```
 
@@ -56,7 +53,6 @@ Alias for `unknownToObservable` with `mode: 'not-undefined'`.
 ```ts
 function unknownToObservableStrict<GInput>(
   input: GInput,
-  options?: IUnknownToObservableOptions,
 ): IUnknownToObservableStrict<GInput>
 ```
 

@@ -1,10 +1,10 @@
+import { futureUnsubscribe } from '@lirx/unsubscribe';
 import { noop } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../../../../../misc/notifications/default-notifications-union.type';
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 import { INotificationsToValuesObservableOnErrorFunction } from './notifications-to-values-observable-on-error-function.type';
-import { futureUnsubscribe } from '@lirx/unsubscribe';
 
 export function notificationsToValuesObservable<GValue>(
   subscribe: IObservable<IDefaultInNotificationsUnion<GValue>>,

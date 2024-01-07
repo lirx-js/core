@@ -36,10 +36,10 @@ effect(() => {
 });
 
 // update the values of the writable signals
-todos.mutate(value => {
-  value.push({ id: 4, title: 'Clean the house', completed: false });
-  value[1].completed = false;
-});
+todos.update(tasks => ([
+  ...tasks,
+  { id: 4, title: 'Clean the house', completed: false },
+]));
 
 // update the showCompleted flag
 showCompleted.set(true);

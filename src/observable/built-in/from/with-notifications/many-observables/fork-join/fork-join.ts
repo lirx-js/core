@@ -1,3 +1,4 @@
+import { futureUnsubscribe, IRunning, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification';
@@ -10,7 +11,6 @@ import {
   IForkJoinObservablesValues,
   IGenericForkInObservables,
 } from './fork-join-observable-notifications.type';
-import { futureUnsubscribe, IRunning, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
 
 export function forkJoin<GObservables extends IGenericForkInObservables>(
   observables: GObservables,

@@ -4,56 +4,68 @@ Signals are not a replacement but a **complement** to Observable.
 
 That's why, we may cast a Signal to an Observable and vice-versa.
 
-## signal.toObservable(...)
+## fromSignal(...)
 
 ```ts
-interface IReadonlySignal<GValue> {
-  // ...
-  toObservable(
-    options?: ISignalToValueObservableOptions<GValue>,
-  ): IObservable<GValue>;
-  toObservable(
-    options: ISignalToNotificationsObservableOptions,
-  ): IObservable<ISignalNotifications<GValue>>;
-}
+function fromSignal<GValue>(
+  signal: IReadonlySignal<GValue>,
+  onError?: IObservableFromSignalOnErrorFunction<GValue>, // (default: logs the error, and discards the value)
+): IObservable<GValue>
 ```
 
-The `toObservable` method is used to convert a Signal to an Observable.
+The `fromSignal` function is used to convert a Signal to an Observable.
 
-It accepts an optional `ISignalToXXXObservableOptions` argument:
+It accepts an optional `IObservableFromSignalOnErrorFunction` function, which is called when the signal enters in an *"error"* state,
+and allows us to return a different value or discard it (by default, it logs the error and discards it).
+
+### Examples
+
+#### Cast a Signal to an Observable
 
 ```ts
-interface ISignalToObservableSharedOptions {
-  readonly emitCurrentValue?: boolean; // (default: true)
-  readonly debounce?: boolean; // (default: true)
-}
+const counter = signal(0);
 
-interface ISignalToValueObservableOnErrorFunction<GValue> {
-  (
-    error: unknown,
-  ): IMapFilterMapFunctionReturn<GValue>;
-}
+const counter$ = fromSignal(counter);
 
-interface ISignalToValueObservableOptions<GValue> extends ISignalToObservableSharedOptions {
-  readonly mode?: 'value'; // (default: 'value')
-  readonly onError?: ISignalToValueObservableOnErrorFunction<GValue>; // (default: logs the error, and discards the value)
-}
+counter$((count: number) => {
+  console.log(`count: ${count}`);
+});
 
-interface ISignalToNotificationObservableOptions extends ISignalToObservableSharedOptions {
-  readonly mode: 'notification';
-}
+window.onclick = () => {
+  counter.set(counter() + 1);
+};
 ```
 
-- `mode`: (default: `value`) - it defines the type of values send by the returned Observable.
-  - `value`: values only are sent. If the signal enters an "error" state, then an error is thrown.
-  - `notification`: notifications are sent. If the signal enters an "error" state, then an `error` notification is sent. Else, the signal values are sent through `next` notifications.
-- `onError`: called if the `mode` is `value` and the signal enters an "error" state.
-- `emitCurrentValue`: (default: `true`) - if set to `true`, then, when the returned Observable is subscribed, the Signal will immediately emit its current value.
-  Else, the values are sent only when the Signal changes.
-- `debounce`: (default: `true`) - Observables are not [glitch-free](https://en.wikipedia.org/wiki/Reactive_programming#Glitches) by nature.
-  Keeping this value to `true` ensures that the values sent by the Signal are glitch-free (using a [microtask debounce](/docs/reference/debounce-microtask-observable-pipe/)).
-  If not wanted, you may set it to `false`. In this case, it must be used with **extreme caution**.
+Outputs:
 
+```text
+count: 0
+// on click
+count: 1
+// ...
+```
+
+
+## fromSignalWithNotifications(...)
+
+Or `fromSignalN(...)`: 
+
+```ts
+function fromSignalWithNotifications<GValue>(
+  signal: IReadonlySignal<GValue>,
+): IObservable<IObservableFromSignalNotifications<GValue>>
+```
+
+With:
+
+```ts
+type IObservableFromSignalNotifications<GValue> =
+  | INextNotification<GValue>
+  | IErrorNotification
+  ;
+```
+
+This is similar to the `fromSignal` function but emits notifications instead.
 
 ## toSignal(...)
 
@@ -187,6 +199,4 @@ effect(() => {
   }
 });
 ```
-
-
 

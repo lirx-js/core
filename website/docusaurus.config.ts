@@ -182,7 +182,7 @@ const config: Config = {
               },
               {
                 label: 'Changelog',
-                to: '/docs/changelogs/1.5.0/',
+                to: '/docs/changelogs/1.6.0/',
               },
               {
                 label: 'GitHub',

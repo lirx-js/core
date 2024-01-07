@@ -1,9 +1,9 @@
 import { isNullish } from '@lirx/utils';
 import { IObserverObservablePair } from '../../../observer-observable-pair/type/observer-observable-pair.type';
 import { IObserver } from '../../../observer/type/observer.type';
+import { isSignal } from '../../../signals/signal/is/is-signal';
+import { ISignal } from '../../../signals/signal/signal.type';
 import { isMaybeObserver } from './is-maybe-observer';
-import { ISignal } from '../../signals/signal/signal.type';
-import { isSignal } from '../../signals/signal/is/is-signal';
 
 // export type IUnknownToObserverValue<GInput> =
 //   GInput extends IWritableSignal<infer GValue>

@@ -1,5 +1,5 @@
-import { IObserver } from '../../../observer/type/observer.type';
 import { isFunction } from '@lirx/utils';
+import { IObserver } from '../../../observer/type/observer.type';
 
 export function isMaybeObserver<GValue>(
   value: unknown,
