@@ -12,31 +12,29 @@ import { IObserver } from '../../observer/type/observer.type';
 
 export type IArrayOfValuesToArrayOfObservableProxy<GArray extends readonly any[]> = {
   [GKey in keyof GArray]: ObservableProxy<GArray[GKey]>;
-}
+};
 
-export type IObservableProxyArray$<GValue> =
-  GValue extends readonly any[]
-    ? IObservable<IArrayOfValuesToArrayOfObservableProxy<GValue>>
-    : never;
+export type IObservableProxyArray$<GValue> = GValue extends readonly any[]
+  ? IObservable<IArrayOfValuesToArrayOfObservableProxy<GValue>>
+  : never;
 
 /* PURE PROXY */
 
 export type IPureObservableProxy<GValue> = {
   [GKey in keyof GValue]: IPureObservableProxy<GValue[GKey]>;
 } & {
-  '$': IObservable<GValue>;
-  'array$': IPureObservableProxyArray$<GValue>;
-  '__proxy__': ObservableProxy<GValue>;
+  $: IObservable<GValue>;
+  array$: IPureObservableProxyArray$<GValue>;
+  __proxy__: ObservableProxy<GValue>;
 };
 
 export type IArrayOfValuesToArrayOfPureObservableProxy<GArray extends readonly any[]> = {
   [GKey in keyof GArray]: IPureObservableProxy<GArray[GKey]>;
-}
+};
 
-export type IPureObservableProxyArray$<GValue> =
-  GValue extends readonly any[]
-    ? IObservable<IArrayOfValuesToArrayOfPureObservableProxy<GValue>>
-    : never;
+export type IPureObservableProxyArray$<GValue> = GValue extends readonly any[]
+  ? IObservable<IArrayOfValuesToArrayOfPureObservableProxy<GValue>>
+  : never;
 
 /** CLASS **/
 
@@ -48,9 +46,7 @@ export class ObservableProxy<GValue> {
   protected _cachedArray$Observers: IObserver<unknown>[];
   protected _cachedPureProxy!: IPureObservableProxy<GValue>;
 
-  constructor(
-    value$: IObservable<GValue>,
-  ) {
+  constructor(value$: IObservable<GValue>) {
     this.value$ = value$;
     this._cachedGetProxies = new Map<PropertyKey, ObservableProxy<unknown>>();
     this._cachedArray$Proxies = [];
@@ -61,9 +57,7 @@ export class ObservableProxy<GValue> {
     return this.value$;
   }
 
-  get<GKey extends keyof GValue>(
-    propertyKey: GKey,
-  ): ObservableProxy<GValue[GKey]> {
+  get<GKey extends keyof GValue>(propertyKey: GKey): ObservableProxy<GValue[GKey]> {
     let cachedProxy: ObservableProxy<unknown> | undefined = this._cachedGetProxies.get(propertyKey);
     if (cachedProxy === void 0) {
       cachedProxy = new ObservableProxy<GValue[GKey]>(
@@ -76,9 +70,7 @@ export class ObservableProxy<GValue> {
     return cachedProxy as ObservableProxy<GValue[GKey]>;
   }
 
-  get$<GKey extends keyof GValue>(
-    propertyKey: GKey,
-  ): IObservable<GValue[GKey]> {
+  get$<GKey extends keyof GValue>(propertyKey: GKey): IObservable<GValue[GKey]> {
     return this.get(propertyKey).value$;
   }
 
@@ -95,7 +87,8 @@ export class ObservableProxy<GValue> {
 
             if (arrayLength > cachedArray$ProxiesLength) {
               for (let i = cachedArray$ProxiesLength; i < arrayLength; i++) {
-                const { emit, subscribe }: IMulticastReplayLastSource<unknown> = createMulticastReplayLastSource<unknown>();
+                const { emit, subscribe }: IMulticastReplayLastSource<unknown> =
+                  createMulticastReplayLastSource<unknown>();
                 this._cachedArray$Proxies[i] = new ObservableProxy<unknown>(subscribe);
                 this._cachedArray$Observers[i] = emit;
               }

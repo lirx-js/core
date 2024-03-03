@@ -8,11 +8,6 @@ export function notificationsToImmediateObservablePipe<GValue>(
   onError?: INotificationsToImmediateObservableOnErrorFunction,
 ): IObservablePipe<IDefaultInNotificationsUnion<GValue>, GValue> {
   return (subscribe: IObservable<IDefaultInNotificationsUnion<GValue>>): IObservable<GValue> => {
-    return notificationsToImmediateObservable<GValue>(
-      subscribe,
-      onError,
-    );
+    return notificationsToImmediateObservable<GValue>(subscribe, onError);
   };
 }
-
-

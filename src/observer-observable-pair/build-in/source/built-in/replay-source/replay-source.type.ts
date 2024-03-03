@@ -6,12 +6,12 @@ export interface IReplaySourceMethods<GValue> {
   reset(): void;
 }
 
-export type IReplaySource<GValue, GSource extends ISource<GValue>> =
-  Omit<GSource, keyof IReplaySourceMethods<GValue>>
-  & IReplaySourceMethods<GValue>;
+export type IReplaySource<GValue, GSource extends ISource<GValue>> = Omit<
+  GSource,
+  keyof IReplaySourceMethods<GValue>
+> &
+  IReplaySourceMethods<GValue>;
 
 /* derived */
 
 export type IGenericReplaySource = IReplaySource<any, IGenericSource>;
-
-

@@ -10,7 +10,7 @@ export function takeObservable<GValue>(
     return empty();
   } else {
     return takeWhileObservable<GValue>(subscribe, (_, index: number): boolean => {
-      return (index < count);
+      return index < count;
     });
   }
 }

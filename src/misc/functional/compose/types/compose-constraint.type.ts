@@ -2,27 +2,21 @@ import { IPipeNonTupleConstraint } from '../../shared-types/pipe-non-tuple-const
 import { ISameLength } from '../../shared-types/shared.type';
 import { IGenericUnaryFunction } from '../../shared-types/unary-function.type';
 
-export type IComposeConstraint<// generics
+export type IComposeConstraint<
+  // generics
   GFunctions extends readonly GUnaryFunction[], // list of unary functions
   GFirstReturn, // type of the first expected returned value
-  GUnaryFunction extends IGenericUnaryFunction // shape of the unary function
+  GUnaryFunction extends IGenericUnaryFunction, // shape of the unary function
   //
-> =
-  [GFunctions] extends [[]] // to avoid circular constraint
-    ? []
-    : (
-      [GFunctions] extends [[infer GFirst, ...infer GRest]] // to avoid circular constraint
-        ? (
-          GFirst extends ((value: infer GFirstArgument) => GFirstReturn)
-            ? (
-              GRest extends GUnaryFunction[]
-                ? [any, ...IComposeConstraint<GRest, GFirstArgument, GUnaryFunction>]
-                : [(value: any) => GFirstReturn, ...ISameLength<GRest>]
-              )
-            : [(value: any) => GFirstReturn, ...ISameLength<GRest>]
-          )
-        : IPipeNonTupleConstraint<GFunctions>
-      );
+> = [GFunctions] extends [[]] // to avoid circular constraint
+  ? []
+  : [GFunctions] extends [[infer GFirst, ...infer GRest]] // to avoid circular constraint
+    ? GFirst extends (value: infer GFirstArgument) => GFirstReturn
+      ? GRest extends GUnaryFunction[]
+        ? [any, ...IComposeConstraint<GRest, GFirstArgument, GUnaryFunction>]
+        : [(value: any) => GFirstReturn, ...ISameLength<GRest>]
+      : [(value: any) => GFirstReturn, ...ISameLength<GRest>]
+    : IPipeNonTupleConstraint<GFunctions>;
 
 // export type IComposeConstraint<
 //   // generics

@@ -7,21 +7,13 @@ import {
   toTypedEventTarget,
 } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
-import {
-  createDownloadProgressNotification,
-} from '../../../../../../../misc/notifications/built-in/download-progress/create-download-progress-notification';
+import { createDownloadProgressNotification } from '../../../../../../../misc/notifications/built-in/download-progress/create-download-progress-notification';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification';
 
-import {
-  createAbortErrorNotification,
-} from '../../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';
+import { createAbortErrorNotification } from '../../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification';
-import {
-  STATIC_UPLOAD_COMPLETE_NOTIFICATION,
-} from '../../../../../../../misc/notifications/built-in/upload-complete/upload-complete-notification.constant';
-import {
-  createUploadProgressNotification,
-} from '../../../../../../../misc/notifications/built-in/upload-progress/create-upload-progress-notification';
+import { STATIC_UPLOAD_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/upload-complete/upload-complete-notification.constant';
+import { createUploadProgressNotification } from '../../../../../../../misc/notifications/built-in/upload-progress/create-upload-progress-notification';
 import { createProgressFromProgressEvent } from '../../../../../../../misc/progress/create-progress-from-progress-event';
 import { IProgress } from '../../../../../../../misc/progress/progress.type';
 import { IObserver } from '../../../../../../../observer/type/observer.type';
@@ -35,7 +27,10 @@ import {
   XHRResponseToResponseInit,
   XHRResponseTypeExtended,
 } from '../xhr-helpers';
-import { IFromXHRObservableNotifications, IFromXHRObservableOptions } from './from-xhr-observable-notifications.type';
+import {
+  IFromXHRObservableNotifications,
+  IFromXHRObservableOptions,
+} from './from-xhr-observable-notifications.type';
 
 /**
  * Uses the Fetch API to make an HTTP request.
@@ -47,12 +42,9 @@ export function fromXHR(
 ): IObservable<IFromXHRObservableNotifications> {
   const request: Request = new Request(requestInfo, requestInit);
 
-  const useReadableStream: boolean = areReadableStreamSupported()
-    && (
-      ((options === void 0) || (options.useReadableStream === void 0))
-        ? true
-        : options.useReadableStream
-    );
+  const useReadableStream: boolean =
+    areReadableStreamSupported() &&
+    (options === void 0 || options.useReadableStream === void 0 ? true : options.useReadableStream);
 
   return (emit: IObserver<IFromXHRObservableNotifications>): IUnsubscribeOfObservable => {
     if (request.signal.aborted) {
@@ -68,7 +60,8 @@ export function fromXHR(
       if (useReadableStream) {
         responseType = 'binary-string';
         stream = XHRResponseToReadableStream(xhr, responseType);
-      } else { // if !useReadableStream
+      } else {
+        // if !useReadableStream
         responseType = 'blob';
       }
 
@@ -126,23 +119,23 @@ export function fromXHR(
         }
       };
 
-      const removeReadyStateChangeEventListener: IRemoveEventListener = createEventListener<'readystatechange', Event>(
-        toTypedEventTarget(xhr),
+      const removeReadyStateChangeEventListener: IRemoveEventListener = createEventListener<
         'readystatechange',
-        (): void => {
-          if (running) {
-            if (stream === void 0) { // if !useReadableStream
-              if (xhr.readyState === xhr.DONE) {
-                next(XHRResponseToResponse(xhr, responseType));
-              }
-            } else {
-              if (xhr.readyState === xhr.HEADERS_RECEIVED) {
-                next(new XHRResponse(stream, XHRResponseToResponseInit(xhr)));
-              }
+        Event
+      >(toTypedEventTarget(xhr), 'readystatechange', (): void => {
+        if (running) {
+          if (stream === void 0) {
+            // if !useReadableStream
+            if (xhr.readyState === xhr.DONE) {
+              next(XHRResponseToResponse(xhr, responseType));
+            }
+          } else {
+            if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+              next(new XHRResponse(stream, XHRResponseToResponseInit(xhr)));
             }
           }
-        },
-      );
+        }
+      });
 
       const removeLoadEventListener: IRemoveEventListener = createEventListener<'load', Event>(
         toTypedEventTarget(xhr),
@@ -164,7 +157,10 @@ export function fromXHR(
         abort,
       );
 
-      const removeDownloadProgressEventListener: IRemoveEventListener = createEventListener<'progress', ProgressEvent<XMLHttpRequestEventTarget>>(
+      const removeDownloadProgressEventListener: IRemoveEventListener = createEventListener<
+        'progress',
+        ProgressEvent<XMLHttpRequestEventTarget>
+      >(
         toTypedEventTarget(xhr),
         'progress',
         (event: ProgressEvent<XMLHttpRequestEventTarget>): void => {
@@ -172,7 +168,10 @@ export function fromXHR(
         },
       );
 
-      const removeUploadProgressEventListener: IRemoveEventListener = createEventListener<'progress', ProgressEvent<XMLHttpRequestEventTarget>>(
+      const removeUploadProgressEventListener: IRemoveEventListener = createEventListener<
+        'progress',
+        ProgressEvent<XMLHttpRequestEventTarget>
+      >(
         toTypedEventTarget(xhr.upload),
         'progress',
         (event: ProgressEvent<XMLHttpRequestEventTarget>): void => {
@@ -180,22 +179,16 @@ export function fromXHR(
         },
       );
 
-      const removeUploadCompleteEventListener: IRemoveEventListener = createEventListener<'load', ProgressEvent<XMLHttpRequestEventTarget>>(
-        toTypedEventTarget(xhr.upload),
+      const removeUploadCompleteEventListener: IRemoveEventListener = createEventListener<
         'load',
-        uploadComplete,
-      );
+        ProgressEvent<XMLHttpRequestEventTarget>
+      >(toTypedEventTarget(xhr.upload), 'load', uploadComplete);
 
-      initAndSendXHRFromRequest(
-        xhr,
-        responseType,
-        request,
-      )
-        .catch((error: any): void => {
-          if (!isAbortError(error)) {
-            throw error;
-          }
-        });
+      initAndSendXHRFromRequest(xhr, responseType, request).catch((error: any): void => {
+        if (!isAbortError(error)) {
+          throw error;
+        }
+      });
 
       return (): void => {
         if (running) {
@@ -206,4 +199,3 @@ export function fromXHR(
     }
   };
 }
-

@@ -6,9 +6,7 @@ export interface IGetReferenceValue<GValue> {
   (): GValue;
 }
 
-export function reference<GValue>(
-  getValue: IGetReferenceValue<GValue>,
-): IObservable<GValue> {
+export function reference<GValue>(getValue: IGetReferenceValue<GValue>): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     emit(getValue());
     return noop;

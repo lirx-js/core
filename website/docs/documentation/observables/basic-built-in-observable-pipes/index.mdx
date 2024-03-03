@@ -1,0 +1,121 @@
+# Basic ObservablePipes
+
+*ObservablePipes* are the most important bricks to build complex data flow with our Observables.
+
+In this tutorial, we'll **learn** how to use some of the **essentials** ObservablePipes provided by `@lirx/core`.
+
+### Filtering and mapping
+
+The most common pipes are [filter$$$](/docs/reference/filter-observable-pipe/), [map$$$](/docs/reference/map-observable-pipe/),
+and [distinct$$$](/docs/reference/distinct-observable-pipe/).
+
+For example, we may want to filter only even numbers, and then cast them to string:
+
+```ts
+const subscribe = pipe$$(single(0, 1, 2, 3, 4, 5), [
+  filter$$$(v => v % 2 === 0),
+  map$$$(String),
+]);
+
+subscribe((value: string) => {
+  console.log(value);
+});
+```
+
+As you may have already noted, this is quite similar to the `Array.map` and `Array.filter` functions:
+
+```ts
+const data = [0, 1, 2, 3, 4, 5]
+  .filter(v => v % 2 === 0)
+  .map(String);
+
+console.log(data);
+```
+
+
+
+However, it works with streams of data instead of static values.
+
+
+### Debouncing values
+
+Sometimes, we need to delay incoming values and/or discard next values during a period.
+
+The most common pipes are [debounceTime$$$](/docs/reference/debounce-time-observable-pipe/)
+and [throttleTime$$$](/docs/reference/map-observable-pipe/).
+
+As an example, this is especially useful when we want to debounce user's click:
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  debounceTime$$$(200),
+]);
+
+subscribe(() => {
+  console.log('clicked');
+});
+```
+
+### When an Observable emits a value, map this value and return another Observable
+
+One of the most used pipe is [switchMap$$$](/docs/reference/merge-map-single-observable-pipe/).
+It maps the incoming values of an Observable to another one.
+
+For example, it allows us *to listen to an element's size selected by a user click*:
+
+```ts
+const subscribe = pipe$$(fromEventTarget(window, 'click'), [
+  // maps incoming event to the "select" element using event.target
+  map$$$((event: MouseEvent): HTMLElement => event.target as HTMLElement),
+  // maps incoming element into an Observable listening to its size
+  switchMap$$$((element: HTMLElement): IObservable<DOMRectReadOnly> => {
+    // use merge to get the initial size, and the new size if the element is resized
+    return merge([
+      // initial size
+      reference((): DOMRectReadOnly => element.getBoundingClientRect()),
+      // listen to the element's size and map the value to get a DOMRectReadOnly
+      map$$(fromResizeObserver(event.target), ({ contentRect }) => contentRect),
+    ]);
+  }),
+]);
+
+subscribe(({ width, height }) => {
+  console.log(width, height);
+});
+```
+
+However, it is a little more complex than the previous one. So don't hesitate to play with it.
+
+### Sharing values of an Observable (only subscribing once)
+
+Let's finish with another common use case: if we want to subscribe many times to an Observable but subscribe only once to the original one.
+We may use [shareRL$$$](/docs/reference/share-observable-pipe-with-multicast-replay-last-source/).
+
+
+```ts
+const subscribe = pipe$$(interval(1000), [
+  scan$$$<void, number>(count => (count + 1), 0),
+  shareRL$$$<number>(),
+]);
+
+subscribe((value: number) => {
+  console.log('value - A:', value);
+});
+
+// note that interval(1000) is only subscribed once
+subscribe((value: number) => {
+  console.log('value - B:', value);
+});
+```
+
+
+### Going deeper
+
+Plenty of others *ObservablePipes* may be found on the **[reference page](/docs/tags/observable-pipe/)**.
+
+They are some of the most powerful tools in this library. However, it requires you to browse carefully through the documentation.
+Some of these pipes are pretty complex to understand, **do not hesitate to play with them**, and take time to check the examples.
+Finally, everytime you're facing a problem and want to implement your own ObservablePipe,
+or if you're forced to perform some ugly trick, **there is probably an ObservablePipe** already existing and documented.
+In this situation take a look at the [decision tree page](/docs/documentation/decision-tree/).
+

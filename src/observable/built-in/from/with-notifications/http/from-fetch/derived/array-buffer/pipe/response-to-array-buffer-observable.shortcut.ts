@@ -1,5 +1,1 @@
-export {
-  responseToArrayBufferObservable as responseToArrayBuffer$$,
-} from './response-to-array-buffer-observable';
-
-
+export { responseToArrayBufferObservable as responseToArrayBuffer$$ } from './response-to-array-buffer-observable';

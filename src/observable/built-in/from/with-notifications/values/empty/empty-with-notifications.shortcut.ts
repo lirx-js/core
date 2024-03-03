@@ -1,1 +1,4 @@
-export { emptyWithNotifications as emptyN, emptyWithNotifications as complete } from './empty-with-notifications';
+export {
+  emptyWithNotifications as complete,
+  emptyWithNotifications as emptyN,
+} from './empty-with-notifications';

@@ -7,7 +7,9 @@ import { IFromIterableObservableNotifications } from './from-iterable-observable
 export function fromIterableWithNotifications<GValue>(
   iterable: Iterable<GValue>,
 ): IObservable<IFromIterableObservableNotifications<GValue>> {
-  return (emit: IObserver<IFromIteratorObservableNotifications<GValue>>): IUnsubscribeOfObservable => {
+  return (
+    emit: IObserver<IFromIteratorObservableNotifications<GValue>>,
+  ): IUnsubscribeOfObservable => {
     return fromIteratorWithNotifications<GValue>(iterable[Symbol.iterator]())(emit);
   };
 }

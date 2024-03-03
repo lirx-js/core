@@ -13,4 +13,3 @@ export interface IUnicastSource<GValue> extends ISource<GValue> {
 /* derived */
 
 export type IGenericUnicastSource = IUnicastSource<any>;
-

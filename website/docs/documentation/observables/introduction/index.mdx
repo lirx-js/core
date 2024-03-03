@@ -1,0 +1,44 @@
+# Introduction
+
+An Observable is simply **an asynchronous stream of data** to which we may subscribe and unsubscribe.
+
+You already use such streams: `event listeners`, `ReadableStream`, `setInterval`, `Promises`, and many more... are all streams.
+
+Observables give you powerful tools to create and organise these streams, while managing cancellation of complex data pipelines like a breeze.
+
+🔬 However, **[learning Observables is hard](https://dev.to/mfcodeworks/comment/11agc)**, which is discouraging, due to their steep initial learning curve.
+**But, once done**, when you'll understand the core concepts of Reactive Programming, you'll use them effortlessly in you day-to-day code,
+gain in productivity, quality of code, and create more robust applications.
+
+---
+> When I started using RxJS (the most used Observables library) it was a nightmare:
+it lacked tutorials, the documentation was cryptic, and I couldn't find concrete use cases and examples.
+It's just a pile of documentation where the authors expect that everyone can read their mind 😑.
+>
+> But now, that I'm very confortable with Reactive Programming, **I simply cannot work without it**:
+it solves so many problems and allows me to create very consistent applications.
+---
+
+The first thing to know is that Reactive Programming requires you to **think reactively**.
+Just like writing Promises was a different paradigm with regards to non-blocking code (*async thinking*), in the same way, you'll have to be able to change your perspective on variables and streams.
+
+<p align="center">
+
+  ```mermaid
+  flowchart LR;
+  Observable>Observable]--value A-->Pipe{{Pipe}}--value B-->Observer
+  ```
+
+</p>
+
+So the first question to answer is: **when should I use an Observable ?**
+Well, the correct answer is: **everytime you have a value which will evolve through time.**
+It may be a user's input, an async HTTP request, a computed value, a stream of data, etc.
+
+If you force yourself to use the Observables when you encounter these situations, then you'll quickly become an Observables' master.
+
+The second and most important point: you'll have to **be patient**, **read the documentation** and **learn** at least **the essentials functions** before beginning.
+Just like you would have done for a tooling library like *lodash* or *underscore*.
+**Don't jump immediately into coding**. Take an hour (or more), and read progressively this tutorial.
+If you skip this step, you'll feel frustrated and limited while creating your pipelines, so, you won't be able to unleash the true potential of Observables.
+

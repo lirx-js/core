@@ -1,10 +1,10 @@
-import { isNullish } from '@lirx/utils';
+import { isFunction, isNullish } from '@lirx/utils';
 import { single } from '../../../observable/built-in/from/without-notifications/values/single/single';
 import { IObservable } from '../../../observable/type/observable.type';
 import { IObserverObservablePair } from '../../../observer-observable-pair/type/observer-observable-pair.type';
-import { isReadonlySignal } from '../../../signals/readonly-signal/is/is-readonly-signal';
-import { IReadonlySignal } from '../../../signals/readonly-signal/readonly-signal.type';
-import { fromSignal } from '../../../signals/signal-to-observable/without-notifications/from-signal';
+import { fromSignal } from '../../../signals/signal-to-observable/from-signal';
+import { SIGNAL } from '../../../signals/signal/signal.symbol';
+import { IReadonlySignal } from '../../../signals/signal/types/readonly-signal.type';
 import { IUnknownToObservableMode } from '../unknown-to-observable-mode.type';
 import { isMaybeObservable } from './is-maybe-observable';
 
@@ -28,19 +28,13 @@ import { isMaybeObservable } from './is-maybe-observable';
 export type IUnknownToObservable<GInput, GMode extends IUnknownToObservableMode> =
   GInput extends IReadonlySignal<infer GValue>
     ? IObservable<GValue>
-    : (
-      GInput extends IObserverObservablePair<any, infer GValue>
-        ? IObservable<GValue>
-        : (
-          GInput extends IObservable<any>
-            ? GInput
-            : (
-              GMode extends 'strict'
-                ? never
-                : IObservable<GInput>
-              )
-          )
-      );
+    : GInput extends IObserverObservablePair<any, infer GValue>
+      ? IObservable<GValue>
+      : GInput extends IObservable<any>
+        ? GInput
+        : GMode extends 'strict'
+          ? never
+          : IObservable<GInput>;
 
 export function unknownToObservable<GInput>(
   input: GInput,
@@ -53,26 +47,30 @@ export function unknownToObservable<GInput, GMode extends IUnknownToObservableMo
   input: GInput,
   mode: GMode = 'not-undefined' as GMode,
 ): IUnknownToObservable<GInput, GMode> {
-  if (isReadonlySignal(input)) {
-    return fromSignal(input) as IUnknownToObservable<GInput, GMode>;
-  } else if (!isNullish(input) && isMaybeObservable((input as any).subscribe)) {
-    return (input as any).subscribe;
-  } else if (isMaybeObservable(input)) {
-    return input as IUnknownToObservable<GInput, GMode>;
+  if (isFunction(input)) {
+    if (SIGNAL in input) {
+      return fromSignal(input) as IUnknownToObservable<GInput, GMode>;
+    } else {
+      return input as IUnknownToObservable<GInput, GMode>;
+    }
   } else {
-    switch (mode) {
-      case 'strict':
-        throw new Error(`Unable to convert: ${input} to an Observable`);
-      case 'not-undefined':
-        if (input === void 0) {
-          throw new Error(`Undefined cannot be converted to an Observable`);
-        } else {
+    if (!isNullish(input) && isMaybeObservable((input as any).subscribe)) {
+      return (input as any).subscribe;
+    } else {
+      switch (mode) {
+        case 'strict':
+          throw new Error(`Unable to convert: ${input} to an Observable`);
+        case 'not-undefined':
+          if (input === void 0) {
+            throw new Error(`Undefined cannot be converted to an Observable`);
+          } else {
+            return single(input) as IUnknownToObservable<GInput, GMode>;
+          }
+        case 'any':
           return single(input) as IUnknownToObservable<GInput, GMode>;
-        }
-      case 'any':
-        return single(input) as IUnknownToObservable<GInput, GMode>;
-      default:
-        throw new Error(`Invalid mode: "${mode}"`);
+        default:
+          throw new Error(`Invalid mode: "${mode}"`);
+      }
     }
   }
 }
@@ -84,34 +82,26 @@ export type IUnknownToObservableStrict<GInput> = IUnknownToObservable<GInput, 's
 export function unknownToObservableStrict<GInput>(
   input: GInput,
 ): IUnknownToObservableStrict<GInput> {
-  return unknownToObservable<GInput, 'strict'>(
-    input,
-    'strict',
-  );
+  return unknownToObservable<GInput, 'strict'>(input, 'strict');
 }
 
 /* NOT UNDEFINED */
 
-export type IUnknownToObservableNotUndefined<GInput> = IUnknownToObservable<GInput, 'not-undefined'>;
+export type IUnknownToObservableNotUndefined<GInput> = IUnknownToObservable<
+  GInput,
+  'not-undefined'
+>;
 
 export function unknownToObservableNotUndefined<GInput>(
   input: GInput,
 ): IUnknownToObservableNotUndefined<GInput> {
-  return unknownToObservable<GInput, 'not-undefined'>(
-    input,
-    'not-undefined',
-  );
+  return unknownToObservable<GInput, 'not-undefined'>(input, 'not-undefined');
 }
 
 /* STRICT */
 
 export type IUnknownToObservableAny<GInput> = IUnknownToObservable<GInput, 'any'>;
 
-export function unknownToObservableAny<GInput>(
-  input: GInput,
-): IUnknownToObservableAny<GInput> {
-  return unknownToObservable<GInput, 'any'>(
-    input,
-    'any',
-  );
+export function unknownToObservableAny<GInput>(input: GInput): IUnknownToObservableAny<GInput> {
+  return unknownToObservable<GInput, 'any'>(input, 'any');
 }

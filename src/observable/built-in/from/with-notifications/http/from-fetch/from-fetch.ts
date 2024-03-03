@@ -9,14 +9,10 @@ export function fromFetch(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchObservableNotifications> {
-  return fromPromiseFactory(
-    (signal: AbortSignal): Promise<Response> => {
-      return fetch(requestInfo, {
-        ...requestInit,
-        signal,
-      });
-    },
-    requestInit,
-  );
+  return fromPromiseFactory((signal: AbortSignal): Promise<Response> => {
+    return fetch(requestInfo, {
+      ...requestInit,
+      signal,
+    });
+  }, requestInit);
 }
-

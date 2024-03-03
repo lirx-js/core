@@ -1,1 +1,5 @@
-export { reactiveAddMany as addMany$$, reactiveAddMany as addM$$, reactiveAddMany as sum$$ } from './reactive-add-many';
+export {
+  reactiveAddMany as addM$$,
+  reactiveAddMany as addMany$$,
+  reactiveAddMany as sum$$,
+} from './reactive-add-many';

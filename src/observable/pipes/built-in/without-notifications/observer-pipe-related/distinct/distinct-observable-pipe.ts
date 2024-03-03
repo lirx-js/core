@@ -10,4 +10,3 @@ export function distinctObservablePipe<GValue>(
     return distinctObservable<GValue>(subscribe, options);
   };
 }
-

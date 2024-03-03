@@ -36,6 +36,10 @@ function HomepageHeader() {
           Compose asynchronous data streams like a breeze, create complex data flow, and unleash the full potential of Reactive Programming.
         </div>
 
+        <div className={clsx(styles.heroBannerSubMessage)}>
+          Includes <Link to="/docs/documentation/signals/introduction/">signals</Link> out of the box !
+        </div>
+
         <div className={styles.heroBannerButtons}>
           <Link
             className="button button--primary button--lg"

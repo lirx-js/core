@@ -3,17 +3,15 @@ import { IGenericUnaryFunction } from './unary-function.type';
 /**
  * Returns the last argument of the first unary function from a list of unary functions, or NEVER
  */
-export type IInferLastArgumentOfUnaryFunctionList<// generics
-  GFunctions extends readonly IGenericUnaryFunction[] // list of unary functions
+export type IInferLastArgumentOfUnaryFunctionList<
+  // generics
+  GFunctions extends readonly IGenericUnaryFunction[], // list of unary functions
   //
-> =
-  GFunctions extends [...infer GRest, infer GLast]
-    ? (
-      GLast extends ((value: infer GLastArgument) => any)
-        ? GLastArgument
-        : never
-      )
-    : never;
+> = GFunctions extends [...infer GRest, infer GLast]
+  ? GLast extends (value: infer GLastArgument) => any
+    ? GLastArgument
+    : never
+  : never;
 
 // export type IInferLastArgumentOfUnaryFunctionListOrValue<// generics
 //   GFunctions extends readonly IGenericUnaryFunction[],

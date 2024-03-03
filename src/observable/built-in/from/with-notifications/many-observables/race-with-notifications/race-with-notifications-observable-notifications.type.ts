@@ -8,11 +8,15 @@ import { IObservable } from '../../../../../type/observable.type';
 
 export type IGenericRaceWithNotificationsInNotifications = IDefaultInNotificationsUnion<any>;
 
-export type IGenericRaceWithNotificationsInObservable = IObservable<IGenericRaceWithNotificationsInNotifications>;
+export type IGenericRaceWithNotificationsInObservable =
+  IObservable<IGenericRaceWithNotificationsInNotifications>;
 
-export type IGenericRaceWithNotificationsInObservables = readonly IGenericRaceWithNotificationsInObservable[];
+export type IGenericRaceWithNotificationsInObservables =
+  readonly IGenericRaceWithNotificationsInObservable[];
 
-export type IRaceWithNotificationsObservablesValues<GObservables extends IGenericRaceWithNotificationsInObservables> = TupleTypes<{
+export type IRaceWithNotificationsObservablesValues<
+  GObservables extends IGenericRaceWithNotificationsInObservables,
+> = TupleTypes<{
   [GKey in keyof GObservables]: GObservables[GKey] extends IObservable<infer GNotificationUnion>
     ? GNotificationUnion extends INextNotification<infer GValue>
       ? GValue
@@ -20,5 +24,6 @@ export type IRaceWithNotificationsObservablesValues<GObservables extends IGeneri
     : never;
 }>;
 
-export type IRaceWithNotificationsObservableNotifications<GObservables extends IGenericRaceWithNotificationsInObservables> =
-  IDefaultNotificationsUnion<IRaceWithNotificationsObservablesValues<GObservables>>;
+export type IRaceWithNotificationsObservableNotifications<
+  GObservables extends IGenericRaceWithNotificationsInObservables,
+> = IDefaultNotificationsUnion<IRaceWithNotificationsObservablesValues<GObservables>>;

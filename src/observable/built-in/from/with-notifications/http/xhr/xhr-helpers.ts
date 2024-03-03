@@ -1,4 +1,10 @@
-import { createAbortError, createEventListener, createNetworkError, IRemoveEventListener, toTypedEventTarget } from '@lirx/utils';
+import {
+  createAbortError,
+  createEventListener,
+  createNetworkError,
+  IRemoveEventListener,
+  toTypedEventTarget,
+} from '@lirx/utils';
 
 /** TYPES **/
 
@@ -7,20 +13,17 @@ export interface XHRResponseInit extends ResponseInit {
 }
 
 function getResponseClass(): typeof Response {
-  return (typeof Response === 'undefined')
-    ? function() {
-      throw new Error(`Unsupported Response`);
-    } as unknown as typeof Response
+  return typeof Response === 'undefined'
+    ? (function () {
+        throw new Error(`Unsupported Response`);
+      } as unknown as typeof Response)
     : Response;
 }
 
 export class XHRResponse extends getResponseClass() {
   protected _url: string;
 
-  constructor(
-    body?: BodyInit | null,
-    init?: XHRResponseInit,
-  ) {
+  constructor(body?: BodyInit | null, init?: XHRResponseInit) {
     super(body, init);
     // @ts-ignore
     this._url = init?.url ?? super.url;
@@ -48,10 +51,7 @@ export function isReadableStream(value: any): value is ReadableStream {
 /**
  * Sets headers (type Headers) into xhr (type XMLHttpRequest)
  */
-export function setHeadersIntoXHR(
-  headers: Headers,
-  xhr: XMLHttpRequest,
-): void {
+export function setHeadersIntoXHR(headers: Headers, xhr: XMLHttpRequest): void {
   headers.forEach((value: string, key: string): void => {
     xhr.setRequestHeader(key, value);
   });
@@ -60,16 +60,14 @@ export function setHeadersIntoXHR(
 /**
  * Returns a boolean to assign to xhr.withCredentials from the parameters extracted from request
  */
-export function getXHRWithCredentialsValueFromRequest(
-  request: Request,
-): boolean {
+export function getXHRWithCredentialsValueFromRequest(request: Request): boolean {
   // xhr.withCredentials = ['same-origin', 'include'].includes(request.credentials);
 
   switch (request.credentials) {
     case 'omit':
       return false;
     case 'same-origin':
-      return (window.location.origin === new URL(request.url).origin);
+      return window.location.origin === new URL(request.url).origin;
     case 'include':
       return true;
     default:
@@ -109,17 +107,15 @@ export function initXHRFromRequest(
 
     setHeadersIntoXHR(request.headers, xhr);
 
-    const removeLoadEventListener: IRemoveEventListener = createEventListener<'load', ProgressEvent<XMLHttpRequestEventTarget>>(
-      toTypedEventTarget(xhr),
+    const removeLoadEventListener: IRemoveEventListener = createEventListener<
       'load',
-      end,
-    );
+      ProgressEvent<XMLHttpRequestEventTarget>
+    >(toTypedEventTarget(xhr), 'load', end);
 
-    const removeErrorEventListener: IRemoveEventListener = createEventListener<'error', ProgressEvent<XMLHttpRequestEventTarget>>(
-      toTypedEventTarget(xhr),
+    const removeErrorEventListener: IRemoveEventListener = createEventListener<
       'error',
-      end,
-    );
+      ProgressEvent<XMLHttpRequestEventTarget>
+    >(toTypedEventTarget(xhr), 'error', end);
 
     const removeAbortEventListener: IRemoveEventListener = createEventListener<'abort', Event>(
       toTypedEventTarget(request.signal),
@@ -130,7 +126,6 @@ export function initXHRFromRequest(
       },
     );
   }
-
 }
 
 /**
@@ -169,14 +164,13 @@ export function initAndSendXHRFromRequestUsingBlob(
   if (signal?.aborted) {
     return Promise.reject(createAbortError());
   } else {
-    return request.blob()
-      .then((blob: Blob): void => {
-        if (signal?.aborted) {
-          throw createAbortError();
-        } else {
-          return initAndSendXHRFromRequestAndBody(xhr, responseType, request, blob);
-        }
-      });
+    return request.blob().then((blob: Blob): void => {
+      if (signal?.aborted) {
+        throw createAbortError();
+      } else {
+        return initAndSendXHRFromRequestAndBody(xhr, responseType, request, blob);
+      }
+    });
   }
 }
 
@@ -189,8 +183,10 @@ export function initAndSendXHRFromRequest(
   request: Request,
   signal?: AbortSignal,
 ): Promise<void> {
-  return (areReadableStreamSupported() && isReadableStream(request.body))
-    ? new Promise<void>(resolve => resolve(initAndSendXHRFromRequestUsingReadableStream(xhr, responseType, request)))
+  return areReadableStreamSupported() && isReadableStream(request.body)
+    ? new Promise<void>((resolve) =>
+        resolve(initAndSendXHRFromRequestUsingReadableStream(xhr, responseType, request)),
+      )
     : initAndSendXHRFromRequestUsingBlob(xhr, responseType, request, signal);
 }
 
@@ -199,9 +195,7 @@ export function initAndSendXHRFromRequest(
 /**
  * Converts a binary string to an Uint8Array
  */
-export function binaryStringToUint8Array(
-  input: string,
-): Uint8Array {
+export function binaryStringToUint8Array(input: string): Uint8Array {
   const length: number = input.length;
   const array: Uint8Array = new Uint8Array(length);
   for (let i = 0; i < length; i++) {
@@ -230,7 +224,9 @@ export function XHRResponseToUint8Array(
       throw new TypeError(`Cannot synchronously convert a blob to an Uint8Array`);
     // return new Response(xhr.response as Blob, init);
     case 'document':
-      return new TextEncoder().encode(new XMLSerializer().serializeToString(xhr.response as Document));
+      return new TextEncoder().encode(
+        new XMLSerializer().serializeToString(xhr.response as Document),
+      );
     case 'json':
       return new TextEncoder().encode(JSON.stringify(xhr.response as any));
     default:
@@ -252,15 +248,21 @@ export function XHRResponseToBlob(
     case 'text':
       return new Blob([xhr.response as string], { type: contentType || 'text/plain' });
     case 'binary-string':
-      return new Blob([binaryStringToUint8Array(xhr.response as string)], { type: contentType || 'text/plain' });
+      return new Blob([binaryStringToUint8Array(xhr.response as string)], {
+        type: contentType || 'text/plain',
+      });
     case 'arraybuffer':
       return new Blob([xhr.response as ArrayBuffer], { type: contentType || void 0 });
     case 'blob':
       return xhr.response as Blob;
     case 'document':
-      return new Blob([new XMLSerializer().serializeToString(xhr.response as Document)], { type: contentType || xhr.response.contentType });
+      return new Blob([new XMLSerializer().serializeToString(xhr.response as Document)], {
+        type: contentType || xhr.response.contentType,
+      });
     case 'json':
-      return new Blob([JSON.stringify(xhr.response as any)], { type: contentType || 'application/json' });
+      return new Blob([JSON.stringify(xhr.response as any)], {
+        type: contentType || 'application/json',
+      });
     default:
       throw new TypeError(`Unsupported response type '${responseType}'`);
   }
@@ -277,7 +279,7 @@ export function XHRResponseToReadableStream(
   let end: () => void;
   return new ReadableStream<Uint8Array>({
     start(controller: ReadableStreamDefaultController<Uint8Array>) {
-      const isStreamableResponseType: boolean = (responseType === 'binary-string');
+      const isStreamableResponseType: boolean = responseType === 'binary-string';
       let readIndex: number = 0;
 
       end = (): void => {
@@ -292,7 +294,9 @@ export function XHRResponseToReadableStream(
       const progress = (): void => {
         const index: number = xhr.response.length;
         if (index !== readIndex) {
-          const data: Uint8Array = binaryStringToUint8Array(xhr.response.substring(readIndex, index));
+          const data: Uint8Array = binaryStringToUint8Array(
+            xhr.response.substring(readIndex, index),
+          );
           controller.enqueue(data);
           readIndex = index;
         }
@@ -339,7 +343,6 @@ export function XHRResponseToReadableStream(
           progress,
         );
       }
-
     },
     cancel() {
       if (end !== void 0) {
@@ -449,9 +452,7 @@ export type IHeaderTuple = [key: string, value: string];
 /**
  * Converts a raw headers' string to an array of tuple [key, value]
  */
-export function parseRawHeaders(
-  headers: string,
-): IHeaderTuple[] {
+export function parseRawHeaders(headers: string): IHeaderTuple[] {
   return headers
     .split(/\r?\n/g)
     .map<[string, string]>((header: string): [string, string] => {
@@ -460,16 +461,14 @@ export function parseRawHeaders(
       const value: string = parts.join(': ');
       return [key.trim(), value.trim()];
     })
-    .filter(([key]: [string, string]): boolean => (key !== ''));
+    .filter(([key]: [string, string]): boolean => key !== '');
 }
 
 /**
  * Creates a ResponseInit from an XHR.response
  * Assumes xhr.readyState after or equals to xhr.HEADERS_RECEIVED
  */
-export function XHRResponseToResponseInit(
-  xhr: XMLHttpRequest,
-): XHRResponseInit {
+export function XHRResponseToResponseInit(xhr: XMLHttpRequest): XHRResponseInit {
   return {
     headers: new Headers(parseRawHeaders(xhr.getAllResponseHeaders())),
     status: xhr.status,

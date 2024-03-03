@@ -6,5 +6,8 @@ import { IDownloadProgressNotification } from './download-progress-notification.
 export function createDownloadProgressNotification(
   progress: IProgress,
 ): IDownloadProgressNotification {
-  return createNotification<'download-progress', IProgress>(DOWNLOAD_PROGRESS_NOTIFICATION_NAME, progress);
+  return createNotification<'download-progress', IProgress>(
+    DOWNLOAD_PROGRESS_NOTIFICATION_NAME,
+    progress,
+  );
 }

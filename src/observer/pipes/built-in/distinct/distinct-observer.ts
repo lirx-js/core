@@ -12,21 +12,14 @@ import { IObserver } from '../../../type/observer.type';
  */
 export function distinctObserver<GValue>(
   emit: IObserver<GValue>,
-  {
-    equal = EQUAL_FUNCTION_STRICT_EQUAL,
-    ...options
-  }: IDistinctOptions<GValue> = {},
+  { equal = EQUAL_FUNCTION_STRICT_EQUAL, ...options }: IDistinctOptions<GValue> = {},
 ): IObserver<GValue> {
-  let previousValue: GValue | IUninitializedToken = getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
+  let previousValue: GValue | IUninitializedToken =
+    getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
   return (value: GValue): void => {
-    if (
-      (previousValue === UNINITIALIZED_TOKEN)
-      || !equal(value, previousValue)
-    ) {
+    if (previousValue === UNINITIALIZED_TOKEN || !equal(value, previousValue)) {
       previousValue = value;
       emit(value);
     }
   };
 }
-
-

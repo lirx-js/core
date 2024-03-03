@@ -1,5 +1,1 @@
-export {
-  responseToStreamObservable as responseToStream$$,
-} from './response-to-stream-observable';
-
-
+export { responseToStreamObservable as responseToStream$$ } from './response-to-stream-observable';

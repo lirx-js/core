@@ -7,5 +7,8 @@ export function filterObserverGeneric<GValue>(
   emit: IObserver<GValue>,
   filterFunction: IFilterFunctionGeneric<GValue>,
 ): IObserver<GValue> {
-  return filterObserverStrict<GValue, GValue>(emit, filterFunction as IFilterFunctionStrict<GValue, GValue>);
+  return filterObserverStrict<GValue, GValue>(
+    emit,
+    filterFunction as IFilterFunctionStrict<GValue, GValue>,
+  );
 }

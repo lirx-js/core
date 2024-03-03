@@ -16,9 +16,7 @@ export function readObservableValue<GValue>(
     cachedValue = value;
   })();
 
-  return cachedValueReceived
-    ? cachedValue
-    : onNoValue();
+  return cachedValueReceived ? cachedValue : onNoValue();
 }
 
 export const UNABLE_TO_READ_OBSERVABLE = (): never => {

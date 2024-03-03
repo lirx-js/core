@@ -1,8 +1,6 @@
 export {
-  mergeAllSingleObservablePipe as mergeAllSingle$$$,
   mergeAllSingleObservablePipe as mergeAllS$$$,
-  mergeAllSingleObservablePipe as switchAllObservablePipe,
+  mergeAllSingleObservablePipe as mergeAllSingle$$$,
   mergeAllSingleObservablePipe as switchAll$$$,
+  mergeAllSingleObservablePipe as switchAllObservablePipe,
 } from './merge-all-single-observable-pipe';
-
-

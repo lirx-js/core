@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveOrMany(
   ...observables: IReactiveFunctionObservables<typeof orMany>
 ): IObservable<ReturnType<typeof orMany>> {
-  return optimizedReactiveFunction(
-    observables,
-    orMany,
-  );
+  return optimizedReactiveFunction(observables, orMany);
 }
 
 // export function reactiveOrMany(
@@ -30,4 +27,3 @@ function orMany(...values: boolean[]): boolean {
   }
   return false;
 }
-

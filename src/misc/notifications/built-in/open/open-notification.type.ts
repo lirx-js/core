@@ -7,6 +7,4 @@ export type IOpenNotification<GValue> = INotification<'open', GValue>;
 export type IGenericOpenNotification = IOpenNotification<any>;
 
 export type IInferOpenNotificationGValue<GOpenNotification extends IGenericOpenNotification> =
-  GOpenNotification extends IOpenNotification<infer GValue>
-    ? GValue
-    : never;
+  GOpenNotification extends IOpenNotification<infer GValue> ? GValue : never;

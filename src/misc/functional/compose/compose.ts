@@ -2,15 +2,17 @@ import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 import { IComposeConstraint } from './types/compose-constraint.type';
 import { IInferComposeReturn } from './types/infer-compose-return.type';
 
-export function compose<// generics
+export function compose<
+  // generics
   GFunctions extends IComposeConstraint<GFunctions, any, GUnaryFunction>,
-  GUnaryFunction extends IGenericUnaryFunction
+  GUnaryFunction extends IGenericUnaryFunction,
   //
->(
-  fns: GFunctions,
-): IInferComposeReturn<GFunctions, GUnaryFunction> {
+>(fns: GFunctions): IInferComposeReturn<GFunctions, GUnaryFunction> {
   return ((firstArg: unknown): unknown => {
-    return (fns as GUnaryFunction[]).reduceRight((value: any, fnc: GUnaryFunction) => fnc(value), firstArg);
+    return (fns as GUnaryFunction[]).reduceRight(
+      (value: any, fnc: GUnaryFunction) => fnc(value),
+      firstArg,
+    );
   }) as IInferComposeReturn<GFunctions, GUnaryFunction>;
 }
 
@@ -23,5 +25,3 @@ export function compose<// generics
 // ): IInferComposeReturn<GFunctions, GUnaryFunction> {
 //   return compose<GFunctions, GUnaryFunction>(fns);
 // }
-
-

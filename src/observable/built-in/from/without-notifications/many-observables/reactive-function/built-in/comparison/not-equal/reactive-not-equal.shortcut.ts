@@ -1,1 +1,1 @@
-export { reactiveNotEqual as notEqual$$, reactiveNotEqual as neq$$ } from './reactive-not-equal';
+export { reactiveNotEqual as neq$$, reactiveNotEqual as notEqual$$ } from './reactive-not-equal';

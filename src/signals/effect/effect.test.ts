@@ -1,18 +1,16 @@
-import { computed } from '../computed/implementations/function/computed.function';
-import { signal } from '../signal/implementations/function/signal.function';
+import { computed } from '../computed/computed';
+import { signal } from '../signal/signal';
 import { effect } from './effect';
 import { IOnCleanUpFunction } from './types/effet-function.type';
 
 describe('effect', (): void => {
   const sleep = (t: number) => {
-    return new Promise(_ => setTimeout(_, t));
+    return new Promise((_) => setTimeout(_, t));
   };
 
   describe('for writable signal', (): void => {
     it('should be called immediately', (): Promise<void> => {
-      return new Promise<void>((
-        resolve: () => void,
-      ): void => {
+      return new Promise<void>((resolve: () => void): void => {
         const a = signal(1);
         expect(a()).toBe(1);
 
@@ -24,9 +22,7 @@ describe('effect', (): void => {
     });
 
     it('should be called when a writable signal change', (): Promise<void> => {
-      return new Promise<void>((
-        resolve: () => void,
-      ): void => {
+      return new Promise<void>((resolve: () => void): void => {
         let setCount: number = 0;
         let effectCount: number = 0;
         let cleanUpCount: number = 0;
@@ -92,9 +88,7 @@ describe('effect', (): void => {
 
   describe('for computed signal', (): void => {
     it('should be called immediately', (): Promise<void> => {
-      return new Promise<void>((
-        resolve: () => void,
-      ): void => {
+      return new Promise<void>((resolve: () => void): void => {
         const a = signal(1);
         expect(a()).toBe(1);
 
@@ -109,9 +103,7 @@ describe('effect', (): void => {
     });
 
     it('should be called when a computed signal change', (): Promise<void> => {
-      return new Promise<void>((
-        resolve: () => void,
-      ): void => {
+      return new Promise<void>((resolve: () => void): void => {
         let setCount: number = 0;
         let effectCount: number = 0;
         let cleanUpCount: number = 0;
@@ -190,44 +182,21 @@ describe('effect', (): void => {
     await sleep(10);
   });
 
-  it('may allow a signal write in its context', async () => {
+  it('should throw if a write is done in its context', async () => {
     const counter = signal(0);
     expect(counter()).toBe(0);
 
     const isBig = signal(false);
     expect(isBig()).toBe(false);
 
-    effect(() => {
-      if (counter() > 5) {
-        isBig.set(true);
-      } else {
-        isBig.set(false);
-      }
-    });
-
-    counter.set(6);
-    expect(counter()).toBe(6);
-    await sleep(10);
-    expect(isBig()).toBe(true);
-  });
-
-  it('cannot support signal self update in its context', () => {
-    return new Promise<void>((
-      resolve: () => void,
-    ): void => {
-      let effectCount: number = 0;
-
-      const counter = signal(0);
-      expect(counter()).toBe(0);
-
-      effect((): void => {
-        effectCount++;
-        if (effectCount < 1e3) {
-          counter.set(counter() + 1);
+    expect(() => {
+      effect(() => {
+        if (counter() > 5) {
+          isBig.set(true);
         } else {
-          resolve();
+          isBig.set(false);
         }
       });
-    });
+    }).toThrow();
   });
 });

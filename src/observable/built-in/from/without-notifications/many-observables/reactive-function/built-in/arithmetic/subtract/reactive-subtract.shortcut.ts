@@ -1,1 +1,1 @@
-export { reactiveSubtract as subtract$$, reactiveSubtract as sub$$ } from './reactive-subtract';
+export { reactiveSubtract as sub$$, reactiveSubtract as subtract$$ } from './reactive-subtract';

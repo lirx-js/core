@@ -10,4 +10,3 @@ export function mapObservablePipe<GIn, GOut>(
     return mapObservable<GIn, GOut>(subscribe, mapFunction);
   };
 }
-

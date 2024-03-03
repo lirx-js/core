@@ -10,4 +10,3 @@ export function debugObservablePipe<GValue>(
     return debugObservable<GValue>(subscribe, name, color);
   };
 }
-

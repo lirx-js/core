@@ -127,7 +127,3 @@
 //     return fns.reduceRight((value: any, fnc: IGenericUnaryFunction) => fnc(value), firstArg);
 //   };
 // }
-
-
-
-

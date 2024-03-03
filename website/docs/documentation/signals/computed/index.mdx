@@ -20,25 +20,24 @@ The signature of the computed is:
 
 ```ts
 function computed<GValue>(
-  computedFunction: IComputedSignalFunction<GValue>,
-  options?: IComputedSignalOptions<GValue>,
+  computation: IComputationFunction<GValue>,
+  options?: ICreateComputedOptions<GValue>,
 ): IReadonlySignal<GValue>
 ```
 
 ```ts
-interface IComputedSignalFunction<GValue> {
-  (): GValue | SignalThrow;
+interface IComputationFunction<GValue> {
+  (): GValue;
 }
 
-interface IComputedSignalOptions<GValue> extends ISignalOptions<GValue> {
-}
+interface ICreateComputedOptions<GValue> extends ICreateSignalOptions<GValue> {}
 ```
 
 The computation function is expected to be side-effect free: it should only access values of the dependent signals
 (and / or other values being part of the computation) and avoid any mutation operations.
 In particular, the **computation function must not write to other signals**
 
-> We assume that developers have the responsibility to avoid loops and side-effects when working with signals.
+> The framework is able to detect loops and signal writes. In such cases, it will report them as errors.
 
 Similarly to the writable signals, computed signals can (optionally) specify the equality function.
 When provided, the equality function can stop recomputation of the deeper dependency chain if two values are determined to be equal. Example (with the default equality):
@@ -65,8 +64,8 @@ The algorithm chosen to implement the computed functionality makes strong guaran
 - **Computations are disposed of automatically**: as soon as the computed signal reference is out of scope
 it is automatically eligible for garbage collection.
 No explicit cleanup boundaries and / or operations are exposed by the library.
-- **Computations are glitch-free**-like: the computation function **may** be executed many times in response to dependencies change,
-but the *sync* result will always be one expected.
+- **Computations are glitch-free**: the computation function is executed only once in response to dependencies change,
+and reading synchronously its value won't generate recomputation nor glitches.
 
 #### Branching in Computations
 

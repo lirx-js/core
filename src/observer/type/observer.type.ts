@@ -7,6 +7,4 @@ export interface IObserver<GValue> {
 export type IGenericObserver = IObserver<any>;
 
 export type IInferObserverGValue<GObserver extends IGenericObserver> =
-  GObserver extends IObserver<infer GValue>
-    ? GValue
-    : never;
+  GObserver extends IObserver<infer GValue> ? GValue : never;

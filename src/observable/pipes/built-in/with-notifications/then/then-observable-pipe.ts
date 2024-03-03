@@ -8,10 +8,9 @@ export function thenObservablePipe<GInNextValue, GOut>(
   onFulfilled: IThenObservableOnFulfilled<GInNextValue, GOut>,
   onRejected: IThenObservableOnRejected<GOut>,
 ): IObservablePipe<IThenObservableInNotifications<GInNextValue>, GOut> {
-  return (subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>): IObservable<GOut> => {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  ): IObservable<GOut> => {
     return thenObservable<GInNextValue, GOut>(subscribe, onFulfilled, onRejected);
   };
 }
-
-
-

@@ -8,32 +8,29 @@ export function toReadableStream<GValue>(
 ): ReadableStream<GValue> {
   let unsubscribe: IUnsubscribeOfObservable;
   return new ReadableStream<GValue>({
-    start: (
-      controller: ReadableStreamDefaultController<GValue>,
-    ): void => {
-      unsubscribe = futureUnsubscribe((
-        unsubscribe: IUnsubscribeOfObservable,
-      ): IUnsubscribeOfObservable => {
-        return subscribe(
-          defaultNotificationObserver<GValue>(
-            /* next */(value: GValue): void => {
-              controller.enqueue(value);
-            },
-            /* complete */(): void => {
-              controller.close();
-              unsubscribe();
-            },
-            /* error */(error: unknown): void => {
-              controller.error(error);
-              unsubscribe();
-            },
-          ),
-        );
-      });
+    start: (controller: ReadableStreamDefaultController<GValue>): void => {
+      unsubscribe = futureUnsubscribe(
+        (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
+          return subscribe(
+            defaultNotificationObserver<GValue>(
+              /* next */ (value: GValue): void => {
+                controller.enqueue(value);
+              },
+              /* complete */ (): void => {
+                controller.close();
+                unsubscribe();
+              },
+              /* error */ (error: unknown): void => {
+                controller.error(error);
+                unsubscribe();
+              },
+            ),
+          );
+        },
+      );
     },
     cancel: (): void => {
       unsubscribe();
     },
   });
 }
-

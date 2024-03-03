@@ -1,6 +1,4 @@
-import {
-  distinctObservable,
-} from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
+import { distinctObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
 import { mapObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
 import { IObservable } from '../../../../../../type/observable.type';
 import { merge } from '../../../many-observables/merge/merge';
@@ -13,9 +11,7 @@ import { focusLeaveElementObservable } from './focus-leave-element-observable';
  *
  * @experimental
  */
-export function isFocusedElementObservable(
-  element: Element,
-): IObservable<boolean> {
+export function isFocusedElementObservable(element: Element): IObservable<boolean> {
   return distinctObservable(
     merge([
       reference(() => element.contains(document.activeElement)),
@@ -23,10 +19,7 @@ export function isFocusedElementObservable(
         fromEventTarget<'focusin', FocusEvent>(element, 'focusin'),
         () => true,
       ),
-      mapObservable<FocusEvent, boolean>(
-        focusLeaveElementObservable(element),
-        () => false,
-      ),
+      mapObservable<FocusEvent, boolean>(focusLeaveElementObservable(element), () => false),
     ]),
   );
 }

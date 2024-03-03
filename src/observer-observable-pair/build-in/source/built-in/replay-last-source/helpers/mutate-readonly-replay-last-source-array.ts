@@ -9,4 +9,3 @@ export function mutateReadonlyReplayLastSourceArray<GItem>(
   callback(items as GItem[]);
   source.emit(items);
 }
-

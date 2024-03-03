@@ -13,4 +13,3 @@ export interface IMulticastSource<GValue> extends ISource<GValue> {
 /* derived */
 
 export type IGenericMulticastSource = IMulticastSource<any>;
-

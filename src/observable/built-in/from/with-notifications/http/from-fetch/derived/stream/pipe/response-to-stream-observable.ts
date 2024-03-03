@@ -16,8 +16,7 @@ export function responseToStreamObservable(
       if (response.ok) {
         if (response.body === null) {
           return fromPromiseFactory<Uint8Array>(() => {
-            return response.arrayBuffer()
-              .then((buffer: ArrayBuffer) => new Uint8Array(buffer));
+            return response.arrayBuffer().then((buffer: ArrayBuffer) => new Uint8Array(buffer));
           });
           // return throwError(new Error(`Response's body is null`));
         } else {

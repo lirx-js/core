@@ -91,8 +91,8 @@ unsubscribeOfEffect();
 
 #### Effects writing to signals
 
-We generally consider that **writing to signals from effects can lead to unexpected behavior** (mostly infinite loops) and hard to follow data flow.
-As such any attempt of writing to a signal from an effect **should be forbidden**:
+We consider that **writing to signals from effects can lead to unexpected behavior** (mostly infinite loops) and hard to follow data flow.
+As such any attempt of writing to a signal from an effect **is forbidden**:
 
 ```ts
 const counter = signal(0);
@@ -100,12 +100,14 @@ const isBig = signal(false);
 
 effect(() => {
   if (counter() > 5) {
-    isBig.set(true);
+    isBig.set(true); // throws
   } else {
-    isBig.set(false);
+    isBig.set(false); // throws
   }
 });
 ```
+
+> The framework is able to detect signal writes in effects, and will report an error.
 
 Please note that `computed` is often a more declarative, straightforward and predictable solution to synchronizing data:
 
@@ -114,6 +116,18 @@ const counter = signal(0);
 const isBig = computed(() => counter() > 5);
 ```
 
+*If writes are still required*, and only if you perfectly know that you're not creating loops,
+you may write to signals from effect using [queueMicrotask](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask) or `setTimeout`:
+
+```ts
+const counter = signal(0);
+
+effect(() => {
+  if (counter() < 5) {
+    setTimeout(() => counter.update(count => count + 1), 1000);
+  }
+});
+```
 
 #### Reading without tracking dependencies
 
@@ -161,6 +175,6 @@ effect(() => {
 :::tip
 
 It is important to note that `effect` may usually be replaced by `computed`, which is generally more adequate.
-`effect` is really powerful, so it *SHOULD* be used with **caution**.
+`effect` is sensitive to signal's loops, so dangerous operations should be avoided.
 
 :::

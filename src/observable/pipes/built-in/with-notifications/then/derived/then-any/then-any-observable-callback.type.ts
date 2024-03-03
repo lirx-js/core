@@ -11,9 +11,8 @@ export interface IThenAnyObservableCallbackValueRejected {
 }
 
 export type IThenAnyObservableCallbackValue<GInNextValue> =
-  IThenAnyObservableCallbackValueFulfilled<GInNextValue>
-  | IThenAnyObservableCallbackValueRejected
-  ;
+  | IThenAnyObservableCallbackValueFulfilled<GInNextValue>
+  | IThenAnyObservableCallbackValueRejected;
 
 export interface IThenAnyObservableCallback<GInNextValue, GOut> {
   (value: IThenAnyObservableCallbackValue<GInNextValue>): IObservable<GOut>;

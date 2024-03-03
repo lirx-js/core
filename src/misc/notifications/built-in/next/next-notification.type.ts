@@ -7,6 +7,4 @@ export type INextNotification<GValue> = INotification<'next', GValue>;
 export type IGenericNextNotification = INextNotification<any>;
 
 export type IInferNextNotificationGValue<GNextNotification extends IGenericNextNotification> =
-  GNextNotification extends INextNotification<infer GValue>
-    ? GValue
-    : never;
+  GNextNotification extends INextNotification<infer GValue> ? GValue : never;

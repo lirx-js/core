@@ -7,5 +7,3 @@ export function ofWithNotifications<GValue>(
 ): IObservable<IOfObservableNotifications<GValue>> {
   return fromArrayWithNotifications<GValue>(values);
 }
-
-

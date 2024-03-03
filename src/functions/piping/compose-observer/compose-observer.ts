@@ -5,37 +5,32 @@ import { IInferComposeNowReturn } from '../../../misc/functional/compose/types/i
 import { IGenericObserverPipe } from '../../../observer/pipes/type/observer-pipe.type';
 import { IGenericObserver } from '../../../observer/type/observer.type';
 
-export type IObserverComposeConstraint<// generics
+export type IObserverComposeConstraint<
+  // generics
   GFunctions extends readonly IGenericObserverPipe[],
   //
-> =
-  IComposeConstraint<GFunctions, any, IGenericObserverPipe>;
+> = IComposeConstraint<GFunctions, any, IGenericObserverPipe>;
 
-type IGenericObserverConstraint<GValue> =
-  GValue extends IGenericObserver
-    ? GValue
-    : never;
+type IGenericObserverConstraint<GValue> = GValue extends IGenericObserver ? GValue : never;
 
-export type IObserverComposeValueConstraint<// generics
+export type IObserverComposeValueConstraint<
+  // generics
   GFunctions extends readonly IGenericObserverPipe[],
   //
-> =
-  IGenericObserverConstraint<IComposeNowValueConstraint<GFunctions, IGenericObserverPipe>>;
+> = IGenericObserverConstraint<IComposeNowValueConstraint<GFunctions, IGenericObserverPipe>>;
 
-export type IObserverComposeReturn<// generics
+export type IObserverComposeReturn<
+  // generics
   GFunctions extends readonly IGenericObserverPipe[],
   GObserver extends IGenericObserver,
   //
->
-  = IInferComposeNowReturn<GFunctions, GObserver>;
+> = IInferComposeNowReturn<GFunctions, GObserver>;
 
-export function composeObserver<// generics
+export function composeObserver<
+  // generics
   GFunctions extends IObserverComposeConstraint<GFunctions>,
   GObserver extends IObserverComposeValueConstraint<GFunctions>,
   //
->(
-  fns: GFunctions,
-  Observer: GObserver,
-): IObserverComposeReturn<GFunctions, GObserver> {
+>(fns: GFunctions, Observer: GObserver): IObserverComposeReturn<GFunctions, GObserver> {
   return composeNow<GFunctions, GObserver, IGenericObserverPipe>(fns, Observer);
 }

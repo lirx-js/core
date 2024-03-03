@@ -1,5 +1,1 @@
-export type IUnknownToObservableMode =
-  | 'strict'
-  | 'not-undefined'
-  | 'any'
-  ;
+export type IUnknownToObservableMode = 'strict' | 'not-undefined' | 'any';

@@ -154,11 +154,11 @@ It will improve the performances and bundle size.
 
 The `@lirx/core` Observables don't have a `complete` nor `error` state. Instead, they just send values defined by their type.
 
-This is somehow, like if they were only sending `next`. To send a state, we have to use some [Notifications](/docs/documentation/getting-started/what-is-a-notification/).
+This is somehow, like if they were only sending `next`. To send a state, we have to use some [Notifications](/docs/documentation/observables/what-is-a-notification/).
 
 ## Subject, BehaviorSubject and ReplaySubject
 
-They are replaced by [Sources](/docs/documentation/getting-started/what-is-a-source/):
+They are replaced by [Sources](/docs/documentation/observables/what-is-a-source/):
 
 - Subject: [createMulticastSource](/docs/reference/create-multicast-source/)
 - BehaviorSubject: [createMulticastReplayLastSource](/docs/reference/create-multicast-replay-last-source/)

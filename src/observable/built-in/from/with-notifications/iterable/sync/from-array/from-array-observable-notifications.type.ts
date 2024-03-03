@@ -3,5 +3,4 @@ import { INextNotification } from '../../../../../../../misc/notifications/built
 
 export type IFromArrayObservableNotifications<GValue> =
   | INextNotification<GValue>
-  | ICompleteNotification
-  ;
+  | ICompleteNotification;

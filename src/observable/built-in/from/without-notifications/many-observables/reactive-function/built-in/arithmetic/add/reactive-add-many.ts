@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveAddMany(
   ...observables: IReactiveFunctionObservables<typeof addMany>
 ): IObservable<ReturnType<typeof addMany>> {
-  return optimizedReactiveFunction(
-    observables,
-    addMany,
-  );
+  return optimizedReactiveFunction(observables, addMany);
 }
 
 function addMany(...values: number[]): number {
@@ -18,5 +15,3 @@ function addMany(...values: number[]): number {
   }
   return result;
 }
-
-

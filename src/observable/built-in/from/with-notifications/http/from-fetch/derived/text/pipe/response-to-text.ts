@@ -1,6 +1,3 @@
-export function responseToText(
-  response: Response,
-): Promise<string> {
+export function responseToText(response: Response): Promise<string> {
   return response.text();
 }
-

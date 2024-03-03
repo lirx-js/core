@@ -2,15 +2,16 @@ import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
 import { IInferPipeNowReturn } from './types/infer-pipe-now-return.type';
 import { IPipeNowConstraint } from './types/pipe-now-constraint.type';
 
-export function pipeNow<// generics
+export function pipeNow<
+  // generics
   GInitialValue,
   GFunctions extends IPipeNowConstraint<GInitialValue, GFunctions>,
   //
->(
-  initialValue: GInitialValue,
-  fns: GFunctions,
-): IInferPipeNowReturn<GInitialValue, GFunctions> {
-  return (fns as any[]).reduce((value: any, fnc: IGenericUnaryFunction) => fnc(value), initialValue);
+>(initialValue: GInitialValue, fns: GFunctions): IInferPipeNowReturn<GInitialValue, GFunctions> {
+  return (fns as any[]).reduce(
+    (value: any, fnc: IGenericUnaryFunction) => fnc(value),
+    initialValue,
+  );
 }
 
 // export function pipeNowSpread<// generics

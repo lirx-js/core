@@ -1,5 +1,15 @@
 # Observable and Signal
 
+---
+
+:::note
+
+If you've not started [the Observable part yet](/docs/documentation/observables/introduction/), we recommend you to read it first, and then come back here.
+
+:::
+
+---
+
 Signals are not a replacement but a **complement** to Observable.
 
 That's why, we may cast a Signal to an Observable and vice-versa.
@@ -9,18 +19,39 @@ That's why, we may cast a Signal to an Observable and vice-versa.
 ```ts
 function fromSignal<GValue>(
   signal: IReadonlySignal<GValue>,
-  onError?: IObservableFromSignalOnErrorFunction<GValue>, // (default: logs the error, and discards the value)
-): IObservable<GValue>
+  options?: IFromSignalOptionsForValueMode<GValue>,
+): IObservable<GValue>;
+function fromSignal<GValue>(
+  signal: IReadonlySignal<GValue>,
+  options: IFromSignalOptionsForNotificationMode<GValue>,
+): IObservable<IObservableFromSignalNotifications<GValue>>;
+```
+
+With:
+
+```ts
+interface IFromSignalOptionsForValueMode<GValue> {
+  readonly mode?: 'value';
+  readonly onError?: IObservableFromSignalOnErrorFunction<GValue>;
+}
+
+interface IFromSignalOptionsForNotificationMode<GValue> {
+  readonly mode: 'notification';
+}
 ```
 
 The `fromSignal` function is used to convert a Signal to an Observable.
 
-It accepts an optional `IObservableFromSignalOnErrorFunction` function, which is called when the signal enters in an *"error"* state,
-and allows us to return a different value or discard it (by default, it logs the error and discards it).
+It has two modes:
 
-### Examples
+- `value`: returns an Observables sending only the values of the Signal.
+  An `onError` function may be given (`IObservableFromSignalOnErrorFunction`), which is called when the signal enters in an *"error"* state,
+  and allows us to return a different value or discard it (by default, it logs the error and discards it).
+- `notification`: returns an Observables sending `next` notifications when the signal emits a value, and `error` notifications when it throws errors.
 
-#### Cast a Signal to an Observable
+
+#### Example: cast a Signal to an Observable
+
 
 ```ts
 const counter = signal(0);
@@ -45,28 +76,6 @@ count: 1
 // ...
 ```
 
-
-## fromSignalWithNotifications(...)
-
-Or `fromSignalN(...)`: 
-
-```ts
-function fromSignalWithNotifications<GValue>(
-  signal: IReadonlySignal<GValue>,
-): IObservable<IObservableFromSignalNotifications<GValue>>
-```
-
-With:
-
-```ts
-type IObservableFromSignalNotifications<GValue> =
-  | INextNotification<GValue>
-  | IErrorNotification
-  ;
-```
-
-This is similar to the `fromSignal` function but emits notifications instead.
-
 ## toSignal(...)
 
 Conversely, it is possible to convert an Observable to a Signal by using the `toSignal` function.
@@ -74,11 +83,11 @@ Conversely, it is possible to convert an Observable to a Signal by using the `to
 ```ts
 function toSignal<GValue>(
   value$: IObservable<GValue>,
-  options?: ISignalFromValueObservableOptions<GValue>
+  options?: ICreateSignalFromValueObservableOptions<GValue>,
 ): ISignalFromObservable<GValue>;
 function toSignal<GValue>(
   value$: IObservable<IDefaultInNotificationsUnion<GValue>>,
-  options: ISignalFromNotificationsObservableOptions<GValue>,
+  options: ICreateSignalFromNotificationsObservableOptions<GValue>,
 ): ISignalFromObservable<GValue>;
 ```
 
@@ -86,19 +95,21 @@ function toSignal<GValue>(
 interface ISignalFromObservable<GValue> extends IReadonlySignal<GValue> {
   isActive(): boolean;
 
-  activate(
-    active?: boolean, // default: true
-  ): void;
+  activate(active?: boolean): void;
 }
 
-interface ISignalFromObservableSharedOptions<GValue> extends ISignalOptions<GValue> {
+interface ICreateSignalFromObservableSharedOptions<GValue>
+  extends ICreateSignalOptions<GValue> {
+  readonly initialValue?: GValue;
 }
 
-interface ISignalFromValueObservableOptions<GValue> extends ISignalFromObservableSharedOptions<GValue> {
+interface ICreateSignalFromValueObservableOptions<GValue>
+  extends ICreateSignalFromObservableSharedOptions<GValue> {
   readonly mode?: 'value'; // (default: 'value')
 }
 
-interface ISignalFromNotificationsObservableOptions<GValue> extends ISignalFromObservableSharedOptions<GValue> {
+interface ICreateSignalFromNotificationsObservableOptions<GValue>
+  extends ICreateSignalFromObservableSharedOptions<GValue> {
   readonly mode: 'notification';
   readonly unsubscribeOnError?: boolean; // (default: true)
 }
@@ -110,12 +121,13 @@ The `toSignal` function internally subscribes to the given Observable and update
 
 The `toSignal` function accepts 2 modes:
 
-- `value`: when a value is sent by the Observable, the Signal is updated with this value.
+- `value` (default): when a value is sent by the Observable, the Signal is updated with this value.
 - `notification`: when a notification is sent by the Observable
   - if it's a `next` notification, then the Signal is updated with this notification's value
   - else in case of `error` notification, the signal enters an "error" state.
     If `unsubscribeOnError` is true, then the provided Observable will unsubscribe too.
 
+You may provide an `initialValue` too.
 
 ### Returned Signal
 
@@ -167,17 +179,14 @@ console.log(count()); // throws !
 
 #### Initial Values
 
-If an Observable is known to emit only asynchronously, then, we may want to make it synchronous:
+If an Observable is known to emit only asynchronously, then, we may provide an `initialValue` to the signal:
 
 ```ts
 // the first value will not be emitted until 1 second later
-const secondsAsynchonous$ = scan$$(interval(1000), _ => _ + 1, 0);
-const secondsSynchonous$ = merge([
-  single(0), // initial value
-  secondsAsynchonous$,
-]);
+const seconds$ = scan$$(interval(1000), _ => _ + 1, 0);
+
 // provide an initial value of zero
-const seconds = toSignal(secondsSynchonous$);
+const seconds = toSignal(seconds$, { initialValue: 0 });
 
 effect(() => {
   console.log(seconds());
@@ -187,15 +196,16 @@ effect(() => {
 #### Observable of Notifications
 
 ```ts
-const requestSignal = toSignal(fromFetch('https://example.com'), { mode: 'notification' });
+const requestSignal = toSignal(fromFetch('https://example.com'), { mode: 'notification', initialValue: null });
 
 effect(() => {
   try {
     const response = requestSignal();
-  } catch (e: unknown) {
-    if (!(e instanceof SignalUninitializedError)) {
-      // Handle the error from the observable here
+    if (response !== null) {
+      // Handle the response here
     }
+  } catch (e: unknown) {
+    // Handle the error from the observable here
   }
 });
 ```

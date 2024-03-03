@@ -23,7 +23,7 @@ A Promise has an internal state:
   - `fulfilled`: the Promise is resolved without error and has a `value`
   - `rejected`: the Promise is rejected with an `error`
 
-However, an Observable may emit **any kind of value**. In order to mimic the behaviour of a Promise we will use some **[Notifications](/docs/documentation/getting-started/what-is-a-notification/)**:
+However, an Observable may emit **any kind of value**. In order to mimic the behaviour of a Promise we will use some **[Notifications](/docs/documentation/observables/what-is-a-notification/)**:
 
 - [INextNotification](/docs/reference/next-notification/): used to emit a value
 - [ICompleteNotification](/docs/reference/complete-notification/): used to notify of a `complete` state (success/fulfilled)

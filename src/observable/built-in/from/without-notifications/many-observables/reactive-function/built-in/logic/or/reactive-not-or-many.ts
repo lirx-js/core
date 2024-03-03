@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveNotOrMany(
   ...observables: IReactiveFunctionObservables<typeof notOrMany>
 ): IObservable<ReturnType<typeof notOrMany>> {
-  return optimizedReactiveFunction(
-    observables,
-    notOrMany,
-  );
+  return optimizedReactiveFunction(observables, notOrMany);
 }
 
 function notOrMany(...values: boolean[]): boolean {
@@ -19,4 +16,3 @@ function notOrMany(...values: boolean[]): boolean {
   }
   return true;
 }
-

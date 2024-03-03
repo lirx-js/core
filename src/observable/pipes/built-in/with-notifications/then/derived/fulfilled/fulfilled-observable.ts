@@ -11,29 +11,31 @@ export function fulfilledObservable<GInNextValue, GOut>(
   subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
   onFulfilled: IThenObservableOnFulfilled<GInNextValue, GOut>,
 ): IObservable<IFulfilledObservableOutNotifications<GOut>> {
-  return (emit: IObserver<IFulfilledObservableOutNotifications<GOut>>): IUnsubscribeOfObservable => {
+  return (
+    emit: IObserver<IFulfilledObservableOutNotifications<GOut>>,
+  ): IUnsubscribeOfObservable => {
     let childUnsubscribe: IUnsubscribeOfObservable;
     let lastValue: GInNextValue;
 
-    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-    ): IUnsubscribeOfObservable => {
-      return subscribe((notification: IDefaultInNotificationsUnion<GInNextValue>): void => {
-        switch (notification.name) {
-          case 'next':
-            lastValue = notification.value;
-            break;
-          case 'complete':
-            childUnsubscribe = onFulfilled(lastValue)(emit);
-            unsubscribe();
-            break;
-          case 'error':
-            emit(notification as IErrorNotification);
-            unsubscribe();
-            break;
-        }
-      });
-    });
+    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
+        return subscribe((notification: IDefaultInNotificationsUnion<GInNextValue>): void => {
+          switch (notification.name) {
+            case 'next':
+              lastValue = notification.value;
+              break;
+            case 'complete':
+              childUnsubscribe = onFulfilled(lastValue)(emit);
+              unsubscribe();
+              break;
+            case 'error':
+              emit(notification as IErrorNotification);
+              unsubscribe();
+              break;
+          }
+        });
+      },
+    );
 
     return (): void => {
       unsubscribe();

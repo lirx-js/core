@@ -6,12 +6,8 @@ export interface NgZone {
   runOutsideAngular(fn: (...args: any[]) => any): any;
 }
 
-export function createAngularPipeline(
-  ngZone: NgZone,
-  component: any,
-): any {
+export function createAngularPipeline(ngZone: NgZone, component: any): any {
   ngZone.runOutsideAngular(() => {
-
     const obs1$ = single('a');
     const obs2$ = single('b');
 

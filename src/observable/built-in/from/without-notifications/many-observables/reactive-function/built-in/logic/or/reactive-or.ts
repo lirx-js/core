@@ -5,13 +5,9 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveOr(
   ...observables: IReactiveFunctionObservables<typeof or>
 ): IObservable<ReturnType<typeof or>> {
-  return optimizedReactiveFunction(
-    observables,
-    or,
-  );
+  return optimizedReactiveFunction(observables, or);
 }
 
 function or(a: boolean, b: boolean): boolean {
   return a || b;
 }
-

@@ -9,4 +9,3 @@ export type ISource<GValue> = IObserverObservablePair<GValue, GValue>;
 /* derived */
 
 export type IGenericSource = ISource<any>;
-

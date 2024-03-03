@@ -15,22 +15,21 @@ export function fromPromise<GValue>(
   type GNotificationsUnion = IFromPromiseObservableNotifications<GValue>;
   return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     let running: boolean = true;
-    promise
-      .then(
-        (value: GValue): void => {
-          if (running) {
-            emit(createNextNotification<GValue>(value));
-          }
-          if (running) {
-            emit(STATIC_COMPLETE_NOTIFICATION);
-          }
-        },
-        (error: unknown): void => {
-          if (running) {
-            emit(createErrorNotification<any>(error));
-          }
-        },
-      );
+    promise.then(
+      (value: GValue): void => {
+        if (running) {
+          emit(createNextNotification<GValue>(value));
+        }
+        if (running) {
+          emit(STATIC_COMPLETE_NOTIFICATION);
+        }
+      },
+      (error: unknown): void => {
+        if (running) {
+          emit(createErrorNotification<any>(error));
+        }
+      },
+    );
     return (): void => {
       running = false;
     };

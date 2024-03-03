@@ -8,11 +8,15 @@ import { IObservable } from '../../../../../type/observable.type';
 
 export type IGenericAnyWithNotificationsInNotifications = IDefaultInNotificationsUnion<any>;
 
-export type IGenericAnyWithNotificationsInObservable = IObservable<IGenericAnyWithNotificationsInNotifications>;
+export type IGenericAnyWithNotificationsInObservable =
+  IObservable<IGenericAnyWithNotificationsInNotifications>;
 
-export type IGenericAnyWithNotificationsInObservables = readonly IGenericAnyWithNotificationsInObservable[];
+export type IGenericAnyWithNotificationsInObservables =
+  readonly IGenericAnyWithNotificationsInObservable[];
 
-export type IAnyWithNotificationsObservablesValues<GObservables extends IGenericAnyWithNotificationsInObservables> = TupleTypes<{
+export type IAnyWithNotificationsObservablesValues<
+  GObservables extends IGenericAnyWithNotificationsInObservables,
+> = TupleTypes<{
   [GKey in keyof GObservables]: GObservables[GKey] extends IObservable<infer GNotificationUnion>
     ? GNotificationUnion extends INextNotification<infer GValue>
       ? GValue
@@ -20,5 +24,6 @@ export type IAnyWithNotificationsObservablesValues<GObservables extends IGeneric
     : never;
 }>;
 
-export type IAnyWithNotificationsObservableNotifications<GObservables extends IGenericAnyWithNotificationsInObservables> =
-  IDefaultNotificationsUnion<IAnyWithNotificationsObservablesValues<GObservables>>;
+export type IAnyWithNotificationsObservableNotifications<
+  GObservables extends IGenericAnyWithNotificationsInObservables,
+> = IDefaultNotificationsUnion<IAnyWithNotificationsObservablesValues<GObservables>>;

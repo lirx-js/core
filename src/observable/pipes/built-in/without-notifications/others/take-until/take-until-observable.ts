@@ -7,18 +7,17 @@ export function takeUntilObservable<GValue>(
   until: IObservable<any>,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-      running: IRunning,
-    ): IUnsubscribeOfObservable => {
-      return mergeUnsubscribeFunctions([
-        until(unsubscribe),
-        subscribe((value: GValue): void => {
-          if (running()) {
-            emit(value);
-          }
-        }),
-      ]);
-    });
+    return futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
+        return mergeUnsubscribeFunctions([
+          until(unsubscribe),
+          subscribe((value: GValue): void => {
+            if (running()) {
+              emit(value);
+            }
+          }),
+        ]);
+      },
+    );
   };
 }

@@ -7,4 +7,3 @@ export function toBooleanObservablePipe<GValue>(): IObservablePipe<GValue, boole
     return toBooleanObservable<GValue>(subscribe);
   };
 }
-

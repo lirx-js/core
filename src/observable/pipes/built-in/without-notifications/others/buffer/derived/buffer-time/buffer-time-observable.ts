@@ -30,6 +30,3 @@ export function bufferTimeObservable<GValue>(
     };
   };
 }
-
-
-

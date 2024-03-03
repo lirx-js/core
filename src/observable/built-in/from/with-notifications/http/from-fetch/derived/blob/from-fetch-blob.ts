@@ -10,11 +10,5 @@ export function fromFetchBlob(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchBlobObservableNotifications> {
-  return responseToBlobObservable(
-    fromFetch(
-      requestInfo,
-      requestInit,
-    ),
-  );
+  return responseToBlobObservable(fromFetch(requestInfo, requestInit));
 }
-

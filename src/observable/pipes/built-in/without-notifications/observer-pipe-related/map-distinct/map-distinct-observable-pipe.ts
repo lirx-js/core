@@ -12,4 +12,3 @@ export function mapDistinctObservablePipe<GIn, GOut>(
     return mapDistinctObservable<GIn, GOut>(subscribe, mapFunction, options);
   };
 }
-

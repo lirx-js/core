@@ -7,9 +7,7 @@ export type IRecordOfObservables = {
 };
 
 export type InferCombineLatestObjectValue<GObject extends IRecordOfObservables> = {
-  [GKey in keyof GObject]: GObject[GKey] extends IObservable<infer GValue>
-    ? GValue
-    : never;
+  [GKey in keyof GObject]: GObject[GKey] extends IObservable<infer GValue> ? GValue : never;
 };
 
 export function combineLatestObject<GObject extends IRecordOfObservables>(
@@ -22,10 +20,7 @@ export function combineLatestObject<GObject extends IRecordOfObservables>(
     (values: readonly any[]): InferCombineLatestObjectValue<GObject> => {
       return Object.fromEntries(
         entries.map(([key], index: number): [string, any] => {
-          return [
-            key,
-            values[index],
-          ];
+          return [key, values[index]];
         }),
       ) as InferCombineLatestObjectValue<GObject>;
     },

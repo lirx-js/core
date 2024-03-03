@@ -1,4 +1,7 @@
-import { IObservable, IUnsubscribeOfObservable } from '../../../../../observable/type/observable.type';
+import {
+  IObservable,
+  IUnsubscribeOfObservable,
+} from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { IUnicastSource } from './unicast-source.type';
 

@@ -7,8 +7,13 @@ import { IRejectedObservableOutNotifications } from './rejected-observable-out-n
 
 export function rejectedObservablePipe<GInNextValue, GOut>(
   onRejected: IThenObservableOnRejected<GOut>,
-): IObservablePipe<IThenObservableInNotifications<GInNextValue>, IRejectedObservableOutNotifications<GInNextValue, GOut>> {
-  return (subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>): IObservable<IRejectedObservableOutNotifications<GInNextValue, GOut>> => {
+): IObservablePipe<
+  IThenObservableInNotifications<GInNextValue>,
+  IRejectedObservableOutNotifications<GInNextValue, GOut>
+> {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  ): IObservable<IRejectedObservableOutNotifications<GInNextValue, GOut>> => {
     return rejectedObservable<GInNextValue, GOut>(subscribe, onRejected);
   };
 }

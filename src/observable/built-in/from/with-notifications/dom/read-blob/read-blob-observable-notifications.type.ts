@@ -3,15 +3,15 @@ import { IDefaultNotificationsUnion } from '../../../../../../misc/notifications
 
 export interface IFileReaderFormatsToTypeMap {
   'data-url': string;
-  'text': string;
+  text: string;
   'array-buffer': ArrayBuffer;
 }
 
 export type IFileReaderReadType = keyof IFileReaderFormatsToTypeMap;
 
-export type IInferFileReaderReturnTypeFromReadType<GReadType extends IFileReaderReadType> = IFileReaderFormatsToTypeMap[GReadType];
+export type IInferFileReaderReturnTypeFromReadType<GReadType extends IFileReaderReadType> =
+  IFileReaderFormatsToTypeMap[GReadType];
 
 export type IReadBlobObservableNotifications<GReadType extends IFileReaderReadType> =
-  IDefaultNotificationsUnion<IInferFileReaderReturnTypeFromReadType<GReadType>>
-  | IProgressNotification
-  ;
+  | IDefaultNotificationsUnion<IInferFileReaderReturnTypeFromReadType<GReadType>>
+  | IProgressNotification;

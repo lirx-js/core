@@ -2,7 +2,7 @@ import { isNullish } from '@lirx/utils';
 import { IObserverObservablePair } from '../../../observer-observable-pair/type/observer-observable-pair.type';
 import { IObserver } from '../../../observer/type/observer.type';
 import { isSignal } from '../../../signals/signal/is/is-signal';
-import { ISignal } from '../../../signals/signal/signal.type';
+import { ISignal } from '../../../signals/signal/types/signal.type';
 import { isMaybeObserver } from './is-maybe-observer';
 
 // export type IUnknownToObserverValue<GInput> =
@@ -21,19 +21,13 @@ import { isMaybeObserver } from './is-maybe-observer';
 export type IUnknownToObserver<GInput> =
   GInput extends ISignal<infer GValue>
     ? IObserver<GValue>
-    : (
-      GInput extends IObserverObservablePair<infer GValue, any>
-        ? IObserver<GValue>
-        : (
-          GInput extends IObserver<any>
-            ? GInput
-            : never
-          )
-      );
+    : GInput extends IObserverObservablePair<infer GValue, any>
+      ? IObserver<GValue>
+      : GInput extends IObserver<any>
+        ? GInput
+        : never;
 
-export function unknownToObserver<GInput>(
-  input: GInput,
-): IUnknownToObserver<GInput> {
+export function unknownToObserver<GInput>(input: GInput): IUnknownToObserver<GInput> {
   if (isSignal(input)) {
     return ((value: unknown): void => {
       input.set(value);

@@ -1,1 +1,4 @@
-export { reactiveNotAndMany as notAndMany$$, reactiveNotAndMany as notAndM$$ } from './reactive-not-and-many';
+export {
+  reactiveNotAndMany as notAndM$$,
+  reactiveNotAndMany as notAndMany$$,
+} from './reactive-not-and-many';

@@ -8,8 +8,5 @@ import { responseToJSON } from './response-to-json';
 export function responseToJSONObservable<GData>(
   subscribe: IObservable<IThenObservableInNotifications<Response>>,
 ): IObservable<IFromFetchJSONObservableNotifications<GData>> {
-  return fulfilledObservable(
-    subscribe,
-    responseToBodyObservable<GData>(responseToJSON),
-  );
+  return fulfilledObservable(subscribe, responseToBodyObservable<GData>(responseToJSON));
 }

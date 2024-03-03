@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveAndMany(
   ...observables: IReactiveFunctionObservables<typeof andMany>
 ): IObservable<ReturnType<typeof andMany>> {
-  return optimizedReactiveFunction(
-    observables,
-    andMany,
-  );
+  return optimizedReactiveFunction(observables, andMany);
 }
 
 // export function reactiveAndMany(
@@ -30,4 +27,3 @@ function andMany(...values: boolean[]): boolean {
   }
   return true;
 }
-

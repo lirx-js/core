@@ -4,9 +4,10 @@ import { IPipeNowConstraint } from '../../../../misc/functional/pipe/types/pipe-
 import { IGenericObservablePipe } from '../../../pipes/type/observable-pipe.type';
 import { IGenericObservable } from '../../../type/observable.type';
 
-export type IObservablePipeConstraint<// generics
+export type IObservablePipeConstraint<
+  // generics
   GObservable extends IGenericObservable,
-  GFunctions
+  GFunctions,
   //
 > =
   IPipeNowConstraint<GObservable, GFunctions> extends readonly IGenericObservablePipe[]
@@ -16,9 +17,10 @@ export type IObservablePipeConstraint<// generics
 //   ? IPipeNowConstraint<GObservable, GFunctions>
 //   : readonly IGenericObservablePipe[];
 
-export type IObservablePipeReturn<// generics
+export type IObservablePipeReturn<
+  // generics
   GObservable extends IGenericObservable,
-  GFunctions extends readonly IGenericObservablePipe[]
+  GFunctions extends readonly IGenericObservablePipe[],
   //
 > = IInferPipeNowReturn<GObservable, GFunctions>;
 
@@ -31,15 +33,16 @@ export type IObservablePipeReturn<// generics
 //     ? IInferPipeNowReturn<GObservable, GFunctions>
 //     : never;
 
-export function pipeObservable<// generics
+export function pipeObservable<
+  // generics
   GObservable extends IGenericObservable,
-  GFunctions extends IObservablePipeConstraint<GObservable, GFunctions>
+  GFunctions extends IObservablePipeConstraint<GObservable, GFunctions>,
   //
->(
-  subscribe: GObservable,
-  fns: GFunctions,
-): IObservablePipeReturn<GObservable, GFunctions> {
-  return pipeNow<GObservable, GFunctions>(subscribe, fns) as IObservablePipeReturn<GObservable, GFunctions>;
+>(subscribe: GObservable, fns: GFunctions): IObservablePipeReturn<GObservable, GFunctions> {
+  return pipeNow<GObservable, GFunctions>(subscribe, fns) as IObservablePipeReturn<
+    GObservable,
+    GFunctions
+  >;
 }
 
 // export function pipeObservableSpread<// generics

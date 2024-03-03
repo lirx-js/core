@@ -1,6 +1,3 @@
-export function responseToBlob(
-  response: Response,
-): Promise<Blob> {
+export function responseToBlob(response: Response): Promise<Blob> {
   return response.blob();
 }
-

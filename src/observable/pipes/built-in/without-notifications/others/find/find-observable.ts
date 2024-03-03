@@ -8,16 +8,15 @@ export function findObservable<GValue>(
   condition: IFindObservablePipeConditionFunction<GValue>,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-      running: IRunning,
-    ): IUnsubscribeOfObservable => {
-      return subscribe((value: GValue): void => {
-        if (running() && condition(value)) {
-          unsubscribe();
-          emit(value);
-        }
-      });
-    });
+    return futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
+        return subscribe((value: GValue): void => {
+          if (running() && condition(value)) {
+            unsubscribe();
+            emit(value);
+          }
+        });
+      },
+    );
   };
 }

@@ -6,7 +6,7 @@ import { fromEventTarget } from '../../../without-notifications/dom/from-event-t
 import { IDragEndNotification } from './notifications/drag-end/drag-end-notification.type';
 import { IDragMoveNotification } from './notifications/drag-move/drag-move-notification.type';
 import { IDragStartNotification } from './notifications/drag-start/drag-start-notification.type';
-import { createPoint2D, IPoint2D } from './point-2d';
+import { IPoint2D, createPoint2D } from './point-2d';
 
 export interface IDraggableObject {
   readonly origin: IPoint2D;
@@ -20,15 +20,16 @@ export interface IDraggableElementObject<GElement extends Element> extends IDrag
 export type IDraggableObservableNotifications<GElement extends Element> =
   | IDragStartNotification<GElement>
   | IDragMoveNotification<GElement>
-  | IDragEndNotification<GElement>
-  ;
+  | IDragEndNotification<GElement>;
 
 /*---------------*/
 
 export function createDraggableObservable<GElement extends Element>(
   element: Element,
 ): IObservable<IDraggableObservableNotifications<GElement>> {
-  return (emit: IObserver<IDraggableObservableNotifications<GElement>>): IUnsubscribeOfObservable => {
+  return (
+    emit: IObserver<IDraggableObservableNotifications<GElement>>,
+  ): IUnsubscribeOfObservable => {
     let origin: IPoint2D;
     let unsubscribeOfPointerDown: IUnsubscribeOfObservable;
     let unsubscribeOfPointerMove: IUnsubscribeOfObservable;
@@ -38,14 +39,13 @@ export function createDraggableObservable<GElement extends Element>(
       name: TInferNotificationGName<IDraggableObservableNotifications<GElement>>,
       event: PointerEvent,
     ): void => {
-      emit(createNotification(name, {
-        element,
-        origin,
-        delta: createPoint2D(
-          event.clientX - origin.x,
-          event.clientY - origin.y,
-        ),
-      }) as IDraggableObservableNotifications<GElement>);
+      emit(
+        createNotification(name, {
+          element,
+          origin,
+          delta: createPoint2D(event.clientX - origin.x, event.clientY - origin.y),
+        }) as IDraggableObservableNotifications<GElement>,
+      );
     };
 
     const subscribeToPointerDown = (): void => {
@@ -58,7 +58,7 @@ export function createDraggableObservable<GElement extends Element>(
     };
 
     const onPointerDown = (event: PointerEvent): void => {
-      if (event.button === 0) {
+      if (event.isPrimary) {
         unsubscribeOfPointerDown();
         preventDefault(event);
         origin = createPoint2D(event.clientX, event.clientY);
@@ -70,14 +70,14 @@ export function createDraggableObservable<GElement extends Element>(
     };
 
     const onPointerMove = (event: PointerEvent): void => {
-      if (event.button === 0) {
+      if (event.isPrimary) {
         preventDefault(event);
         dispatch('drag-move', event);
       }
     };
 
     const onPointerUp = (event: PointerEvent): void => {
-      if (event.button === 0) {
+      if (event.isPrimary) {
         preventDefault(event);
         dispatch('drag-move', event);
         dispatch('drag-end', event);
@@ -100,5 +100,3 @@ export function createDraggableObservable<GElement extends Element>(
     };
   };
 }
-
-

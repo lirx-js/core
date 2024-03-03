@@ -1,16 +1,18 @@
-import { IPipeConstraint } from './types/pipe-constraint.type';
-import { IInferPipeReturn } from './types/infer-pipe-return.type';
 import { IGenericUnaryFunction } from '../shared-types/unary-function.type';
+import { IInferPipeReturn } from './types/infer-pipe-return.type';
+import { IPipeConstraint } from './types/pipe-constraint.type';
 
-export function pipe<// generics
+export function pipe<
+  // generics
   GFunctions extends IPipeConstraint<GFunctions, any, GUnaryFunction>,
-  GUnaryFunction extends IGenericUnaryFunction
+  GUnaryFunction extends IGenericUnaryFunction,
   //
-  >(
-  fns: GFunctions,
-): IInferPipeReturn<GFunctions, GUnaryFunction> {
+>(fns: GFunctions): IInferPipeReturn<GFunctions, GUnaryFunction> {
   return ((firstArg: unknown): unknown => {
-    return (fns as GUnaryFunction[]).reduce((value: any, fnc: GUnaryFunction) => fnc(value), firstArg);
+    return (fns as GUnaryFunction[]).reduce(
+      (value: any, fnc: GUnaryFunction) => fnc(value),
+      firstArg,
+    );
   }) as IInferPipeReturn<GFunctions, GUnaryFunction>;
 }
 
@@ -45,5 +47,3 @@ export function pipe<// generics
 // ): IInferPipeReturn<GFunctions, GUnaryFunction> {
 //   return pipe<GFunctions, GUnaryFunction>(fns);
 // }
-
-

@@ -4,9 +4,7 @@ import { IErrorNotification } from '../../../../../../misc/notifications/built-i
 import { IObserver } from '../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type';
 
-export function throwError<GError>(
-  error: GError,
-): IObservable<IErrorNotification<GError>> {
+export function throwError<GError>(error: GError): IObservable<IErrorNotification<GError>> {
   return (emit: IObserver<IErrorNotification<GError>>): IUnsubscribeOfObservable => {
     emit(createErrorNotification<GError>(error));
     return noop;

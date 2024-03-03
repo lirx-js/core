@@ -11,18 +11,16 @@ export function notificationsToImmediateObservable<GValue>(
   onError: INotificationsToImmediateObservableOnErrorFunction = noop,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-    ): IUnsubscribeOfObservable => {
+    return futureUnsubscribe((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GValue>(
-          /* next */(value: GValue): void => {
+          /* next */ (value: GValue): void => {
             emit(value);
           },
-          /* complete */(): void => {
+          /* complete */ (): void => {
             unsubscribe();
           },
-          /* error */(error: unknown): void => {
+          /* error */ (error: unknown): void => {
             onError(error);
             unsubscribe();
           },
@@ -31,5 +29,3 @@ export function notificationsToImmediateObservable<GValue>(
     });
   };
 }
-
-

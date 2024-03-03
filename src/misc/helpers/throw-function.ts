@@ -1,5 +1,3 @@
-export function throwFunction(
-  error: unknown,
-): never {
+export function throwFunction(error: unknown): never {
   throw error;
 }

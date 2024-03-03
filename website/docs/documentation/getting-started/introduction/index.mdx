@@ -1,7 +1,7 @@
 # Introduction
 
 📨 **@lirx/core** helps you to build and compose **asynchronous and event-based programs**.
-Everything being asynchronous, like user events, http requests, data streams, is supported out from the box.
+Everything being asynchronous, like dynamic variables, user events, http requests, data streams, is supported out from the box.
 
 ⚡️ It is extremely **[fast and small](/docs/documentation/performances/)**.
 Tree-shaking is fully supported, and the library is sufficiently optimized, so you can embed it in any applications, even the smallest ones.
@@ -9,172 +9,109 @@ Tree-shaking is fully supported, and the library is sufficiently optimized, so y
 🦸 This is your **best ally** when developing a **web-app**.
 Code in a more predictable way with **clear data workflows**, avoiding bugs, errors and inconsistent states.
 
-<p align="center">
-🚀🚀🚀
-</p>
+---
 
-🔥 However, **[learning it is hard](https://dev.to/mfcodeworks/comment/11agc)**, or it may look like a total waste of time.
-But don't give up. Once you understand the core concepts of Reactive Programming you can easily master this paradigm apply it effortlessly in you day-to-day code.
-
-When I started using RxJS, which is the most used Observables library, it was a nightmare:
-it lacked tutorials, the documentation was cryptic, and I couldn't find concrete use cases and examples.
-It's just a pile of documentation where the authors expect that everyone can read their mind 😑.
-
-But now, that I'm very confortable with Reactive Programming, **I simply cannot work without it**:
-it solves so many problems and allows me to create very consistent applications.
-
-The first thing to know is that Reactive Programming requires you to **think reactively**.
-Just like writing Promises was a different paradigm with regards to non-blocking code (*async thinking*), in the same way, you'll have to be able to change your perspective on variables and streams.
-
-So the first question to answer is: **when should I use an Observable ?**
-Well, the best answer is: **everytime you have a value which will evolve through time.**
-It may be a user's input, an async HTTP request, a computed value, a stream of data, etc.
-
-If you force yourself to use the Observables when you encounter these situations, then you'll quickly become an Observables' master.
-
-The second and most important point: you'll have to **read the documentation** and learn at least the essentials functions before beginning.
-Just like you would have done for a tooling library like *lodash* or *underscore*.
-If you skip this step, you won't be able to unleash the true potential of Observables.
-
-
-
-## What is Reactive Programming?
-
-> Reactive programming (or RP for short) is programming with asynchronous data streams.
-
-Actually, this isn't new:
-
-- Promises are streams of values with a `success` and `error` state, and you can "pipe" them with `then` or `catch`
-- EventListeners are streams of events
-- Timers (setTimeout/setInterval) are somehow streams of "void/empty" values
-- [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)
-  and [Readable](https://nodejs.org/api/stream.html#class-streamreadable) are data streams too
-- websockets
-- ... and many more...
-
-So, you've probably already played with asynchronous data streams. Reactive programming is all about this but on steroids.
-You'll be able to **create data streams of anything**, not just from click and hover events:
-variables, user inputs, properties, tasks, data structures,...
-
-On top of that, you are given **an amazing toolbox of functions** to combine, create and filter any of those streams.
-That's where the "functional" magic kicks in. A stream can be used as an input to another one. Even multiple streams can be used as inputs
-to another stream. You can merge two streams. You can filter a stream to get another one that has only those events you are interested in.
-You can map data values from one stream to another new one. Etc.
-
-A stream is simply a sequence of **ongoing values ordered in time**.
-
-We capture these emitted values only **asynchronously**, by defining a function that will execute when a value is emitted.
-The "listening" to the stream is called **subscribing**.
-The functions we are defining are *Observers*. The stream is the *Observable* being observed.
-
-## Reactive Programming by example
-
-Normally you'll register event listeners like this:
-
-```js
-const onClick = () => console.log('clicked');
-document.addEventListener('click', onClick);
-// later
-document.removeEventListener('click', onClick);
-```
-
-With `@lirx/core`, instead, you will create an Observable:
-
-```js
-const onClick$ = fromEventTarget(document, 'click');
-const unsubscribe = onClick$(() => console.log('clicked'));
-// later
-unsubscribe();
-```
-
-The most important part of Reactive Programming is that you have fine control of the flow of your values.
-
-Let's write a piece of code which displays the number of time the user clicked on the document:
-
-In "plain" js:
-
-```js
-let count = 0;
-let rate = 1000;
-let lastClick = Date.now() - rate;
-document.addEventListener('click', () => {
-  if (Date.now() - lastClick >= rate) {
-    console.log(`clicked ${++count} times`);
-    lastClick = Date.now();
-  }
-});
-```
-
-With `@lirx/core`:
-
-```js
-const subscribe = pipe$$(fromEventTarget(document, 'click'), [
-  throttleTime$$$(1000),
-  scan$$$(count => count + 1, 0),
-]);
-subscribe(count => console.log(`clicked ${count} times`));
-```
-
-The `@lirx/core` code is **more concise, organized, and clearer**.
-I hope you enjoy the beauty of this approach.
-And this is just the tip of the iceberg: you can apply the same operations on different kinds of streams,
-for instance, on a stream of API responses, bytes, timing, etc.; with many other functions available.
-
-## For what usage RP is great ?
-
-Usually, when we use variables and functions, we **PULL** values:
-
-```ts
-let firstname = 'Valentin';
-let lastname = 'Richard';
-const fullname = `${firstname} ${lastname}`; // you 'PULL' the values from 'firstname' and 'lastname' to compute 'fullname'
-console.log(fullname); // 'Valentin Richard'
-```
-
-But, sometimes (especially in javascript with a lot of async events, or in front-end applications) we have to deal with evolving values:
-If we update the value of `firstname` or `lastname` (ex: from an &lt;input&gt; element), we would like to update the value of `fullname` too.
-
-We could write:
-
-```ts
-const getFullName = () => `${firstname} ${lastname}`;
-console.log(getFullName()); // 'Valentin Richard'
-firstname = `Bob`;
-console.log(getFullName()); // 'Bob Richard'
-```
-
-But we're forced to **PULL** the "fullname" to get the value. It would be more convenient having `fullname`
-updating automatically when any of `firstname` or `lastname` changes.
-
-Here comes the Observables:
-
-
-```ts
-const firstname$ = createTextInputObservable('Valentin');
-const lastname$ = createTextInputObservable('Richard');
-const fullname$ = string$$`${firstname$} ${lastname$}`;
-
-fullname$((fullname) => {
-  console.log(fullname);
-});
-```
-
-If `firstname$` or `lastname$` changes, then `fullname$` is immediately updated.
-So Observables **PUSHES** values. We don't have to **PULL** them. It's magic, and it's perfect for all async events.
-
-> So Reactive Programming is excellent for every asynchronous stream of data.
-This includes: computed/updated values, events, promises, timers, and many more.
-
-## Why should you consider adopting RP?
-
-Reactive Programming raises the level of abstraction of your code, so you can focus on the interdependence of events that define the
-business logic, rather than having to constantly fiddle with a large amount of implementation details.
-**Code in RP will likely be more concise**.
-
-The benefits are really important in **web applications**, where you have to deal with multitude of UI events, async requests, etc...
-and react to these changes, like updating the DOM.
+> Starting to think in Reactive Programming and using *@lirx/core*, will open so many opportunities, and simplify so much your work,
+that **once started, you won't be able to do without it**. They are revolutionary like Promises on their time.
 
 ---
 
-If you want to go deeper into RP, I recommend you [this excellent article](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754) from Andre Staltz.
+First thing first, this library contains **two complementary** approach of [Reactive Programming](/docs/documentation/getting-started/reactive-programming/): *Signals and Observables*.
+
+**[Signals](/docs/documentation/signals/introduction/)** provide a nice bridge between [Imperative Programming](https://en.wikipedia.org/wiki/Imperative_programming)
+and [Reactive Programming](https://en.wikipedia.org/wiki/Reactive_programming), while **[Observables](/docs/documentation/observables/introduction/)** permit more complex data flows.
+
+## Signals
+
+<p align="center">
+
+  ```mermaid
+  flowchart LR;
+  Signal>Signal]--read (sync)-->Read{{"count()"}}-->Value
+  Signal-- observe (async)-->Effect{{"effect(() => count())"}}-->AsyncValue["Async value"]
+  Signal-- compute (async)-->Computed{{"computed(() => `${firstname()} ${lastname()}`)"}}-->ComputedValue["Computed value"]
+  ```
+
+</p>
+
+Signals are a perfect start as they are relatively easy to understand and straightforward to use.
+
+They are similar to **variables**, with the specificity to be **observable**: if their value change, we may observe this change and react to it.
+
+Let's illustrate it with a quick example:
+
+```ts
+// create a writable signal
+const counter = signal(0);
+
+// create a computed signal
+const isEven = computed(() => counter() % 2 === 0);
+
+// log the values of our signals, and log them again when either (or all) changes
+effect(() => {
+  console.log('counter', counter(), 'isEven', isEven());
+});
+
+// create an observable triggered on a click on the window
+fromEventTarget(window, 'click')(() => {
+  // update signal's value based on the current one
+  counter.update((currentValue) => currentValue + 1);
+});
+```
+
+Signal's values are readable by calling the signal like a function (`counter()`), this is the imperative side of them.
+However, when using in contexts like `effect` or `computed`, we listen to their current state and future changes,
+thus, allowing us to create signals based on others (`computed`), or trigger a function when a change is detected (`effect`).
+
+This capacity opens the gates to new designs, and elegant pipelines, where **your variables contains always fresh data**.
+
+
+## Observables
+
+<p align="center">
+
+  ```mermaid
+  flowchart LR;
+  Observable>Observable]--value A-->Pipe{{Pipe}}--value B-->Observer
+  ```
+
+</p>
+
+The Observables are the root of Reactive Programming: they are **streams of values** for which we create the pipeline first,
+and then, subscribe to them when requiring their values.
+They nature is asynchronous by default, and we will observe their changes:
+
+```js
+// creates an Observable from a 'click' event on `document`, then pipe it
+const subscribe = pipe$$(fromEventTarget(document, 'click'), [
+  // debounces the events: maximum one event every 1000ms
+  throttleTime$$$(1000),
+  // like Array.reduce, but for Observables: here we increment count
+  scan$$$(count => count + 1, 0),
+]);
+// we end up with an Observable, emitting the number of time
+// we clicked on the document, with a minium interval of 1s
+
+// finally we subscribe to the observable to log the value
+subscribe(count => console.log(`clicked ${count} times`));
+```
+
+Observables are **harder to master** as they ask you to think in a totally different paradigm.
+However, they give you powerful tools to create complex data pipelines.
+
+Usually, if you have an async data source (`Events`, `Promises`, `HTTP Request`, etc.), then, Observables are probably the right answer.
+
+
+## Where to start ?
+
+First, if you want to go deeper on the concept of Reactive Programming, we wrote [a gentle introduction to this paradigm](/docs/documentation/getting-started/reactive-programming/).
+
+However, if you want to go straight to the code, we recommend you to start from the **[Signals](/docs/documentation/signals/introduction/)** to get familiar with the primitives,
+and then go deeper with the **[Observables](/docs/documentation/observables/introduction/)**.
+We suggest you to go **steps by steps**, by starting to implement some signals in your application, and when you'll start to adopt the concept,
+add Observables to it.
+
+Begin with the most essential functions, and when you'll be comfortable, start to implement more complex pipelines.
+After a while, you'll be so satisfied that you'll ask yourself: *"How did I do without Observables?"*
+
 

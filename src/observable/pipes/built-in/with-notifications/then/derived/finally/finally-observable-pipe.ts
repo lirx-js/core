@@ -7,8 +7,13 @@ import { IFinallyObservableOutNotifications } from './finally-observable-out-not
 
 export function finallyObservablePipe<GInNextValue>(
   onFinally: IFinallyObservableCallback<GInNextValue>,
-): IObservablePipe<IThenObservableInNotifications<GInNextValue>, IFinallyObservableOutNotifications<GInNextValue>> {
-  return (subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>): IObservable<IFinallyObservableOutNotifications<GInNextValue>> => {
+): IObservablePipe<
+  IThenObservableInNotifications<GInNextValue>,
+  IFinallyObservableOutNotifications<GInNextValue>
+> {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  ): IObservable<IFinallyObservableOutNotifications<GInNextValue>> => {
     return finallyObservable<GInNextValue>(subscribe, onFinally);
   };
 }

@@ -10,4 +10,3 @@ export function mergeAllObservablePipe<GValue>(
     return mergeAllObservable<GValue>(subscribe, maxNumberOfSubscriptions);
   };
 }
-

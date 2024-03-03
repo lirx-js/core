@@ -1,0 +1,34 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="languages">
+  <TabItem value="typescript" label="Typescript">
+
+```ts
+const observable: IObservable<number> = (emit: IObserver<number>): IUnsubscribe => {
+  let count: number = 0;
+  // every 500ms, we call the Observer `emit`, with an incremented `count`.
+  const timer: any = setInterval(() => emit(count++), 500);
+  // then, we return an unsubscribe function, used to clean up any async operations.
+  return (): void => {
+    // in our case, we stop the interval timer.
+    clearInterval(timer);
+  };
+};
+```
+
+  </TabItem>
+  <TabItem value="javascript" label="Javascript">
+
+```ts
+const observable = (emit) => {
+  let count = 0;
+  const timer = setInterval(() => emit(count++), 500);
+  return () => {
+    clearInterval(timer);
+  };
+};
+```
+
+  </TabItem>
+</Tabs>

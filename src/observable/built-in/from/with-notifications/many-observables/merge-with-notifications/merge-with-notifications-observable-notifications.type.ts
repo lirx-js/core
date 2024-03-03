@@ -8,11 +8,15 @@ import { IObservable } from '../../../../../type/observable.type';
 
 export type IGenericMergeWithNotificationsInNotifications = IDefaultInNotificationsUnion<any>;
 
-export type IGenericMergeWithNotificationsInObservable = IObservable<IGenericMergeWithNotificationsInNotifications>;
+export type IGenericMergeWithNotificationsInObservable =
+  IObservable<IGenericMergeWithNotificationsInNotifications>;
 
-export type IGenericMergeWithNotificationsInObservables = readonly IGenericMergeWithNotificationsInObservable[];
+export type IGenericMergeWithNotificationsInObservables =
+  readonly IGenericMergeWithNotificationsInObservable[];
 
-export type IMergeWithNotificationsObservablesValues<GObservables extends IGenericMergeWithNotificationsInObservables> = TupleTypes<{
+export type IMergeWithNotificationsObservablesValues<
+  GObservables extends IGenericMergeWithNotificationsInObservables,
+> = TupleTypes<{
   [GKey in keyof GObservables]: GObservables[GKey] extends IObservable<infer GNotificationUnion>
     ? GNotificationUnion extends INextNotification<infer GValue>
       ? GValue
@@ -20,5 +24,6 @@ export type IMergeWithNotificationsObservablesValues<GObservables extends IGener
     : never;
 }>;
 
-export type IMergeWithNotificationsObservableNotifications<GObservables extends IGenericMergeWithNotificationsInObservables> =
-  IDefaultNotificationsUnion<IMergeWithNotificationsObservablesValues<GObservables>>;
+export type IMergeWithNotificationsObservableNotifications<
+  GObservables extends IGenericMergeWithNotificationsInObservables,
+> = IDefaultNotificationsUnion<IMergeWithNotificationsObservablesValues<GObservables>>;

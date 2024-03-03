@@ -1,16 +1,17 @@
 {
   "name": "@lirx/core",
-  "version": "1.7.0",
-  "description": "Blazing fast Observables",
+  "version": "1.6.0",
+  "description": "Blazing fast Observables and Signals",
   "repository": {
     "type": "git",
     "url": "https://github.com/lirx-js/core"
   },
   "keywords": [
-    "rx-js",
+    "rxjs",
     "reactive",
     "async",
     "observable",
+    "signal",
     "stream"
   ],
   "scripts": {
@@ -31,5 +32,5 @@
     "@lirx/unsubscribe",
     "@lirx/utils"
   ],
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.1.0"
 }

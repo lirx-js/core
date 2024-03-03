@@ -7,4 +7,3 @@ export function toStringObservablePipe<GValue>(): IObservablePipe<GValue, string
     return toStringObservable<GValue>(subscribe);
   };
 }
-

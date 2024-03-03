@@ -7,16 +7,11 @@ import { fromEventTarget } from '../from-event-target';
  *
  * @experimental
  */
-export function focusLeaveElementObservable(
-  element: Element,
-): IObservable<FocusEvent> {
+export function focusLeaveElementObservable(element: Element): IObservable<FocusEvent> {
   return filterObservable(
     fromEventTarget<'focusout', FocusEvent>(element, 'focusout'),
     (event: FocusEvent): boolean => {
-      return (
-        (event.relatedTarget === null)
-        || !element.contains(event.relatedTarget as Node)
-      );
+      return event.relatedTarget === null || !element.contains(event.relatedTarget as Node);
     },
   );
 }

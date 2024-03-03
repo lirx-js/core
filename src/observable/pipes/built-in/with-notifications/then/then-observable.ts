@@ -6,7 +6,8 @@ import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observab
 import { IThenObservableOnFulfilled } from './then-observable-on-fulfilled.type';
 import { IThenObservableOnRejected } from './then-observable-on-rejected.type';
 
-export type IThenObservableInNotifications<GInNextValue> = IDefaultInNotificationsUnion<GInNextValue>;
+export type IThenObservableInNotifications<GInNextValue> =
+  IDefaultInNotificationsUnion<GInNextValue>;
 
 export function thenObservable<GInNextValue, GOut>(
   subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
@@ -17,25 +18,25 @@ export function thenObservable<GInNextValue, GOut>(
     let childUnsubscribe: IUnsubscribeOfObservable;
     let lastValue: GInNextValue;
 
-    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-    ): IUnsubscribeOfObservable => {
-      return subscribe(
-        defaultNotificationObserver<GInNextValue>(
-          /* next */(value: GInNextValue): void => {
-            lastValue = value;
-          },
-          /* complete */(): void => {
-            childUnsubscribe = onFulfilled(lastValue)(emit);
-            unsubscribe();
-          },
-          /* error */(error: unknown): void => {
-            childUnsubscribe = onRejected(error)(emit);
-            unsubscribe();
-          },
-        ),
-      );
-    });
+    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
+        return subscribe(
+          defaultNotificationObserver<GInNextValue>(
+            /* next */ (value: GInNextValue): void => {
+              lastValue = value;
+            },
+            /* complete */ (): void => {
+              childUnsubscribe = onFulfilled(lastValue)(emit);
+              unsubscribe();
+            },
+            /* error */ (error: unknown): void => {
+              childUnsubscribe = onRejected(error)(emit);
+              unsubscribe();
+            },
+          ),
+        );
+      },
+    );
 
     return (): void => {
       unsubscribe();
@@ -45,6 +46,3 @@ export function thenObservable<GInNextValue, GOut>(
     };
   };
 }
-
-
-

@@ -13,9 +13,5 @@ export function let$$<GValue>(
   ...initialValue: ICreateReplayLastSourceInitialValue<GValue>
 ): ILetTuple<GValue> {
   const { emit, subscribe, getValue } = createMulticastReplayLastSource<GValue>(...initialValue);
-  return [
-    emit,
-    subscribe,
-    getValue,
-  ];
+  return [emit, subscribe, getValue];
 }

@@ -9,6 +9,3 @@ export function bufferTimeObservablePipe<GValue>(
     return bufferTimeObservable<GValue>(subscribe, duration);
   };
 }
-
-
-

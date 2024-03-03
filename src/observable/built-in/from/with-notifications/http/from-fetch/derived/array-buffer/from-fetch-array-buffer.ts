@@ -10,11 +10,5 @@ export function fromFetchArrayBuffer(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchArrayBufferObservableNotifications> {
-  return responseToArrayBufferObservable(
-    fromFetch(
-      requestInfo,
-      requestInit,
-    ),
-  );
+  return responseToArrayBufferObservable(fromFetch(requestInfo, requestInit));
 }
-

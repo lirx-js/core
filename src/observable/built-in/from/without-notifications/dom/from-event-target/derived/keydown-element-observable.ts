@@ -20,9 +20,7 @@ export function filterKeyObservable(
   onKeyDown$: IObservable<KeyboardEvent>,
   key: string,
 ): IObservable<KeyboardEvent> {
-  return filterObservable(
-    onKeyDown$,
-    (event: KeyboardEvent): boolean => {
-      return (event.key === key);
-    });
+  return filterObservable(onKeyDown$, (event: KeyboardEvent): boolean => {
+    return event.key === key;
+  });
 }
