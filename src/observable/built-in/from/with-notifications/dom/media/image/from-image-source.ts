@@ -5,21 +5,21 @@ import { createNextNotification } from '../../../../../../../misc/notifications/
 import { IObserver } from '../../../../../../../observer/type/observer.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../../type/observable.type';
 import { fromEventTarget } from '../../../../without-notifications/dom/from-event-target/from-event-target';
-import {
-  IFromPromiseFactoryObservableNotifications,
-} from '../../../promise/from-promise-factory/from-promise-factory-observable-notifications.type';
+import { IFromPromiseFactoryObservableNotifications } from '../../../promise/from-promise-factory/from-promise-factory-observable-notifications.type';
 
-export type IFromImageSourceObservableNotifications = IFromPromiseFactoryObservableNotifications<HTMLImageElement>;
+export type IFromImageSourceObservableNotifications =
+  IFromPromiseFactoryObservableNotifications<HTMLImageElement>;
 
-export function fromImageSource(
-  src: string,
-): IObservable<IFromImageSourceObservableNotifications> {
+export function fromImageSource(src: string): IObservable<IFromImageSourceObservableNotifications> {
   return (emit: IObserver<IFromImageSourceObservableNotifications>): IUnsubscribeOfObservable => {
     let running: boolean = true;
     const image: HTMLImageElement = new Image();
 
     const unsubscribeOfEvents = mergeUnsubscribeFunctions([
-      fromEventTarget(image, 'load')((): void => {
+      fromEventTarget(
+        image,
+        'load',
+      )((): void => {
         unsubscribeOfEvents();
         emit(createNextNotification<HTMLImageElement>(image));
         if (running) {
@@ -27,7 +27,10 @@ export function fromImageSource(
         }
         running = false;
       }),
-      fromEventTarget(image, 'error')((): void => {
+      fromEventTarget(
+        image,
+        'error',
+      )((): void => {
         unsubscribeOfEvents();
         emit(createErrorNotification<HTMLImageElement>(image));
         running = false;

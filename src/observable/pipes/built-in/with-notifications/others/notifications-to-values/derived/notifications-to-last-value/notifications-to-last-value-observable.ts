@@ -13,19 +13,17 @@ export function notificationsToLastValueObservable<GValue>(
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     let lastValue: GValue;
 
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-    ): IUnsubscribeOfObservable => {
+    return futureUnsubscribe((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GValue>(
-          /* next */(value: GValue): void => {
+          /* next */ (value: GValue): void => {
             lastValue = value;
           },
-          /* complete */(): void => {
+          /* complete */ (): void => {
             emit(lastValue);
             unsubscribe();
           },
-          /* error */(error: unknown): void => {
+          /* error */ (error: unknown): void => {
             onError(error);
             unsubscribe();
           },
@@ -34,5 +32,3 @@ export function notificationsToLastValueObservable<GValue>(
     });
   };
 }
-
-

@@ -8,15 +8,21 @@ export interface IObserverObservablePair<GObserverValue, GObservableValue> {
 
 /* derived */
 
-export type IGenericObserverObservablePair = IObserverObservablePair<IGenericObserver, IGenericObservable>;
+export type IGenericObserverObservablePair = IObserverObservablePair<
+  IGenericObserver,
+  IGenericObservable
+>;
 
-export type IInferObserverObservablePairGObserverValue<GObserverObservablePair extends IGenericObserverObservablePair> =
+export type IInferObserverObservablePairGObserverValue<
+  GObserverObservablePair extends IGenericObserverObservablePair,
+> =
   GObserverObservablePair extends IObserverObservablePair<infer GObserverValue, any>
     ? GObserverValue
     : never;
 
-export type IInferObserverObservablePairGObservableValue<GObserverObservablePair extends IGenericObserverObservablePair> =
+export type IInferObserverObservablePairGObservableValue<
+  GObserverObservablePair extends IGenericObserverObservablePair,
+> =
   GObserverObservablePair extends IObserverObservablePair<any, infer GObservableValue>
     ? GObservableValue
     : never;
-

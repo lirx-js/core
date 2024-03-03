@@ -13,5 +13,3 @@ export function distinctObserverPipe<GValue>(
     return distinctObserver<GValue>(emit, options);
   };
 }
-
-

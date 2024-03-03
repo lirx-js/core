@@ -14,6 +14,9 @@ export function filterObservablePipe<GIn, GOut extends GIn>(
   filterFunction: IFilterFunctionStrict<GIn, GOut> | IFilterFunctionGeneric<GIn>,
 ): IObservablePipe<GIn, GOut> {
   return (subscribe: IObservable<GIn>): IObservable<GOut> => {
-    return filterObservable<GIn, GOut>(subscribe, filterFunction as IFilterFunctionStrict<GIn, GOut>);
+    return filterObservable<GIn, GOut>(
+      subscribe,
+      filterFunction as IFilterFunctionStrict<GIn, GOut>,
+    );
   };
 }

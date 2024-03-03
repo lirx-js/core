@@ -7,4 +7,3 @@ export function debounceImmediateObservablePipe<GValue>(): IObservablePipe<GValu
     return debounceImmediateObservable<GValue>(subscribe);
   };
 }
-

@@ -1,1 +1,1 @@
-export { reactiveEqual as equal$$, reactiveEqual as eq$$ } from './reactive-equal';
+export { reactiveEqual as eq$$, reactiveEqual as equal$$ } from './reactive-equal';

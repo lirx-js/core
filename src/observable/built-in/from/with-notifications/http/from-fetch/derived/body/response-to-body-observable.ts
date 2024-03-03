@@ -6,17 +6,13 @@ import { IFromFetchBodyObservableNotifications } from './from-fetch-body-observa
 import { IResponseToBodyMapFunction } from './response-to-body-map-function.type';
 
 export interface IResponseToBodyObservableFunction<GData> {
-  (
-    response: Response,
-  ): IObservable<IFromFetchBodyObservableNotifications<GData>>;
+  (response: Response): IObservable<IFromFetchBodyObservableNotifications<GData>>;
 }
 
 export function responseToBodyObservable<GData>(
   map: IResponseToBodyMapFunction<GData>,
 ): IResponseToBodyObservableFunction<GData> {
-  return (
-    response: Response,
-  ): IObservable<IFromFetchBodyObservableNotifications<GData>> => {
+  return (response: Response): IObservable<IFromFetchBodyObservableNotifications<GData>> => {
     if (response.ok) {
       return fromPromiseFactory<GData>(() => map(response));
     } else {

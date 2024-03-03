@@ -1,3 +1,1 @@
-export { forkJoin as allWithNotifications, forkJoin as allN } from './fork-join';
-
-
+export { forkJoin as allN, forkJoin as allWithNotifications } from './fork-join';

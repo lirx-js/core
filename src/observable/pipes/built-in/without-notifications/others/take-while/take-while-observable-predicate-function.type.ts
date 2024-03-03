@@ -1,6 +1,3 @@
 export interface ITakeWhileObservablePredicateFunction<GValue> {
-  (
-    value: GValue,
-    index: number,
-  ): boolean;
+  (value: GValue, index: number): boolean;
 }

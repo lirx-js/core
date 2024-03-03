@@ -12,7 +12,4 @@ export type IUnsubscribeOfObservable = IUnsubscribe;
 export type IGenericObservable = IObservable<any>;
 
 export type IInferObservableGValue<GObservable extends IGenericObservable> =
-  GObservable extends IObservable<infer GValue>
-    ? GValue
-    : never;
-
+  GObservable extends IObservable<infer GValue> ? GValue : never;

@@ -10,8 +10,5 @@ export const responseToTextObservableRaw = responseToBodyObservable<string>(resp
 export function responseToTextObservable(
   subscribe: IObservable<IThenObservableInNotifications<Response>>,
 ): IObservable<IFromFetchTextObservableNotifications> {
-  return fulfilledObservable(
-    subscribe,
-    responseToTextObservableRaw,
-  );
+  return fulfilledObservable(subscribe, responseToTextObservableRaw);
 }

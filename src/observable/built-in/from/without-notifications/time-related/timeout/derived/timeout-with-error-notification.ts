@@ -1,7 +1,5 @@
 import { ITimeoutError } from '@lirx/utils';
-import {
-  createTimeoutErrorNotification,
-} from '../../../../../../../misc/notifications/built-in/error/derived/create-timeout-error-notification';
+import { createTimeoutErrorNotification } from '../../../../../../../misc/notifications/built-in/error/derived/create-timeout-error-notification';
 import { IErrorNotification } from '../../../../../../../misc/notifications/built-in/error/error-notification.type';
 import { IObservable } from '../../../../../../type/observable.type';
 import { timeout } from '../timeout';
@@ -14,4 +12,3 @@ export function timeoutWithErrorNotification(
     (): IErrorNotification<ITimeoutError> => createTimeoutErrorNotification(),
   );
 }
-

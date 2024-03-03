@@ -6,6 +6,8 @@ import { timeout } from '../timeout';
 export function timeoutWithCompleteNotification(
   duration: number,
 ): IObservable<ICompleteNotification> {
-  return timeout<ICompleteNotification>(duration, (): ICompleteNotification => STATIC_COMPLETE_NOTIFICATION);
+  return timeout<ICompleteNotification>(
+    duration,
+    (): ICompleteNotification => STATIC_COMPLETE_NOTIFICATION,
+  );
 }
-

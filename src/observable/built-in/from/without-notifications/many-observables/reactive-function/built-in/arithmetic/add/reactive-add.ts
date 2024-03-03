@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveAdd(
   ...observables: IReactiveFunctionObservables<typeof add>
 ): IObservable<ReturnType<typeof add>> {
-  return optimizedReactiveFunction(
-    observables,
-    add,
-  );
+  return optimizedReactiveFunction(observables, add);
 }
 
 function add(a: number, b: number): number {

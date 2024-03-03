@@ -1,5 +1,1 @@
-export {
-  responseToTextObservable as responseToText$$,
-} from './response-to-text-observable';
-
-
+export { responseToTextObservable as responseToText$$ } from './response-to-text-observable';

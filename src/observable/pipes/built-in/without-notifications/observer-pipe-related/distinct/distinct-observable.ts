@@ -10,18 +10,13 @@ import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/obser
 
 export function distinctObservable<GValue>(
   subscribe: IObservable<GValue>,
-  {
-    equal = EQUAL_FUNCTION_STRICT_EQUAL,
-    ...options
-  }: IDistinctOptions<GValue> = {},
+  { equal = EQUAL_FUNCTION_STRICT_EQUAL, ...options }: IDistinctOptions<GValue> = {},
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    let previousValue: GValue | IUninitializedToken = getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
+    let previousValue: GValue | IUninitializedToken =
+      getDistinctPreviousValueFromDistinctInitialValueOptions<GValue>(options);
     return subscribe((value: GValue): void => {
-      if (
-        (previousValue === UNINITIALIZED_TOKEN)
-        || !equal(value, previousValue)
-      ) {
+      if (previousValue === UNINITIALIZED_TOKEN || !equal(value, previousValue)) {
         previousValue = value;
         emit(value);
       }

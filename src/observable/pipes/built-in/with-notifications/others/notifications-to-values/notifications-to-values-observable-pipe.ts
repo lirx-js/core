@@ -9,12 +9,6 @@ export function notificationsToValuesObservablePipe<GValue>(
   maxNumberOfValues?: number,
 ): IObservablePipe<IDefaultInNotificationsUnion<GValue>, GValue[]> {
   return (subscribe: IObservable<IDefaultInNotificationsUnion<GValue>>): IObservable<GValue[]> => {
-    return notificationsToValuesObservable<GValue>(
-      subscribe,
-      onError,
-      maxNumberOfValues,
-    );
+    return notificationsToValuesObservable<GValue>(subscribe, onError, maxNumberOfValues);
   };
 }
-
-

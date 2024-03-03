@@ -1,7 +1,5 @@
 import { IObserver } from '../../../../../observer/type/observer.type';
 
 export interface ISourceObservableOnUnsubscribeFunction<GValue> {
-  (
-    emit: IObserver<GValue>,
-  ): boolean;
+  (emit: IObserver<GValue>): boolean;
 }

@@ -5,11 +5,7 @@ import { ISourceObservableOptions } from './source-observable-options.type';
 
 export function sourceObservable<GValue>(
   subscribe: IObservable<GValue>,
-  {
-    createSource,
-    onSubscribe,
-    onUnsubscribe,
-  }: ISourceObservableOptions<GValue>,
+  { createSource, onSubscribe, onUnsubscribe }: ISourceObservableOptions<GValue>,
 ): IObservable<GValue> {
   let source: ISource<GValue> | undefined;
   let unsubscribe: IUnsubscribeOfObservable | undefined;
@@ -54,4 +50,3 @@ export function sourceObservable<GValue>(
     };
   };
 }
-

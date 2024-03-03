@@ -6,5 +6,7 @@ import { IFilterFunctionGeneric } from './filter-function-generic.type';
 export function filterObserverPipeGeneric<GValue>(
   filterFunction: IFilterFunctionGeneric<GValue>,
 ): IObserverPipe<GValue, GValue> {
-  return filterObserverPipeStrict<GValue, GValue>(filterFunction as IFilterFunctionStrict<GValue, GValue>);
+  return filterObserverPipeStrict<GValue, GValue>(
+    filterFunction as IFilterFunctionStrict<GValue, GValue>,
+  );
 }

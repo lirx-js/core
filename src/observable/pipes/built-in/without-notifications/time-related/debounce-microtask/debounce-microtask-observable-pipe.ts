@@ -7,4 +7,3 @@ export function debounceMicrotaskObservablePipe<GValue>(): IObservablePipe<GValu
     return debounceMicrotaskObservable<GValue>(subscribe);
   };
 }
-

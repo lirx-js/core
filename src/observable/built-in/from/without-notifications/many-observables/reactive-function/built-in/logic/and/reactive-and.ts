@@ -5,13 +5,9 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveAnd(
   ...observables: IReactiveFunctionObservables<typeof and>
 ): IObservable<ReturnType<typeof and>> {
-  return optimizedReactiveFunction(
-    observables,
-    and,
-  );
+  return optimizedReactiveFunction(observables, and);
 }
 
 function and(a: boolean, b: boolean): boolean {
   return a && b;
 }
-

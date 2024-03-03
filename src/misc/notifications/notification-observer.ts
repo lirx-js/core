@@ -1,11 +1,16 @@
 import { IObserver } from '../../observer/type/observer.type';
 import { IGenericNotification, INotification, TInferNotificationGName } from './notification.type';
 
-export type IInferNotificationsObserverMapFromNotificationsUnion<GNotificationsUnion extends IGenericNotification> = {
-  [GName in TInferNotificationGName<GNotificationsUnion>]?: GNotificationsUnion extends INotification<GName, infer GValue>
+export type IInferNotificationsObserverMapFromNotificationsUnion<
+  GNotificationsUnion extends IGenericNotification,
+> = {
+  [GName in TInferNotificationGName<GNotificationsUnion>]?: GNotificationsUnion extends INotification<
+    GName,
+    infer GValue
+  >
     ? IObserver<GValue>
     : never;
-}
+};
 
 export function notificationObserver<GNotificationsUnion extends IGenericNotification>(
   map: IInferNotificationsObserverMapFromNotificationsUnion<GNotificationsUnion>,
@@ -18,8 +23,3 @@ export function notificationObserver<GNotificationsUnion extends IGenericNotific
     }
   };
 }
-
-
-
-
-

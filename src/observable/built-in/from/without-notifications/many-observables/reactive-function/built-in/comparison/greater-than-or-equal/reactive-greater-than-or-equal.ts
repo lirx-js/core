@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveGreaterThanOrEqual(
   ...observables: IReactiveFunctionObservables<typeof greaterThanOrEqual>
 ): IObservable<ReturnType<typeof greaterThanOrEqual>> {
-  return optimizedReactiveFunction(
-    observables,
-    greaterThanOrEqual,
-  );
+  return optimizedReactiveFunction(observables, greaterThanOrEqual);
 }
 
 function greaterThanOrEqual(a: any, b: any): boolean {

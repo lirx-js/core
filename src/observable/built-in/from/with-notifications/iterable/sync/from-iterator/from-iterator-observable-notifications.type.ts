@@ -5,5 +5,4 @@ import { INextNotification } from '../../../../../../../misc/notifications/built
 export type IFromIteratorObservableNotifications<GValue> =
   | INextNotification<GValue>
   | ICompleteNotification
-  | IErrorNotification
-  ;
+  | IErrorNotification;

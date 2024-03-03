@@ -4,8 +4,13 @@ import { IObservable } from '../../../../../../../../type/observable.type';
 import { IFromFetchTextObservableNotifications } from '../from-fetch-text-observable-notifications.type';
 import { responseToTextObservable } from './response-to-text-observable';
 
-export function responseToTextObservablePipe(): IObservablePipe<IThenObservableInNotifications<Response>, IFromFetchTextObservableNotifications> {
-  return (subscribe: IObservable<IThenObservableInNotifications<Response>>): IObservable<IFromFetchTextObservableNotifications> => {
+export function responseToTextObservablePipe(): IObservablePipe<
+  IThenObservableInNotifications<Response>,
+  IFromFetchTextObservableNotifications
+> {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<Response>>,
+  ): IObservable<IFromFetchTextObservableNotifications> => {
     return responseToTextObservable(subscribe);
   };
 }

@@ -8,20 +8,19 @@ export function takeWhileObservable<GValue>(
   predicate: ITakeWhileObservablePredicateFunction<GValue>,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-      running: IRunning,
-    ): IUnsubscribeOfObservable => {
-      let index: number = 0;
-      return subscribe((value: GValue): void => {
-        if (running()) {
-          if (predicate(value, index++)) {
-            emit(value);
-          } else {
-            unsubscribe();
+    return futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
+        let index: number = 0;
+        return subscribe((value: GValue): void => {
+          if (running()) {
+            if (predicate(value, index++)) {
+              emit(value);
+            } else {
+              unsubscribe();
+            }
           }
-        }
-      });
-    });
+        });
+      },
+    );
   };
 }

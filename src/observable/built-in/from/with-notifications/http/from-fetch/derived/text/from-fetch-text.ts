@@ -10,11 +10,5 @@ export function fromFetchText(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchTextObservableNotifications> {
-  return responseToTextObservable(
-    fromFetch(
-      requestInfo,
-      requestInit,
-    ),
-  );
+  return responseToTextObservable(fromFetch(requestInfo, requestInit));
 }
-

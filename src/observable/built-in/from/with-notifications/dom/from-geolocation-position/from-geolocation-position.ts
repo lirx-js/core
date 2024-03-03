@@ -7,7 +7,9 @@ import { IFromGeolocationPositionObservableNotifications } from './from-geolocat
 export function fromGeolocationPosition(
   options?: PositionOptions,
 ): IObservable<IFromGeolocationPositionObservableNotifications> {
-  return (emit: IObserver<IFromGeolocationPositionObservableNotifications>): IUnsubscribeOfObservable => {
+  return (
+    emit: IObserver<IFromGeolocationPositionObservableNotifications>,
+  ): IUnsubscribeOfObservable => {
     let running: boolean = true;
 
     const watchId: number = navigator.geolocation.watchPosition(
@@ -28,4 +30,3 @@ export function fromGeolocationPosition(
     };
   };
 }
-

@@ -5,5 +5,3 @@ import { IUploadCompleteNotification } from './upload-complete-notification.type
 export function createUploadCompleteNotification(): IUploadCompleteNotification {
   return createNotification<'upload-complete', void>(UPLOAD_COMPLETE_NOTIFICATION_NAME, void 0);
 }
-
-

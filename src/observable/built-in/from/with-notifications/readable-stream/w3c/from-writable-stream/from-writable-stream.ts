@@ -11,9 +11,6 @@ export function fromWritableStream<GValue>(
   if (writableStream.locked) {
     throw createLockError();
   } else {
-    return fromWritableStreamDefaultWriter(
-      writableStream.getWriter(),
-      onError,
-    );
+    return fromWritableStreamDefaultWriter(writableStream.getWriter(), onError);
   }
 }

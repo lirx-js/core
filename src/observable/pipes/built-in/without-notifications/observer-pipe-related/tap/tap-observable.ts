@@ -10,6 +10,8 @@ export function tapObservable<GValue>(
   subscribe: IObservable<GValue>,
   tapFunction: ITapFunction<GValue>,
 ): IObservable<GValue> {
-  return transformObservableWithObserverPipe<GValue, GValue>(subscribe, tapObserverPipe<GValue>(tapFunction));
+  return transformObservableWithObserverPipe<GValue, GValue>(
+    subscribe,
+    tapObserverPipe<GValue>(tapFunction),
+  );
 }
-

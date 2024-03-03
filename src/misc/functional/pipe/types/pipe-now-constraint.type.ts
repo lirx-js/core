@@ -1,23 +1,20 @@
 import { ISameLength } from '../../shared-types/shared.type';
 import { IUnaryFunction } from '../../shared-types/unary-function.type';
 
-export type IPipeNowConstraint<// generics
+export type IPipeNowConstraint<
+  // generics
   GIn, // type of the first expected argument
   GFunctions, // list of unary functions
   //
-> =
-  [GFunctions] extends [[]] // first check if GFunctions is empty
-    ? []
-    : ( // if not empty
-      [GFunctions] extends [[infer GFirstFunction, ...infer GRestFunctions]] // infer first function and the rest
-        ? (
-          GFirstFunction extends IUnaryFunction<GIn, infer GOut> // ensures that the first function match the expected pattern, and infer it's return
-            ? [IUnaryFunction<GIn, GOut>, ...IPipeNowConstraint<GOut, GRestFunctions>]
-            : [IUnaryFunction<GIn, any>, ...ISameLength<GRestFunctions>]
-          )
-        : readonly IUnaryFunction<GIn, GIn>[]
-      // : IPipeNowConstraintForArray<GIn, GFunctions>
-      );
+> = [GFunctions] extends [[]] // first check if GFunctions is empty
+  ? []
+  : // if not empty
+    [GFunctions] extends [[infer GFirstFunction, ...infer GRestFunctions]] // infer first function and the rest
+    ? GFirstFunction extends IUnaryFunction<GIn, infer GOut> // ensures that the first function match the expected pattern, and infer it's return
+      ? [IUnaryFunction<GIn, GOut>, ...IPipeNowConstraint<GOut, GRestFunctions>]
+      : [IUnaryFunction<GIn, any>, ...ISameLength<GRestFunctions>]
+    : readonly IUnaryFunction<GIn, GIn>[];
+// : IPipeNowConstraintForArray<GIn, GFunctions>
 
 // type IPipeNowConstraintForArray<// generics
 //   GIn,

@@ -7,8 +7,13 @@ import { IFulfilledObservableOutNotifications } from './fulfilled-observable-out
 
 export function fulfilledObservablePipe<GInNextValue, GOut>(
   onFulfilled: IThenObservableOnFulfilled<GInNextValue, GOut>,
-): IObservablePipe<IThenObservableInNotifications<GInNextValue>, IFulfilledObservableOutNotifications<GOut>> {
-  return (subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>): IObservable<IFulfilledObservableOutNotifications<GOut>> => {
+): IObservablePipe<
+  IThenObservableInNotifications<GInNextValue>,
+  IFulfilledObservableOutNotifications<GOut>
+> {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  ): IObservable<IFulfilledObservableOutNotifications<GOut>> => {
     return fulfilledObservable<GInNextValue, GOut>(subscribe, onFulfilled);
   };
 }

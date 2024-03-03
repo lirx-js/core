@@ -1,12 +1,6 @@
-import {
-  IDownloadProgressNotification,
-} from '../../../../../../../misc/notifications/built-in/download-progress/download-progress-notification.type';
-import {
-  IUploadCompleteNotification,
-} from '../../../../../../../misc/notifications/built-in/upload-complete/upload-complete-notification.type';
-import {
-  IUploadProgressNotification,
-} from '../../../../../../../misc/notifications/built-in/upload-progress/upload-progress-notification.type';
+import { IDownloadProgressNotification } from '../../../../../../../misc/notifications/built-in/download-progress/download-progress-notification.type';
+import { IUploadCompleteNotification } from '../../../../../../../misc/notifications/built-in/upload-complete/upload-complete-notification.type';
+import { IUploadProgressNotification } from '../../../../../../../misc/notifications/built-in/upload-progress/upload-progress-notification.type';
 import { IDefaultNotificationsUnion } from '../../../../../../../misc/notifications/default-notifications-union.type';
 
 export interface IFromXHRObservableOptions {
@@ -14,8 +8,7 @@ export interface IFromXHRObservableOptions {
 }
 
 export type IFromXHRObservableNotifications =
-  IDefaultNotificationsUnion<Response>
+  | IDefaultNotificationsUnion<Response>
   | IUploadProgressNotification
   | IUploadCompleteNotification
-  | IDownloadProgressNotification
-  ;
+  | IDownloadProgressNotification;

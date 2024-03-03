@@ -10,11 +10,5 @@ export function fromFetchStream(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchStreamObservableNotifications> {
-  return responseToStreamObservable(
-    fromFetch(
-      requestInfo,
-      requestInit,
-    ),
-  );
+  return responseToStreamObservable(fromFetch(requestInfo, requestInit));
 }
-

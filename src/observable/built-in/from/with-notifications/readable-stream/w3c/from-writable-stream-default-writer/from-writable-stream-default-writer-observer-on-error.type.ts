@@ -1,5 +1,3 @@
 export interface IFromWritableStreamDefaultWriterObserverOnError {
-  (
-    error: unknown,
-  ): void;
+  (error: unknown): void;
 }

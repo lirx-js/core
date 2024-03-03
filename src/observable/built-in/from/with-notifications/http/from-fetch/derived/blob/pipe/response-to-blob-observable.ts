@@ -10,8 +10,5 @@ export const responseToBlobObservableRaw = responseToBodyObservable<Blob>(respon
 export function responseToBlobObservable(
   subscribe: IObservable<IThenObservableInNotifications<Response>>,
 ): IObservable<IFromFetchBlobObservableNotifications> {
-  return fulfilledObservable(
-    subscribe,
-    responseToBlobObservableRaw,
-  );
+  return fulfilledObservable(subscribe, responseToBlobObservableRaw);
 }

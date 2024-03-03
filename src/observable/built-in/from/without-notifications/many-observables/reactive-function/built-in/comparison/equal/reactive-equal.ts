@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveEqual(
   ...observables: IReactiveFunctionObservables<typeof equal>
 ): IObservable<ReturnType<typeof equal>> {
-  return optimizedReactiveFunction(
-    observables,
-    equal,
-  );
+  return optimizedReactiveFunction(observables, equal);
 }
 
 function equal(a: any, b: any): boolean {

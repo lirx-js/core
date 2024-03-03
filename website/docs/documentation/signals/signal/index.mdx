@@ -2,7 +2,7 @@
 
 ## Fundamentals
 
-A Signal is simply a function returning immediately its value (as opposed to an Observable whose value is async):
+A Signal is simply a function returning immediately its value (as opposed to an Observable whose value is only async):
 
 ```ts
 interface IReadonlySignal<GValue> {
@@ -30,32 +30,17 @@ Signal reads outside of the reactive context are permitted.
 This means that non-reactive code (ex.: existing, 3rd party libraries) can always read the signal's value, without being aware of its reactive nature.
 
 
-### Errored signals
-
-A Signal may be in an *"error"* state.
-
-When getting the value of such a signal (ex: `const value = count();`), it will **throw** the error.
-
-**This state is not definitive:** an errored signal may re-enter in a *"normal"* state, for example, when setting a new value.
-
-
 ## Writable signals
 
 When creating a Signal with the [signal](#create-a-signal) function (explained later), you'll receive a writable signal:
 
 ```ts
 interface ISignal<GValue> extends IReadonlySignal<GValue> {
-  set(
-    value: GValue | SignalThrow,
-  ): void;
+  set(value: GValue): void;
 
-  update(
-    updateFunction: ISignalUpdateFunctionCallback<GValue>,
-  ): void;
+  update(updateFunction: ISignalUpdateFunctionCallback<GValue>): void;
 
-  throw(
-    error: any,
-  ): void;
+  asReadonly(): IReadonlySignal<GValue>;
 }
 ```
 
@@ -65,23 +50,6 @@ This method directly sets the Signal to a new value, and notifies any dependents
 
 This is useful for changing primitive values or replacing data structures when
 the new value is independent of the old one.
-
-#### SignalThrow
-
-An instance of `SignalThrow` may be given as a value:
-
-```ts
-class SignalThrow<GError = any> {
-  readonly error: GError;
-
-  constructor(
-    error: GError,
-  );
-}
-```
-
-In such case, it will put the signal in an *"error"* state (and notifies any dependents).
-
 
 ### update(...)
 
@@ -95,19 +63,11 @@ It accepts an `updateFunction`:
 interface ISignalUpdateFunctionCallback<GValue> {
   (
     value: GValue,
-  ): GValue | SignalThrow;
+  ): GValue;
 }
 ```
 
-If an error is thrown from this function or a `SignalThrow` is returned, then the signal enters in an *"error"* state.
-
 `update` is simply a shorter and convenient manner to combine a signal read and write in one call (`count.update(c => c + 1)` is similar to `count.set(count() + 1)`).
-
-### throw(...)
-
-This method puts the signal in *"error"* state, and notifies any dependents.
-
-This is a shortcut for `signal.set(new SignalThrow(error))`.
 
 ## Create a Signal
 
@@ -115,23 +75,18 @@ An instance of a writable Signal can be created using the `signal` creation func
 
 ```ts
 function signal<GValue>(
-  initialValue: GValue | SignalThrow,
-  options?: ISignalOptions<GValue>,
+  initialValue: GValue,
+  options?: ICreateSignalOptions<GValue>,
 ): ISignal<GValue>
 ```
 
-This functions receives as first argument an `initialValue`:
+`initialValue` is used to set, as its name suggests, the signal's initial value.
+Because signals are sync, this argument must be provided.
 
-- if this value is an instance of `SignalThrow`, then the signal is initialized with an *"error"* state.
-- else the signal is initialized with this value.
-
-Because signals are sync, the `initialValue` must be given to set the initial state of this signal.
-
-Then, it's possible to provide an optional `ISignalOptions` argument:
-
+Then, it's possible to provide an optional `ICreateSignalOptions` argument:
 
 ```ts
-interface ISignalOptions<GValue> {
+interface ICreateSignalOptions<GValue> {
   readonly equal?: IEqualFunction<GValue>;
 }
 
@@ -146,32 +101,10 @@ interface IEqualFunction<GValue> {
 
 - `equal`: this function is used to compare values passed to the `set` method.
 If this equality function determines that 2 values are equal, then the value is simply ignored, and the change propagation is skipped.
-  - `EQUAL_FUNCTION_STRICT_EQUAL`: (default) - compares values using the strict equality `===`.
-  - `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: compares primitive values (numbers, strings, etc) using `===` semantics
-    but treats objects and arrays as "always unequal".
-    This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
-
-#### thrownSignal
-
-```ts
-function thrownSignal<GValue>(
-  error: any,
-  options?: ISignalOptions<GValue>,
-): ISignal<GValue>
-```
-
-This is simply a shortcut to `signal<GValue>(new SignalThrow(error), options)`.
-
-
-#### uninitializedSignal
-
-```ts
-function uninitializedSignal<GValue>(
-  options?: ISignalOptions<GValue>,
-): ISignal<GValue>
-```
-
-This is simply a shortcut to `thrownSignal<GValue>(new Error(`The signal has no value.`), options)`.
+- `EQUAL_FUNCTION_STRICT_EQUAL`: (default) - compares values using the strict equality `===`.
+- `EQUAL_FUNCTION_NON_PRIMITIVES_ALWAYS_FALSE`: compares primitive values (numbers, strings, etc) using `===` semantics
+but treats objects and arrays as "always unequal".
+This allows Signals to hold non-primitive values (objects, arrays) and still propagate change notification.
 
 ## Examples
 
@@ -211,23 +144,3 @@ names.update(names => {
   return names;
 });
 ```
-
-### Creates a signal in an "error" state
-
-```ts
-const counter = thrownSignal<number>(new Error(`Not a Number`));
-
-const run = () => {
-  try {
-    if (counter() > 0) {
-      // ... do something
-    }
-  } catch {
-    console.log('Oops, counter is errored.');
-    // let's fix it
-    counter.set(1);
-    run();
-  }
-};
-```
-

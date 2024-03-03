@@ -1,31 +1,25 @@
+import { IPipeNonTupleConstraint } from '../../shared-types/pipe-non-tuple-constraint.type';
 import { ISameLength } from '../../shared-types/shared.type';
 import { IGenericUnaryFunction } from '../../shared-types/unary-function.type';
-import { IPipeNonTupleConstraint } from '../../shared-types/pipe-non-tuple-constraint.type';
 
-export type IPipeConstraint<// generics
+export type IPipeConstraint<
+  // generics
   GFunctions extends readonly GUnaryFunction[], // list of unary functions
   GFirstArgument, // type of the first expected argument
-  GUnaryFunction extends IGenericUnaryFunction // shape of the unary function
+  GUnaryFunction extends IGenericUnaryFunction, // shape of the unary function
   //
-  > =
-  [GFunctions] extends [[]] // to avoid circular constraint
-    ? []
-    : (
-      [GFunctions] extends [[infer GFirst, ...infer GRest]] // to avoid circular constraint
-        ? (
-          GFirst extends ((value: GFirstArgument) => infer GFirstReturn)
-            ? (
-              GRest extends GUnaryFunction[]
-                ? [any, ...IPipeConstraint<GRest, GFirstReturn, GUnaryFunction>]
-                : [(value: GFirstArgument) => any, ...ISameLength<GRest>]
-              )
-            : [(value: GFirstArgument) => any, ...ISameLength<GRest>]
-          )
-        : IPipeNonTupleConstraint<GFunctions>
-      // : any[]
-      // : GFunctions // cant because of circular constraint
-      // : never[]
-      );
+> = [GFunctions] extends [[]] // to avoid circular constraint
+  ? []
+  : [GFunctions] extends [[infer GFirst, ...infer GRest]] // to avoid circular constraint
+    ? GFirst extends (value: GFirstArgument) => infer GFirstReturn
+      ? GRest extends GUnaryFunction[]
+        ? [any, ...IPipeConstraint<GRest, GFirstReturn, GUnaryFunction>]
+        : [(value: GFirstArgument) => any, ...ISameLength<GRest>]
+      : [(value: GFirstArgument) => any, ...ISameLength<GRest>]
+    : IPipeNonTupleConstraint<GFunctions>;
+// : any[]
+// : GFunctions // cant because of circular constraint
+// : never[]
 
 // (
 //   GArgument extends GReturn

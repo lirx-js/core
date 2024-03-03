@@ -5,13 +5,9 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveSubtract(
   ...observables: IReactiveFunctionObservables<typeof subtract>
 ): IObservable<ReturnType<typeof subtract>> {
-  return optimizedReactiveFunction(
-    observables,
-    subtract,
-  );
+  return optimizedReactiveFunction(observables, subtract);
 }
 
 function subtract(a: number, b: number): number {
   return a - b;
 }
-

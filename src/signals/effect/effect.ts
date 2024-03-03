@@ -4,9 +4,7 @@ import { runSignalChangeContextOnce } from '../internal/signal-change-context/si
 import { IEffetFunction } from './types/effet-function.type';
 import { IUnsubscribeOfEffect } from './types/unsubscribe-of-effect.type';
 
-export function effect(
-  effectFunction: IEffetFunction,
-): IUnsubscribeOfEffect {
+export function effect(effectFunction: IEffetFunction): IUnsubscribeOfEffect {
   let cleanUpSource: IMulticastSource<void>;
   let running: boolean = true;
 

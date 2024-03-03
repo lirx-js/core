@@ -3,27 +3,25 @@ import { IInferPipeReturn } from '../../../../misc/functional/pipe/types/infer-p
 import { IPipeNowConstraint } from '../../../../misc/functional/pipe/types/pipe-now-constraint.type';
 import { IGenericObservablePipe } from '../../../pipes/type/observable-pipe.type';
 
-export type IObservablePipePipeConstraint<// generics
-  GFunctions
+export type IObservablePipePipeConstraint<
+  // generics
+  GFunctions,
   //
 > =
   IPipeNowConstraint<any, GFunctions> extends readonly IGenericObservablePipe[]
     ? IPipeNowConstraint<any, GFunctions>
     : never;
 
-export type IPipeObservablePipesReturn<// generics
-  GFunctions extends readonly IGenericObservablePipe[]
+export type IPipeObservablePipesReturn<
+  // generics
+  GFunctions extends readonly IGenericObservablePipe[],
   //
->
-  = IInferPipeReturn<GFunctions>;
+> = IInferPipeReturn<GFunctions>;
 
-export function pipeObservablePipes<// generics
-  GFunctions extends IObservablePipePipeConstraint<GFunctions>
+export function pipeObservablePipes<
+  // generics
+  GFunctions extends IObservablePipePipeConstraint<GFunctions>,
   //
->(
-  fns: GFunctions,
-): IPipeObservablePipesReturn<GFunctions> {
+>(fns: GFunctions): IPipeObservablePipesReturn<GFunctions> {
   return pipe<GFunctions>(fns);
 }
-
-

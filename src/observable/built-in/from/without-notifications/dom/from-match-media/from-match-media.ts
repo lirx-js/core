@@ -4,9 +4,7 @@ import { merge } from '../../many-observables/merge/merge';
 import { reference } from '../../values/reference/reference';
 import { fromEventTarget } from '../from-event-target/from-event-target';
 
-export function fromMatchMedia(
-  query: string,
-): IObservable<boolean> {
+export function fromMatchMedia(query: string): IObservable<boolean> {
   const mediaQueryList: MediaQueryList = matchMedia(query);
   return merge([
     reference(() => mediaQueryList.matches),

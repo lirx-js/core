@@ -6,16 +6,10 @@ import { IThrottleTimeObservablePipeOptions } from './throttle-time-observable-p
 export function throttleTimeObservable<GValue>(
   subscribe: IObservable<GValue>,
   duration: number,
-  {
-    leading = true,
-    trailing = true,
-  }: IThrottleTimeObservablePipeOptions = {},
+  { leading = true, trailing = true }: IThrottleTimeObservablePipeOptions = {},
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-
-    let lastSendValueTime: number = leading
-      ? Number.NEGATIVE_INFINITY
-      : Number.POSITIVE_INFINITY;
+    let lastSendValueTime: number = leading ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
 
     let abortTimeout: IAbortTimer | null = null;
     let trailingValue: GValue;

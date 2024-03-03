@@ -8,7 +8,9 @@ import {
 /**
  * @experimental
  */
-export function autoUnsubscribeObservablePipeWithNotifications<GNotifications extends IAutoUnsubscribeObservableNotifications>(): IObservablePipe<GNotifications, GNotifications> {
+export function autoUnsubscribeObservablePipeWithNotifications<
+  GNotifications extends IAutoUnsubscribeObservableNotifications,
+>(): IObservablePipe<GNotifications, GNotifications> {
   return (subscribe: IObservable<GNotifications>): IObservable<GNotifications> => {
     return autoUnsubscribeObservableWithNotifications<GNotifications>(subscribe);
   };

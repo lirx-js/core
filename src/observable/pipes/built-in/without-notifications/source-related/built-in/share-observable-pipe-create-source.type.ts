@@ -3,5 +3,4 @@ import { IShareObservablePipeCreateUnicastSource } from './share-observable-pipe
 
 export type IShareObservablePipeCreateSource<GValue> =
   | IShareObservablePipeCreateMulticastSource<GValue>
-  | IShareObservablePipeCreateUnicastSource<GValue>
-  ;
+  | IShareObservablePipeCreateUnicastSource<GValue>;

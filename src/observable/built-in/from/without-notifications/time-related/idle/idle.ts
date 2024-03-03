@@ -5,9 +5,7 @@ import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/obser
 /**
  * Creates an Observable that emits when idle time is available.
  */
-export function idle(
-  options?: IdleRequestOptions,
-): IObservable<IdleDeadline> {
+export function idle(options?: IdleRequestOptions): IObservable<IdleDeadline> {
   return (emit: IObserver<IdleDeadline>): IUnsubscribeOfObservable => {
     let running: boolean = true;
     let abort: IAbortTimer;

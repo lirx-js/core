@@ -1,5 +1,3 @@
 export interface IResponseToBodyMapFunction<GData> {
-  (
-    response: Response,
-  ): Promise<GData>;
+  (response: Response): Promise<GData>;
 }

@@ -1,8 +1,6 @@
 export {
-  mergeMapSingleObservable as mergeMapSingle$$,
   mergeMapSingleObservable as mergeMapS$$,
-  mergeMapSingleObservable as switchMapObservable,
+  mergeMapSingleObservable as mergeMapSingle$$,
   mergeMapSingleObservable as switchMap$$,
+  mergeMapSingleObservable as switchMapObservable,
 } from './merge-map-single-observable';
-
-

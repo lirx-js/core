@@ -1,6 +1,3 @@
-export function responseToArrayBuffer(
-  response: Response,
-): Promise<ArrayBuffer> {
+export function responseToArrayBuffer(response: Response): Promise<ArrayBuffer> {
   return response.arrayBuffer();
 }
-

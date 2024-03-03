@@ -305,7 +305,7 @@ Create a demo, share it with others, and help to build the web of tomorrow.
 [@lirx/core](/docs/documentation/getting-started/introduction/) **is a Reactive Programming framework** with a lot of prebuild functions,
 clear documentations and many examples to teach you how to become a master of RP.
 It allows you to develop complex applications and pipelines that scale easily.
-Moreover, it is the [fastest and smallest](/docs/documentation/performances/)
+Moreover, it is the [fastest and smallest](/docs/documentation/performances/introduction/)
 javascript library for `Reactive Programming`.
 So it's a good candidate to start your journey with Observables.
 

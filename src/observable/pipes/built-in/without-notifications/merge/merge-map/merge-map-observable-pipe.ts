@@ -8,11 +8,7 @@ export function mergeMapObservablePipe<GIn, GOut>(
   maxNumberOfSubscriptions?: number,
 ): IObservablePipe<GIn, GOut> {
   return (subscribe: IObservable<GIn>): IObservable<GOut> => {
-    return mergeMapObservable<GIn, GOut>(
-      subscribe,
-      mapFunction,
-      maxNumberOfSubscriptions,
-    );
+    return mergeMapObservable<GIn, GOut>(subscribe, mapFunction, maxNumberOfSubscriptions);
   };
 }
 

@@ -14,22 +14,20 @@ export function notificationsToValuesObservable<GValue>(
   return (emit: IObserver<GValue[]>): IUnsubscribeOfObservable => {
     const values: GValue[] = [];
 
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-    ): IUnsubscribeOfObservable => {
+    return futureUnsubscribe((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GValue>(
-          /* next */(value: GValue): void => {
+          /* next */ (value: GValue): void => {
             values.push(value);
             if (values.length > maxNumberOfValues) {
               values.shift();
             }
           },
-          /* complete */(): void => {
+          /* complete */ (): void => {
             emit(values);
             unsubscribe();
           },
-          /* error */(error: unknown): void => {
+          /* error */ (error: unknown): void => {
             onError(error);
             unsubscribe();
           },
@@ -38,5 +36,3 @@ export function notificationsToValuesObservable<GValue>(
     });
   };
 }
-
-

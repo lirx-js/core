@@ -11,7 +11,8 @@ export function reactiveTemplateString(
   ...observables: IObservable<any>[]
 ): IObservable<string> {
   const lengthMinusOne: number = parts.length - 1;
-  if (lengthMinusOne === 0) { // meaning observables === 0
+  if (lengthMinusOne === 0) {
+    // meaning observables === 0
     return single(parts[0]);
   } else {
     return optimizedReactiveFunction(observables, (...values: any[]): string => {

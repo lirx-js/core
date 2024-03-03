@@ -14,9 +14,11 @@ export function bufferObservable<GValue>(
       emit(buffer);
     });
 
-    const unsubscribeOfSourceObservable: IUnsubscribeOfObservable = subscribe((value: GValue): void => {
-      currentBuffer.push(value);
-    });
+    const unsubscribeOfSourceObservable: IUnsubscribeOfObservable = subscribe(
+      (value: GValue): void => {
+        currentBuffer.push(value);
+      },
+    );
 
     return (): void => {
       unsubscribeOfClosingObservable();

@@ -6,12 +6,12 @@ import { IFromReadableWritablePairReadableValueNotifications } from './from-read
 import { IFromReadableWritablePairWritableValueNotifications } from './from-readable-writable-pair-writable-value-notifications.type';
 
 export function fromReadableWritablePair<GReadableValue, GWritableValue>(
-  {
-    readable,
-    writable,
-  }: ReadableWritablePair<GReadableValue, GWritableValue>,
+  { readable, writable }: ReadableWritablePair<GReadableValue, GWritableValue>,
   onError?: IFromReadableWritablePairOnError,
-): IObserverObservablePair<IFromReadableWritablePairWritableValueNotifications<GWritableValue>, IFromReadableWritablePairReadableValueNotifications<GReadableValue>> {
+): IObserverObservablePair<
+  IFromReadableWritablePairWritableValueNotifications<GWritableValue>,
+  IFromReadableWritablePairReadableValueNotifications<GReadableValue>
+> {
   return {
     emit: fromWritableStream(writable, onError),
     subscribe: fromReadableStream(readable),

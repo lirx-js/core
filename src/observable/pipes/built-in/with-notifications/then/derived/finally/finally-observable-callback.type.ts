@@ -4,10 +4,9 @@ import { IGenericNotification } from '../../../../../../../misc/notifications/no
 import { IObservable } from '../../../../../../type/observable.type';
 
 export type IFinallyObservableNotifications =
-  ICompleteNotification
+  | ICompleteNotification
   | IErrorNotification
-  | IGenericNotification
-  ;
+  | IGenericNotification;
 
 export interface IFinallyObservableCallbackValueFulfilled<GInNextValue> {
   state: 'fulfilled';
@@ -20,10 +19,11 @@ export interface IFinallyObservableCallbackValueRejected {
 }
 
 export type IFinallyObservableCallbackValue<GInNextValue> =
-  IFinallyObservableCallbackValueFulfilled<GInNextValue>
-  | IFinallyObservableCallbackValueRejected
-  ;
+  | IFinallyObservableCallbackValueFulfilled<GInNextValue>
+  | IFinallyObservableCallbackValueRejected;
 
 export interface IFinallyObservableCallback<GInNextValue> {
-  (value: IFinallyObservableCallbackValue<GInNextValue>): IObservable<IFinallyObservableNotifications>;
+  (
+    value: IFinallyObservableCallbackValue<GInNextValue>,
+  ): IObservable<IFinallyObservableNotifications>;
 }

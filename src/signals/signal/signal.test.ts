@@ -1,15 +1,24 @@
-import { signal } from './implementations/function/signal.function';
-import { thrownSignal } from './implementations/function/thrown-signal.function';
+import { signal } from './signal';
 
 describe('signal', () => {
-  it('should have correct value', () => {
+  it('should have correct initial value', () => {
     const a = signal(1);
     expect(a()).toBe(1);
   });
 
-  it('should be errored', () => {
-    const error = new Error('Custom error');
-    const a = thrownSignal(error);
-    expect(() => a()).toThrow(error);
+  it('should have correct updated value', () => {
+    const a = signal(1);
+    expect(a()).toBe(1);
+
+    a.set(2);
+    expect(a()).toBe(2);
+  });
+
+  it('should have correct updated value', () => {
+    const a = signal(1);
+    expect(a()).toBe(1);
+
+    a.set(2);
+    expect(a()).toBe(2);
   });
 });

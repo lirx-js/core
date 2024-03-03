@@ -14,4 +14,3 @@ export function filterObserverPipe<GIn, GOut extends GIn>(
 ): IObserverPipe<GIn, GOut> {
   return filterObserverPipeStrict<GIn, GOut>(filterFunction as IFilterFunctionStrict<GIn, GOut>);
 }
-

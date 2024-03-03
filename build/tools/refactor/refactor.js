@@ -14,34 +14,22 @@ const REFACTOR_DIRECTORY_PATH = $path.join(ROOT_PATH, 'src/core');
 const SIMPLE_REFACTOR_FROM = 'abc';
 const SIMPLE_REFACTOR_TO = 'def';
 
-
-function dashCaseToCamelCase(
-  input,
-) {
+function dashCaseToCamelCase(input) {
   return input.replace(/-([a-z])/g, (_, firstLetter) => {
     return firstLetter.toUpperCase();
   });
 }
 
-function dashCaseToPascalCase(
-  input,
-) {
+function dashCaseToPascalCase(input) {
   const output = dashCaseToCamelCase(input);
   return `${output.slice(0, 1).toUpperCase()}${output.slice(1)}`;
 }
 
-function dashCaseToUpperCase(
-  input,
-) {
-  return input
-    .replace(/-/g, '_')
-    .toUpperCase();
+function dashCaseToUpperCase(input) {
+  return input.replace(/-/g, '_').toUpperCase();
 }
 
-function createRefactorFunction(
-  from,
-  to,
-) {
+function createRefactorFunction(from, to) {
   if (!from.includes('-') && to.includes('-')) {
     throw new Error(`'from' must be dash-case`);
   }
@@ -64,9 +52,9 @@ function createRefactorFunction(
 
   const replaceDashAndCamelCase = from.includes('-')
     ? (input) => {
-      return replaceCamelCase(replaceDashCase(input));
-    }
-    : replaceDashCase
+        return replaceCamelCase(replaceDashCase(input));
+      }
+    : replaceDashCase;
 
   /* PASCAL CASE */
   const fromAsPascalCase = dashCaseToPascalCase(from);
@@ -76,7 +64,6 @@ function createRefactorFunction(
   const replacePascalCase = (input) => {
     return input.replace(REPLACE_PASCAL_CASE_REGEXP, toAsPascalCase);
   };
-
 
   /* UPPER CASE */
 
@@ -94,7 +81,6 @@ function createRefactorFunction(
     return replaceUpperCase(replacePascalCase(replaceDashAndCamelCase(input)));
   };
 }
-
 
 const REFACTOR_FILE_NAME = createRefactorFunction(SIMPLE_REFACTOR_FROM, SIMPLE_REFACTOR_TO);
 
@@ -129,32 +115,29 @@ const REFACTOR_FILE_CONTENT = createRefactorFunction(SIMPLE_REFACTOR_FROM, SIMPL
 //   });
 // };
 
-
 function exploreDirectory(path, callback) {
   // return exploreDirectoryConcurrent(path, callback);
   return exploreDirectorySequential(path, callback);
 }
 
 function exploreDirectorySequential(path, callback) {
-  return readdir(path, { withFileTypes: true })
-    .then(async (entries) => {
-      for (const entry of entries) {
-        const subPath = $path.join(path, entry.name);
-        await new Promise(resolve => resolve(callback(subPath, entry)))
-          .then(() => {
-            if (entry.isDirectory()) {
-              return exploreDirectorySequential(subPath, callback);
-            }
-          });
-      }
-    });
+  return readdir(path, { withFileTypes: true }).then(async (entries) => {
+    for (const entry of entries) {
+      const subPath = $path.join(path, entry.name);
+      await new Promise((resolve) => resolve(callback(subPath, entry))).then(() => {
+        if (entry.isDirectory()) {
+          return exploreDirectorySequential(subPath, callback);
+        }
+      });
+    }
+  });
 }
 
-
-function refactorFileName(
-  entryPath,
-) {
-  const newPath = $path.join($path.dirname(entryPath), REFACTOR_FILE_NAME($path.basename(entryPath)));
+function refactorFileName(entryPath) {
+  const newPath = $path.join(
+    $path.dirname(entryPath),
+    REFACTOR_FILE_NAME($path.basename(entryPath)),
+  );
   if (entryPath === newPath) {
     return Promise.resolve();
   } else {
@@ -167,34 +150,27 @@ function refactorFileName(
   }
 }
 
-function refactorFileContent(
-  entryPath,
-  dry,
-) {
-  return readFile(entryPath, { encoding: 'utf8' })
-    .then((content) => {
-      const newContent = REFACTOR_FILE_CONTENT(content);
-      if (newContent !== content) {
-        if (dry) {
-          console.log(`in: '${$path.basename(entryPath)}'`);
-          console.log(newContent);
-        } else {
-          return writeFile(entryPath, newContent, { encoding: 'utf8' });
-        }
+function refactorFileContent(entryPath, dry) {
+  return readFile(entryPath, { encoding: 'utf8' }).then((content) => {
+    const newContent = REFACTOR_FILE_CONTENT(content);
+    if (newContent !== content) {
+      if (dry) {
+        console.log(`in: '${$path.basename(entryPath)}'`);
+        console.log(newContent);
+      } else {
+        return writeFile(entryPath, newContent, { encoding: 'utf8' });
       }
-    });
+    }
+  });
 }
 
-async function run(
-  dry,
-) {
+async function run(dry) {
   exploreDirectory(REFACTOR_DIRECTORY_PATH, (entryPath, entry) => {
     if (entry.isFile()) {
-      return refactorFileContent(entryPath, dry)
-        .then(() => {
-          return refactorFileName(entryPath, dry);
-        });
-    }/* else if (entry.isDirectory()) {
+      return refactorFileContent(entryPath, dry).then(() => {
+        return refactorFileName(entryPath, dry);
+      });
+    } /* else if (entry.isDirectory()) {
       return refactorFileName(entryPath);
     }*/
   });
@@ -203,5 +179,3 @@ async function run(
 const dry = false;
 
 run(dry);
-
-

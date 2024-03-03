@@ -10,10 +10,5 @@ export function fromFetchJSON<GData>(
   requestInfo: RequestInfo,
   requestInit?: RequestInit,
 ): IObservable<IFromFetchJSONObservableNotifications<GData>> {
-  return responseToJSONObservable<GData>(
-    fromFetch(
-      requestInfo,
-      requestInit,
-    ),
-  );
+  return responseToJSONObservable<GData>(fromFetch(requestInfo, requestInit));
 }

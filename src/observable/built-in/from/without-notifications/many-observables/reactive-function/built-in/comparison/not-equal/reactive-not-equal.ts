@@ -5,10 +5,7 @@ import { IReactiveFunctionObservables } from '../../../reactive-function';
 export function reactiveNotEqual(
   ...observables: IReactiveFunctionObservables<typeof notEqual>
 ): IObservable<ReturnType<typeof notEqual>> {
-  return optimizedReactiveFunction(
-    observables,
-    notEqual,
-  );
+  return optimizedReactiveFunction(observables, notEqual);
 }
 
 function notEqual(a: any, b: any): boolean {

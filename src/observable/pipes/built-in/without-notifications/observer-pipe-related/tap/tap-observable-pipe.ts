@@ -10,4 +10,3 @@ export function tapObservablePipe<GValue>(
     return tapObservable<GValue>(subscribe, tapFunction);
   };
 }
-

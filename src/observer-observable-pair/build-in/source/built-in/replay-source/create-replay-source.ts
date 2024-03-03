@@ -1,4 +1,7 @@
-import { IObservable, IUnsubscribeOfObservable } from '../../../../../observable/type/observable.type';
+import {
+  IObservable,
+  IUnsubscribeOfObservable,
+} from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { ISource } from '../../type/source.type';
 import { IReplaySource } from './replay-source.type';
@@ -38,4 +41,3 @@ export function createReplaySource<GValue, GSource extends ISource<GValue>>(
     subscribe,
   };
 }
-

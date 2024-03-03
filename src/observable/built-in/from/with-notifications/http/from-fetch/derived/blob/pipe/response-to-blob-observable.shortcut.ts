@@ -1,5 +1,1 @@
-export {
-  responseToBlobObservable as responseToBlob$$,
-} from './response-to-blob-observable';
-
-
+export { responseToBlobObservable as responseToBlob$$ } from './response-to-blob-observable';

@@ -7,10 +7,7 @@ export function mergeMapSingleObservablePipe<GIn, GOut>(
   mapFunction: IMapFunction<GIn, IObservable<GOut>>,
 ): IObservablePipe<GIn, GOut> {
   return (subscribe: IObservable<GIn>): IObservable<GOut> => {
-    return mergeMapSingleObservable<GIn, GOut>(
-      subscribe,
-      mapFunction,
-    );
+    return mergeMapSingleObservable<GIn, GOut>(subscribe, mapFunction);
   };
 }
 

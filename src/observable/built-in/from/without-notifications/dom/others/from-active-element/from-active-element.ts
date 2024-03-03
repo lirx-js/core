@@ -1,12 +1,6 @@
-import {
-  mapDistinctObservable,
-} from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map-distinct/map-distinct-observable';
-import {
-  shareObservableWithMulticastReplayLastSource,
-} from '../../../../../../pipes/built-in/without-notifications/source-related/built-in/derived/multicast-replay-last-source/share-observable-with-multicast-replay-last-source';
-import {
-  debounceTimeObservable,
-} from '../../../../../../pipes/built-in/without-notifications/time-related/debounce-time/debounce-time-observable';
+import { mapDistinctObservable } from '../../../../../../pipes/built-in/without-notifications/observer-pipe-related/map-distinct/map-distinct-observable';
+import { shareObservableWithMulticastReplayLastSource } from '../../../../../../pipes/built-in/without-notifications/source-related/built-in/derived/multicast-replay-last-source/share-observable-with-multicast-replay-last-source';
+import { debounceTimeObservable } from '../../../../../../pipes/built-in/without-notifications/time-related/debounce-time/debounce-time-observable';
 import { IObservable } from '../../../../../../type/observable.type';
 import { merge } from '../../../many-observables/merge/merge';
 import { interval } from '../../../time-related/interval/interval';

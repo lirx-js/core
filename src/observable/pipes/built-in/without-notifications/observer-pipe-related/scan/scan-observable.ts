@@ -11,5 +11,8 @@ export function scanObservable<GIn, GOut>(
   scanFunction: IScanFunction<GIn, GOut>,
   initialValue: GOut,
 ): IObservable<GOut> {
-  return transformObservableWithObserverPipe<GIn, GOut>(subscribe, scanObserverPipe<GIn, GOut>(scanFunction, initialValue));
+  return transformObservableWithObserverPipe<GIn, GOut>(
+    subscribe,
+    scanObserverPipe<GIn, GOut>(scanFunction, initialValue),
+  );
 }

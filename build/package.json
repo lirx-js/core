@@ -1,6 +1,6 @@
 {
   "name": "ts-lib-seed",
-  "version": "2.5.0-beta.1",
+  "version": "2.5.2",
   "description": "Seed to build a library",
   "main": "index.js",
   "scripts": {
@@ -49,16 +49,21 @@
     "_________________MANAGE_PACKAGE_______________": "",
     "bump:publish:package:dev": "yarn run bump:package:version && yarn run publish:package:dev",
     "bump:package:version": "echo \"bump:package:version\" && node tools/package/bump-package-version.mjs",
-    "publish:package:dev": "cd ../dist && npm publish --registry http://localhost:4873/ && cd ../build",
-    "publish:package:prod": "cd ../dist && npm publish --access public --registry https://registry.npmjs.org && cd ../build",
+    "publish:package:dev": "cd ../dist && npm publish --registry http://localhost:4873/",
+    "publish:package:prod": "cd ../dist && npm publish --access public --registry https://registry.npmjs.org",
     "install:verdaccio": "npm install --global verdaccio",
     "run:verdaccio": "verdaccio",
+    "_________________INSTALL_________________": "",
+    "install:dev": "node tools/install/install.mjs --dev",
+    "install:prod": "node tools/install/install.mjs",
+    "_________________FORMAT_________________": "",
+    "prettier:watch": "onchange \"../src/**/*.{js,ts,html,scss}\" -- prettier --write --ignore-unknown --config ./.prettierrc \\{\\{changed\\}\\}",
+    "prettier:format": "prettier --write --ignore-unknown --config ./.prettierrc \"../src/**/*.{js,ts,html,scss}\"",
     "_________________OTHERS_________________": "",
     "clean:dist": "echo \"clean:dist\" && find ../ -path \"../dist/*\" -delete",
     "ncu": "npx npm-check-updates",
-    "_________________INSTALL_________________": "",
-    "install:dev": "node tools/install/install.mjs --dev",
-    "install:prod": "node tools/install/install.mjs"
+    "doc": "yarn run generate:index-file && yarn run generate:doc && yarn run remove:index-file",
+    "generate:doc": "typedoc ../index.ts --json ../dist/doc.json --tsconfig ./tsconfig.json"
   },
   "repository": {
     "type": "git",
@@ -69,19 +74,23 @@
   "license": "MIT",
   "access": "public",
   "devDependencies": {
-    "@types/jest": "^29.5.7",
-    "acorn": "^8.11.2",
-    "acorn-walk": "^8.3.0",
+    "@types/jest": "^29.5.12",
+    "acorn": "^8.11.3",
+    "acorn-walk": "^8.3.2",
     "astring": "^1.8.6",
-    "cssnano": "^6.0.1",
+    "cssnano": "^6.0.3",
     "html-minifier-terser": "^7.2.0",
     "jest": "^29.7.0",
-    "postcss": "^8.4.31",
+    "onchange": "^7.1.0",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "sass": "1.62.1",
-    "ts-jest": "^29.1.1",
+    "ts-jest": "^29.1.2",
     "tsc-watch": "^6.0.4",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "typedoc": "^0.25.8",
+    "typescript": "^5.3.3"
   },
-  "packageManager": "yarn@4.0.1"
+  "packageManager": "yarn@4.1.0"
 }

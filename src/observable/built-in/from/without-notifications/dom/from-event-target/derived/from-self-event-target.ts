@@ -9,11 +9,7 @@ export function fromSelfEventTarget<GType extends string, GEvent extends Event>(
   options?: boolean | AddEventListenerOptions,
 ): IObservable<GEvent> {
   return filterObservable(
-    fromEventTarget<GType, GEvent>(
-      target,
-      type,
-      options,
-    ),
+    fromEventTarget<GType, GEvent>(target, type, options),
     (event: GEvent): boolean => {
       return event.target === target;
     },

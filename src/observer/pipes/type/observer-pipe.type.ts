@@ -13,11 +13,7 @@ export interface IObserverPipe<GIn, GOut> {
 export type IGenericObserverPipe = IObserverPipe<any, any>;
 
 export type IInferObserverPipeGIn<GObserver extends IGenericObserverPipe> =
-  GObserver extends IObserverPipe<infer GIn, any>
-    ? GIn
-    : never;
+  GObserver extends IObserverPipe<infer GIn, any> ? GIn : never;
 
 export type IInferObserverPipeGOut<GObserver extends IGenericObserverPipe> =
-  GObserver extends IObserverPipe<any, infer GOut>
-    ? GOut
-    : never;
+  GObserver extends IObserverPipe<any, infer GOut> ? GOut : never;

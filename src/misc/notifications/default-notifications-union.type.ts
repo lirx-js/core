@@ -6,8 +6,7 @@ import { IGenericNotification } from './notification.type';
 export type IDefaultNotificationsUnion<GValue> =
   | INextNotification<GValue>
   | ICompleteNotification
-  | IErrorNotification
-  ;
+  | IErrorNotification;
 
 export type IDefaultInNotificationsUnion<GValue> =
   | IDefaultNotificationsUnion<GValue>
@@ -17,10 +16,8 @@ export type IDefaultInNotificationsUnion<GValue> =
 
 export type IGenericDefaultNotificationsUnion = IDefaultNotificationsUnion<any>;
 
-export type IInferDefaultNotificationsUnionGValue<GNotificationUnion extends IGenericDefaultNotificationsUnion> =
-  GNotificationUnion extends INextNotification<infer GValue>
-    ? GValue
-    : never;
+export type IInferDefaultNotificationsUnionGValue<
+  GNotificationUnion extends IGenericDefaultNotificationsUnion,
+> = GNotificationUnion extends INextNotification<infer GValue> ? GValue : never;
 
 export type IGenericDefaultInNotificationsUnion = IDefaultInNotificationsUnion<any>;
-

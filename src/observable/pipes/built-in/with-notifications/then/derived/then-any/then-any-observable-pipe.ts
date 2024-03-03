@@ -7,7 +7,9 @@ import { IThenAnyObservableCallback } from './then-any-observable-callback.type'
 export function thenAnyObservablePipe<GInNextValue, GOut>(
   onThenAny: IThenAnyObservableCallback<GInNextValue, GOut>,
 ): IObservablePipe<IThenObservableInNotifications<GInNextValue>, GOut> {
-  return (subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>): IObservable<GOut> => {
+  return (
+    subscribe: IObservable<IThenObservableInNotifications<GInNextValue>>,
+  ): IObservable<GOut> => {
     return thenAnyObservable<GInNextValue, GOut>(subscribe, onThenAny);
   };
 }

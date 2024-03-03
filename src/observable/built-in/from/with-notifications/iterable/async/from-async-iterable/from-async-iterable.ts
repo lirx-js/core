@@ -6,7 +6,9 @@ import { IFromAsyncIterableObservableNotifications } from './from-async-iterable
 export function fromAsyncIterable<GValue>(
   asyncIterable: AsyncIterable<GValue>,
 ): IObservable<IFromAsyncIterableObservableNotifications<GValue>> {
-  return (emit: IObserver<IFromAsyncIterableObservableNotifications<GValue>>): IUnsubscribeOfObservable => {
+  return (
+    emit: IObserver<IFromAsyncIterableObservableNotifications<GValue>>,
+  ): IUnsubscribeOfObservable => {
     return fromAsyncIterator<GValue>(asyncIterable[Symbol.asyncIterator]())(emit);
   };
 }

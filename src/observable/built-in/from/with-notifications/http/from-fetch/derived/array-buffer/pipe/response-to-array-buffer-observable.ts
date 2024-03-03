@@ -5,13 +5,11 @@ import { responseToBodyObservable } from '../../body/response-to-body-observable
 import { IFromFetchArrayBufferObservableNotifications } from '../from-fetch-array-buffer-observable-notifications.type';
 import { responseToArrayBuffer } from './response-to-array-buffer';
 
-export const responseToArrayBufferObservableRaw = responseToBodyObservable<ArrayBuffer>(responseToArrayBuffer);
+export const responseToArrayBufferObservableRaw =
+  responseToBodyObservable<ArrayBuffer>(responseToArrayBuffer);
 
 export function responseToArrayBufferObservable(
   subscribe: IObservable<IThenObservableInNotifications<Response>>,
 ): IObservable<IFromFetchArrayBufferObservableNotifications> {
-  return fulfilledObservable(
-    subscribe,
-    responseToArrayBufferObservableRaw,
-  );
+  return fulfilledObservable(subscribe, responseToArrayBufferObservableRaw);
 }

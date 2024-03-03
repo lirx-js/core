@@ -9,14 +9,14 @@ export function fromWritableStreamDefaultWriter<GValue>(
   onError: IFromWritableStreamDefaultWriterObserverOnError = FROM_WRITABLE_STREAM_DEFAULT_WRITER_DEFAULT_ON_ERROR,
 ): IObserver<IFromWritableStreamDefaultWriterObserverNotifications<GValue>> {
   return defaultNotificationObserver<GValue>(
-    /* next */(value: GValue): void => {
+    /* next */ (value: GValue): void => {
       writer.write(value).catch(onError);
     },
-    /* complete */(): void => {
+    /* complete */ (): void => {
       writer.close().catch(onError);
       writer.releaseLock();
     },
-    /* error */(error: unknown): void => {
+    /* error */ (error: unknown): void => {
       writer.abort(error).catch(onError);
       writer.releaseLock();
     },

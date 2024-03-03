@@ -1,4 +1,11 @@
-import { createEventListener, INullish, IRemoveEventListener, isNullish, noop, toTypedEventTarget } from '@lirx/utils';
+import {
+  createEventListener,
+  INullish,
+  IRemoveEventListener,
+  isNullish,
+  noop,
+  toTypedEventTarget,
+} from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification';
 import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification';
@@ -62,9 +69,7 @@ export function fromPromiseFactory<GValue>(
         }
       };
 
-      const abort = (
-        signal: AbortSignal,
-      ): void => {
+      const abort = (signal: AbortSignal): void => {
         if (running) {
           end();
           emit(createAbortErrorNotification({ signal }));
@@ -86,20 +91,16 @@ export function fromPromiseFactory<GValue>(
 
       const newSignal: AbortSignal = abortController.signal;
 
-      createPromise(newSignal)
-        .then(
-          (value: GValue): void => {
-            // INFO not necessary because newSignal is only aborted when we unsubscribe to this Observable,
-            //  meaning that next, complete or abort won't emit values
-            // if (newSignal.aborted) {
-            //   abort(newSignal);
-            // } else {
-            next(value);
-            complete();
-            // }
-          },
-          error,
-        );
+      createPromise(newSignal).then((value: GValue): void => {
+        // INFO not necessary because newSignal is only aborted when we unsubscribe to this Observable,
+        //  meaning that next, complete or abort won't emit values
+        // if (newSignal.aborted) {
+        //   abort(newSignal);
+        // } else {
+        next(value);
+        complete();
+        // }
+      }, error);
 
       return (): void => {
         if (running) {

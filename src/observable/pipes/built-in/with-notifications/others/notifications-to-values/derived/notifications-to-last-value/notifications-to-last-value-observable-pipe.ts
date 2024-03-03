@@ -8,11 +8,6 @@ export function notificationsToLastValueObservablePipe<GValue>(
   onError?: INotificationsToLastValueObservableOnErrorFunction,
 ): IObservablePipe<IDefaultInNotificationsUnion<GValue>, GValue> {
   return (subscribe: IObservable<IDefaultInNotificationsUnion<GValue>>): IObservable<GValue> => {
-    return notificationsToLastValueObservable<GValue>(
-      subscribe,
-      onError,
-    );
+    return notificationsToLastValueObservable<GValue>(subscribe, onError);
   };
 }
-
-

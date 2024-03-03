@@ -1,5 +1,3 @@
 export interface INotificationsToValuesObservableOnErrorFunction {
-  (
-    error: any,
-  ): void;
+  (error: any): void;
 }

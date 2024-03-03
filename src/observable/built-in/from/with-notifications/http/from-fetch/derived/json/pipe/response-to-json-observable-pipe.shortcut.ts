@@ -1,5 +1,1 @@
-export {
-  responseToJSONObservablePipe as responseToJSON$$$,
-} from './response-to-json-observable-pipe';
-
-
+export { responseToJSONObservablePipe as responseToJSON$$$ } from './response-to-json-observable-pipe';

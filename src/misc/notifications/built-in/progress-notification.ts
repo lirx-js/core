@@ -5,9 +5,7 @@ import { INotification } from '../notification.type';
 
 export type IProgressNotification = INotification<'progress', IProgress>;
 
-export function createProgressNotification(
-  progress: IProgress,
-): IProgressNotification {
+export function createProgressNotification(progress: IProgress): IProgressNotification {
   return createNotification<'progress', IProgress>('progress', progress);
 }
 

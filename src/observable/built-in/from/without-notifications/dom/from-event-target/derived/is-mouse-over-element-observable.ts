@@ -8,9 +8,7 @@ import { fromSelfEventTarget } from './from-self-event-target';
  *
  * @experimental
  */
-export function isMouseOverElementObservable(
-  element: Element,
-): IObservable<boolean> {
+export function isMouseOverElementObservable(element: Element): IObservable<boolean> {
   return merge([
     mapObservable<MouseEvent, boolean>(
       fromSelfEventTarget<'mouseenter', MouseEvent>(element, 'mouseenter'),

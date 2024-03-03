@@ -1,5 +1,8 @@
 import { noop } from '@lirx/utils';
-import { IObservable, IUnsubscribeOfObservable } from '../../../../../observable/type/observable.type';
+import {
+  IObservable,
+  IUnsubscribeOfObservable,
+} from '../../../../../observable/type/observable.type';
 import { IObserver } from '../../../../../observer/type/observer.type';
 import { IMulticastSource } from './multicast-source.type';
 
@@ -32,14 +35,16 @@ export function createMulticastSource<GValue>(): IMulticastSource<GValue> {
   const subscribe: IObservable<GValue> = (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     let running: boolean = true;
     // if we are dispatching, we must clone _emitFunctions, to avoid changing _dispatchingObservers
-    if (_dispatchingCount > 0) { // if we are dispatching
+    if (_dispatchingCount > 0) {
+      // if we are dispatching
       cloneObservers();
     }
     _emitFunctions.push(emit);
     return (): void => {
       if (running) {
         running = false;
-        if (_dispatchingCount > 0) { // if we are dispatching
+        if (_dispatchingCount > 0) {
+          // if we are dispatching
           cloneObservers();
           _dispatchingObservers[_dispatchingObservers.indexOf(emit)] = noop; // remove from _dispatchingObservers the emit function
         }

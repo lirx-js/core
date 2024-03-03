@@ -1,12 +1,9 @@
 import { IGenericSource } from '../../type/source.type';
 import { ISourceToReadonlySource } from './source-to-readonly-source.type';
 
-export function sourceToReadonlySource<GSource extends IGenericSource>(
-  {
-    emit,
-    ...readonlySource
-  }: GSource,
-): ISourceToReadonlySource<GSource> {
+export function sourceToReadonlySource<GSource extends IGenericSource>({
+  emit,
+  ...readonlySource
+}: GSource): ISourceToReadonlySource<GSource> {
   return readonlySource;
 }
-

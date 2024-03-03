@@ -1,11 +1,9 @@
-import {
-  IInferLastReturnedValueOfUnaryFunctionListOrValue,
-} from '../../shared-types/infer-last-returned-value-of-unary-function-list.type';
+import { IInferLastReturnedValueOfUnaryFunctionListOrValue } from '../../shared-types/infer-last-returned-value-of-unary-function-list.type';
 import { IGenericUnaryFunction } from '../../shared-types/unary-function.type';
 
-export type IInferPipeNowReturn<// generics
+export type IInferPipeNowReturn<
+  // generics
   GValue,
-  GFunctions extends readonly IGenericUnaryFunction[]
+  GFunctions extends readonly IGenericUnaryFunction[],
   //
-> =
-  IInferLastReturnedValueOfUnaryFunctionListOrValue<GFunctions, GValue>;
+> = IInferLastReturnedValueOfUnaryFunctionListOrValue<GFunctions, GValue>;

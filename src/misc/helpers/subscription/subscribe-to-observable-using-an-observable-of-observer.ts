@@ -14,10 +14,12 @@ export function subscribeToObservableUsingAnObservableOfObserver<GValue>(
     }
   };
 
-  const unsubscribeOfObservableOfObserver: IUnsubscribeOfObservable = observableOfObserver((observer: IObserver<GValue>): void => {
-    unsubscribeOfObservable();
-    _unsubscribeOfObservable = observable(observer);
-  });
+  const unsubscribeOfObservableOfObserver: IUnsubscribeOfObservable = observableOfObserver(
+    (observer: IObserver<GValue>): void => {
+      unsubscribeOfObservable();
+      _unsubscribeOfObservable = observable(observer);
+    },
+  );
 
   return (): void => {
     if (running) {

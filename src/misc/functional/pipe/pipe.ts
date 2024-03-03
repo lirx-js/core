@@ -2,12 +2,11 @@ import { pipeNow } from './pipe-now';
 import { IInferPipeReturn } from './types/infer-pipe-return.type';
 import { IPipeNowConstraint } from './types/pipe-now-constraint.type';
 
-export function pipe<// generics
+export function pipe<
+  // generics
   GFunctions extends IPipeNowConstraint<any, GFunctions>,
   //
->(
-  fns: GFunctions,
-): IInferPipeReturn<GFunctions> {
+>(fns: GFunctions): IInferPipeReturn<GFunctions> {
   return ((initialValue: unknown): unknown => {
     return pipeNow(initialValue, fns);
   }) as IInferPipeReturn<GFunctions>;
@@ -44,5 +43,3 @@ export function pipe<// generics
 // ): IInferPipeReturn<GFunctions, GUnaryFunction> {
 //   return pipe<GFunctions, GUnaryFunction>(fns);
 // }
-
-

@@ -24,10 +24,12 @@ export async function* toAsyncIterable<GValue>(
 
   let notificationPromise = createDeferredPromise();
 
-  const unsubscribe: IUnsubscribeOfObservable = subscribe((notification: IObservableToPromiseNotifications<GValue>): void => {
-    notifications.push(notification);
-    notificationPromise.resolve();
-  });
+  const unsubscribe: IUnsubscribeOfObservable = subscribe(
+    (notification: IObservableToPromiseNotifications<GValue>): void => {
+      notifications.push(notification);
+      notificationPromise.resolve();
+    },
+  );
 
   try {
     while (true) {
@@ -35,7 +37,8 @@ export async function* toAsyncIterable<GValue>(
       notificationPromise = createDeferredPromise();
 
       while (notifications.length > 0) {
-        const notification: IObservableToPromiseNotifications<GValue> = notifications.shift() as IObservableToPromiseNotifications<GValue>;
+        const notification: IObservableToPromiseNotifications<GValue> =
+          notifications.shift() as IObservableToPromiseNotifications<GValue>;
         switch (notification.name) {
           case 'next':
             yield notification.value;
@@ -51,4 +54,3 @@ export async function* toAsyncIterable<GValue>(
     unsubscribe();
   }
 }
-

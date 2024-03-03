@@ -4,8 +4,11 @@ import { IMapValueTupleToObservableTuple } from '../../../../../type/helpers/map
 import { IObservable } from '../../../../../type/observable.type';
 import { combineLatest, ICombineLatestObservablesValues } from '../combine-latest/combine-latest';
 
-export type IReactiveFunctionObservables<GFunction extends IGenericFunction> = IMapValueTupleToObservableTuple<Parameters<GFunction>>;
-export type IReactiveFunctionReturn<GFunction extends IGenericFunction> = IObservable<ReturnType<GFunction>>;
+export type IReactiveFunctionObservables<GFunction extends IGenericFunction> =
+  IMapValueTupleToObservableTuple<Parameters<GFunction>>;
+export type IReactiveFunctionReturn<GFunction extends IGenericFunction> = IObservable<
+  ReturnType<GFunction>
+>;
 
 export function reactiveFunction<GFunction extends IGenericFunction>(
   observables: IReactiveFunctionObservables<GFunction>,

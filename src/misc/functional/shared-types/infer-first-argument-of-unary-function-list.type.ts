@@ -3,17 +3,15 @@ import { IGenericUnaryFunction } from './unary-function.type';
 /**
  * Returns the first argument of the first unary function from a list of unary functions, or NEVER
  */
-export type IInferFirstArgumentOfUnaryFunctionList<// generics
-  GFunctions extends readonly IGenericUnaryFunction[] // list of unary functions
+export type IInferFirstArgumentOfUnaryFunctionList<
+  // generics
+  GFunctions extends readonly IGenericUnaryFunction[], // list of unary functions
   //
-> =
-  GFunctions extends [infer GFirst, ...infer GRest]
-    ? (
-      GFirst extends ((value: infer GFirstArgument) => any)
-        ? GFirstArgument
-        : never
-      )
-    : never;
+> = GFunctions extends [infer GFirst, ...infer GRest]
+  ? GFirst extends (value: infer GFirstArgument) => any
+    ? GFirstArgument
+    : never
+  : never;
 
 // export type IInferFirstArgumentOfUnaryFunctionListOrValue<// generics
 //   GFunctions extends readonly IGenericUnaryFunction[],

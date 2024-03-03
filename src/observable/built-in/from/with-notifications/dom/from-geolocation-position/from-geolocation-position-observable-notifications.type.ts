@@ -3,5 +3,4 @@ import { INextNotification } from '../../../../../../misc/notifications/built-in
 
 export type IFromGeolocationPositionObservableNotifications =
   | INextNotification<GeolocationPosition>
-  | IErrorNotification<GeolocationPositionError>
-  ;
+  | IErrorNotification<GeolocationPositionError>;

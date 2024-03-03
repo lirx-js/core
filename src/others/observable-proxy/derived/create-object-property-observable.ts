@@ -1,31 +1,25 @@
 import { IDistinctEqualFunctionOptions } from '@lirx/utils';
 import { merge } from '../../../observable/built-in/from/without-notifications/many-observables/merge/merge';
 import { idle } from '../../../observable/built-in/from/without-notifications/time-related/idle/idle';
-import {
-  distinctObservable,
-} from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
+import { distinctObservable } from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable';
 import { mapObservable } from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/map/map-observable';
-import {
-  shareObservableWithMulticastReplayLastSource,
-} from '../../../observable/pipes/built-in/without-notifications/source-related/built-in/derived/multicast-replay-last-source/share-observable-with-multicast-replay-last-source';
+import { shareObservableWithMulticastReplayLastSource } from '../../../observable/pipes/built-in/without-notifications/source-related/built-in/derived/multicast-replay-last-source/share-observable-with-multicast-replay-last-source';
 import { IObservable } from '../../../observable/type/observable.type';
-import {
-  createMulticastReplayLastSource,
-} from '../../../observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-multicast-replay-last-source';
+import { createMulticastReplayLastSource } from '../../../observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-multicast-replay-last-source';
 
 function getObjectPropertyDescriptor<GValue>(
   obj: any,
   propertyKey: PropertyKey,
 ): TypedPropertyDescriptor<GValue> | undefined {
-  if (
-    (obj === null)
-    || (obj === void 0)
-  ) {
+  if (obj === null || obj === void 0) {
     return undefined;
   } else {
-    const descriptor: TypedPropertyDescriptor<GValue> | undefined = Object.getOwnPropertyDescriptor(obj, propertyKey);
+    const descriptor: TypedPropertyDescriptor<GValue> | undefined = Object.getOwnPropertyDescriptor(
+      obj,
+      propertyKey,
+    );
 
-    return (descriptor === void 0)
+    return descriptor === void 0
       ? getObjectPropertyDescriptor<GValue>(Object.getPrototypeOf(obj), propertyKey)
       : descriptor;
   }
@@ -33,7 +27,8 @@ function getObjectPropertyDescriptor<GValue>(
 
 const CACHE = new WeakMap<any, Map<PropertyKey, IObservable<any>>>();
 
-export interface ICreateObjectPropertyObservableOptions<GValue> extends IDistinctEqualFunctionOptions<GValue> {
+export interface ICreateObjectPropertyObservableOptions<GValue>
+  extends IDistinctEqualFunctionOptions<GValue> {
   allowGetters?: 'throw' | 'warn' | 'allow';
 }
 
@@ -61,7 +56,8 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
   if (propertyCache.has(propertyKey)) {
     return propertyCache.get(propertyKey)!;
   } else {
-    const descriptor: TypedPropertyDescriptor<GValue> | undefined = getObjectPropertyDescriptor<GValue>(obj, propertyKey);
+    const descriptor: TypedPropertyDescriptor<GValue> | undefined =
+      getObjectPropertyDescriptor<GValue>(obj, propertyKey);
     const { emit: $value, subscribe: value$, getValue } = createMulticastReplayLastSource<GValue>();
 
     let _value$: IObservable<GValue>;
@@ -78,29 +74,33 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
     } else {
       const { get, set, value, writable, ...properties } = descriptor;
 
-      const _get = (get === void 0)
-        ? void 0
-        : (): GValue => {
-          return Reflect.apply(get, obj, []);
-        };
+      const _get =
+        get === void 0
+          ? void 0
+          : (): GValue => {
+              return Reflect.apply(get, obj, []);
+            };
 
-      const _set = (set === void 0)
-        ? void 0
-        : (value: GValue): void => {
-          Reflect.apply(set, obj, [value]);
-        };
+      const _set =
+        set === void 0
+          ? void 0
+          : (value: GValue): void => {
+              Reflect.apply(set, obj, [value]);
+            };
 
-      const _set$ = (_set === void 0)
-        ? void 0
-        : (value: GValue): void => {
-          $value(value);
-          _set!(value);
-        };
+      const _set$ =
+        _set === void 0
+          ? void 0
+          : (value: GValue): void => {
+              $value(value);
+              _set!(value);
+            };
 
       if (get === void 0) {
         _value$ = value$;
 
-        if (set === void 0) { // based on value
+        if (set === void 0) {
+          // based on value
           $value(value as GValue);
 
           if (writable) {
@@ -109,10 +109,11 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
               get: getValue,
               set: $value,
             });
-          } else { // readonly
-
+          } else {
+            // readonly
           }
-        } else { // pure setter => write-only
+        } else {
+          // pure setter => write-only
           Object.defineProperty(obj, propertyKey, {
             ...properties,
             get: () => void 0,
@@ -134,13 +135,12 @@ export function createObjectPropertyObservable<GObject, GPropertyKey extends key
 
         const valueGetter$ = mapObservable(idle(), _get);
 
-        if (set === void 0) { // pure getter => readonly
+        if (set === void 0) {
+          // pure getter => readonly
           _value$ = valueGetter$;
-        } else { // getter and setter
-          _value$ = merge([
-            value$,
-            valueGetter$,
-          ]);
+        } else {
+          // getter and setter
+          _value$ = merge([value$, valueGetter$]);
 
           Object.defineProperty(obj, propertyKey, {
             ...properties,

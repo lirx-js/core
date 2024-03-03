@@ -16,25 +16,21 @@ export type IAutoUnsubscribeObservableNotifications =
  *
  * @experimental
  */
-export function autoUnsubscribeObservableWithNotifications<GNotifications extends IAutoUnsubscribeObservableNotifications>(
-  subscribe: IObservable<GNotifications>,
-): IObservable<GNotifications> {
+export function autoUnsubscribeObservableWithNotifications<
+  GNotifications extends IAutoUnsubscribeObservableNotifications,
+>(subscribe: IObservable<GNotifications>): IObservable<GNotifications> {
   return (emit: IObserver<GNotifications>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe((
-      unsubscribe: IUnsubscribeOfObservable,
-      running: IRunning,
-    ): IUnsubscribeOfObservable => {
-      return subscribe((notification: GNotifications): void => {
-        if (running()) {
-          if (
-            (notification.name === 'complete')
-            || (notification.name === 'error')
-          ) {
-            unsubscribe();
+    return futureUnsubscribe(
+      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
+        return subscribe((notification: GNotifications): void => {
+          if (running()) {
+            if (notification.name === 'complete' || notification.name === 'error') {
+              unsubscribe();
+            }
+            emit(notification);
           }
-          emit(notification);
-        }
-      });
-    });
+        });
+      },
+    );
   };
 }

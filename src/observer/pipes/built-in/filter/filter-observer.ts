@@ -17,4 +17,3 @@ export function filterObserver<GIn, GOut extends GIn>(
 ): IObserver<GIn> {
   return filterObserverStrict<GIn, GOut>(emit, filterFunction as IFilterFunctionStrict<GIn, GOut>);
 }
-

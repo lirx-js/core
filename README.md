@@ -5,7 +5,7 @@
     <img src="assets/lirx-core-logo.png" alt="lirx-core-logo" width="120px" height="120px"/>
   </a>
   <br>
-  <i><strong>@lirx/core</strong> is an extremely performant framework to master asynchronous data streams using Observables and Observers.</i>
+  <i><strong>@lirx/core</strong> is an extremely performant framework to master asynchronous data streams using Observables, Observers, and Signals.</i>
 </p>
 
 <p align="center">
@@ -25,8 +25,9 @@
 
 <hr>
 
-`@lirx/core` (pronounced `lyrics`) is simply the [fastest and smallest](https://core.lirx.org/docs/documentation/performances/) javascript library for `Reactive Programming`,
+`@lirx/core` (pronounced `lyrics`) is simply the [fastest and smallest](https://core.lirx.org/docs/documentation/performances/introdution/) javascript library for `Reactive Programming`,
 providing different tools to generate, consume, and pipe Observables and Observers.
+It even provides powerful tools like [Signals](https://core.lirx.org/docs/documentation/signals/introduction/) out-of-the-box.
 
 If *Reactive Programming* does not tell you much or is a new concept to you, you may [take a look at this tutorial](https://core.lirx.org/docs/documentation/getting-started/introduction/).
 In a few words, if you deal frequently with async programming like *events*, *timeouts*, *promises* or *streams* (ex: front-end development),
@@ -35,7 +36,7 @@ then `@lirx/core` is the perfect candidate for you.
 
 *Example: emulate double click*
 
-```js
+```ts
 const subscribe = pipe$$(fromEventTarget(window, 'click'), [
   bufferTime$$$(500),
   filter$$$((events: PointerEvent[]) => events.length === 2),
@@ -50,6 +51,24 @@ subscribe((event: PointerEvent) => {
 [//]: # (TODO)
 [//]: # ([Click here to see the live demo]&#40;https://stackblitz.com/edit/typescript-sfkssg?devtoolsheight=33&file=index.ts&#41;)
 
+*Example: signals !*
+
+```ts
+const counter = signal(0);
+const isEven = computed(() => counter() % 2 === 0);
+const color = computed(() => (isEven() ? 'red' : 'blue'));
+
+effect(() => {
+  console.log('counter', counter(), 'isEven', isEven(), 'color', color());
+});
+
+fromEventTarget(window, 'click')(() => {
+  counter.update((currentValue) => currentValue + 1);
+});
+```
+
+[//]: # (TODO demo)
+
 Give it a try, and you'll love it !
 
 
@@ -61,6 +80,7 @@ and the [reference page here](https://core.lirx.org/docs/reference/any-with-noti
 
 Here are the essential links:
 
+- [Signal](https://core.lirx.org/docs/documentation/signals/introduction/)
 - [Observable](https://core.lirx.org/docs/reference/observable/)
 - [Observer](https://core.lirx.org/docs/reference/observer/)
 - [ObservablePipe](https://core.lirx.org/docs/reference/observable-pipe/) (ak: Pipeable Operator)
@@ -116,4 +136,4 @@ npm install @lirx/core --save
 
 - some concepts / operators / methods may have a different behaviour or name.
   Take care to read the documentation before any hasty use.
-  
+

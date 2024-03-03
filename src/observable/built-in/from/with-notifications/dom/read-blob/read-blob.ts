@@ -65,36 +65,32 @@ export function readBlob<GReadType extends IFileReaderReadType>(
       }
     };
 
-    const removeLoadEventListener: IRemoveEventListener = createEventListener<'load', ProgressEvent<FileReader>>(
-      toTypedEventTarget(fileReader),
+    const removeLoadEventListener: IRemoveEventListener = createEventListener<
       'load',
-      (): void => {
-        next(fileReader.result as GReturnType);
-        complete();
-      },
-    );
+      ProgressEvent<FileReader>
+    >(toTypedEventTarget(fileReader), 'load', (): void => {
+      next(fileReader.result as GReturnType);
+      complete();
+    });
 
-    const removeErrorEventListener: IRemoveEventListener = createEventListener<'error', ProgressEvent<FileReader>>(
-      toTypedEventTarget(fileReader),
+    const removeErrorEventListener: IRemoveEventListener = createEventListener<
       'error',
-      (): void => {
-        error(fileReader.error);
-      },
-    );
+      ProgressEvent<FileReader>
+    >(toTypedEventTarget(fileReader), 'error', (): void => {
+      error(fileReader.error);
+    });
 
-    const removeAbortEventListener: IRemoveEventListener = createEventListener<'abort', ProgressEvent<FileReader>>(
-      toTypedEventTarget(fileReader),
+    const removeAbortEventListener: IRemoveEventListener = createEventListener<
       'abort',
-      abort,
-    );
+      ProgressEvent<FileReader>
+    >(toTypedEventTarget(fileReader), 'abort', abort);
 
-    const removeProgressEventListener: IRemoveEventListener = createEventListener<'progress', ProgressEvent<FileReader>>(
-      toTypedEventTarget(fileReader),
+    const removeProgressEventListener: IRemoveEventListener = createEventListener<
       'progress',
-      (event: ProgressEvent<FileReader>): void => {
-        progress(createProgressFromProgressEvent(event));
-      },
-    );
+      ProgressEvent<FileReader>
+    >(toTypedEventTarget(fileReader), 'progress', (event: ProgressEvent<FileReader>): void => {
+      progress(createProgressFromProgressEvent(event));
+    });
 
     switch (readType) {
       case 'data-url':
@@ -118,4 +114,3 @@ export function readBlob<GReadType extends IFileReaderReadType>(
     };
   };
 }
-

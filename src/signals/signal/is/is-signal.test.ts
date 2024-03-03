@@ -1,4 +1,4 @@
-import { signal } from '../implementations/function/signal.function';
+import { signal } from '../signal';
 import { isSignal } from './is-signal';
 
 describe('is-signal', () => {

@@ -3,26 +3,22 @@ import { IGenericUnaryFunction, IUnaryFunction } from './unary-function.type';
 /**
  * Returns the return value of the last unary function from a list of unary functions, or NEVER
  */
-export type IInferLastReturnedValueOfUnaryFunctionList<// generics
+export type IInferLastReturnedValueOfUnaryFunctionList<
+  // generics
   GFunctions extends readonly IGenericUnaryFunction[],
   //
-> =
-  GFunctions extends [...infer GRestFunctions, infer GLastFunction]
-    ? (
-      GLastFunction extends IUnaryFunction<any, infer GOut>
-        ? GOut
-        : never
-      )
-    : never;
+> = GFunctions extends [...infer GRestFunctions, infer GLastFunction]
+  ? GLastFunction extends IUnaryFunction<any, infer GOut>
+    ? GOut
+    : never
+  : never;
 
-export type IInferLastReturnedValueOfUnaryFunctionListOrValue<// generics
+export type IInferLastReturnedValueOfUnaryFunctionListOrValue<
+  // generics
   GFunctions extends readonly IGenericUnaryFunction[],
   GValue,
   //
-> =
-  GFunctions extends []
-    ? GValue
-    : IInferLastReturnedValueOfUnaryFunctionList<GFunctions>;
+> = GFunctions extends [] ? GValue : IInferLastReturnedValueOfUnaryFunctionList<GFunctions>;
 
 // export type PipeLastReturn<GFunctions extends readonly GUnaryFunction[], GUnaryFunction extends IGenericUnaryFunction = IGenericUnaryFunction> =
 //   PipeLastReturnOrValue<GFunctions, unknown, GUnaryFunction>;
@@ -36,4 +32,3 @@ export type IInferLastReturnedValueOfUnaryFunctionListOrValue<// generics
 // const a: IInferLastReturnedValueOfUnaryFunctionList<[]> = null; // never
 // const a: IInferLastReturnedValueOfUnaryFunctionList<[F0]> = null; // string
 // const a: IInferLastReturnedValueOfUnaryFunctionList<[F1, F3]> = null; // bigint
-

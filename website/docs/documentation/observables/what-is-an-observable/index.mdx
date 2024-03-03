@@ -1,0 +1,99 @@
+# What is an Observable ?
+
+The following tutorial will teach you the basics: what is an Observable, an Observer, and what is the logic behind them.
+We will start using only typing, to understand the essential concepts. The library's functions will be used later.
+
+## Definition of an Observer
+
+So, the first thing to do, is to define **what** is an [Observer](/docs/reference/observer/):
+
+```ts
+interface IObserver<GValue> {
+  (value: GValue): void;
+}
+```
+
+An *Observer* **is simply a function** that receives and consumes a value. Nothing more.
+Its purpose is to **collect the values** sent by an *Observable*.
+
+Here's an example of an *Observer* that logs its incoming values:
+
+import ObserverExample from './_observer-example.mdx';
+
+<ObserverExample/>
+
+**Yes, it's just a function !** That's where `@lirx/core` shines: simplicity and efficiency.
+
+
+Really simple, isn't it ?
+
+## Definition of an Observable
+
+An Observable is an **asynchronous stream of values**. We subscribe to it, and it will send us its data.
+
+Let's define the [Observable](/docs/reference/observable/):
+
+import ObservableTypes from '../../../reference/observable/_types.mdx';
+
+<ObservableTypes/>
+
+
+An *Observable* is a function that **receives an *Observer*** (used to **emit some values**, here through `emit`),
+and **returns an *Unsubscribe*** function (used to free resources and notify the Observable to stop sending these values).
+
+Here's a handmade example of an *Observable* that emits numbers (an incremented value) every 500ms:
+
+import ObservableExample from './_observable-example.mdx';
+
+<ObservableExample/>
+
+To build our own Observable, we have to follow this pattern:
+
+- create a function that receives an `emit` argument
+- use `emit` to send some values
+- and return a function which when called must free resources, and stop the Observable from sending values
+
+:::info
+
+`@lirx/core` already provides many functions to create plenty of Observables.
+Usually you won't have to create them from scratch.
+
+:::
+
+## Subscribing to an Observable using an Observer
+
+To read the values of an Observable we just have to provide an Observer to it.
+So we directly write:
+
+```ts
+const unsubscribe = observable(observer);
+```
+
+The Observable receives the Observer (the `emit` argument), and starts sending its values into this Observer.
+
+Thus, in our example, it outputs:
+
+```text
+value: 0
+value: 1
+value: 2
+value: 3
+...
+```
+
+Later, when we want to dispose of the *Subscription*, we simply have to call the returned function (here `unsubscribe`):
+
+```ts
+unsubscribe(); // free resources, and stop to emit values
+```
+
+[Click here to see the live demo](https://stackblitz.com/edit/typescript-rchi37?devToolsHeight=33&file=index.ts)
+
+:::info
+
+At this point, you may consider that it's pretty simple, and we've learned nothing:
+we've just provided a callback to a function... nothing extraordinary.
+This is where `@lirx/core` shines: it's simple by design, making it excessively fast and optimized by js engines.
+But don't stop here, the **strength** of Reactive Programming is due to its **[piping possibilities](../what-is-an-observable-pipe)**.
+
+:::
