@@ -52,7 +52,7 @@ This library follows the Angular Signals' API for compatibility, with little dif
 
 
 It's not restricted to Angular, but it has a close API, in consequence the following part comes directly
-from the [Angular Signals' tutorial page]((https://angular.io/guide/signals)).
+from the [Angular Signals' tutorial page](https://angular.io/guide/signals).
 If you're already familiar with Signals, you may [jump to the differences](#differences-between-this-library-and-the-angulars-signals).
 
 

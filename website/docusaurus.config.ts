@@ -134,7 +134,7 @@ const config: Config = {
             },
             {
               label: 'Example',
-              to: '/docs/documentation/example/',
+              to: '/docs/documentation/observables/example/',
             },
             {
               type: 'link',
