@@ -4,6 +4,8 @@ import { ISignalUpdateFunctionCallback } from './signal-update-function-callback
 export interface ISignal<GValue> extends IReadonlySignal<GValue> {
   set(value: GValue): void;
 
+  throw(error: unknown): void;
+
   update(updateFunction: ISignalUpdateFunctionCallback<GValue>): void;
 
   asReadonly(): IReadonlySignal<GValue>;

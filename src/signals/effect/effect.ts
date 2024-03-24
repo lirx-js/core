@@ -1,40 +1,37 @@
-import { createMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
-import { IMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
-import { runSignalChangeContextOnce } from '../internal/signal-change-context/signal-change-context.private';
+import {
+  EFFECT_CONTEXT,
+  effectContextRunInContext,
+  effectContextStop,
+  IEffectContext,
+} from '../internal/effect.private';
+import {
+  initReactiveConsumer,
+  preventEffectCreationInConsumerContext,
+} from '../internal/reactive-context.private';
 import { IEffetFunction } from './types/effet-function.type';
 import { IUnsubscribeOfEffect } from './types/unsubscribe-of-effect.type';
 
+let inEffect: boolean = false;
+
 export function effect(effectFunction: IEffetFunction): IUnsubscribeOfEffect {
-  let cleanUpSource: IMulticastSource<void>;
-  let running: boolean = true;
+  preventEffectCreationInConsumerContext();
 
-  const unsubscribeOfEffect = (): void => {
-    if (running) {
-      running = false;
-      cleanUpSource.emit();
+  if (inEffect) {
+    throw new Error('Detected nested effects.');
+  } else {
+    inEffect = true;
+    try {
+      const context: IEffectContext = Object.create(EFFECT_CONTEXT);
+      initReactiveConsumer(context);
+      context.effectFunction = effectFunction;
+
+      effectContextRunInContext(context);
+
+      return (): void => {
+        effectContextStop(context);
+      };
+    } finally {
+      inEffect = false;
     }
-  };
-
-  const loop = (): void => {
-    runSignalChangeContextOnce(
-      (): void => {
-        cleanUpSource = createMulticastSource<void>();
-        effectFunction(cleanUpSource.subscribe);
-      },
-      (): void => {
-        if (running) {
-          cleanUpSource.emit();
-        }
-        queueMicrotask((): void => {
-          if (running) {
-            loop();
-          }
-        });
-      },
-    );
-  };
-
-  loop();
-
-  return unsubscribeOfEffect;
+  }
 }

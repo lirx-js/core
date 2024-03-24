@@ -1,8 +1,8 @@
 import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-notifications-union.type';
 import { IObservable } from '../../observable/type/observable.type';
 import { UNSET } from '../internal/computed.private';
+
 import { reactiveNodeInit } from '../internal/reactive-node.private';
-import { isInSignalContext } from '../internal/signal-change-context/signal-change-context.private';
 import {
   ISignalFromObservableNode,
   SIGNAL_FROM_OBSERVABLE_NODE,
@@ -33,9 +33,7 @@ export function toSignal<GValue>(
     | ICreateSignalFromObservableOptions<GValue>
     | ICreateSignalFromNotificationsObservableOptions<GValue>,
 ): ISignalFromObservable<GValue> {
-  if (isInSignalContext()) {
-    throw new Error('Cannot create a signal is this context.');
-  }
+  // preventCreationIfInSignalContext();
 
   const node: ISignalFromObservableNode<GValue> = Object.create(SIGNAL_FROM_OBSERVABLE_NODE);
   reactiveNodeInit(node);

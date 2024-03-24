@@ -4,9 +4,9 @@ import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-n
 import { IObservable, IUnsubscribeOfObservable } from '../../observable/type/observable.type';
 import { ERRORED, UNSET } from './computed.private';
 import {
-  reactiveNodeAddSignalChangeListener,
-  reactiveNodeDispatchSignalChangeListeners,
-} from './reactive-node.private';
+  markReactiveContextChangesSignalerAsChanged,
+  markReactiveNodeAsObservedByCurrentObserver,
+} from './reactive-context.private';
 import { ISignalNode, SIGNAL_NODE, signalSetNoCheck } from './signal.private';
 
 export interface ISignalFromObservableNode<GValue> extends ISignalNode<GValue> {
@@ -27,7 +27,7 @@ export const SIGNAL_FROM_OBSERVABLE_NODE: ISignalFromObservableNode<unknown> = {
 };
 
 export function signalFromObservableGet<GValue>(node: ISignalFromObservableNode<GValue>): GValue {
-  reactiveNodeAddSignalChangeListener(node);
+  markReactiveNodeAsObservedByCurrentObserver(node);
   if (node.value === UNSET) {
     throw new Error('No value received.');
   } else if (node.value === ERRORED) {
@@ -69,7 +69,7 @@ export function signalFromObservableActivateForNotification<GValue>(
             }
             node.value = ERRORED;
             node.error = error;
-            reactiveNodeDispatchSignalChangeListeners(node);
+            markReactiveContextChangesSignalerAsChanged(node);
           },
         ),
       );
