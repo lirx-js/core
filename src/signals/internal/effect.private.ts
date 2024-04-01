@@ -46,12 +46,12 @@ export function effectContextMaybeOutdated(
   node: IGenericReactiveNode,
 ): void {
   if (context.state !== EFFECT_CONTEXT_STATE_STOPPED) {
-    updateReactiveNode(node);
-    // queueMicrotask((): void => {
-    //   if (context.state !== EFFECT_CONTEXT_STATE_STOPPED) {
-    //     updateReactiveNode(node);
-    //   }
-    // });
+    // updateReactiveNode(node);
+    queueMicrotask((): void => {
+      if (context.state !== EFFECT_CONTEXT_STATE_STOPPED) {
+        updateReactiveNode(node);
+      }
+    });
   }
 }
 
@@ -83,6 +83,5 @@ export function effectContextStop(context: IEffectContext): void {
   if (context.state !== EFFECT_CONTEXT_STATE_STOPPED) {
     context.state = EFFECT_CONTEXT_STATE_STOPPED;
     context.cleanUpSource.emit();
-    // TODO unbound producers
   }
 }

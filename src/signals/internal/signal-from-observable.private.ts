@@ -2,15 +2,10 @@ import { futureUnsubscribe } from '@lirx/unsubscribe';
 import { defaultNotificationObserver } from '../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-notifications-union.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../observable/type/observable.type';
-import { ERRORED, UNSET } from './computed.private';
-import {
-  markReactiveContextChangesSignalerAsChanged,
-  markReactiveNodeAsObservedByCurrentObserver,
-} from './reactive-context.private';
-import { ISignalNode, SIGNAL_NODE, signalSetNoCheck } from './signal.private';
+import { reactiveProducerGet } from './reactive-context.private';
+import { ISignalNode, SIGNAL_NODE, signalSet, signalThrow } from './signal.private';
 
 export interface ISignalFromObservableNode<GValue> extends ISignalNode<GValue> {
-  error: unknown;
   active: boolean;
   unsubscribeOnError: boolean;
   value$: IObservable<GValue> | IObservable<IDefaultInNotificationsUnion<GValue>>;
@@ -19,7 +14,6 @@ export interface ISignalFromObservableNode<GValue> extends ISignalNode<GValue> {
 
 export const SIGNAL_FROM_OBSERVABLE_NODE: ISignalFromObservableNode<unknown> = {
   ...SIGNAL_NODE,
-  error: undefined,
   active: false,
   unsubscribeOnError: true,
   value$: undefined as any,
@@ -27,13 +21,7 @@ export const SIGNAL_FROM_OBSERVABLE_NODE: ISignalFromObservableNode<unknown> = {
 };
 
 export function signalFromObservableGet<GValue>(node: ISignalFromObservableNode<GValue>): GValue {
-  markReactiveNodeAsObservedByCurrentObserver(node);
-  if (node.value === UNSET) {
-    throw new Error('No value received.');
-  } else if (node.value === ERRORED) {
-    throw node.error;
-  }
-  return node.value;
+  return reactiveProducerGet<GValue>(node);
 }
 
 export function signalFromObservableIsActive<GValue>(
@@ -46,7 +34,7 @@ export function signalFromObservableActivateForRawValue<GValue>(
   node: ISignalFromObservableNode<GValue>,
 ): void {
   node.unsubscribe = (node.value$ as IObservable<GValue>)((value: GValue): void => {
-    signalSetNoCheck<GValue>(node, value);
+    signalSet<GValue>(node, value);
   });
 }
 
@@ -58,7 +46,7 @@ export function signalFromObservableActivateForNotification<GValue>(
       return (node.value$ as IObservable<IDefaultInNotificationsUnion<GValue>>)(
         defaultNotificationObserver<GValue>(
           /* next */ (value: GValue): void => {
-            signalSetNoCheck<GValue>(node, value);
+            signalSet<GValue>(node, value);
           },
           /* complete */ (): void => {
             unsubscribe();
@@ -67,9 +55,7 @@ export function signalFromObservableActivateForNotification<GValue>(
             if (node.unsubscribeOnError) {
               unsubscribe();
             }
-            node.value = ERRORED;
-            node.error = error;
-            markReactiveContextChangesSignalerAsChanged(node);
+            signalThrow<GValue>(node, error);
           },
         ),
       );

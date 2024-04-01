@@ -1,8 +1,8 @@
 import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-notifications-union.type';
 import { IObservable } from '../../observable/type/observable.type';
-import { UNSET } from '../internal/computed.private';
+import { initReactiveProducer } from '../internal/reactive-context.private';
 
-import { reactiveNodeInit } from '../internal/reactive-node.private';
+import { SignalError } from '../internal/signal-error.class';
 import {
   ISignalFromObservableNode,
   SIGNAL_FROM_OBSERVABLE_NODE,
@@ -36,23 +36,16 @@ export function toSignal<GValue>(
   // preventCreationIfInSignalContext();
 
   const node: ISignalFromObservableNode<GValue> = Object.create(SIGNAL_FROM_OBSERVABLE_NODE);
-  reactiveNodeInit(node);
-  node.value = UNSET;
+  initReactiveProducer(
+    node,
+    options && 'initialValue' in options ? options.initialValue! : SignalError.UNSET,
+    options?.equal,
+  );
   node.value$ = value$;
 
   const signal: ISignalFromObservable<GValue> = ((): GValue =>
     signalFromObservableGet(node)) as ISignalFromObservable<GValue>;
   signal[SIGNAL] = node;
-
-  if (options) {
-    if (options.equal) {
-      node.equal = options.equal;
-    }
-
-    if ('initialValue' in options) {
-      node.value = options.initialValue!;
-    }
-  }
 
   signal.isActive = (): boolean => signalFromObservableIsActive(node);
   signal.activate =

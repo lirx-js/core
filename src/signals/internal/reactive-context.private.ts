@@ -8,7 +8,12 @@ import { SignalError } from './signal-error.class';
 export interface IReactiveProducer<GValue> {
   equal: IEqualFunction<GValue>;
   value: GValue | SignalError;
-  consumers: Set<IGenericReactiveConsumer>; // list if nodes consuming this node
+  // list if nodes consuming this node
+  // INFO: using an array instead of a Set is less "accurate":
+  //  it creates unnecessary operations when the same signal is used multiple times in the same context.
+  //  However, it's faster (a Set us usually 2 times slower than an Array).
+  //  Thus, if we consider the statistically most prevalent usages of signals, globally, using Array is faster.
+  consumers: IGenericReactiveConsumer[];
 }
 
 export type IGenericReactiveProducer = IReactiveProducer<any>;
@@ -31,7 +36,7 @@ export function initReactiveProducer<GValue>(
   }
 
   producer.value = value;
-  producer.consumers = new Set<IGenericReactiveConsumer>();
+  producer.consumers = [];
 }
 
 /* FUNCTIONS */
@@ -83,15 +88,16 @@ export function setAndNotifyReactiveProducerValue<GValue>(
 }
 
 export function markReactiveNodeConsumersAsMaybeOutdated(node: IGenericReactiveNode): void {
-  node.consumers.forEach((consumer: IGenericReactiveConsumer): void => {
-    consumer.maybeOutDated(consumer, node);
-  });
+  for (let i = 0; i < node.consumers.length; i++) {
+    node.consumers[i].maybeOutDated(node.consumers[i], node);
+  }
 }
 
 export function markReactiveProducerConsumerAsOutdated(producer: IGenericReactiveProducer): void {
-  producer.consumers.forEach((consumer: IGenericReactiveConsumer): void => {
-    consumer.outdated(consumer);
-  });
+  for (let i = 0; i < producer.consumers.length; i++) {
+    producer.consumers[i].outdated(producer.consumers[i]);
+  }
+  producer.consumers = [];
 }
 
 /** CONSUMER **/
@@ -99,7 +105,6 @@ export function markReactiveProducerConsumerAsOutdated(producer: IGenericReactiv
 /* TYPES */
 
 export interface IReactiveConsumer<GSelf extends IReactiveConsumer<GSelf>> {
-  producers: Set<IGenericReactiveProducer>; // list if nodes "producing" this node
   maybeOutDated: (consumer: GSelf, node: IGenericReactiveNode) => void;
   outdated: (consumer: GSelf) => void;
 }
@@ -110,14 +115,11 @@ export type IOptionalGenericReactiveConsumer = IGenericReactiveConsumer | undefi
 /* INIT */
 
 export const REACTIVE_CONSUMER: IGenericReactiveConsumer = {
-  producers: undefined as any,
   maybeOutDated: undefined as any,
   outdated: undefined as any,
 };
 
-export function initReactiveConsumer(consumer: IGenericReactiveConsumer): void {
-  consumer.producers = new Set<IGenericReactiveProducer>();
-}
+export function initReactiveConsumer(consumer: IGenericReactiveConsumer): void {}
 
 /** SHARED **/
 
@@ -162,21 +164,7 @@ export function bindReactiveConsumerWithReactiveProducer(
   consumer: IGenericReactiveConsumer,
   producer: IGenericReactiveProducer,
 ): void {
-  if (!producer.consumers.has(consumer)) {
-    consumer.producers.add(producer);
-    producer.consumers.add(consumer);
-  }
-}
-
-export function unbindReactiveConsumerWithReactiveProducer(
-  consumer: IReactiveConsumer<any>,
-  producer: IReactiveProducer<any>,
-): void {
-  console.assert(consumer.producers.has(producer));
-  console.assert(producer.consumers.has(consumer));
-
-  consumer.producers.delete(producer);
-  producer.consumers.delete(consumer);
+  producer.consumers.push(consumer);
 }
 
 /** REACTIVE NODE **/
@@ -257,18 +245,13 @@ export function reactiveNodeOutdated(node: IGenericReactiveNode): void {
   node.state = REACTIVE_NODE_STATE_OUTDATED;
   node.maybeOutdatedProducers = [];
 
-  node.producers.forEach((producer: IGenericReactiveProducer): void => {
-    unbindReactiveConsumerWithReactiveProducer(node, producer);
-  });
-
   if (_markReactiveNodeConsumersAsMayHaveChanged) {
     markReactiveNodeConsumersAsMaybeOutdated(node);
   }
 }
 
 export function runReactiveNodeComputation<GValue>(node: IReactiveNode<GValue>): void {
-  console.assert(node.producers.size === 0);
-  console.assert(node.maybeOutdatedProducers.length === 0);
+  // console.assert(node.maybeOutdatedProducers.length === 0);
 
   node.state = REACTIVE_NODE_STATE_COMPUTING;
 

@@ -1,5 +1,5 @@
-import { runOutsideSignalChangeContext } from '../internal/signal-change-context/signal-change-context.private';
+import { runInReactiveConsumerContext } from '../internal/reactive-context.private';
 
 export function untracked<GReturn>(callback: () => GReturn): GReturn {
-  return runOutsideSignalChangeContext<GReturn>(callback);
+  return runInReactiveConsumerContext<GReturn>(undefined, callback);
 }
