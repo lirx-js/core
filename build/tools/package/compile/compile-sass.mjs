@@ -1,9 +1,5 @@
-// import { compile } from 'sass';
-import sass from 'sass';
+import { compile } from 'sass';
 import { minifyCss } from './minify-css.mjs';
-
-const { compile } = sass;
-
 
 export function compileSass(
   path,

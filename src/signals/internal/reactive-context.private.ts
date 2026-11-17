@@ -1,290 +1,537 @@
 import { EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction } from '@lirx/utils';
+import { createMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
+import { IMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
+import { IComputationFunction } from '../computed/types/computation-function.type';
+import { IEffetFunction } from '../effect/types/effet-function.type';
+import { SIGNAL } from '../signal/signal.symbol';
+import { IReadonlySignal } from '../signal/types/readonly-signal.type';
+import { ISignalUpdateFunctionCallback } from '../signal/types/signal-update-function-callback.type';
+import { IWatchCleanUpFunction } from '../watch/types/watch-clean-up-function.type';
+import { IWatchFunction } from '../watch/types/watch-function.type';
 import { SignalError } from './signal-error.class';
 
-/** PRODUCER **/
+/* --------------------------------------- SIGNAL NODE --------------------------------------- */
 
 /* TYPES */
 
-export interface IReactiveProducer<GValue> {
+export interface ISignalNode<GValue> {
   equal: IEqualFunction<GValue>;
   value: GValue | SignalError;
-  // list if nodes consuming this node
-  // INFO: using an array instead of a Set is less "accurate":
-  //  it creates unnecessary operations when the same signal is used multiple times in the same context.
-  //  However, it's faster (a Set us usually 2 times slower than an Array).
-  //  Thus, if we consider the statistically most prevalent usages of signals, globally, using Array is faster.
-  consumers: IGenericReactiveConsumer[];
+  watchers: IWatcherNode[];
 }
-
-export type IGenericReactiveProducer = IReactiveProducer<any>;
 
 /* INIT */
 
-export const REACTIVE_PRODUCER: IReactiveProducer<unknown> = {
+export const SIGNAL_NODE: ISignalNode<unknown> = {
   equal: EQUAL_FUNCTION_STRICT_EQUAL,
   value: undefined,
-  consumers: undefined as any,
+  watchers: undefined as any,
 };
 
-export function initReactiveProducer<GValue>(
-  producer: IReactiveProducer<GValue>,
+export function initSignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
   value: GValue | SignalError,
   equal: IEqualFunction<GValue> | undefined,
 ): void {
   if (equal) {
-    producer.equal = equal;
+    signalNode.equal = equal;
   }
 
-  producer.value = value;
-  producer.consumers = [];
+  signalNode.value = value;
+  signalNode.watchers = [];
 }
 
 /* FUNCTIONS */
 
-export function getReactiveProducerValue<GValue>(producer: IReactiveProducer<GValue>): GValue {
-  if (producer.value instanceof SignalError) {
-    throw producer.value.error;
-  }
-
-  return producer.value;
-}
-
-export function reactiveProducerGet<GValue>(producer: IReactiveProducer<GValue>): GValue {
-  consumeReactiveProducer(producer);
-  return getReactiveProducerValue<GValue>(producer);
-}
-
-export function reactiveProducerSet<GValue>(
-  producer: IReactiveProducer<GValue>,
-  value: GValue | SignalError,
-): void {
-  preventSignalWriteInConsumerContext();
-  setAndNotifyReactiveProducerValue<GValue>(producer, value);
-}
-
-export function setReactiveProducerValue<GValue>(
-  producer: IReactiveProducer<GValue>,
+export function isSignalNodeValueDifferentOfValue<GValue>(
+  signalNode: ISignalNode<GValue>,
   value: GValue | SignalError,
 ): boolean {
-  if (
-    producer.value instanceof SignalError ||
+  return (
+    signalNode.value instanceof SignalError ||
     value instanceof SignalError ||
-    !producer.equal(value, producer.value)
-  ) {
-    producer.value = value;
+    !signalNode.equal(value, signalNode.value)
+  );
+}
+
+export function readSignalNode<GValue>(signalNode: ISignalNode<GValue>): GValue {
+  if (signalNode.value instanceof SignalError) {
+    throw signalNode.value.error;
+  }
+
+  return signalNode.value;
+}
+
+export function writeSignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): boolean {
+  if (isSignalNodeValueDifferentOfValue<GValue>(signalNode, value)) {
+    signalNode.value = value;
     return true;
   } else {
     return false;
   }
 }
 
-export function setAndNotifyReactiveProducerValue<GValue>(
-  producer: IReactiveProducer<GValue>,
-  value: GValue | SignalError,
+export function watchSignalNode<GValue>(signalNode: ISignalNode<GValue>): void {
+  if (currentWatcher !== undefined && signalNode.watchers.at(-1) !== currentWatcher) {
+    signalNode.watchers.push(currentWatcher);
+  }
+}
+
+export function notifySignalNodeWatchers<GValue>(
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
 ): void {
-  if (setReactiveProducerValue(producer, value)) {
-    markReactiveProducerConsumerAsOutdated(producer);
-  }
-}
-
-export function markReactiveNodeConsumersAsMaybeOutdated(node: IGenericReactiveNode): void {
-  for (let i = 0; i < node.consumers.length; i++) {
-    node.consumers[i].maybeOutDated(node.consumers[i], node);
-  }
-}
-
-export function markReactiveProducerConsumerAsOutdated(producer: IGenericReactiveProducer): void {
-  for (let i = 0; i < producer.consumers.length; i++) {
-    producer.consumers[i].outdated(producer.consumers[i]);
-  }
-  producer.consumers = [];
-}
-
-/** CONSUMER **/
-
-/* TYPES */
-
-export interface IReactiveConsumer<GSelf extends IReactiveConsumer<GSelf>> {
-  maybeOutDated: (consumer: GSelf, node: IGenericReactiveNode) => void;
-  outdated: (consumer: GSelf) => void;
-}
-
-export type IGenericReactiveConsumer = IReactiveConsumer<any>;
-export type IOptionalGenericReactiveConsumer = IGenericReactiveConsumer | undefined;
-
-/* INIT */
-
-export const REACTIVE_CONSUMER: IGenericReactiveConsumer = {
-  maybeOutDated: undefined as any,
-  outdated: undefined as any,
-};
-
-export function initReactiveConsumer(consumer: IGenericReactiveConsumer): void {}
-
-/** SHARED **/
-
-/* CURRENT */
-
-let currentConsumer: IOptionalGenericReactiveConsumer = undefined;
-
-export function runInReactiveConsumerContext<GReturn>(
-  consumer: IOptionalGenericReactiveConsumer,
-  callback: () => GReturn,
-): GReturn {
-  const previousObserver: IOptionalGenericReactiveConsumer = currentConsumer;
-  currentConsumer = consumer;
-  try {
-    return callback();
-  } finally {
-    currentConsumer = previousObserver;
-  }
-}
-
-export function consumeReactiveProducer(producer: IReactiveProducer<any>): void {
-  if (currentConsumer !== undefined) {
-    bindReactiveConsumerWithReactiveProducer(currentConsumer, producer);
-  }
-}
-
-export function preventSignalWriteInConsumerContext(): void {
-  if (currentConsumer !== undefined) {
-    throw new Error('The signal cannot be written is this context.');
-  }
-}
-
-export function preventEffectCreationInConsumerContext(): void {
-  if (currentConsumer !== undefined) {
-    throw new Error('Cannot create an effect this context.');
-  }
-}
-
-/* FUNCTIONS */
-
-export function bindReactiveConsumerWithReactiveProducer(
-  consumer: IGenericReactiveConsumer,
-  producer: IGenericReactiveProducer,
-): void {
-  producer.consumers.push(consumer);
-}
-
-/** REACTIVE NODE **/
-
-/* CONSTANTS */
-
-const REACTIVE_NODE_STATE_FRESH = 0;
-const REACTIVE_NODE_STATE_MAYBE_OUTDATED = 1;
-const REACTIVE_NODE_STATE_OUTDATED = 2;
-const REACTIVE_NODE_STATE_COMPUTING = 3;
-
-type IReactiveNodeState =
-  | typeof REACTIVE_NODE_STATE_FRESH
-  | typeof REACTIVE_NODE_STATE_MAYBE_OUTDATED
-  | typeof REACTIVE_NODE_STATE_OUTDATED
-  | typeof REACTIVE_NODE_STATE_COMPUTING;
-
-/* TYPES */
-
-export interface IReactiveNodeComputationFunction<GValue> {
-  (): GValue;
-}
-
-export interface IReactiveNode<GValue>
-  extends IReactiveConsumer<IReactiveNode<GValue>>,
-    IReactiveProducer<GValue> {
-  computation: IReactiveNodeComputationFunction<GValue>;
-  state: IReactiveNodeState;
-  maybeOutdatedProducers: IGenericReactiveNode[];
-}
-
-export type IGenericReactiveNode = IReactiveNode<any>;
-
-/* INIT */
-
-export const REACTIVE_NODE: IGenericReactiveNode = {
-  ...REACTIVE_PRODUCER,
-  ...REACTIVE_CONSUMER,
-  computation: undefined as any,
-  state: REACTIVE_NODE_STATE_OUTDATED,
-  maybeOutdatedProducers: undefined as any,
-  maybeOutDated: reactiveNodeMaybeOutdated,
-  outdated: reactiveNodeOutdated,
-};
-
-export function initReactiveNode<GValue>(
-  node: IReactiveNode<GValue>,
-  computation: IReactiveNodeComputationFunction<GValue>,
-  equal: IEqualFunction<GValue> | undefined,
-): void {
-  initReactiveConsumer(node);
-  initReactiveProducer<GValue>(node, SignalError.UNSET, equal);
-  node.computation = computation;
-  node.maybeOutdatedProducers = [];
-}
-
-/* FUNCTIONS */
-
-export function reactiveNodeMaybeOutdated(
-  node: IGenericReactiveNode,
-  producer: IGenericReactiveNode,
-): void {
-  const _markReactiveNodeConsumersAsMaybeOutdated: boolean =
-    node.state === REACTIVE_NODE_STATE_FRESH;
-
-  node.state = REACTIVE_NODE_STATE_MAYBE_OUTDATED;
-  node.maybeOutdatedProducers.push(producer);
-
-  if (_markReactiveNodeConsumersAsMaybeOutdated) {
-    markReactiveNodeConsumersAsMaybeOutdated(node);
-  }
-}
-
-export function reactiveNodeOutdated(node: IGenericReactiveNode): void {
-  const _markReactiveNodeConsumersAsMayHaveChanged: boolean =
-    node.state === REACTIVE_NODE_STATE_FRESH;
-
-  node.state = REACTIVE_NODE_STATE_OUTDATED;
-  node.maybeOutdatedProducers = [];
-
-  if (_markReactiveNodeConsumersAsMayHaveChanged) {
-    markReactiveNodeConsumersAsMaybeOutdated(node);
-  }
-}
-
-export function runReactiveNodeComputation<GValue>(node: IReactiveNode<GValue>): void {
-  // console.assert(node.maybeOutdatedProducers.length === 0);
-
-  node.state = REACTIVE_NODE_STATE_COMPUTING;
-
-  let newValue: GValue | SignalError;
-  try {
-    newValue = runInReactiveConsumerContext<GValue>(node, node.computation);
-  } catch (error: unknown) {
-    newValue = new SignalError(error);
-  }
-
-  node.state = REACTIVE_NODE_STATE_FRESH;
-  setAndNotifyReactiveProducerValue<GValue>(node, newValue);
-}
-
-export function updateReactiveNode(node: IGenericReactiveNode): void {
-  if (node.state === REACTIVE_NODE_STATE_COMPUTING) {
-    throw new Error('Detected cycle in computations.');
-  } else if (node.state === REACTIVE_NODE_STATE_MAYBE_OUTDATED) {
-    if (node.maybeOutdatedProducers.length === 0) {
-      node.state = REACTIVE_NODE_STATE_FRESH;
-    } else {
-      updateReactiveNode(node.maybeOutdatedProducers.pop()!);
-      updateReactiveNode(node);
-    }
-  } else if (node.state === REACTIVE_NODE_STATE_OUTDATED) {
-    runReactiveNodeComputation(node);
+  while (signalNode.watchers.length > 0) {
+    const watcherNode: IWatcherNode = signalNode.watchers.pop()!;
+    watcherNode.onActivity<GValue>(watcherNode, signalNode, previousValue);
   }
 }
 
 /**
- * @public
+ * @deprecated `.splice(...)` cost a lost of performances, usually it's faster to perform the check inside `onActivity`
  */
-export function reactiveNodeGet<GValue>(node: IReactiveNode<GValue>): GValue {
-  updateReactiveNode(node);
-  return reactiveProducerGet<GValue>(node);
+export function removeSignalNodeWatcher<GValue>(
+  signalNode: ISignalNode<GValue>,
+  watcherNode: IWatcherNode,
+): void {
+  const index: number = signalNode.watchers.indexOf(watcherNode);
+  if (index !== -1) {
+    signalNode.watchers.splice(index, 1);
+  }
+}
+
+export function writeAndNotifySignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): void {
+  const currentValue: GValue | SignalError = signalNode.value;
+  if (writeSignalNode<GValue>(signalNode, value)) {
+    notifySignalNodeWatchers<GValue>(signalNode, currentValue);
+  }
+}
+
+export function updateSignalNode<GValue>(signalNode: ISignalNode<GValue>): void {
+  if (isComputedNode<GValue>(signalNode)) {
+    updateComputedNode<GValue>(signalNode);
+  }
+}
+
+export function preventSignalWriteInWatcherContext(): void {
+  if (currentWatcher !== undefined) {
+    throw new Error('The signal cannot be written is this context.');
+  }
+}
+
+/* METHODS */
+
+// GET
+
+export function signalGet<GValue>(signalNode: ISignalNode<GValue>): GValue {
+  watchSignalNode<GValue>(signalNode);
+  return readSignalNode<GValue>(signalNode);
+}
+
+// SET
+
+export function signalSet<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): void {
+  preventSignalWriteInWatcherContext();
+  writeAndNotifySignalNode<GValue>(signalNode, value);
+}
+
+export function signalThrow<GValue>(signalNode: ISignalNode<GValue>, error: unknown): void {
+  signalSet<GValue>(signalNode, new SignalError(error));
+}
+
+export function signalUpdate<GValue>(
+  signalNode: ISignalNode<GValue>,
+  updateFunction: ISignalUpdateFunctionCallback<GValue>,
+): void {
+  const currentValue: GValue = signalGet<GValue>(signalNode);
+  let value: GValue | SignalError;
+
+  try {
+    value = updateFunction(currentValue);
+  } catch (error: unknown) {
+    value = new SignalError(error);
+  }
+
+  signalSet<GValue>(signalNode, value);
+}
+
+/* ------ SIGNAL NODE WITH READONLY ------ */
+
+/* TYPES */
+
+export interface ISignalNodeWithReadonly<GValue> extends ISignalNode<GValue> {
+  readonlySignal: IReadonlySignal<GValue> | undefined;
+}
+
+/* INIT */
+
+export const SIGNAL_NODE_WITH_READONLY: ISignalNodeWithReadonly<unknown> = {
+  ...SIGNAL_NODE,
+  readonlySignal: undefined,
+};
+
+/* METHODS */
+
+export function signalAsReadonly<GValue>(
+  node: ISignalNodeWithReadonly<GValue>,
+): IReadonlySignal<GValue> {
+  if (node.readonlySignal === undefined) {
+    const readonlySignal: IReadonlySignal<GValue> = (): GValue => signalGet<GValue>(node);
+    readonlySignal[SIGNAL] = node;
+    node.readonlySignal = readonlySignal;
+  }
+  return node.readonlySignal;
+}
+
+/* --------------------------------------- WATCHER NODE --------------------------------------- */
+
+/* TYPES */
+
+export interface IWatcherNode {
+  onActivity: <GValue>(
+    self: IWatcherNode,
+    signalNode: ISignalNode<GValue>,
+    previousValue: GValue | SignalError,
+  ) => void;
+  signals: ISignalNodeWithValue<any>[];
+}
+
+export type ISignalNodeWithValue<GValue> = readonly [
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
+];
+
+/* INIT */
+
+export const WATCHER_NODE: IWatcherNode = {
+  onActivity: undefined as any,
+  signals: undefined as any,
+};
+
+export function initWatcherNode(watcherNode: IWatcherNode): void {
+  watcherNode.signals = [];
+}
+
+/* FUNCTIONS */
+
+export type IOptionalWatcherNode = IWatcherNode | undefined;
+
+let currentWatcher: IOptionalWatcherNode = undefined;
+
+export function runInWatcherContext<GReturn>(
+  watcher: IOptionalWatcherNode,
+  cb: () => GReturn,
+): GReturn {
+  const previousWatcher: IOptionalWatcherNode = currentWatcher;
+  currentWatcher = watcher;
+  try {
+    return cb();
+  } finally {
+    currentWatcher = previousWatcher;
+  }
+}
+
+export function isInWatcherContext(): boolean {
+  return currentWatcher !== undefined;
+}
+
+/**
+ * Returns `true` if the context should be updated or not.
+ */
+export function refreshWatcherNodeContext(watcherNode: IWatcherNode): boolean {
+  while (watcherNode.signals.length > 0) {
+    const [signalNode, value] = watcherNode.signals.pop()!;
+
+    updateSignalNode<any>(signalNode);
+
+    if (isSignalNodeValueDifferentOfValue<any>(signalNode, value)) {
+      return true;
+    } else {
+      signalNode.watchers.push(watcherNode);
+    }
+  }
+
+  return false;
+}
+
+export function clearWatcherNode(watcherNode: IWatcherNode): void {
+  watcherNode.signals = [];
+}
+
+/* --------------------------------------- COMPUTED NODE --------------------------------------- */
+
+export const COMPUTED_STATE_PROP = Symbol('STATE');
+
+export const enum COMPUTED_STATE {
+  UNSET,
+  OUTDATED,
+  COMPUTING,
+  UP_TO_DATE,
+}
+
+/* TYPES */
+
+export interface IComputedNode<GValue> extends IWatcherNode, ISignalNode<GValue> {
+  computation: IComputationFunction<GValue>;
+  [COMPUTED_STATE_PROP]: COMPUTED_STATE;
+}
+
+export function isComputedNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+): signalNode is IComputedNode<GValue> {
+  return COMPUTED_STATE_PROP in signalNode;
+}
+
+/* INIT */
+
+export const COMPUTED_NODE: IComputedNode<unknown> = {
+  ...WATCHER_NODE,
+  ...SIGNAL_NODE,
+  computation: undefined as any,
+  [COMPUTED_STATE_PROP]: COMPUTED_STATE.UNSET,
+  onActivity: onComputedNodeActivity as any,
+};
+
+export function initComputedNode<GValue>(
+  computedNode: IComputedNode<GValue>,
+  computation: IComputationFunction<GValue>,
+  equal: IEqualFunction<GValue> | undefined,
+): void {
+  initWatcherNode(computedNode);
+  initSignalNode<GValue>(computedNode, SignalError.UNSET, equal);
+  computedNode.computation = computation;
+}
+
+/* FUNCTIONS */
+
+export function onComputedNodeActivity<GValue>(
+  computedNode: IComputedNode<any>,
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
+): void {
+  computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.OUTDATED;
+  computedNode.signals.push([signalNode, previousValue]);
+  notifySignalNodeWatchers<GValue>(computedNode, computedNode.value);
+}
+
+export function isComputedNodeOutdated<GValue>(computedNode: IComputedNode<GValue>): boolean {
+  return computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.OUTDATED
+    ? refreshWatcherNodeContext(computedNode)
+    : computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.UNSET;
+}
+
+/**
+ * Returns `true` if the computation ran.
+ */
+export function updateComputedNode<GValue>(computedNode: IComputedNode<GValue>): boolean {
+  if (computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.COMPUTING) {
+    throw new Error('Detected cycle in computations.');
+  } else {
+    if (isComputedNodeOutdated<GValue>(computedNode)) {
+      computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.COMPUTING;
+
+      clearWatcherNode(computedNode);
+
+      let newValue: GValue | SignalError;
+      try {
+        newValue = runInWatcherContext<GValue>(computedNode, computedNode.computation);
+      } catch (error: unknown) {
+        newValue = new SignalError(error);
+      }
+
+      computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.UP_TO_DATE;
+
+      writeAndNotifySignalNode<GValue>(computedNode, newValue);
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+/* METHODS */
+
+export function computedGet<GValue>(computedNode: IComputedNode<GValue>): GValue {
+  updateComputedNode<GValue>(computedNode);
+  watchSignalNode(computedNode);
+  return readSignalNode<GValue>(computedNode);
+}
+
+/* --------------------------------------- WATCH NODE --------------------------------------- */
+
+/** EXPERIMENTAL **/
+
+/* TYPES */
+
+export interface IWatchNode<GValue> extends IWatcherNode {
+  signalNode: ISignalNode<GValue>;
+  watchFunction: IWatchFunction<GValue>;
+  running: boolean;
+  cleanUp: IWatchCleanUpFunction | undefined | void;
+}
+
+/* INIT */
+
+export const WATCH_NODE: IWatchNode<unknown> = {
+  ...WATCHER_NODE,
+  signalNode: undefined as any,
+  watchFunction: undefined as any,
+  running: true,
+  cleanUp: undefined,
+  onActivity: onWatchNodeActivity as any,
+};
+
+export function initWatchNode<GValue>(
+  watchNode: IWatchNode<GValue>,
+  signalNode: ISignalNode<GValue>,
+  watchFunction: IWatchFunction<GValue>,
+): void {
+  initWatcherNode(watchNode);
+  watchNode.signalNode = signalNode;
+  watchNode.watchFunction = watchFunction;
+}
+
+/* FUNCTIONS */
+
+export function onWatchNodeActivity<GValue>(
+  watchNode: IWatchNode<GValue>,
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
+): void {
+  if (watchNode.running) {
+    // console.assert(signalNode === watchNode.signalNode);
+
+    queueMicrotask((): void => {
+      if (watchNode.running) {
+        updateSignalNode<GValue>(watchNode.signalNode);
+
+        watchNode.signalNode.watchers.push(watchNode);
+
+        const differ: boolean = isSignalNodeValueDifferentOfValue<GValue>(
+          watchNode.signalNode,
+          previousValue,
+        );
+
+        if (differ) {
+          watchNode.cleanUp?.();
+          watchNode.cleanUp = watchNode.watchFunction(watchNode.signalNode.value);
+        }
+      }
+    });
+  }
+}
+
+export function initWatchNodeWatching<GValue>(watchNode: IWatchNode<GValue>): void {
+  watchNode.signalNode.watchers.push(watchNode);
+  updateSignalNode<GValue>(watchNode.signalNode);
+
+  watchNode.cleanUp = runInWatcherContext(undefined, (): IWatchCleanUpFunction | void => {
+    return watchNode.watchFunction(watchNode.signalNode.value);
+  });
+}
+
+export function stopWatchNode<GValue>(watchNode: IWatchNode<GValue>): void {
+  if (watchNode.running) {
+    watchNode.running = false;
+    // removeSignalNodeWatcher(watchNode.signalNode, watchNode);
+    watchNode.cleanUp?.();
+  }
+}
+
+export function preventWatchCreationInWatcherContext(): void {
+  if (currentWatcher !== undefined) {
+    throw new Error('Cannot create a watcher in this context.');
+  }
+}
+/* --------------------------------------- EFFECT NODE --------------------------------------- */
+
+/* CONSTANTS */
+
+export const enum EFFECT_STATE {
+  IDLE,
+  UPDATING,
+  STOPPED,
+}
+
+/* TYPES */
+
+export interface IEffectNode extends IWatcherNode {
+  effectFunction: IEffetFunction;
+  state: EFFECT_STATE;
+  cleanUpSource: IMulticastSource<void>;
+}
+
+/* INIT */
+
+export const EFFECT_NODE: IEffectNode = {
+  ...WATCHER_NODE,
+  effectFunction: undefined as any,
+  state: EFFECT_STATE.IDLE,
+  cleanUpSource: undefined as any,
+  onActivity: onEffectNodeActivity as any,
+};
+
+export function initEffectNode(effectNode: IEffectNode, effectFunction: IEffetFunction): void {
+  initWatcherNode(effectNode);
+  effectNode.effectFunction = effectFunction;
+}
+
+/* FUNCTIONS */
+
+export function onEffectNodeActivity<GValue>(
+  effectNode: IEffectNode,
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
+): void {
+  if (effectNode.state === EFFECT_STATE.IDLE) {
+    effectNode.state = EFFECT_STATE.UPDATING;
+    effectNode.signals.push([signalNode, previousValue]);
+    queueMicrotask((): void => {
+      if (effectNode.state !== EFFECT_STATE.STOPPED) {
+        if (isEffectNodeOutdated(effectNode)) {
+          effectNode.cleanUpSource.emit();
+          clearWatcherNode(effectNode);
+          runEffectNode(effectNode);
+        }
+        effectNode.state = EFFECT_STATE.IDLE;
+      }
+    });
+  }
+}
+
+export function isEffectNodeOutdated(effectNode: IEffectNode): boolean {
+  return refreshWatcherNodeContext(effectNode);
+}
+
+export function runEffectNode(effectNode: IEffectNode): void {
+  effectNode.cleanUpSource = createMulticastSource<void>();
+  runInWatcherContext(effectNode, (): void => {
+    effectNode.effectFunction(effectNode.cleanUpSource.subscribe);
+  });
+}
+
+export function stopEffectNode(effectNode: IEffectNode): void {
+  if (effectNode.state !== EFFECT_STATE.STOPPED) {
+    effectNode.state = EFFECT_STATE.STOPPED;
+    // effectNode.signals.forEach(([signalNode]: ISignalNodeWithValue<any>) => {
+    //   removeSignalNodeWatcher(signalNode, effectNode);
+    // });
+    effectNode.cleanUpSource.emit();
+  }
+}
+
+export function preventEffectCreationInWatcherContext(): void {
+  if (currentWatcher !== undefined) {
+    throw new Error('Cannot create an effect in this context.');
+  }
 }

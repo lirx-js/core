@@ -108,127 +108,154 @@ describe('effect', (): void => {
     });
   });
 
-  // describe('for computed signal', (): void => {
-  //   it('should be called immediately', (): Promise<void> => {
-  //     return new Promise<void>((resolve: () => void): void => {
-  //       const a = signal(1);
-  //       expect(a()).toBe(1);
-  //
-  //       const b = computed(() => a() + 1);
-  //       expect(b()).toBe(2);
-  //
-  //       effect((): void => {
-  //         expect(b()).toBe(2);
-  //         resolve();
-  //       });
-  //     });
-  //   });
-  //
-  //   it('should be called when a computed signal change', (): Promise<void> => {
-  //     return new Promise<void>((resolve: () => void): void => {
-  //       let setCount: number = 0;
-  //       let effectCount: number = 0;
-  //       let cleanUpCount: number = 0;
-  //
-  //       const set = (value: number): void => {
-  //         setCount++;
-  //         _a = value;
-  //         a.set(value);
-  //       };
-  //
-  //       const get = (): void => {
-  //         // expect(a()).toBe(_a);
-  //         expect(b()).toBe(_a + 1);
-  //       };
-  //
-  //       let _a: number;
-  //       const a = signal(0);
-  //       const b = computed(() => a() + 1);
-  //
-  //       set(0);
-  //       get();
-  //
-  //       effect((onCleanUp: IOnCleanUpFunction): void => {
-  //         effectCount++;
-  //         get();
-  //
-  //         if (effectCount === 1) {
-  //           expect(setCount).toBe(1);
-  //           onCleanUp((): void => {
-  //             cleanUpCount++;
-  //           });
-  //         } else if (effectCount === 2) {
-  //           expect(setCount).toBe(3);
-  //           expect(cleanUpCount).toBe(1);
-  //           resolve();
-  //         }
-  //       });
-  //
-  //       expect(effectCount).toBe(1);
-  //       set(2);
-  //       set(3);
-  //       expect(effectCount).toBe(1);
-  //     });
-  //   });
-  // });
-  //
-  // it('should accept a mix of writable and computed signals', async () => {
-  //   const a = signal(1);
-  //   expect(a()).toBe(1);
-  //
-  //   const b = signal(2);
-  //   expect(b()).toBe(2);
-  //
-  //   const c = computed(() => a() + b());
-  //   expect(c()).toBe(3);
-  //
-  //   let _c = c();
-  //
-  //   effect((): void => {
-  //     expect(a() + b()).toBe(_c);
-  //     expect(a() + b()).toBe(c());
-  //   });
-  //
-  //   await sleep(10);
-  //
-  //   a.set(3);
-  //   expect(c()).toBe(5);
-  //   _c = 5;
-  //
-  //   await sleep(10);
-  //
-  //   b.set(1);
-  //   expect(c()).toBe(4);
-  //   _c = 4;
-  //
-  //   await sleep(10);
-  // });
-  //
-  // it("should be called only once is computed value doesn't change", (): Promise<void> => {
-  //   return new Promise<void>((resolve: () => void, reject: (reason: any) => void): void => {
-  //     const a = signal(1);
-  //     expect(a()).toBe(1);
-  //
-  //     const b = computed(() => a() > 0);
-  //     expect(b()).toBe(true);
-  //
-  //     let count: number = -1;
-  //
-  //     effect((): void => {
-  //       count++;
-  //       if (count === 0) {
-  //         expect(b()).toBe(true);
-  //         queueMicrotask(() => {
-  //           a.set(2);
-  //         });
-  //         setTimeout(() => {
-  //           resolve();
-  //         }, 200);
-  //       } else if (count === 1) {
-  //         expect(b()).toBe(true);
-  //         reject('Should not be called again');
-  //       }
-  //     });
-  //   });
-  // });
+  describe('for computed signal', (): void => {
+    it('should be called immediately', (): Promise<void> => {
+      return new Promise<void>((resolve: () => void): void => {
+        const a = signal(1);
+        expect(a()).toBe(1);
+
+        const b = computed(() => a() + 1);
+        expect(b()).toBe(2);
+
+        effect((): void => {
+          expect(b()).toBe(2);
+          resolve();
+        });
+      });
+    });
+
+    it('should be called when a computed signal change', (): Promise<void> => {
+      return new Promise<void>((resolve: () => void): void => {
+        let setCount: number = 0;
+        let effectCount: number = 0;
+        let cleanUpCount: number = 0;
+
+        const set = (value: number): void => {
+          setCount++;
+          _a = value;
+          a.set(value);
+        };
+
+        const get = (): void => {
+          // expect(a()).toBe(_a);
+          expect(b()).toBe(_a + 1);
+        };
+
+        let _a: number;
+        const a = signal(0);
+        const b = computed(() => a() + 1);
+
+        set(0);
+        get();
+
+        effect((onCleanUp: IOnCleanUpFunction): void => {
+          effectCount++;
+          get();
+
+          if (effectCount === 1) {
+            expect(setCount).toBe(1);
+            onCleanUp((): void => {
+              cleanUpCount++;
+            });
+          } else if (effectCount === 2) {
+            expect(setCount).toBe(3);
+            expect(cleanUpCount).toBe(1);
+            resolve();
+          }
+        });
+
+        expect(effectCount).toBe(1);
+        set(2);
+        set(3);
+        expect(effectCount).toBe(1);
+      });
+    });
+  });
+
+  it('should accept a mix of writable and computed signals', async () => {
+    const a = signal(1);
+    expect(a()).toBe(1);
+
+    const b = signal(2);
+    expect(b()).toBe(2);
+
+    const c = computed(() => a() + b());
+    expect(c()).toBe(3);
+
+    let _c = c();
+
+    effect((): void => {
+      expect(a() + b()).toBe(_c);
+      expect(a() + b()).toBe(c());
+    });
+
+    await sleep(10);
+
+    a.set(3);
+    expect(c()).toBe(5);
+    _c = 5;
+
+    await sleep(10);
+
+    b.set(1);
+    expect(c()).toBe(4);
+    _c = 4;
+
+    await sleep(10);
+  });
+
+  it("should be called only once is computed value doesn't change", (): Promise<void> => {
+    return new Promise<void>((resolve: () => void, reject: (reason: any) => void): void => {
+      const a = signal(1);
+      expect(a()).toBe(1);
+
+      const b = computed(() => a() > 0);
+      expect(b()).toBe(true);
+
+      let count: number = -1;
+
+      effect((): void => {
+        count++;
+        if (count === 0) {
+          expect(b()).toBe(true);
+          queueMicrotask(() => {
+            a.set(2);
+          });
+          setTimeout(() => {
+            resolve();
+          }, 200);
+        } else if (count === 1) {
+          expect(b()).toBe(true);
+          reject('Should not be called again');
+        }
+      });
+    });
+  });
+
+  it('should run just once if a signal returns to its initial value', () => {
+    return new Promise<void>((resolve: () => void, reject: (reason: any) => void): void => {
+      let count: number = -1;
+
+      const a = signal(1);
+      expect(a()).toBe(1);
+
+      effect(() => {
+        count++;
+        if (count === 0) {
+          expect(a()).toBe(1);
+          queueMicrotask(() => {
+            a.set(2);
+            a.set(1);
+
+            setTimeout(() => {
+              a.set(3);
+            }, 10);
+          });
+        } else if (count === 1) {
+          expect(a()).toBe(3);
+          resolve();
+        }
+      });
+    });
+  });
 });

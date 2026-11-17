@@ -1,6 +1,6 @@
 import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-notifications-union.type';
 import { IObservable } from '../../observable/type/observable.type';
-import { initReactiveProducer } from '../internal/reactive-context.private';
+import { initSignalNode } from '../internal/reactive-context.private';
 
 import { SignalError } from '../internal/signal-error.class';
 import {
@@ -36,7 +36,7 @@ export function toSignal<GValue>(
   // preventCreationIfInSignalContext();
 
   const node: ISignalFromObservableNode<GValue> = Object.create(SIGNAL_FROM_OBSERVABLE_NODE);
-  initReactiveProducer(
+  initSignalNode<GValue>(
     node,
     options && 'initialValue' in options ? options.initialValue! : SignalError.UNSET,
     options?.equal,

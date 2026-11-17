@@ -125,6 +125,23 @@ describe('computed', () => {
       expect(b()).toBe(3);
     });
 
+    it('should handle interdependent signals - chain', () => {
+      const a = signal(1);
+      expect(a()).toBe(1);
+
+      const b = computed(() => a() > 10);
+      expect(b()).toBe(false);
+
+      const c = computed(() => b());
+      expect(c()).toBe(false);
+
+      a.set(2);
+      expect(c()).toBe(false);
+
+      a.set(20);
+      expect(c()).toBe(true);
+    });
+
     it('should handle interdependent signals - odd and even', async () => {
       const counter = signal(0);
       expect(counter()).toBe(0);
@@ -158,6 +175,7 @@ describe('computed', () => {
           return a() > 10;
         })();
       });
+
       expect(count1).toBe(0);
       expect(count2).toBe(0);
       expect(b()).toBe(false);
@@ -250,6 +268,31 @@ describe('computed', () => {
 
       a.set(20);
       expect(c()).toBe(true);
+      expect(count).toBe(2);
+    });
+
+    it('should run just once if a signal returns to its initial value', () => {
+      let count: number = 0;
+
+      const a = signal(1);
+      expect(a()).toBe(1);
+
+      const b = computed(() => {
+        count++;
+        return a();
+      });
+
+      expect(count).toBe(0);
+      expect(b()).toBe(1);
+      expect(count).toBe(1);
+
+      a.set(-1);
+      a.set(1);
+      expect(b()).toBe(1);
+      expect(count).toBe(1);
+
+      a.set(2);
+      expect(b()).toBe(2);
       expect(count).toBe(2);
     });
   });

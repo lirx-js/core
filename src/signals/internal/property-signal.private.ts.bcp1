@@ -1,0 +1,106 @@
+import { IObjectValueFromPropertyKey } from '../../others/property-observable/object-value-from-property-key.type';
+import {
+  ISignalNodeWithReadonly,
+  readSignalNode,
+  runInWatcherContext,
+  SIGNAL_NODE_WITH_READONLY,
+  watchSignalNode,
+  writeAndNotifySignalNode,
+} from './reactive-context.private';
+import { SignalError } from './signal-error.class';
+
+/* TYPES */
+
+export interface IPropertySignalNode<GObject extends object, GPropertyKey extends PropertyKey>
+  extends ISignalNodeWithReadonly<IObjectValueFromPropertyKey<GObject, GPropertyKey>> {
+  obj: GObject;
+  propertyKey: GPropertyKey;
+  updating: boolean;
+}
+
+/* INIT */
+
+export const PROPERTY_SIGNAL_NODE: IPropertySignalNode<any, any> = {
+  ...SIGNAL_NODE_WITH_READONLY,
+  obj: undefined,
+  propertyKey: undefined,
+  updating: false,
+};
+
+/* FUNCTIONS */
+
+// /**
+//  * Returns `true` if the computation ran.
+//  */
+// function readPropertySignalNodeValue<GValue>(node: IPropertySignalNode<GValue>): boolean {
+//   if (node.updating) {
+//     throw new Error('Detected cycle in computations.');
+//   } else {
+//     node.updating = true;
+//
+//     let newValue: GValue | SignalError;
+//     try {
+//       newValue = runInWatcherContext<GValue>(computedNode, computedNode.computation);
+//     } catch (error: unknown) {
+//       newValue = new SignalError(error);
+//     }
+//
+//     computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.UP_TO_DATE;
+//
+//     writeAndNotifySignalNode<GValue>(computedNode, newValue);
+//
+//     return true;
+//   }
+//
+//   // if (isInWatcherContext()) {
+//   //
+//   // } else {
+//   //
+//   // }
+// }
+
+/**
+ * Returns `true` if the computation ran.
+ */
+export function updatePropertySignalNode<GObject extends object, GPropertyKey extends PropertyKey>(
+  node: IPropertySignalNode<GObject, GPropertyKey>,
+): boolean {
+  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+
+  if (node.updating) {
+    throw new Error('Detected cycle in computations.');
+  } else {
+    node.updating = true;
+
+    let newValue: GValue | SignalError;
+    try {
+      newValue = runInWatcherContext<GValue>(undefined, (): GValue => {
+        return Reflect.get(node.obj, node.propertyKey);
+      });
+    } catch (error: unknown) {
+      newValue = new SignalError(error);
+    }
+
+    node.updating = false;
+
+    writeAndNotifySignalNode<GValue>(node, newValue);
+
+    return true;
+  }
+
+  // if (isInWatcherContext()) {
+  //
+  // } else {
+  //
+  // }
+}
+
+/* METHODS */
+
+export function propertySignalGet<GObject extends object, GPropertyKey extends PropertyKey>(
+  node: IPropertySignalNode<GObject, GPropertyKey>,
+): GValue {
+  updatePropertySignalNode(node);
+  watchSignalNode(node);
+  return readSignalNode<GValue>(node);
+}

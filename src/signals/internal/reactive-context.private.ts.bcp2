@@ -1,0 +1,420 @@
+import { EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction } from '@lirx/utils';
+import { createMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/create-multicast-source';
+import { IMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type';
+import { IComputationFunction } from '../computed/types/computation-function.type';
+import { IEffetFunction } from '../effect/types/effet-function.type';
+import { SIGNAL } from '../signal/signal.symbol';
+import { IReadonlySignal } from '../signal/types/readonly-signal.type';
+import { ISignalUpdateFunctionCallback } from '../signal/types/signal-update-function-callback.type';
+import { SignalError } from './signal-error.class';
+
+/* --------------------------------------- SIGNAL NODE --------------------------------------- */
+
+/* TYPES */
+
+export interface ISignalNode<GValue> {
+  equal: IEqualFunction<GValue>;
+  value: GValue | SignalError;
+  watchers: Set<IWatcherNode>;
+}
+
+/* INIT */
+
+export const SIGNAL_NODE: ISignalNode<unknown> = {
+  equal: EQUAL_FUNCTION_STRICT_EQUAL,
+  value: undefined,
+  watchers: undefined as any,
+};
+
+export function initSignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+  equal: IEqualFunction<GValue> | undefined,
+): void {
+  if (equal) {
+    signalNode.equal = equal;
+  }
+
+  signalNode.value = value;
+  signalNode.watchers = new Set<IWatcherNode>();
+}
+
+/* FUNCTIONS */
+
+export function isSignalNodeValueDifferentOfValue<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): boolean {
+  return (
+    signalNode.value instanceof SignalError ||
+    value instanceof SignalError ||
+    !signalNode.equal(value, signalNode.value)
+  );
+}
+
+export function readSignalNode<GValue>(signalNode: ISignalNode<GValue>): GValue {
+  if (signalNode.value instanceof SignalError) {
+    throw signalNode.value.error;
+  }
+
+  return signalNode.value;
+}
+
+export function writeSignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): boolean {
+  if (isSignalNodeValueDifferentOfValue<GValue>(signalNode, value)) {
+    signalNode.value = value;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function watchSignalNode(signalNode: ISignalNode<any>): void {
+  if (currentWatcher !== undefined) {
+    signalNode.watchers.add(currentWatcher);
+    // currentWatcher.signals.set(signalNode, signalNode.value);
+  }
+}
+
+export function notifySignalNodeWatchers<GValue>(
+  signalNode: ISignalNode<GValue>,
+  previousValue: GValue | SignalError,
+): void {
+  for (const watcherNode of signalNode.watchers) {
+    watcherNode.onActivity(watcherNode, signalNode, previousValue);
+  }
+
+  // signalNode.watchers.forEach((watcherNode: IWatcherNode): void => {
+  //   watcherNode.onActivity(watcherNode);
+  // });
+
+  clearSignalNode(signalNode);
+}
+
+export function clearSignalNode(signalNode: ISignalNode<any>): void {
+  signalNode.watchers.clear();
+}
+
+export function writeAndNotifySignalNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): void {
+  const currentValue: GValue | SignalError = signalNode.value;
+  if (writeSignalNode<GValue>(signalNode, value)) {
+    notifySignalNodeWatchers<GValue>(signalNode, currentValue);
+  }
+}
+
+export function preventSignalWriteInWatcherContext(): void {
+  if (currentWatcher !== undefined) {
+    throw new Error('The signal cannot be written is this context.');
+  }
+}
+
+/* METHODS */
+
+// GET
+
+export function signalGet<GValue>(signalNode: ISignalNode<GValue>): GValue {
+  watchSignalNode(signalNode);
+  return readSignalNode<GValue>(signalNode);
+}
+
+// SET
+
+export function signalSet<GValue>(
+  signalNode: ISignalNode<GValue>,
+  value: GValue | SignalError,
+): void {
+  preventSignalWriteInWatcherContext();
+  writeAndNotifySignalNode<GValue>(signalNode, value);
+}
+
+export function signalThrow<GValue>(signalNode: ISignalNode<GValue>, error: unknown): void {
+  signalSet<GValue>(signalNode, new SignalError(error));
+}
+
+export function signalUpdate<GValue>(
+  signalNode: ISignalNode<GValue>,
+  updateFunction: ISignalUpdateFunctionCallback<GValue>,
+): void {
+  const currentValue: GValue = signalGet<GValue>(signalNode);
+  let value: GValue | SignalError;
+
+  try {
+    value = updateFunction(currentValue);
+  } catch (error: unknown) {
+    value = new SignalError(error);
+  }
+
+  signalSet<GValue>(signalNode, value);
+}
+
+/* ------ SIGNAL NODE WITH READONLY ------ */
+
+/* TYPES */
+
+export interface ISignalNodeWithReadonly<GValue> extends ISignalNode<GValue> {
+  readonlySignal: IReadonlySignal<GValue> | undefined;
+}
+
+/* INIT */
+
+export const SIGNAL_NODE_WITH_READONLY: ISignalNodeWithReadonly<unknown> = {
+  ...SIGNAL_NODE,
+  readonlySignal: undefined,
+};
+
+/* METHODS */
+
+export function signalAsReadonly<GValue>(
+  node: ISignalNodeWithReadonly<GValue>,
+): IReadonlySignal<GValue> {
+  if (node.readonlySignal === undefined) {
+    const readonlySignal: IReadonlySignal<GValue> = (): GValue => signalGet<GValue>(node);
+    readonlySignal[SIGNAL] = node;
+    node.readonlySignal = readonlySignal;
+  }
+  return node.readonlySignal;
+}
+
+/* --------------------------------------- WATCHER NODE --------------------------------------- */
+
+/* TYPES */
+
+export interface IWatcherNode {
+  onActivity: (self: any, signalNode: any, previousValue: unknown) => void;
+  signals: Map<ISignalNode<unknown>, unknown>;
+}
+
+/* INIT */
+
+export const WATCHER_NODE: IWatcherNode = {
+  onActivity: undefined as any,
+  signals: undefined as any,
+};
+
+export function initWatcherNode(watcherNode: IWatcherNode): void {
+  watcherNode.signals = new Map<ISignalNode<unknown>, unknown>();
+}
+
+/* FUNCTIONS */
+
+export type IOptionalWatcherNode = IWatcherNode | undefined;
+
+let currentWatcher: IOptionalWatcherNode = undefined;
+
+export function runInWatcherContext<GReturn>(
+  watcher: IOptionalWatcherNode,
+  cb: () => GReturn,
+): GReturn {
+  const previousWatcher: IOptionalWatcherNode = currentWatcher;
+  currentWatcher = watcher;
+  try {
+    return cb();
+  } finally {
+    currentWatcher = previousWatcher;
+  }
+}
+
+/**
+ * returns `true` if the context should be updated or not.
+ */
+export function refreshWatcherNodeContext(watcherNode: IWatcherNode): boolean {
+  for (const [signalNode, value] of watcherNode.signals.entries()) {
+    if (isComputedNode(signalNode)) {
+      if (!updateComputedNode<unknown>(signalNode)) {
+        signalNode.watchers.add(watcherNode);
+      }
+      if (isSignalNodeValueDifferentOfValue(signalNode, value)) {
+        return true;
+      }
+    } else {
+      if (isSignalNodeValueDifferentOfValue(signalNode, value)) {
+        return true;
+      } else {
+        signalNode.watchers.add(watcherNode);
+      }
+    }
+  }
+
+  return false;
+}
+
+export function clearWatcherNode(watcherNode: IWatcherNode): void {
+  watcherNode.signals.clear();
+}
+
+/* --------------------------------------- COMPUTED NODE --------------------------------------- */
+
+export const COMPUTED_STATE_PROP = Symbol('STATE');
+
+export const enum COMPUTED_STATE {
+  UNSET,
+  OUTDATED,
+  COMPUTING,
+  UP_TO_DATE,
+}
+
+/* TYPES */
+
+export interface IComputedNode<GValue> extends IWatcherNode, ISignalNode<GValue> {
+  computation: IComputationFunction<GValue>;
+  [COMPUTED_STATE_PROP]: COMPUTED_STATE;
+}
+
+export function isComputedNode<GValue>(
+  signalNode: ISignalNode<GValue>,
+): signalNode is IComputedNode<GValue> {
+  return Object.hasOwn(signalNode, COMPUTED_STATE_PROP);
+}
+
+/* INIT */
+
+export const COMPUTED_NODE: IComputedNode<unknown> = {
+  ...WATCHER_NODE,
+  ...SIGNAL_NODE,
+  computation: undefined as any,
+  [COMPUTED_STATE_PROP]: COMPUTED_STATE.UNSET,
+  onActivity: onComputedNodeActivity,
+};
+
+export function initComputedNode<GValue>(
+  computedNode: IComputedNode<GValue>,
+  computation: IComputationFunction<GValue>,
+  equal: IEqualFunction<GValue> | undefined,
+): void {
+  initWatcherNode(computedNode);
+  initSignalNode<GValue>(computedNode, SignalError.UNSET, equal);
+  computedNode.computation = computation;
+}
+
+/* FUNCTIONS */
+
+export function onComputedNodeActivity(computedNode: IComputedNode<any>): void {
+  computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.OUTDATED;
+  notifySignalNodeWatchers(computedNode);
+}
+
+export function isComputedNodeOutdated(computedNode: IComputedNode<any>): boolean {
+  return computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.OUTDATED
+    ? refreshWatcherNodeContext(computedNode)
+    : computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.UNSET;
+}
+
+/**
+ * Returns `true` if the computation ran.
+ */
+export function updateComputedNode<GValue>(computedNode: IComputedNode<GValue>): boolean {
+  if (computedNode[COMPUTED_STATE_PROP] === COMPUTED_STATE.COMPUTING) {
+    throw new Error('Detected cycle in computations.');
+  } else {
+    if (isComputedNodeOutdated(computedNode)) {
+      computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.COMPUTING;
+
+      clearWatcherNode(computedNode);
+
+      let newValue: GValue | SignalError;
+      try {
+        newValue = runInWatcherContext<GValue>(computedNode, computedNode.computation);
+      } catch (error: unknown) {
+        newValue = new SignalError(error);
+      }
+
+      computedNode[COMPUTED_STATE_PROP] = COMPUTED_STATE.UP_TO_DATE;
+
+      writeAndNotifySignalNode<GValue>(computedNode, newValue);
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+/* METHODS */
+
+export function computedGet<GValue>(computedNode: IComputedNode<GValue>): GValue {
+  updateComputedNode<GValue>(computedNode);
+  watchSignalNode(computedNode);
+  return readSignalNode<GValue>(computedNode);
+}
+
+/* --------------------------------------- EFFECT NODE --------------------------------------- */
+
+/* CONSTANTS */
+
+export const enum EFFECT_STATE {
+  IDLE,
+  UPDATING,
+  STOPPED,
+}
+
+/* TYPES */
+
+export interface IEffectNode extends IWatcherNode {
+  effectFunction: IEffetFunction;
+  state: EFFECT_STATE;
+  cleanUpSource: IMulticastSource<void>;
+}
+
+/* INIT */
+
+export const EFFECT_NODE: IEffectNode = {
+  ...WATCHER_NODE,
+  effectFunction: undefined as any,
+  state: EFFECT_STATE.IDLE,
+  cleanUpSource: undefined as any,
+  onActivity: onEffectNodeActivity,
+};
+
+export function initEffectNode(effectNode: IEffectNode): void {
+  initWatcherNode(effectNode);
+}
+
+/* FUNCTIONS */
+
+export function onEffectNodeActivity(effectNode: IEffectNode): void {
+  if (effectNode.state === EFFECT_STATE.IDLE) {
+    effectNode.state = EFFECT_STATE.UPDATING;
+    queueMicrotask((): void => {
+      if (effectNode.state !== EFFECT_STATE.STOPPED) {
+        if (isEffectNodeOutdated(effectNode)) {
+          effectNode.cleanUpSource.emit();
+          runEffectNode(effectNode);
+        } else {
+          effectNode.state = EFFECT_STATE.IDLE;
+        }
+      }
+    });
+  }
+}
+
+export function isEffectNodeOutdated(effectNode: IEffectNode): boolean {
+  return refreshWatcherNodeContext(effectNode);
+}
+
+export function runEffectNode(effectNode: IEffectNode): void {
+  clearWatcherNode(effectNode);
+  effectNode.cleanUpSource = createMulticastSource<void>();
+  runInWatcherContext(effectNode, (): void => {
+    effectNode.effectFunction(effectNode.cleanUpSource.subscribe);
+  });
+  effectNode.state = EFFECT_STATE.IDLE;
+}
+
+export function stopEffectNode(effectNode: IEffectNode): void {
+  if (effectNode.state !== EFFECT_STATE.STOPPED) {
+    effectNode.state = EFFECT_STATE.STOPPED;
+    effectNode.cleanUpSource.emit();
+  }
+}
+
+export function preventEffectCreationInWatcherContext(): void {
+  if (currentWatcher !== undefined) {
+    throw new Error('Cannot create an effect this context.');
+  }
+}

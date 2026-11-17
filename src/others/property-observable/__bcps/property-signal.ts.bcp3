@@ -1,0 +1,47 @@
+import { createIdle } from '@lirx/utils';
+import { computed } from '../../signals/computed/computed';
+import { signal } from '../../signals/signal/signal';
+import { ICreateSignalOptions } from '../../signals/signal/types/create-signal-options.type';
+import { ISignal } from '../../signals/signal/types/signal.type';
+import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type';
+
+export function propertySignal<GObject extends object, GPropertyKey extends PropertyKey>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+  options?: ICreateSignalOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>>,
+): IComputedSignal<IObjectValueFromPropertyKey<GObject, GPropertyKey>> {
+  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+
+  const untilNextTick: (nextTick: () => void) => void = requestIdleCallback;
+
+  let observing: boolean = false;
+  const observe = (): void => {
+    untilNextTick(() => {
+
+    });
+  };
+
+  return computed((): GValue => {
+    const value: ISignal<GValue> = signal<GValue>(Reflect.get(obj, propertyKey));
+    untilNextTick(() => {
+
+    });
+    return value();
+  });
+  // type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+  //
+  // const node: ISignalNodeWithReadonly<GValue> = Object.create(PROPERTY_SIGNAL_NODE);
+  // initSignalNode<GValue>(node, Reflect.get(obj, propertyKey), options?.equal);
+  //
+  // const signal: ISignal<GValue> = ((): GValue =>
+  //   propertySignalGet<GValue>(node)) as ISignal<GValue>;
+  // signal[SIGNAL] = node;
+  //
+  // signal.set = (value: GValue): void => signalSet<GValue>(node, value);
+  // signal.throw = (error: unknown): void => signalThrow<GValue>(node, error);
+  // signal.update = (updateFunction: ISignalUpdateFunctionCallback<GValue>): void =>
+  //   signalUpdate<GValue>(node, updateFunction);
+  // signal.asReadonly = (): IReadonlySignal<GValue> => signalAsReadonly<GValue>(node);
+  //
+  // return signal;
+}

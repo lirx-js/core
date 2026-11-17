@@ -1,37 +1,24 @@
 import {
-  EFFECT_CONTEXT,
-  effectContextRunInContext,
-  effectContextStop,
-  IEffectContext,
-} from '../internal/effect.private';
-import {
-  initReactiveConsumer,
-  preventEffectCreationInConsumerContext,
+  EFFECT_NODE,
+  IEffectNode,
+  initEffectNode,
+  preventEffectCreationInWatcherContext,
+  runEffectNode,
+  stopEffectNode,
 } from '../internal/reactive-context.private';
+
 import { IEffetFunction } from './types/effet-function.type';
 import { IUnsubscribeOfEffect } from './types/unsubscribe-of-effect.type';
 
-let inEffect: boolean = false;
-
 export function effect(effectFunction: IEffetFunction): IUnsubscribeOfEffect {
-  preventEffectCreationInConsumerContext();
+  preventEffectCreationInWatcherContext();
 
-  if (inEffect) {
-    throw new Error('Detected nested effects.');
-  } else {
-    inEffect = true;
-    try {
-      const context: IEffectContext = Object.create(EFFECT_CONTEXT);
-      initReactiveConsumer(context);
-      context.effectFunction = effectFunction;
+  const node: IEffectNode = Object.create(EFFECT_NODE);
+  initEffectNode(node, effectFunction);
 
-      effectContextRunInContext(context);
+  runEffectNode(node);
 
-      return (): void => {
-        effectContextStop(context);
-      };
-    } finally {
-      inEffect = false;
-    }
-  }
+  return (): void => {
+    stopEffectNode(node);
+  };
 }

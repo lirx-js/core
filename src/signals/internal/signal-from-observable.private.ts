@@ -2,8 +2,15 @@ import { futureUnsubscribe } from '@lirx/unsubscribe';
 import { defaultNotificationObserver } from '../../misc/notifications/default-notification-observer';
 import { IDefaultInNotificationsUnion } from '../../misc/notifications/default-notifications-union.type';
 import { IObservable, IUnsubscribeOfObservable } from '../../observable/type/observable.type';
-import { reactiveProducerGet } from './reactive-context.private';
-import { ISignalNode, SIGNAL_NODE, signalSet, signalThrow } from './signal.private';
+import {
+  ISignalNode,
+  SIGNAL_NODE,
+  signalGet,
+  signalSet,
+  signalThrow,
+} from './reactive-context.private';
+
+/* TYPES */
 
 export interface ISignalFromObservableNode<GValue> extends ISignalNode<GValue> {
   active: boolean;
@@ -11,6 +18,8 @@ export interface ISignalFromObservableNode<GValue> extends ISignalNode<GValue> {
   value$: IObservable<GValue> | IObservable<IDefaultInNotificationsUnion<GValue>>;
   unsubscribe: IUnsubscribeOfObservable;
 }
+
+/* INIT */
 
 export const SIGNAL_FROM_OBSERVABLE_NODE: ISignalFromObservableNode<unknown> = {
   ...SIGNAL_NODE,
@@ -20,8 +29,10 @@ export const SIGNAL_FROM_OBSERVABLE_NODE: ISignalFromObservableNode<unknown> = {
   unsubscribe: undefined as any,
 };
 
+/* METHODS */
+
 export function signalFromObservableGet<GValue>(node: ISignalFromObservableNode<GValue>): GValue {
-  return reactiveProducerGet<GValue>(node);
+  return signalGet<GValue>(node);
 }
 
 export function signalFromObservableIsActive<GValue>(

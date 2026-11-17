@@ -1,0 +1,145 @@
+import { EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction } from '@lirx/utils';
+import { idle } from '../../observable/built-in/from/without-notifications/time-related/idle/idle';
+import { IObservable } from '../../observable/type/observable.type';
+import { getPropertyDescriptor } from './get-property-descriptor';
+import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type';
+
+export interface IPropertyObserverOnChangeFunction<GValue> {
+  (previousValue: GValue | undefined, currentValue: GValue): void;
+}
+
+export interface IPropertyObserverOptions<GValue> {
+  readonly equal?: IEqualFunction<GValue>;
+  readonly getterSource?: IObservable<any>;
+}
+
+export function propertyObserver<GObject, GPropertyKey extends PropertyKey>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+  onChange: IPropertyObserverOnChangeFunction<IObjectValueFromPropertyKey<GObject, GPropertyKey>>,
+  {
+    equal = EQUAL_FUNCTION_STRICT_EQUAL,
+    getterSource = idle(),
+  }: IPropertyObserverOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
+): void {
+  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+
+  const descriptor: TypedPropertyDescriptor<GValue> | undefined = getPropertyDescriptor<
+    GObject,
+    GPropertyKey
+  >(obj, propertyKey);
+
+  // const verifyThis = (_this: any): void => {
+  //   if (_this !== obj) {
+  //     throw new Error('Different this.');
+  //   }
+  // };
+
+  let value: any;
+
+  const change = (previousValue: GValue | undefined, currentValue: GValue): void => {
+    if (!equal(previousValue!, currentValue)) {
+      onChange(previousValue, currentValue);
+    }
+  };
+
+  if (descriptor === undefined || 'value' in descriptor) {
+    let value: any = descriptor?.value;
+
+    const get = (): GValue => {
+      return value;
+    };
+
+    const set = function (this: any, currentValue: GValue): void {
+      if (this === obj) {
+        const previousValue: GValue = value;
+        value = currentValue;
+        change(previousValue, currentValue);
+      } else {
+        Reflect.set(this, propertyKey, currentValue, this);
+      }
+    };
+
+    Object.defineProperty(obj, propertyKey, {
+      configurable: false,
+      enumerable: true,
+      get,
+      set,
+    });
+  } else {
+    const _get: (() => GValue) | undefined = descriptor.get;
+    const _set: ((value: GValue) => void) | undefined = descriptor.set;
+
+    if (_get === undefined) {
+      if (_set === undefined) {
+        throw new Error('Invalid case.');
+      } else {
+        // pure setter
+        if ('set' in descriptor) {
+          let value: any;
+
+          const set = function (this: any, currentValue: GValue): void {
+            _set.call(this, currentValue);
+
+            if (this === obj) {
+              const previousValue: GValue = value;
+              value = currentValue;
+              change(previousValue, currentValue);
+            }
+          };
+
+          Object.defineProperty(obj, propertyKey, {
+            configurable: false,
+            enumerable: descriptor.enumerable,
+            set,
+          });
+        }
+      }
+    } else {
+      if (_set === undefined) {
+        // pure getter
+        let value: any;
+
+        getterSource((): void => {
+
+        });
+
+        Object.defineProperty(obj, propertyKey, {
+          configurable: false,
+          enumerable: descriptor.enumerable,
+          get: _get,
+        });
+      } else {
+      }
+    }
+
+    // const update = idle();
+    //
+    // let get: () => GValue;
+    //
+    // if ('get' in descriptor) {
+    //   update((): void => {
+    //     signalSet<GValue>(node, descriptor.get!());
+    //   });
+    // } else {
+    //   get = (): GValue => {
+    //     return readSignalNode<GValue>(node);
+    //   };
+    // }
+    //
+    // Object.defineProperty(obj, propertyKey, {
+    //   configurable: false,
+    //   get: (): GValue => {
+    //     const value = isSignalNodeValueDifferentOfValue;
+    //     const signalValue: any = readSignalNode<GValue>(node);
+    //   },
+    //   set: (value: GValue): void => {
+    //     signalSet<GValue>(node, value);
+    //   },
+    // });
+    //
+    // if (descriptor.get !== undefined) {
+    //   throw new Error('Im');
+    // }
+  }
+}

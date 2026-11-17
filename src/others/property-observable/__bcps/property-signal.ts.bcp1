@@ -1,0 +1,140 @@
+import { idle } from '../../observable/built-in/from/without-notifications/time-related/idle/idle';
+import {
+  initSignalNode,
+  ISignalNodeWithReadonly, isSignalNodeValueDifferentOfValue,
+  readSignalNode,
+  SIGNAL_NODE_WITH_READONLY,
+  signalAsReadonly,
+  signalGet,
+  signalSet,
+  signalThrow,
+  signalUpdate
+} from '../internal/reactive-context.private';
+import { SIGNAL } from './signal.symbol';
+import { ICreateSignalOptions } from './types/create-signal-options.type';
+import { IReadonlySignal } from './types/readonly-signal.type';
+import { ISignalUpdateFunctionCallback } from './types/signal-update-function-callback.type';
+import { ISignal } from './types/signal.type';
+
+const OBJECT_PROTOTYPE = Object.getPrototypeOf({});
+
+export function getPropertyDescriptor<GObject, GPropertyKey extends keyof GObject>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+): TypedPropertyDescriptor<GObject[GPropertyKey]> | undefined {
+  let descriptor: TypedPropertyDescriptor<GObject[GPropertyKey]> | undefined;
+
+  while (
+    obj !== OBJECT_PROTOTYPE &&
+    (descriptor = Object.getOwnPropertyDescriptor(obj, propertyKey)) === undefined
+  ) {
+    obj = Object.getPrototypeOf(obj);
+  }
+
+  return descriptor;
+}
+
+export function propertySignal<GObject, GPropertyKey extends keyof GObject>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+  onChange: () => void,
+  options?: ICreateSignalOptions<GObject[GPropertyKey]>,
+): ISignal<GObject[GPropertyKey]> {
+  // preventCreationIfInSignalContext();
+  type GValue = GObject[GPropertyKey];
+
+  const descriptor: TypedPropertyDescriptor<GObject[GPropertyKey]> | undefined =
+    getPropertyDescriptor<GObject, GPropertyKey>(obj, propertyKey);
+
+  // const initialValue: GObject[GPropertyKey] = Reflect.get(obj as object, propertyKey);
+
+  if (descriptor === undefined || 'value' in descriptor) {
+    Object.defineProperty(obj, propertyKey, {
+      configurable: false,
+      get: (): GValue => {
+        return readSignalNode<GValue>(node);
+      },
+      set: (value: GValue): void => {
+        signalSet<GValue>(node, value);
+      },
+    });
+  } else {
+    const update = idle();
+
+    let get: () => GValue;
+
+    if ('get' in descriptor) {
+      update((): void => {
+        signalSet<GValue>(node, descriptor.get!());
+      });
+    } else {
+      get = (): GValue => {
+        return readSignalNode<GValue>(node);
+      };
+    }
+
+    Object.defineProperty(obj, propertyKey, {
+      configurable: false,
+      get: (): GValue => {
+        const value = isSignalNodeValueDifferentOfValue
+        const signalValue: any = readSignalNode<GValue>(node);
+      },
+      set: (value: GValue): void => {
+        signalSet<GValue>(node, value);
+      },
+    });
+
+    if (descriptor.get !== undefined) {
+      throw new Error('Im');
+    }
+  }
+
+  const get =
+    descriptor === undefined || descriptor.get === undefined
+      ? (): GValue => {
+          return signalGet<GValue>(node);
+        }
+      : (): GValue => {
+          const value = descriptor!.get!();
+          signalSet<GValue>(node, value);
+        };
+
+  const set =
+    descriptor === undefined || descriptor.set === undefined
+      ? (value: GValue): void => {
+          signalSet<GValue>(node, value);
+        }
+      : (value: GValue): void => {
+          descriptor!.set!(value);
+          signalSet<GValue>(node, value);
+        };
+
+  /*---*/
+
+  const node: ISignalNodeWithReadonly<GValue> = Object.create(SIGNAL_NODE_WITH_READONLY);
+  initSignalNode<GValue>(node, instance[key], options?.equal);
+
+  const signal: ISignal<GValue> = ((): GValue => signalGet<GValue>(node)) as ISignal<GValue>;
+  signal[SIGNAL] = node;
+
+  signal.set = (value: GValue): void => signalSet<GValue>(node, value);
+  signal.throw = (error: unknown): void => signalThrow<GValue>(node, error);
+  signal.update = (updateFunction: ISignalUpdateFunctionCallback<GValue>): void =>
+    signalUpdate<GValue>(node, updateFunction);
+  signal.asReadonly = (): IReadonlySignal<GValue> => signalAsReadonly<GValue>(node);
+
+  /*---*/
+
+  Object.defineProperty(instance, key, {
+    ...descriptor,
+    configurable: false,
+    get: (): GValue => {
+      return signalGet<GValue>(node);
+    },
+    set: (value: GValue): void => {
+      signalSet<GValue>(node, value);
+    },
+  });
+
+  return signal;
+}

@@ -4,7 +4,7 @@
   "description": "Blazing fast Observables and Signals",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lirx-js/core"
+    "url": "git+https://github.com/lirx-js/core.git"
   },
   "keywords": [
     "rxjs",
@@ -32,5 +32,5 @@
     "@lirx/unsubscribe",
     "@lirx/utils"
   ],
-  "packageManager": "yarn@4.1.0"
+  "packageManager": "yarn@4.3.1"
 }

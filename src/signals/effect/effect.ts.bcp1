@@ -1,0 +1,36 @@
+import {
+  EFFECT_NODE,
+  IEffectNode,
+  initEffectNode,
+  preventEffectCreationInWatcherContext,
+  runEffectNode,
+  stopEffectNode,
+} from '../internal/reactive-context.private';
+
+import { IEffetFunction } from './types/effet-function.type';
+import { IUnsubscribeOfEffect } from './types/unsubscribe-of-effect.type';
+
+let inEffect: boolean = false;
+
+export function effect(effectFunction: IEffetFunction): IUnsubscribeOfEffect {
+  preventEffectCreationInWatcherContext();
+
+  if (inEffect) {
+    throw new Error('Detected nested effects.');
+  } else {
+    inEffect = true;
+    try {
+      const node: IEffectNode = Object.create(EFFECT_NODE);
+      initEffectNode(node);
+      node.effectFunction = effectFunction;
+
+      runEffectNode(node);
+
+      return (): void => {
+        stopEffectNode(node);
+      };
+    } finally {
+      inEffect = false;
+    }
+  }
+}

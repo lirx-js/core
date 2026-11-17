@@ -1,14 +1,15 @@
-import { initReactiveProducer } from '../internal/reactive-context.private';
-import { SignalError } from '../internal/signal-error.class';
 import {
-  ISignalNode,
-  SIGNAL_NODE,
+  initSignalNode,
+  ISignalNodeWithReadonly,
+  SIGNAL_NODE_WITH_READONLY,
   signalAsReadonly,
   signalGet,
   signalSet,
   signalThrow,
   signalUpdate,
-} from '../internal/signal.private';
+} from '../internal/reactive-context.private';
+import { SignalError } from '../internal/signal-error.class';
+
 import { SIGNAL } from './signal.symbol';
 import { ICreateSignalOptions } from './types/create-signal-options.type';
 import { IReadonlySignal } from './types/readonly-signal.type';
@@ -21,8 +22,8 @@ export function signal<GValue>(
 ): ISignal<GValue> {
   // preventCreationIfInSignalContext();
 
-  const node: ISignalNode<GValue> = Object.create(SIGNAL_NODE);
-  initReactiveProducer<GValue>(node, initialValue, options?.equal);
+  const node: ISignalNodeWithReadonly<GValue> = Object.create(SIGNAL_NODE_WITH_READONLY);
+  initSignalNode<GValue>(node, initialValue, options?.equal);
 
   const signal: ISignal<GValue> = ((): GValue => signalGet<GValue>(node)) as ISignal<GValue>;
   signal[SIGNAL] = node;

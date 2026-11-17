@@ -1,0 +1,43 @@
+import { EQUAL_FUNCTION_STRICT_EQUAL } from '@lirx/utils';
+import { toSignal } from '../../signals/signal-from-observable/to-signal';
+import { ISignalFromObservable } from '../../signals/signal-from-observable/types/signal-from-observable.type';
+import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type';
+import { IPropertyObservableOptions, propertyObservable } from './property-observable';
+
+export interface IPropertySignalOptions<GValue> extends IPropertyObservableOptions<GValue> {}
+
+export function propertySignal<GObject extends object, GPropertyKey extends PropertyKey>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+  {
+    equal = EQUAL_FUNCTION_STRICT_EQUAL,
+    ...options
+  }: IPropertySignalOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
+): ISignalFromObservable<IObjectValueFromPropertyKey<GObject, GPropertyKey>> {
+  return toSignal<IObjectValueFromPropertyKey<GObject, GPropertyKey>>(
+    propertyObservable<GObject, GPropertyKey>(obj, propertyKey, {
+      ...options,
+      equal,
+    }),
+    {
+      equal,
+    },
+  );
+  // type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+  //
+  // const node: ISignalFromObservableNode<GValue> = Object.create(SIGNAL_FROM_OBSERVABLE_NODE);
+  // initSignalNode<GValue>(node, SignalError.UNSET, options?.equal);
+  // node.value$ = propertyObservable<GObject, GPropertyKey>(obj, propertyKey);
+  //
+  // const signal: ISignalFromObservable<GValue> = ((): GValue =>
+  //   signalFromObservableGet(node)) as ISignalFromObservable<GValue>;
+  // signal[SIGNAL] = node;
+  //
+  // signal.isActive = (): boolean => signalFromObservableIsActive(node);
+  // signal.activate = (activate?: boolean): void =>
+  //   signalFromObservableActivateOrDeactivateForRawValue(node, activate);
+  //
+  // signal.activate(true);
+  //
+  // return signal;
+}

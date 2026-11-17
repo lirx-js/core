@@ -8,9 +8,9 @@
 - Memory: 32Go
 - OS: Ubuntu 20.04 LTS
 - Browser: Chrome 121
-- Date: 2024-02-20
-- @lirx/core: 1.6.0
-- angular: 17.2.1
+- Date: 2024-06-21
+- @lirx/core: 1.7.0
+- angular: 18.0.4
 
 ---
 
@@ -132,11 +132,11 @@ run();
 
 #### Angular
 
-![](./assets/angular/run0.png)
+![](./assets/angular/run0--2024-06-21--angular.png)
 
 #### @lirx/core
 
-![](./assets/lirx-core/run0.png)
+![](./assets/lirx-core/run0--2024-06-21-lirx-core.png)
 
 #### Comments
 
@@ -147,25 +147,25 @@ Reading signals is extremely fast too (`read-signals`, `read-computed-signals`),
 avoiding unnecessary recomputation, and having similar performances.
 
 Differences happens when we update signals (`update-signals`):
-Angular is far faster (10ms vs 175ms) as it simply marks the signal as `outdated` without notifying its observers.
+Angular is far faster (8ms vs 918ms) as it simply marks the signal as `outdated` without notifying its observers.
 In the contrary, `@lirx/core` chose to immediately notify the observers, costing more to mark all observers as `outdated` too.
-However, consecutive signal writes (`update-signals-2`) have similar performances, with a small advantage for `@lirx/core`.
+However, consecutive signal writes (`update-signals-2`) have similar performances.
 
 The choice to notify immediately the observers, was done to increase the performances when Signals are observed through `effect`.
-And we may immediately see the difference: the first `effect` (`effect-0`) takes ~1500ms with angular versus ~700ms with `@lirx/core`.
-A gain of 800ms ! For applications using a lot of `effect`, this is a huge boost.
+And we may immediately see the difference: the first `effect` (`effect-0`) takes ~1550ms with angular versus ~1010ms with `@lirx/core`.
+A gain of 540ms ! For applications using a lot of `effect`, this is a huge boost.
 We consider that in practice, we will use far more `effect` to be able to observe signal changes (to update the DOM for example),
 that we'll mutate their value in an unobserved context.
 
-`effect-1` updates the values of all the signals, and we may see that Angular remains the champion (48ms vs 234ms)
+`effect-1` updates the values of all the signals, and we may see that Angular remains the champion (78ms vs 611ms)
 as we have the same behaviour as `update-signals`. But the gap is reduced.
 
 However, with `effect-1.1` (when the effect is called again due to the previous changes),
 we may see the absolute boost of immediately notifying the observers:
-2100ms for Angular versus 20ms with `@lirx/core`. It's just crunching the stats.
+2633ms for Angular versus 10ms with `@lirx/core`. It's just crunching the stats.
 
-If we cumulate both writing (faster on Angular) and observing (faster on `@lirx/core`), we get: 48 + 2102 = 2150ms vs 234 + 18 = 252ms.
-So `@lirx/core` outperforms Angular by a factor of **8** (if we consider that observing the values is more important that updating them).
+If we cumulate both writing (faster on Angular) and observing (faster on `@lirx/core`), we get: 78 + 2633 = 2711ms vs 611 + 10 = 621ms.
+So `@lirx/core` outperforms Angular by a factor of **4** (if we consider that observing the values is more important that updating them).
 But fundamentally, this is the purpose of Signals: being observable and react to their changes.
 So we think our choice is the right one.
 

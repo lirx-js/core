@@ -1,0 +1,135 @@
+import { EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction } from '@lirx/utils';
+import { getPropertyDescriptor } from './get-property-descriptor';
+import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type';
+
+export interface IPropertyObserverOnChangeFunction<GValue> {
+  (previousValue: GValue | undefined, currentValue: GValue): void;
+}
+
+export interface IPropertyObserverOptions<GValue> {
+  readonly equal?: IEqualFunction<GValue>;
+}
+
+export function propertyObserver<GObject, GPropertyKey extends PropertyKey>(
+  obj: GObject,
+  propertyKey: GPropertyKey,
+  onChange: IPropertyObserverOnChangeFunction<IObjectValueFromPropertyKey<GObject, GPropertyKey>>,
+  {
+    equal = EQUAL_FUNCTION_STRICT_EQUAL,
+  }: IPropertyObserverOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
+): void {
+  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+
+  const descriptor: TypedPropertyDescriptor<GValue> | undefined = getPropertyDescriptor<
+    GObject,
+    GPropertyKey
+  >(obj, propertyKey);
+
+  if (descriptor === undefined) {
+    const values: WeakMap<any, any> = new WeakMap<any, any>();
+
+    const get = function (this: any): GValue {
+      return values.get(this);
+    };
+
+    const set = function (this: any, currentValue: GValue): void {
+      const previousValue: GValue = get.call(this);
+      values.set(this, currentValue);
+      if (!equal(previousValue, currentValue)) {
+        onChange(previousValue, currentValue);
+      }
+    };
+
+    Object.defineProperty(obj, propertyKey, {
+      configurable: false,
+      enumerable: true,
+      get,
+      set,
+    });
+  } else {
+    if ('value' in descriptor) {
+      const values: WeakMap<any, any> = new WeakMap<any, any>();
+      const initialValue: GValue = descriptor.value!;
+
+      const get = function (this: any): GValue {
+        return values.get(this) ?? initialValue;
+      };
+
+      const set = function (this: any, currentValue: GValue): void {
+        const previousValue: GValue = get.call(this);
+        values.set(this, currentValue);
+        if (!equal(previousValue, currentValue)) {
+          onChange(previousValue, currentValue);
+        }
+      };
+
+      Object.defineProperty(obj, propertyKey, {
+        configurable: false,
+        enumerable: descriptor.enumerable,
+        get,
+        set,
+      });
+
+      onChange(undefined, initialValue);
+    } else {
+      if ('get' in descriptor) {
+        if ('set' in descriptor) {
+        }
+      } else {
+        // setter only
+        if ('set' in descriptor) {
+          const values: WeakMap<any, any> = new WeakMap<any, any>();
+          const initialValue: GValue = descriptor.value!;
+
+          const get = function (this: any): GValue {
+            return values.get(this) ?? initialValue;
+          };
+
+          const set = function (this: any, currentValue: GValue): void {
+            const previousValue: GValue = get.call(this);
+            values.set(this, currentValue);
+            if (!equal(previousValue, currentValue)) {
+              onChange(previousValue, currentValue);
+            }
+          };
+
+          Object.defineProperty(obj, propertyKey, {
+            configurable: false,
+            enumerable: descriptor.enumerable,
+            get,
+            set,
+          });
+        }
+      }
+    }
+
+    // const update = idle();
+    //
+    // let get: () => GValue;
+    //
+    // if ('get' in descriptor) {
+    //   update((): void => {
+    //     signalSet<GValue>(node, descriptor.get!());
+    //   });
+    // } else {
+    //   get = (): GValue => {
+    //     return readSignalNode<GValue>(node);
+    //   };
+    // }
+    //
+    // Object.defineProperty(obj, propertyKey, {
+    //   configurable: false,
+    //   get: (): GValue => {
+    //     const value = isSignalNodeValueDifferentOfValue;
+    //     const signalValue: any = readSignalNode<GValue>(node);
+    //   },
+    //   set: (value: GValue): void => {
+    //     signalSet<GValue>(node, value);
+    //   },
+    // });
+    //
+    // if (descriptor.get !== undefined) {
+    //   throw new Error('Im');
+    // }
+  }
+}
